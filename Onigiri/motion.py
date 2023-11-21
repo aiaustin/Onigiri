@@ -14,7 +14,7 @@ if 1 == 1:
     props["groups"]["actor"] = "actor"
     props["groups"]["director"] = "director"
     props["groups"]["reskin"] = "reskin"
-
+    
     props["themes"] = {}
     props["themes"]["actor"] = "THEME01"
     props["themes"]["director"] = "THEME04"
@@ -29,30 +29,30 @@ if 1 == 1:
     props["anchor_location_x"] = "blank"
     props["anchor_location_y"] = "blank"
     props["anchor_location_z"] = "blank"
-
+    
     props["target_space"] = "LOCAL"
     props["owner_space"] = "LOCAL"
     props["mix_mode"] = "AFTER"
-
+    
     props["target_space_anchor"] = "LOCAL"
     props["owner_space_anchor"] = "LOCAL"
     props["mix_mode_anchor"] = "AFTER"
 
     props["rotation_controller"] = "COPY_ROTATION"
-
+    
     props_axis_dots = {}
     props_axis_dots[True] = "dot_green"
     props_axis_dots[False] = "dot_red"
 
     props["hip_start"] = None
     props["hip_end"] = None
-
-
+    
+    
 def get_anchor_state():
     axis = {
         "rotation": ["blank", "blank", "blank"],
         "location": ["blank", "blank", "blank"],
-    }
+        }
     if len(bpy.context.selected_objects) == 0:
         return axis
     OBJ = bpy.context.selected_objects[0]
@@ -80,7 +80,7 @@ def get_director(object, report=False):
 
     aObj = OBJ.get("oni_motion_actor", None)
     dObj = OBJ.get("oni_motion_director", None)
-
+    
     if report == True:
         print("motion::get_director examining", OBJ.name, "for the director")
 
@@ -143,7 +143,7 @@ def add_constraints(
     bpy.context.view_layer.objects.active = sourceObj
 
     missing_targets = []
-    missing_sources = []
+    missing_sources= []
 
     for tbone in bone_map.keys():
         sbone = bone_map[tbone]
@@ -172,7 +172,7 @@ def add_constraints(
 
     bpy.ops.object.mode_set(mode="POSE")
     for tbone in bone_map.keys():
-
+        
         if tbone not in targetObj.data.bones:
             continue
         sbone = bone_map[tbone]
@@ -195,13 +195,13 @@ def add_constraints(
             conObj.use_rotation_x = rotation
             conObj.use_rotation_y = rotation
             conObj.use_rotation_z = rotation
-
+            
             conObj.target_space = "WORLD"
             conObj.owner_space = "POSE"
             context_py = bpy.context.copy()
             context_py["constraint"] = bc.active
             utils.set_inverse(context_py, cname)
-
+            
         else:
             conObj.target_space = space
             conObj.owner_space = space
@@ -209,14 +209,14 @@ def add_constraints(
         conObj.name = "ONI " + cname
 
         sourceObj.pose.bones[sbone]["oni_motion_cname"] = conObj.name
-
+        
     bpy.ops.object.mode_set(mode="OBJECT")
 
     return True
 
 
 def retarget_hard(inRig):
-
+    
     state = utils.get_state()
     oni_motion = bpy.context.window_manager.oni_motion
 
@@ -224,7 +224,7 @@ def retarget_hard(inRig):
     outRig.select_set(False)
 
     rename_map = inRig["oni_onemap_rename"]
-
+    
     good_bones_out = []
     for sbone in rename_map.keys():
         tbone = rename_map[sbone]
@@ -260,14 +260,14 @@ def retarget_hard(inRig):
         if proxyRig.animation_data.action:
             frame_start = proxyRig.animation_data.action.frame_range[0]
     bpy.context.scene.frame_set(int(frame_start))
-
+    
     proxyRig.animation_data_clear()
     bpy.ops.object.mode_set(mode="POSE")
     bpy.ops.pose.armature_apply()
     bpy.ops.object.mode_set(mode="OBJECT")
     utils.make_single(proxyRig)
     bpy.ops.object.transform_apply(scale=True, rotation=True, location=False)
-
+    
     joint_data = {}
     bpy.ops.object.mode_set(mode="EDIT")
     for boneObj in proxyRig.data.edit_bones:
@@ -287,7 +287,7 @@ def retarget_hard(inRig):
     outRig.select_set(True)
     utils.activate(outRig)
     outRig.animation_data_clear()
-
+    
     if 1 == 1:
         bpy.ops.object.mode_set(mode="POSE")
         bpy.ops.pose.armature_apply()
@@ -300,7 +300,7 @@ def retarget_hard(inRig):
         rename_rev[tbone] = sbone
 
     bpy.ops.object.mode_set(mode="EDIT")
-
+    
     for boneObj in outRig.data.edit_bones:
         boneObj.use_connect = False
 
@@ -398,7 +398,7 @@ def retarget_soft(inRig, report=False):
     proxyRig.name = "RETARGET_PROXY"
     print("Storing proxy rig object", proxyRig.name, "onto the Director", inRig.name)
     inRig["oni_motion_proxy"] = proxyRig
-
+    
     bpy.ops.object.mode_set(mode="EDIT")
     for boneObj in proxyRig.data.edit_bones:
         boneObj.use_connect = False
@@ -410,7 +410,7 @@ def retarget_soft(inRig, report=False):
         if proxyRig.animation_data.action:
             frame_start = proxyRig.animation_data.action.frame_range[0]
     bpy.context.scene.frame_set(int(frame_start))
-
+    
     proxyRig.animation_data_clear()
     bpy.ops.object.mode_set(mode="POSE")
     bpy.ops.pose.armature_apply()
@@ -448,7 +448,7 @@ def retarget_soft(inRig, report=False):
     bpy.ops.object.mode_set(mode="POSE")
     bpy.ops.pose.armature_apply()
     bpy.ops.object.mode_set(mode="OBJECT")
-
+    
     for boneObj in proxyRig.pose.bones:
         for C in boneObj.constraints:
             boneObj.constraints.remove(C)
@@ -499,14 +499,14 @@ def retarget_soft(inRig, report=False):
         bpy.ops.object.mode_set(mode="POSE")
         bpy.ops.pose.armature_apply()
         bpy.ops.object.mode_set(mode="OBJECT")
-
+        
         for boneObj in proxyRig.pose.bones:
             for C in boneObj.constraints:
                 boneObj.constraints.remove(C)
 
     bpy.ops.object.mode_set(mode="POSE")
     for boneObj in proxyRig.pose.bones:
-
+        
         proxyRig.data.bones.active = proxyRig.data.bones[boneObj.name]
         bc = boneObj.constraints
         conObj = bc.new("CHILD_OF")
@@ -514,19 +514,19 @@ def retarget_soft(inRig, report=False):
         conObj.target = inRig
         conObj.subtarget = boneObj.name
         conObj.influence = 1
-
+        
         conObj.target_space = "WORLD"
         conObj.owner_space = "POSE"
 
         if defer == True:
-
-            tbone = boneObj.name
+            
+            tbone = boneObj.name 
             tmat = inRig.matrix_world.copy()
             pmat = proxyRig.matrix_world.copy()
             bmat = inRig.pose.bones[tbone].matrix.copy()
-
+            
             MF = bmat.inverted() @ pmat @ tmat.inverted()
-
+            
             conObj.inverse_matrix = MF
         else:
             context_py = bpy.context.copy()
@@ -534,7 +534,7 @@ def retarget_soft(inRig, report=False):
             bpy.ops.constraint.childof_set_inverse(
                 context_py, constraint=cname, owner="BONE"
             )
-
+ 
         conObj.name = "ONI " + cname
         boneObj["oni_motion_constraints"] = [conObj.name]
 
@@ -550,7 +550,7 @@ def retarget_soft(inRig, report=False):
             if outRig.animation_data.action:
                 frame_start = outRig.animation_data.action.frame_range[0]
         bpy.context.scene.frame_set(int(frame_start))
-
+        
         outRig.animation_data_clear()
         mode = bpy.context.mode
         bpy.ops.object.mode_set(mode="POSE")
@@ -566,7 +566,7 @@ def retarget_soft(inRig, report=False):
         conObj = bc.new("COPY_ROTATION")
         cname = conObj.name
         conObj.target = proxyRig
-
+        
         if boneObj.name in rename_rev:
             sbone = rename_rev[tbone]
             if sbone in inRig.data.bones:
@@ -578,7 +578,7 @@ def retarget_soft(inRig, report=False):
         conObj.owner_space = "POSE"
         conObj.name = "ONI " + cname
         boneObj["oni_motion_constraints"] = [conObj.name]
-
+    
     for boneObj in outRig.pose.bones:
         tbone = boneObj.name
         outRig.data.bones.active = outRig.data.bones[boneObj.name]
@@ -586,7 +586,7 @@ def retarget_soft(inRig, report=False):
         conObj = bc.new("COPY_LOCATION")
         cname = conObj.name
         conObj.target = proxyRig
-
+        
         if boneObj.name in rename_rev:
             sbone = rename_rev[tbone]
             if sbone in inRig.data.bones:
@@ -594,13 +594,13 @@ def retarget_soft(inRig, report=False):
                 conObj.influence = 0
         else:
             conObj.influence = 0
-
+        
         conObj.target_space = "LOCAL"
         conObj.owner_space = "LOCAL"
         conObj.name = "ONI " + cname
 
         if boneObj.parent:
-
+            
             conObj.target_space = "LOCAL_WITH_PARENT"
             conObj.owner_space = "LOCAL_WITH_PARENT"
 
@@ -620,9 +620,9 @@ def retarget_soft(inRig, report=False):
             else:
                 new_list.append(cname)
         boneObj["oni_motion_constraints"] = new_list
-
+    
     bpy.ops.object.mode_set(mode="OBJECT")
-
+    
     if 1 == 1:
         boneObj = outRig.pose.bones[0]
         new_list = boneObj["oni_motion_constraints"]
@@ -630,13 +630,13 @@ def retarget_soft(inRig, report=False):
             if conObj.type == "COPY_LOCATION":
                 conObj.influence = 1
                 new_list.append(conObj.name)
-
+            
         boneObj["oni_motion_constraints"] = new_list
-
+            
     if 1 == 0:
         boneObj = outRig.pose.bones[0]
         proxy_anchor = proxyRig.pose.bones[0].name
-        outRig.data.bones.active = boneObj.bone
+        outRig.data.bones.active = boneObj.bone 
         bc = boneObj.constraints
         conObj = bc.new("COPY_LOCATION")
         conObj.target = proxyRig
@@ -649,7 +649,7 @@ def retarget_soft(inRig, report=False):
                 C.use_x = False
                 C.use_y = False
                 C.use_z = False
-
+    
     if oni_motion.motion_stabilize == True:
         print(
             "Stabilizer used with humanoid non-joint position uploads are likely to be unusable!"
@@ -670,10 +670,10 @@ def retarget_custom(inRig=None, outRig=None):
     oni_motion = bpy.context.window_manager.oni_motion
 
     rename_map = inRig.get("oni_onemap_rename", {})
-
+    
     inRig["oni_motion_actor"] = outRig
     outRig["oni_motion_director"] = inRig
-
+    
     inRig.select_set(True)
     utils.activate(inRig)
     bpy.ops.object.duplicate()
@@ -692,7 +692,7 @@ def retarget_custom(inRig=None, outRig=None):
         if proxyRig.animation_data.action:
             frame_start = proxyRig.animation_data.action.frame_range[0]
     bpy.context.scene.frame_set(int(frame_start))
-
+    
     proxyRig.animation_data_clear()
     bpy.ops.object.mode_set(mode="POSE")
     bpy.ops.pose.armature_apply()
@@ -720,7 +720,7 @@ def retarget_custom(inRig=None, outRig=None):
     bpy.ops.object.mode_set(mode="POSE")
     bpy.ops.pose.armature_apply()
     bpy.ops.object.mode_set(mode="OBJECT")
-
+    
     for boneObj in proxyRig.pose.bones:
         for C in boneObj.constraints:
             boneObj.constraints.remove(C)
@@ -770,14 +770,14 @@ def retarget_custom(inRig=None, outRig=None):
         bpy.ops.object.mode_set(mode="POSE")
         bpy.ops.pose.armature_apply()
         bpy.ops.object.mode_set(mode="OBJECT")
-
+        
         for boneObj in proxyRig.pose.bones:
             for C in boneObj.constraints:
                 boneObj.constraints.remove(C)
 
     bpy.ops.object.mode_set(mode="POSE")
     for boneObj in proxyRig.pose.bones:
-
+        
         proxyRig.data.bones.active = proxyRig.data.bones[boneObj.name]
         bc = boneObj.constraints
         conObj = bc.new("CHILD_OF")
@@ -785,19 +785,19 @@ def retarget_custom(inRig=None, outRig=None):
         conObj.target = inRig
         conObj.subtarget = boneObj.name
         conObj.influence = 1
-
+        
         conObj.target_space = "WORLD"
         conObj.owner_space = "POSE"
 
         if defer == True:
-
-            tbone = boneObj.name
+            
+            tbone = boneObj.name 
             tmat = inRig.matrix_world.copy()
             pmat = proxyRig.matrix_world.copy()
             bmat = inRig.pose.bones[tbone].matrix.copy()
-
+            
             MF = bmat.inverted() @ pmat @ tmat.inverted()
-
+            
             conObj.inverse_matrix = MF
         else:
             context_py = bpy.context.copy()
@@ -805,7 +805,7 @@ def retarget_custom(inRig=None, outRig=None):
             bpy.ops.constraint.childof_set_inverse(
                 context_py, constraint=cname, owner="BONE"
             )
-
+ 
         conObj.name = "ONI " + cname
         boneObj["oni_motion_constraints"] = [conObj.name]
 
@@ -821,7 +821,7 @@ def retarget_custom(inRig=None, outRig=None):
             if outRig.animation_data.action:
                 frame_start = outRig.animation_data.action.frame_range[0]
         bpy.context.scene.frame_set(int(frame_start))
-
+        
         outRig.animation_data_clear()
         mode = bpy.context.mode
         bpy.ops.object.mode_set(mode="POSE")
@@ -837,7 +837,7 @@ def retarget_custom(inRig=None, outRig=None):
         conObj = bc.new("COPY_ROTATION")
         cname = conObj.name
         conObj.target = proxyRig
-
+        
         if boneObj.name in rename_rev:
             sbone = rename_rev[tbone]
             if sbone in inRig.data.bones:
@@ -849,7 +849,7 @@ def retarget_custom(inRig=None, outRig=None):
         conObj.owner_space = "POSE"
         conObj.name = "ONI " + cname
         boneObj["oni_motion_constraints"] = [conObj.name]
-
+    
     for boneObj in outRig.pose.bones:
         tbone = boneObj.name
         outRig.data.bones.active = outRig.data.bones[boneObj.name]
@@ -857,7 +857,7 @@ def retarget_custom(inRig=None, outRig=None):
         conObj = bc.new("COPY_LOCATION")
         cname = conObj.name
         conObj.target = proxyRig
-
+        
         if boneObj.name in rename_rev:
             sbone = rename_rev[tbone]
             if sbone in inRig.data.bones:
@@ -865,7 +865,7 @@ def retarget_custom(inRig=None, outRig=None):
                 conObj.influence = 0
         else:
             conObj.influence = 0
-
+        
         conObj.target_space = "LOCAL"
         conObj.owner_space = "LOCAL"
         conObj.name = "ONI " + cname
@@ -878,7 +878,7 @@ def retarget_custom(inRig=None, outRig=None):
             boneObj["oni_motion_constraints"] = c_list
 
     bpy.ops.object.mode_set(mode="OBJECT")
-
+    
     if 1 == 1:
         boneObj = outRig.pose.bones[0]
         new_list = boneObj["oni_motion_constraints"]
@@ -886,9 +886,9 @@ def retarget_custom(inRig=None, outRig=None):
             if conObj.type == "COPY_LOCATION":
                 conObj.influence = 1
                 new_list.append(conObj.name)
-
+            
         boneObj["oni_motion_constraints"] = new_list
-
+            
     if oni_motion.motion_stabilize == True:
         print(
             "Stabilizer used with humanoid non-joint position uploads are likely to be unusable!"
@@ -921,7 +921,7 @@ def stabilizer(armObj=None, bone_map=None):
     bpy.ops.object.duplicate()
     stickyRig = bpy.context.object
     stickyRig.name = "STICKY_RIG"
-
+    
     for boneObj in stickyRig.pose.bones:
         for C in boneObj.constraints:
             boneObj.constraints.remove(C)
@@ -951,7 +951,7 @@ def popup(message="", title="Message Box", icon="INFO"):
     def draw(self, context):
         self.layout.label(text=message)
 
-    bpy.context.window_manager.popup_menu(draw, title=title, icon=icon)
+    bpy.context.window_manager.popup_menu(draw, title = title, icon = icon)
     return
 
 
@@ -973,7 +973,7 @@ def add_groups(inRig=None, outRig=None):
     bpy.ops.object.mode_set(mode="POSE")
     inRig.data.collections.new(props["groups"]["actor"])
     inRig.data.collections.new(props["groups"]["reskin"])
-    
+
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
@@ -1004,9 +1004,9 @@ def update_map(inRig=None):
 
     if 1 == 1:
         print("Entering update")
-
+        
         if utils.is_valid(proxyRig):
-
+            
             frame_current = bpy.context.scene.frame_current
             has_action = False
             if inRig.animation_data != None:
@@ -1014,7 +1014,7 @@ def update_map(inRig=None):
                     has_action = True
                     frame_start = inRig.animation_data.action.frame_range[0]
             if has_action == False:
-                frame_start = bpy.context.scene.frame_start
+                    frame_start = bpy.context.scene.frame_start
             bpy.context.scene.frame_set(int(frame_start))
 
             for boneObj in proxyRig.pose.bones:
@@ -1033,11 +1033,11 @@ def update_map(inRig=None):
 
             for boneObj in proxyRig.pose.bones:
                 dBone = boneObj.bone
-
+                
                 proxyRig.pose.bones[boneObj.name].matrix = mathutils.Matrix(
                     dBone["matrix_local"]
                 )
-
+                
             for boneObj in outRig.pose.bones:
                 for cname in boneObj["oni_motion_constraints"]:
                     boneObj.constraints[cname].influence = 0
@@ -1082,27 +1082,27 @@ def update_map(inRig=None):
 
             bpy.ops.object.mode_set(mode="POSE")
             for bone in rename.keys():
-
+                
                 if bone in proxyRig.pose.bones:
                     boneObj = proxyRig.pose.bones[bone]
                     proxyRig.data.bones.active = boneObj.bone
                     for cname in boneObj["oni_motion_constraints"]:
                         conObj = boneObj.constraints[cname]
                         if conObj.type == "CHILD_OF":
-
+                            
                             defer = True
                             if defer == True:
-
+                                
                                 tmat = inRig.matrix_world.copy()
                                 pmat = proxyRig.matrix_world.copy()
-
+                                
                                 bmat = inRig.pose.bones[boneObj.name].matrix.copy()
                                 MF = bmat.inverted() @ pmat @ tmat.inverted()
                                 conObj.inverse_matrix = MF
 
                             else:
                                 context_py = bpy.context.copy()
-                                context_py["constraint"] = conObj
+                                context_py["constraint"] = conObj 
                                 bpy.ops.constraint.childof_set_inverse(
                                     context_py, constraint=cname, owner="BONE"
                                 )
@@ -1119,7 +1119,7 @@ def update_map(inRig=None):
                                 if oni_motion.motion_constrain_location == True:
                                     if conObj.type == "COPY_LOCATION":
                                         conObj.influence = 1
-
+                                
                                 if tbone == outRig.pose.bones[0].name:
                                     conObj.influence = 1
 
@@ -1143,7 +1143,7 @@ def update_map(inRig=None):
         
         director_group = props["groups"]["director"]
         actor_group = props["groups"]["actor"]
-
+        
         try:
             inRig.data.collections[director_group].assign(inRig.data.bones[rename_in_bone])
             inRig.data.bones[rename_in_bone].palette = props["themes"]["director"]
@@ -1167,7 +1167,7 @@ def update_map(inRig=None):
         print(
             "There was a problem assigning bone group to your rig, if this is a match map please use the (custom) feature"
         )
-
+        
     return True
 
 
@@ -1193,12 +1193,12 @@ def apply_map(inRig=None, outRig=None):
 
         outRig.data.collections[actor_group].assign(outRig.data.bones[rename_out_bone])
         outRig.data.bones[rename_out_bone].palette = props["themes"]["actor"]
-
+        
         reskin_bones = reskin.get(rename_in_bone, [])
         reskin_group = props["groups"]["reskin"]
 
         for bone in reskin_bones:
-
+            
             if bone not in inRig.pose.bones:
                 continue
             inRig.data.collections[reskin_group].assign(inRig.data.bones[bone])                        
