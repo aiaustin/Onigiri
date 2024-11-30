@@ -1,6 +1,3 @@
-
-
-
 import bpy
 import traceback
 import mathutils
@@ -10,28 +7,21 @@ print("reactor.py loaded")
 print("-----------------")
 
 
-
-
-
 if 1 == 1:
 
     props = {}
 
-    
     props["help"] = "FIXME"
 
-    
-    props['poll_enabled'] = False
-    props['poll_time'] = 0.2
-
+    props["poll_enabled"] = False
+    props["poll_time"] = 0.2
 
 
 def poll():
-    print("reactor::poll :", props['poll_time'])
-    if props['poll_enabled'] == True:
-        return props['poll_time']
+    print("reactor::poll :", props["poll_time"])
+    if props["poll_enabled"] == True:
+        return props["poll_time"]
     return None
-
 
 
 def get_director(armature):
@@ -39,47 +29,8 @@ def get_director(armature):
     return True
 
 
-
-
-
-
-
-
-
-
-
 def deposit(source=None, target=None):
     print("deposit code commented out")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def follow(source=None, target=None):
@@ -88,42 +39,11 @@ def follow(source=None, target=None):
     frame_show_1 = 0
     frame_show_2 = 0
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    path_to['correction'] = True
-    path_to['display_start'] = frame_show_1
-    path_to['display_end'] = frame_show_2
-
+    path_to["correction"] = True
+    path_to["display_start"] = frame_show_1
+    path_to["display_end"] = frame_show_2
 
     return True
-
-
-
-
 
 
 def repeat(source=None, frames=[]):
@@ -131,98 +51,9 @@ def repeat(source=None, frames=[]):
 
     frame_results = {}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     return frame_results
-
-
-
-
-
 
 
 def projection(path_obj=None, target=None):
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     return True
-
-
-
-
-
-
-
-

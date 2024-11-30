@@ -2,6 +2,7 @@ import bpy
 from . import mod_settings
 from .mod_settings import *
 
+
 def get_fcurve_data(armature):
 
     armObj = bpy.data.objects[armature]
@@ -16,10 +17,10 @@ def get_fcurve_data(armature):
     frame_data = {}
 
     for fc in fcurves:
-        
+
         dp, i = fc.data_path, fc.array_index
 
-        bone_path, delimiter, transform_type = dp.rpartition('.')
+        bone_path, delimiter, transform_type = dp.rpartition(".")
 
         if bone_path not in fcurve_paths:
             continue
@@ -28,21 +29,23 @@ def get_fcurve_data(armature):
 
         rot_mode = armObj.pose.bones[real_bone].rotation_mode
 
-        if transform_type == 'rotation_quaternion' and rot_mode == 'QUATERNION':
-            loc_rot = 'rot'
-        elif transform_type == 'rotation_euler' and rot_mode != 'QUATERNION':
-            loc_rot = 'rot'
-        elif transform_type == 'location':
-            loc_rot = 'loc'
+        if transform_type == "rotation_quaternion" and rot_mode == "QUATERNION":
+            loc_rot = "rot"
+        elif transform_type == "rotation_euler" and rot_mode != "QUATERNION":
+            loc_rot = "rot"
+        elif transform_type == "location":
+            loc_rot = "loc"
         else:
-            if oni_settings['debug'] == True:
+            if oni_settings["debug"] == True:
                 print("incompatible transform type:", transform_type, rot_mode)
             continue
 
         if real_bone not in frame_data:
             frame_data[real_bone] = {}
-        if 'rot' not in frame_data[real_bone]: frame_data[real_bone]['rot'] = {}
-        if 'loc' not in frame_data[real_bone]: frame_data[real_bone]['loc'] = {}
+        if "rot" not in frame_data[real_bone]:
+            frame_data[real_bone]["rot"] = {}
+        if "loc" not in frame_data[real_bone]:
+            frame_data[real_bone]["loc"] = {}
 
         if loc_rot not in frame_data[real_bone]:
             frame_data[real_bone][loc_rot] = {}
@@ -62,6 +65,7 @@ def get_fcurve_data(armature):
 
     return frame_data
 
+
 def set_interpolation(armature="", mode="BEZIER"):
     armObj = bpy.data.objects[armature]
     actionObj = armObj.animation_data.action
@@ -76,11 +80,11 @@ def set_interpolation(armature="", mode="BEZIER"):
 
     for fc in fcurves:
         dp, i = fc.data_path, fc.array_index
-        bone_path, delimiter, transform_type = dp.rpartition('.')
+        bone_path, delimiter, transform_type = dp.rpartition(".")
         if bone_path in pose_paths:
             found = True
-            
+
             for kfp in fc.keyframe_points:
                 kfp.interpolation = mode
-                
+
     return found

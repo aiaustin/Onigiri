@@ -1,5 +1,3 @@
-
-
 bento_links = {
     "mPelvis": "",
     "PELVIS": "mPelvis",
@@ -160,4 +158,4 @@ bento_links = {
     "mHindLimb2Right": "mHindLimb1Right",
     "mHindLimb3Right": "mHindLimb2Right",
     "mHindLimb4Right": "mHindLimb3Right",
-    }
+}

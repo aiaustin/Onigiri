@@ -11,7 +11,7 @@
 avatar_skeleton = {}
 
 avatar_skeleton["mPelvis"] = {
-    "aliases": ['hip', 'avatar_mPelvis'],
+    "aliases": ["hip", "avatar_mPelvis"],
     "pivot": (0.000000, 0.000000, 1.067015),
     "pos": (0.000, 0.000, 1.067),
     "absolute_pivot": (0.000000, 0.000000, 1.067015),
@@ -76,7 +76,7 @@ avatar_skeleton["mSpine2"] = {
     "connected": True,
 }
 avatar_skeleton["mTorso"] = {
-    "aliases": ['abdomen', 'avatar_mTorso'],
+    "aliases": ["abdomen", "avatar_mTorso"],
     "pivot": (0.000000, 0.000000, 0.084073),
     "pos": (0.000, 0.000, 0.084),
     "absolute_pivot": (0.0, 0.0, 1.1510150000000001),
@@ -167,7 +167,7 @@ avatar_skeleton["mSpine4"] = {
     "connected": True,
 }
 avatar_skeleton["mChest"] = {
-    "aliases": ['chest', 'avatar_mChest'],
+    "aliases": ["chest", "avatar_mChest"],
     "pivot": (-0.015368, 0.000000, 0.204877),
     "pos": (-0.015, 0.000, 0.205),
     "absolute_pivot": (-0.015, 0.0, 1.3560150000000002),
@@ -232,7 +232,7 @@ avatar_skeleton["UPPER_BACK"] = {
     "connected": False,
 }
 avatar_skeleton["mNeck"] = {
-    "aliases": ['neck', 'avatar_mNeck'],
+    "aliases": ["neck", "avatar_mNeck"],
     "pivot": (-0.009507, 0.000000, 0.251108),
     "pos": (-0.010, 0.000, 0.251),
     "absolute_pivot": (-0.025, 0.0, 1.607015),
@@ -258,7 +258,7 @@ avatar_skeleton["NECK"] = {
     "connected": False,
 }
 avatar_skeleton["mHead"] = {
-    "aliases": ['head', 'avatar_mHead'],
+    "aliases": ["head", "avatar_mHead"],
     "pivot": (0.000000, -0.000000, 0.075630),
     "pos": (0.000, -0.000, 0.076),
     "absolute_pivot": (-0.025, 0.0, 1.6830150000000001),
@@ -284,7 +284,7 @@ avatar_skeleton["HEAD"] = {
     "connected": False,
 }
 avatar_skeleton["mSkull"] = {
-    "aliases": ['figureHair', 'avatar_mSkull'],
+    "aliases": ["figureHair", "avatar_mSkull"],
     "pivot": (0.000000, 0.000000, 0.079000),
     "pos": (0.000, 0.000, 0.079),
     "absolute_pivot": (-0.025, 0.0, 1.762015),
@@ -297,7 +297,7 @@ avatar_skeleton["mSkull"] = {
     "connected": False,
 }
 avatar_skeleton["mEyeRight"] = {
-    "aliases": ['avatar_mEyeRight'],
+    "aliases": ["avatar_mEyeRight"],
     "pivot": (0.098466, -0.036000, 0.079000),
     "pos": (0.098, -0.036, 0.079),
     "absolute_pivot": (0.07300000000000001, -0.036, 1.762015),
@@ -310,7 +310,7 @@ avatar_skeleton["mEyeRight"] = {
     "connected": False,
 }
 avatar_skeleton["mEyeLeft"] = {
-    "aliases": ['avatar_mEyeLeft'],
+    "aliases": ["avatar_mEyeLeft"],
     "pivot": (0.098461, 0.036000, 0.079000),
     "pos": (0.098, 0.036, 0.079),
     "absolute_pivot": (0.07300000000000001, 0.036, 1.762015),
@@ -921,7 +921,7 @@ avatar_skeleton["mFaceNoseBridge"] = {
     "connected": False,
 }
 avatar_skeleton["mCollarLeft"] = {
-    "aliases": ['lCollar', 'avatar_mCollarLeft'],
+    "aliases": ["lCollar", "avatar_mCollarLeft"],
     "pivot": (-0.020927, 0.084665, 0.165396),
     "pos": (-0.021, 0.085, 0.165),
     "absolute_pivot": (-0.036000000000000004, 0.085, 1.5210150000000002),
@@ -947,7 +947,7 @@ avatar_skeleton["L_CLAVICLE"] = {
     "connected": False,
 }
 avatar_skeleton["mShoulderLeft"] = {
-    "aliases": ['lShldr', 'avatar_mShoulderLeft'],
+    "aliases": ["lShldr", "avatar_mShoulderLeft"],
     "pivot": (0.000000, 0.079000, -0.000000),
     "pos": (0.000, 0.079, -0.000),
     "absolute_pivot": (-0.036000000000000004, 0.164, 1.5210150000000002),
@@ -973,7 +973,7 @@ avatar_skeleton["L_UPPER_ARM"] = {
     "connected": False,
 }
 avatar_skeleton["mElbowLeft"] = {
-    "aliases": ['lForeArm', 'avatar_mElbowLeft'],
+    "aliases": ["lForeArm", "avatar_mElbowLeft"],
     "pivot": (0.000000, 0.248000, 0.000000),
     "pos": (0.000, 0.248, 0.000),
     "absolute_pivot": (-0.036000000000000004, 0.41200000000000003, 1.5210150000000002),
@@ -999,7 +999,7 @@ avatar_skeleton["L_LOWER_ARM"] = {
     "connected": False,
 }
 avatar_skeleton["mWristLeft"] = {
-    "aliases": ['lHand', 'avatar_mWristLeft'],
+    "aliases": ["lHand", "avatar_mWristLeft"],
     "pivot": (-0.000000, 0.204846, 0.000000),
     "pos": (-0.000, 0.205, 0.000),
     "absolute_pivot": (-0.036000000000000004, 0.617, 1.5210150000000002),
@@ -1220,7 +1220,7 @@ avatar_skeleton["mHandThumb3Left"] = {
     "connected": True,
 }
 avatar_skeleton["mCollarRight"] = {
-    "aliases": ['rCollar', 'avatar_mCollarRight'],
+    "aliases": ["rCollar", "avatar_mCollarRight"],
     "pivot": (-0.020927, -0.085000, 0.165396),
     "pos": (-0.021, -0.085, 0.165),
     "absolute_pivot": (-0.036000000000000004, -0.085, 1.5210150000000002),
@@ -1246,7 +1246,7 @@ avatar_skeleton["R_CLAVICLE"] = {
     "connected": False,
 }
 avatar_skeleton["mShoulderRight"] = {
-    "aliases": ['rShldr', 'avatar_mShoulderRight'],
+    "aliases": ["rShldr", "avatar_mShoulderRight"],
     "pivot": (0.000000, -0.079418, -0.000000),
     "pos": (0.000, -0.079, -0.000),
     "absolute_pivot": (-0.036000000000000004, -0.164, 1.5210150000000002),
@@ -1272,7 +1272,7 @@ avatar_skeleton["R_UPPER_ARM"] = {
     "connected": False,
 }
 avatar_skeleton["mElbowRight"] = {
-    "aliases": ['rForeArm', 'avatar_mElbowRight'],
+    "aliases": ["rForeArm", "avatar_mElbowRight"],
     "pivot": (0.000000, -0.248000, -0.000000),
     "pos": (0.000, -0.248, -0.000),
     "absolute_pivot": (-0.036000000000000004, -0.41200000000000003, 1.5210150000000002),
@@ -1298,7 +1298,7 @@ avatar_skeleton["R_LOWER_ARM"] = {
     "connected": False,
 }
 avatar_skeleton["mWristRight"] = {
-    "aliases": ['rHand', 'avatar_mWristRight'],
+    "aliases": ["rHand", "avatar_mWristRight"],
     "pivot": (-0.000000, -0.205000, -0.000000),
     "pos": (0.000, -0.205, -0.000),
     "absolute_pivot": (-0.036000000000000004, -0.617, 1.5210150000000002),
@@ -1662,7 +1662,7 @@ avatar_skeleton["mWing4FanRight"] = {
     "connected": True,
 }
 avatar_skeleton["mHipRight"] = {
-    "aliases": ['rThigh', 'avatar_mHipRight'],
+    "aliases": ["rThigh", "avatar_mHipRight"],
     "pivot": (0.033620, -0.128806, -0.041086),
     "pos": (0.034, -0.129, -0.041),
     "absolute_pivot": (0.034, -0.129, 1.0260150000000001),
@@ -1688,7 +1688,7 @@ avatar_skeleton["R_UPPER_LEG"] = {
     "connected": False,
 }
 avatar_skeleton["mKneeRight"] = {
-    "aliases": ['rShin', 'avatar_mKneeRight'],
+    "aliases": ["rShin", "avatar_mKneeRight"],
     "pivot": (-0.000780, 0.048635, -0.490922),
     "pos": (-0.001, 0.049, -0.491),
     "absolute_pivot": (0.033, -0.08, 0.5350150000000001),
@@ -1714,7 +1714,7 @@ avatar_skeleton["R_LOWER_LEG"] = {
     "connected": False,
 }
 avatar_skeleton["mAnkleRight"] = {
-    "aliases": ['rFoot', 'avatar_mAnkleRight'],
+    "aliases": ["rFoot", "avatar_mAnkleRight"],
     "pivot": (-0.028869, 0.000000, -0.468494),
     "pos": (-0.029, 0.000, -0.468),
     "absolute_pivot": (0.004, -0.08, 0.0670150000000001),
@@ -1740,7 +1740,7 @@ avatar_skeleton["R_FOOT"] = {
     "connected": False,
 }
 avatar_skeleton["mFootRight"] = {
-    "aliases": ['avatar_mFootRight'],
+    "aliases": ["avatar_mFootRight"],
     "pivot": (0.111956, -0.000000, -0.060637),
     "pos": (0.112, -0.000, -0.061),
     "absolute_pivot": (0.116, -0.08, 0.006015000000000104),
@@ -1753,7 +1753,7 @@ avatar_skeleton["mFootRight"] = {
     "connected": True,
 }
 avatar_skeleton["mToeRight"] = {
-    "aliases": ['avatar_mToeRight'],
+    "aliases": ["avatar_mToeRight"],
     "pivot": (0.105399, -0.010408, -0.000104),
     "pos": (0.109, 0.000, 0.000),
     "absolute_pivot": (0.225, -0.08, 0.006015000000000104),
@@ -1766,7 +1766,7 @@ avatar_skeleton["mToeRight"] = {
     "connected": False,
 }
 avatar_skeleton["mHipLeft"] = {
-    "aliases": ['lThigh', 'avatar_mHipLeft'],
+    "aliases": ["lThigh", "avatar_mHipLeft"],
     "pivot": (0.033757, 0.126765, -0.040998),
     "pos": (0.034, 0.127, -0.041),
     "absolute_pivot": (0.034, 0.127, 1.0260150000000001),
@@ -1792,7 +1792,7 @@ avatar_skeleton["L_UPPER_LEG"] = {
     "connected": False,
 }
 avatar_skeleton["mKneeLeft"] = {
-    "aliases": ['lShin', 'avatar_mKneeLeft'],
+    "aliases": ["lShin", "avatar_mKneeLeft"],
     "pivot": (-0.000887, -0.045568, -0.491053),
     "pos": (-0.001, -0.046, -0.491),
     "absolute_pivot": (0.033, 0.081, 0.5350150000000001),
@@ -1818,7 +1818,7 @@ avatar_skeleton["L_LOWER_LEG"] = {
     "connected": False,
 }
 avatar_skeleton["mAnkleLeft"] = {
-    "aliases": ['lFoot', 'avatar_mAnkleLeft'],
+    "aliases": ["lFoot", "avatar_mAnkleLeft"],
     "pivot": (-0.028887, 0.001378, -0.468449),
     "pos": (-0.029, 0.001, -0.468),
     "absolute_pivot": (0.004, 0.082, 0.0670150000000001),
@@ -1844,7 +1844,7 @@ avatar_skeleton["L_FOOT"] = {
     "connected": False,
 }
 avatar_skeleton["mFootLeft"] = {
-    "aliases": ['avatar_mFootLeft'],
+    "aliases": ["avatar_mFootLeft"],
     "pivot": (0.111956, -0.000000, -0.060620),
     "pos": (0.112, -0.000, -0.061),
     "absolute_pivot": (0.116, 0.082, 0.006015000000000104),
@@ -1857,7 +1857,7 @@ avatar_skeleton["mFootLeft"] = {
     "connected": True,
 }
 avatar_skeleton["mToeLeft"] = {
-    "aliases": ['avatar_mToeLeft'],
+    "aliases": ["avatar_mToeLeft"],
     "pivot": (0.105387, 0.008270, 0.000871),
     "pos": (0.109, 0.000, 0.000),
     "absolute_pivot": (0.225, 0.082, 0.006015000000000104),

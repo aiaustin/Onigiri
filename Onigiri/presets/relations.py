@@ -1,4 +1,3 @@
-
 sl_rig = {
     "mPelvis": {
         "parent": "",
@@ -15,13 +14,11 @@ sl_rig = {
     },
     "PELVIS": {
         "parent": "mPelvis",
-        "children": [
-        ],
+        "children": [],
     },
     "BUTT": {
         "parent": "mPelvis",
-        "children": [
-        ],
+        "children": [],
     },
     "mSpine1": {
         "parent": "mPelvis",
@@ -47,23 +44,19 @@ sl_rig = {
     },
     "BELLY": {
         "parent": "mTorso",
-        "children": [
-        ],
+        "children": [],
     },
     "LEFT_HANDLE": {
         "parent": "mTorso",
-        "children": [
-        ],
+        "children": [],
     },
     "RIGHT_HANDLE": {
         "parent": "mTorso",
-        "children": [
-        ],
+        "children": [],
     },
     "LOWER_BACK": {
         "parent": "mTorso",
-        "children": [
-        ],
+        "children": [],
     },
     "mSpine3": {
         "parent": "mTorso",
@@ -92,23 +85,19 @@ sl_rig = {
     },
     "CHEST": {
         "parent": "mChest",
-        "children": [
-        ],
+        "children": [],
     },
     "LEFT_PEC": {
         "parent": "mChest",
-        "children": [
-        ],
+        "children": [],
     },
     "RIGHT_PEC": {
         "parent": "mChest",
-        "children": [
-        ],
+        "children": [],
     },
     "UPPER_BACK": {
         "parent": "mChest",
-        "children": [
-        ],
+        "children": [],
     },
     "mNeck": {
         "parent": "mChest",
@@ -119,8 +108,7 @@ sl_rig = {
     },
     "NECK": {
         "parent": "mNeck",
-        "children": [
-        ],
+        "children": [],
     },
     "mHead": {
         "parent": "mNeck",
@@ -134,23 +122,19 @@ sl_rig = {
     },
     "HEAD": {
         "parent": "mHead",
-        "children": [
-        ],
+        "children": [],
     },
     "mSkull": {
         "parent": "mHead",
-        "children": [
-        ],
+        "children": [],
     },
     "mEyeRight": {
         "parent": "mHead",
-        "children": [
-        ],
+        "children": [],
     },
     "mEyeLeft": {
         "parent": "mHead",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceRoot": {
         "parent": "mHead",
@@ -190,73 +174,59 @@ sl_rig = {
     },
     "mFaceEyeAltRight": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceEyeAltLeft": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceForeheadLeft": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceForeheadRight": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceEyebrowOuterLeft": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceEyebrowCenterLeft": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceEyebrowInnerLeft": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceEyebrowOuterRight": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceEyebrowCenterRight": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceEyebrowInnerRight": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceEyeLidUpperLeft": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceEyeLidLowerLeft": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceEyeLidUpperRight": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceEyeLidLowerRight": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceEar1Left": {
         "parent": "mFaceRoot",
@@ -266,8 +236,7 @@ sl_rig = {
     },
     "mFaceEar2Left": {
         "parent": "mFaceEar1Left",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceEar1Right": {
         "parent": "mFaceRoot",
@@ -277,43 +246,35 @@ sl_rig = {
     },
     "mFaceEar2Right": {
         "parent": "mFaceEar1Right",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceNoseLeft": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceNoseCenter": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceNoseRight": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceCheekLowerLeft": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceCheekUpperLeft": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceCheekLowerRight": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceCheekUpperRight": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceJaw": {
         "parent": "mFaceRoot",
@@ -324,8 +285,7 @@ sl_rig = {
     },
     "mFaceChin": {
         "parent": "mFaceJaw",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceTeethLower": {
         "parent": "mFaceJaw",
@@ -338,18 +298,15 @@ sl_rig = {
     },
     "mFaceLipLowerLeft": {
         "parent": "mFaceTeethLower",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceLipLowerRight": {
         "parent": "mFaceTeethLower",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceLipLowerCenter": {
         "parent": "mFaceTeethLower",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceTongueBase": {
         "parent": "mFaceTeethLower",
@@ -359,23 +316,19 @@ sl_rig = {
     },
     "mFaceTongueTip": {
         "parent": "mFaceTongueBase",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceJawShaper": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceForeheadCenter": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceNoseBase": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceTeethUpper": {
         "parent": "mFaceRoot",
@@ -389,43 +342,35 @@ sl_rig = {
     },
     "mFaceLipUpperLeft": {
         "parent": "mFaceTeethUpper",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceLipUpperRight": {
         "parent": "mFaceTeethUpper",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceLipCornerLeft": {
         "parent": "mFaceTeethUpper",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceLipCornerRight": {
         "parent": "mFaceTeethUpper",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceLipUpperCenter": {
         "parent": "mFaceTeethUpper",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceEyecornerInnerLeft": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceEyecornerInnerRight": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mFaceNoseBridge": {
         "parent": "mFaceRoot",
-        "children": [
-        ],
+        "children": [],
     },
     "mCollarLeft": {
         "parent": "mChest",
@@ -436,8 +381,7 @@ sl_rig = {
     },
     "L_CLAVICLE": {
         "parent": "mCollarLeft",
-        "children": [
-        ],
+        "children": [],
     },
     "mShoulderLeft": {
         "parent": "mCollarLeft",
@@ -448,8 +392,7 @@ sl_rig = {
     },
     "L_UPPER_ARM": {
         "parent": "mShoulderLeft",
-        "children": [
-        ],
+        "children": [],
     },
     "mElbowLeft": {
         "parent": "mShoulderLeft",
@@ -460,8 +403,7 @@ sl_rig = {
     },
     "L_LOWER_ARM": {
         "parent": "mElbowLeft",
-        "children": [
-        ],
+        "children": [],
     },
     "mWristLeft": {
         "parent": "mElbowLeft",
@@ -476,8 +418,7 @@ sl_rig = {
     },
     "L_HAND": {
         "parent": "mWristLeft",
-        "children": [
-        ],
+        "children": [],
     },
     "mHandMiddle1Left": {
         "parent": "mWristLeft",
@@ -493,8 +434,7 @@ sl_rig = {
     },
     "mHandMiddle3Left": {
         "parent": "mHandMiddle2Left",
-        "children": [
-        ],
+        "children": [],
     },
     "mHandIndex1Left": {
         "parent": "mWristLeft",
@@ -510,8 +450,7 @@ sl_rig = {
     },
     "mHandIndex3Left": {
         "parent": "mHandIndex2Left",
-        "children": [
-        ],
+        "children": [],
     },
     "mHandRing1Left": {
         "parent": "mWristLeft",
@@ -527,8 +466,7 @@ sl_rig = {
     },
     "mHandRing3Left": {
         "parent": "mHandRing2Left",
-        "children": [
-        ],
+        "children": [],
     },
     "mHandPinky1Left": {
         "parent": "mWristLeft",
@@ -544,8 +482,7 @@ sl_rig = {
     },
     "mHandPinky3Left": {
         "parent": "mHandPinky2Left",
-        "children": [
-        ],
+        "children": [],
     },
     "mHandThumb1Left": {
         "parent": "mWristLeft",
@@ -561,8 +498,7 @@ sl_rig = {
     },
     "mHandThumb3Left": {
         "parent": "mHandThumb2Left",
-        "children": [
-        ],
+        "children": [],
     },
     "mCollarRight": {
         "parent": "mChest",
@@ -573,8 +509,7 @@ sl_rig = {
     },
     "R_CLAVICLE": {
         "parent": "mCollarRight",
-        "children": [
-        ],
+        "children": [],
     },
     "mShoulderRight": {
         "parent": "mCollarRight",
@@ -585,8 +520,7 @@ sl_rig = {
     },
     "R_UPPER_ARM": {
         "parent": "mShoulderRight",
-        "children": [
-        ],
+        "children": [],
     },
     "mElbowRight": {
         "parent": "mShoulderRight",
@@ -597,8 +531,7 @@ sl_rig = {
     },
     "R_LOWER_ARM": {
         "parent": "mElbowRight",
-        "children": [
-        ],
+        "children": [],
     },
     "mWristRight": {
         "parent": "mElbowRight",
@@ -613,8 +546,7 @@ sl_rig = {
     },
     "R_HAND": {
         "parent": "mWristRight",
-        "children": [
-        ],
+        "children": [],
     },
     "mHandMiddle1Right": {
         "parent": "mWristRight",
@@ -630,8 +562,7 @@ sl_rig = {
     },
     "mHandMiddle3Right": {
         "parent": "mHandMiddle2Right",
-        "children": [
-        ],
+        "children": [],
     },
     "mHandIndex1Right": {
         "parent": "mWristRight",
@@ -647,8 +578,7 @@ sl_rig = {
     },
     "mHandIndex3Right": {
         "parent": "mHandIndex2Right",
-        "children": [
-        ],
+        "children": [],
     },
     "mHandRing1Right": {
         "parent": "mWristRight",
@@ -664,8 +594,7 @@ sl_rig = {
     },
     "mHandRing3Right": {
         "parent": "mHandRing2Right",
-        "children": [
-        ],
+        "children": [],
     },
     "mHandPinky1Right": {
         "parent": "mWristRight",
@@ -681,8 +610,7 @@ sl_rig = {
     },
     "mHandPinky3Right": {
         "parent": "mHandPinky2Right",
-        "children": [
-        ],
+        "children": [],
     },
     "mHandThumb1Right": {
         "parent": "mWristRight",
@@ -698,8 +626,7 @@ sl_rig = {
     },
     "mHandThumb3Right": {
         "parent": "mHandThumb2Right",
-        "children": [
-        ],
+        "children": [],
     },
     "mWingsRoot": {
         "parent": "mChest",
@@ -729,13 +656,11 @@ sl_rig = {
     },
     "mWing4Left": {
         "parent": "mWing3Left",
-        "children": [
-        ],
+        "children": [],
     },
     "mWing4FanLeft": {
         "parent": "mWing3Left",
-        "children": [
-        ],
+        "children": [],
     },
     "mWing1Right": {
         "parent": "mWingsRoot",
@@ -758,13 +683,11 @@ sl_rig = {
     },
     "mWing4Right": {
         "parent": "mWing3Right",
-        "children": [
-        ],
+        "children": [],
     },
     "mWing4FanRight": {
         "parent": "mWing3Right",
-        "children": [
-        ],
+        "children": [],
     },
     "mHipRight": {
         "parent": "mPelvis",
@@ -775,8 +698,7 @@ sl_rig = {
     },
     "R_UPPER_LEG": {
         "parent": "mHipRight",
-        "children": [
-        ],
+        "children": [],
     },
     "mKneeRight": {
         "parent": "mHipRight",
@@ -787,8 +709,7 @@ sl_rig = {
     },
     "R_LOWER_LEG": {
         "parent": "mKneeRight",
-        "children": [
-        ],
+        "children": [],
     },
     "mAnkleRight": {
         "parent": "mKneeRight",
@@ -799,8 +720,7 @@ sl_rig = {
     },
     "R_FOOT": {
         "parent": "mAnkleRight",
-        "children": [
-        ],
+        "children": [],
     },
     "mFootRight": {
         "parent": "mAnkleRight",
@@ -810,8 +730,7 @@ sl_rig = {
     },
     "mToeRight": {
         "parent": "mFootRight",
-        "children": [
-        ],
+        "children": [],
     },
     "mHipLeft": {
         "parent": "mPelvis",
@@ -822,8 +741,7 @@ sl_rig = {
     },
     "L_UPPER_LEG": {
         "parent": "mHipLeft",
-        "children": [
-        ],
+        "children": [],
     },
     "mKneeLeft": {
         "parent": "mHipLeft",
@@ -834,8 +752,7 @@ sl_rig = {
     },
     "L_LOWER_LEG": {
         "parent": "mKneeLeft",
-        "children": [
-        ],
+        "children": [],
     },
     "mAnkleLeft": {
         "parent": "mKneeLeft",
@@ -846,8 +763,7 @@ sl_rig = {
     },
     "L_FOOT": {
         "parent": "mAnkleLeft",
-        "children": [
-        ],
+        "children": [],
     },
     "mFootLeft": {
         "parent": "mAnkleLeft",
@@ -857,8 +773,7 @@ sl_rig = {
     },
     "mToeLeft": {
         "parent": "mFootLeft",
-        "children": [
-        ],
+        "children": [],
     },
     "mTail1": {
         "parent": "mPelvis",
@@ -892,13 +807,11 @@ sl_rig = {
     },
     "mTail6": {
         "parent": "mTail5",
-        "children": [
-        ],
+        "children": [],
     },
     "mGroin": {
         "parent": "mPelvis",
-        "children": [
-        ],
+        "children": [],
     },
     "mHindLimbsRoot": {
         "parent": "mPelvis",
@@ -927,8 +840,7 @@ sl_rig = {
     },
     "mHindLimb4Left": {
         "parent": "mHindLimb3Left",
-        "children": [
-        ],
+        "children": [],
     },
     "mHindLimb1Right": {
         "parent": "mHindLimbsRoot",
@@ -950,7 +862,6 @@ sl_rig = {
     },
     "mHindLimb4Right": {
         "parent": "mHindLimb3Right",
-        "children": [
-        ],
+        "children": [],
     },
 }

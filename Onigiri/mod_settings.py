@@ -1,4 +1,3 @@
-
 import traceback
 
 oni_settings = {}
@@ -12,19 +11,13 @@ oni_settings["layers"]["extended"] = 5
 oni_settings["layers"]["face"] = 6
 oni_settings["layers"]["hand"] = 7
 
-oni_settings['debug'] = False
+oni_settings["debug"] = False
 
-oni_settings['proxy_type'] = "empty"
+oni_settings["proxy_type"] = "empty"
 
-oni_settings['mh_vcount'] = 13380
+oni_settings["mh_vcount"] = 13380
 
-oni_settings['mh_edges'] = [
-    11556,
-    24851,
-    11788,
-    25037,
-    12203,
-    25465]
+oni_settings["mh_edges"] = [11556, 24851, 11788, 25037, 12203, 25465]
 
 oni_settings["arg"] = ""
 
@@ -36,23 +29,23 @@ oni_settings["set_rotation"] = True
 
 oni_settings["keep_rotation"] = False
 
-oni_settings["source"] = "" 
+oni_settings["source"] = ""
 
 oni_settings["terminate"] = False
 oni_settings["terminate_handler"] = False
 
 oni_settings["sl_joint_total"] = 110
-oni_settings["sl_joint_influences"] = 4 
+oni_settings["sl_joint_influences"] = 4
 
-oni_settings["count"] = 0 
+oni_settings["count"] = 0
 
 oni_settings["paths"] = {}
-oni_settings["paths"]["presets"] = "/presets/"   
-oni_settings["paths"]["data"] = "/data/"         
-oni_settings["paths"]["devkit"] = "/devkit/"         
-oni_settings["paths"]["code"] = "/code/"         
-oni_settings["paths"]["icons"] = "/icons"        
-oni_settings["paths"]["characters"] = "/characters/"        
+oni_settings["paths"]["presets"] = "/presets/"
+oni_settings["paths"]["data"] = "/data/"
+oni_settings["paths"]["devkit"] = "/devkit/"
+oni_settings["paths"]["code"] = "/code/"
+oni_settings["paths"]["icons"] = "/icons"
+oni_settings["paths"]["characters"] = "/characters/"
 
 oni_settings["files"] = {}
 oni_settings["files"]["reset"] = "/reset.pkl"
@@ -69,7 +62,7 @@ oni_settings["files"]["lsl_split_animmesh"] = "/bulk_export_split_animesh.txt"
 oni_settings["files"]["bone_orientation"] = "/bone_orientation.mtx"
 
 oni_settings["files"]["rigs"] = {}
-oni_settings["files"]["rigs"]["lib"] = "oni_rig_lib.blend" 
+oni_settings["files"]["rigs"]["lib"] = "oni_rig_lib.blend"
 oni_settings["files"]["rigs"]["types"] = {}
 oni_settings["files"]["rigs"]["types"]["base"] = "OnigiriBase"
 oni_settings["files"]["rigs"]["types"]["animation"] = "Onigiri"
@@ -94,7 +87,7 @@ oni_settings["map_to_template"]["flags_new"]["use_connect_state"] = 1
 oni_settings["map_to_template"]["flags_new"]["pretty_places"] = 0
 oni_settings["map_to_template"]["flags_old"] = {}
 
-oni_settings['dae_export_options'] = {
+oni_settings["dae_export_options"] = {
     "dae_apply_modifiers": "Apply Modifiers",
     "dae_selected": "Selection Only",
     "dae_include_children": "Include Children",
@@ -107,6 +100,6 @@ oni_settings['dae_export_options'] = {
     "dae_use_blender_profile": "Use Blender Profile",
     "dae_sort_by_name": "Sort By Name",
     "dae_open_sim": "For SL / OpenSim",
-    }
+}
 
 pelvis_names = {"mpelvis", "avatar_mPelvis", "hip", "hips"}

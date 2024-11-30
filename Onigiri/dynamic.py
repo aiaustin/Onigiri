@@ -1,21 +1,8 @@
 import bpy
 
 
-
-
 if True:
     props = {}
-    
-    
-    
-
-
-
-
-
-
-
-
 
 
 def get_director(armature=None):
@@ -26,13 +13,9 @@ def get_director(armature=None):
     obj = bpy.data.objects
     armObj = obj[armature]
 
-    
-    
-    actor_check = armObj.get('oni_dynamic_actor', None)
-    director_check = armObj.get('oni_dynamic_director', None)
+    actor_check = armObj.get("oni_dynamic_actor", None)
+    director_check = armObj.get("oni_dynamic_director", None)
 
-    
-    
     if actor_check == None:
         if director_check == None:
             return False
@@ -40,49 +23,41 @@ def get_director(armature=None):
     elif director_check == None:
         if actor_check == None:
             return False
-        director = actor_check.get('oni_dynamic_director', None)
+        director = actor_check.get("oni_dynamic_director", None)
         if director == None:
             return False
         inRig = director
-    
-    
-    
+
     else:
         inRig = director_check
 
     if inRig.name not in bpy.context.scene.objects:
-       return False
-
-    
+        return False
 
     return inRig
 
 
-
-
-
-
-
-
-
-
-
 def add_constraints(
-    source=None, target=None, bone_map=None,
-    constraint="COPY_TRANSFORMS", space='WORLD',
-    influence=1, location=False, rotation=True, scale=False):
+    source=None,
+    target=None,
+    bone_map=None,
+    constraint="COPY_TRANSFORMS",
+    space="WORLD",
+    influence=1,
+    location=False,
+    rotation=True,
+    scale=False,
+):
 
     obj = bpy.data.objects
     sourceObj = obj[source]
     targetObj = obj[target]
 
-    
-    
     sourceObj.select_set(True)
     bpy.context.view_layer.objects.active = sourceObj
 
     missing_targets = []
-    missing_sources= []
+    missing_sources = []
 
     for tbone in bone_map:
         sbone = bone_map[tbone]
@@ -99,14 +74,18 @@ def add_constraints(
         print(missing_sources)
 
     if len(missing_targets) == len(bone_map):
-        print("None of the target bones matched for adding constraints (dynamic.add_constraints)")
+        print(
+            "None of the target bones matched for adding constraints (dynamic.add_constraints)"
+        )
         return False
     if len(missing_sources) == len(bone_map):
-        print("None of the source bones matched for adding constraints (dynamic.add_constraints)")
+        print(
+            "None of the source bones matched for adding constraints (dynamic.add_constraints)"
+        )
         return False
 
     for tbone in bone_map:
-        
+
         if tbone not in targetObj.data.bones:
             continue
         sbone = bone_map[tbone]
@@ -121,7 +100,7 @@ def add_constraints(
         conObj.target_space = space
         conObj.owner_space = space
         conObj.influence = influence
-        if constraint == 'CHILD_OF':
+        if constraint == "CHILD_OF":
             conObj.use_location_x = location
             conObj.use_location_y = location
             conObj.use_location_z = location
@@ -134,23 +113,7 @@ def add_constraints(
             context_py = bpy.context.copy()
             context_py["constraint"] = bc.active
             utils.set_inverse(context_py, cname)
-            
-            
+
         conObj.name = "ONI " + cname
 
-    
-
     return True
-
-
-
-
-
-
-
-
-
-
-
-
-

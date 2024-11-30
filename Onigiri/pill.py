@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 import bpy
 import math
 import mathutils
@@ -14,45 +6,36 @@ from .presets import avatar_skeleton as skel_old
 from .presets import volumes
 
 
-
-YZZYX = mathutils.Matrix.Rotation(math.pi/2, 4, 'Y')
-XYZZY = mathutils.Matrix.Rotation(math.pi/2, 4, 'X')
-
+YZZYX = mathutils.Matrix.Rotation(math.pi / 2, 4, "Y")
+XYZZY = mathutils.Matrix.Rotation(math.pi / 2, 4, "X")
 
 
-
-
-Z90 = mathutils.Matrix ((
-    ( 0.0000,  1.0000, 0.0000, 0.0000),
-    (-1.0000,  0.0000, 0.0000, 0.0000),
-    ( 0.0000,  0.0000, 1.0000, 0.0000),
-    ( 0.0000,  0.0000, 0.0000, 1.0000)
-    ))
+Z90 = mathutils.Matrix(
+    (
+        (0.0000, 1.0000, 0.0000, 0.0000),
+        (-1.0000, 0.0000, 0.0000, 0.0000),
+        (0.0000, 0.0000, 1.0000, 0.0000),
+        (0.0000, 0.0000, 0.0000, 1.0000),
+    )
+)
 
 Z90I = Z90.inverted()
 
 
-
-
-
-
-
 zeros = {
-    0 : "000",
-    1 : "00",
-    2 : "0",
-    3 : "",
-    }
+    0: "000",
+    1: "00",
+    2: "0",
+    3: "",
+}
 to_asc = {}
 to_chr = {}
 for i in range(256):
     c = chr(i)
     z = len(str(i))
-    fbx = 'FBXASC' + zeros[z] + str(i)
+    fbx = "FBXASC" + zeros[z] + str(i)
     to_asc[c] = fbx
     to_chr[fbx] = c
-
-
 
 
 def matrix_help():
@@ -60,53 +43,53 @@ def matrix_help():
     print("pill::matrix_help - I'm pill")
     help_text = """I are gone doop"""
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     print(help_text)
     return False
 
+
 def get_transform():
     return matrix_help()
+
+
 def get_location():
     return matrix_help()
+
+
 def get_rotation():
     return matrix_help()
+
+
 def get_scale():
     return matrix_help()
+
+
 def set_matrix():
     return matrix_help()
+
+
 def set_transform():
     return matrix_help()
+
+
 def set_location():
     return matrix_help()
+
+
 def set_rotation():
     return matrix_help()
+
+
 def set_scale():
     return matrix_help()
 
 
-
-
-
-
-
-def quat_short(a,b):
+def quat_short(a, b):
     if a.dot(b) < 0:
         return b.negate()
     return a
 
-def quat_long(a,b):
+
+def quat_long(a, b):
     if a.dot(b) > 0:
         return b.negate()
     return a
@@ -117,11 +100,9 @@ def rotate_matrix(mat, angle=[]):
     smat = mathutils.Matrix()
     for i in range(3):
         smat[i][i] = scale[i]
-    eu = mathutils.Euler(map(math.radians, angle), 'XYZ')
+    eu = mathutils.Euler(map(math.radians, angle), "XYZ")
     new_mat = mathutils.Matrix.Translation(loc) @ eu.to_matrix().to_4x4() @ smat
     return new_mat
-
-
 
 
 def get_local_matrix(armature="", bone=""):
@@ -132,14 +113,14 @@ def get_local_matrix(armature="", bone=""):
         boneRefPoseMtx = poseBone.bone.matrix_local
         parentPoseMtx = poseBone.parent.matrix
         bonePoseMtx = poseBone.matrix
-        boneLocMtx = ( parentRefPoseMtx.inverted() @ boneRefPoseMtx ).inverted() @ ( parentPoseMtx.inverted() @ bonePoseMtx )
+        boneLocMtx = (parentRefPoseMtx.inverted() @ boneRefPoseMtx).inverted() @ (
+            parentPoseMtx.inverted() @ bonePoseMtx
+        )
     else:
         boneRefPoseMtx = poseBone.bone.matrix_local
         bonePoseMtx = poseBone.matrix
         boneLocMtx = boneRefPoseMtx.inverted() @ bonePoseMtx
     return boneLocMtx
-
-
 
 
 def add_vectors(a, b):
@@ -150,6 +131,8 @@ def add_vectors(a, b):
     for i in range(len(a)):
         v.append(a[i] + b[i])
     return v
+
+
 def subtract_vectors(a, b):
     if len(a) < len(b):
         print("length mismatch, last vector must be equal or larger")
@@ -158,21 +141,28 @@ def subtract_vectors(a, b):
     for i in range(len(a)):
         v.append(a[i] - b[i])
     return v
+
+
 def round_to_tuple(a, f=6):
     b = list()
     for t in a:
         b.append(round(t), f)
     return tuple(b)
+
+
 def round_to_list(a, f=6):
     b = list()
     for t in a:
         b.append(round(t), f)
     return b
+
+
 def float_to_string(a, f=6):
     b = list()
     for c in a:
-        b.append( f"{c:.ff}".rstrip('0') )
+        b.append(f"{c:.ff}".rstrip("0"))
     return b
+
 
 def quat_to_degrees(a):
     eu = a.to_euler()
@@ -180,154 +170,73 @@ def quat_to_degrees(a):
     return b
 
 
+def eulerRotate(x, y, z, rot_order):
 
+    MATRIX_IDENTITY_3x3 = mathutils.Matrix([1, 0, 0], [0, 1, 0], [0, 0, 1])
+    MATRIX_IDENTITY_4x4 = mathutils.Matrix(
+        [1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]
+    )
 
+    mats = [
+        mathutils.RotationMatrix(x % 360, 3, "x"),
+        mathutils.RotationMatrix(y % 360, 3, "y"),
+        mathutils.RotationMatrix(z % 360, 3, "z"),
+    ]
 
+    return (
+        mats[rot_order[2]]
+        @ (mats[rot_order[1]] @ (mats[rot_order[0]] @ MATRIX_IDENTITY_3x3))
+    ).toEuler()
 
-
-
-
-
-def eulerRotate(x,y,z, rot_order): 
-    
-    MATRIX_IDENTITY_3x3 = mathutils.Matrix([1,0,0],[0,1,0],[0,0,1])
-    MATRIX_IDENTITY_4x4 = mathutils.Matrix([1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1])
-    
-    mats=[mathutils.RotationMatrix(x%360,3,'x'), mathutils.RotationMatrix(y%360,3,'y'), mathutils.RotationMatrix(z%360,3,'z')]
-    
-    
-    return (mats[rot_order[2]] @ (mats[rot_order[1]] @ (mats[rot_order[0]] @ MATRIX_IDENTITY_3x3))).toEuler()
-
-
-
-
-
-
-    
-    
-        
-            
-    
 
 def matrix_from_list(l):
     M = mathutils.Matrix()
     for c in range(4):
         for r in range(4):
-            M[c][r] = l[ r + (c*4) ]
+            M[c][r] = l[r + (c * 4)]
     return M
-
 
 
 def matrix_from_vectors(v):
     matL = list()
     for fl in v:
-        matL.extend( [float(a) for a in fl] )
+        matL.extend([float(a) for a in fl])
     print("PROBABLY NOT FUNCTIONAL: matrix_from_vectors")
     return matrix_from_list(matL)
-
-
-
-
-
-
-
-
 
 
 def matrix_from_list(l):
     M = mathutils.Matrix()
     for c in range(4):
         for r in range(4):
-            M[c][r] = l[4*r + c]
+            M[c][r] = l[4 * r + c]
     return M
-
-
-
-    
-    
-    
-        
-
-
-
-
 
 
 def inverse_bind(arm, bone):
     boneObj = bpy.data.objects[arm].data.bones[bone]
-    
-    if boneObj.get('bind_mat') != None:
-        
-        
-        M = list_to_matrix(boneObj['bind_mat'])
-        if 1 == 0: 
+
+    if boneObj.get("bind_mat") != None:
+
+        M = list_to_matrix(boneObj["bind_mat"])
+        if 1 == 0:
             M = YZZYX @ M
-        
+
         return M.inverted()
 
-    
-
-    else: 
+    else:
         loc - boneObj.head_local
         R = mathutils.Matrix()
         L = mathutils.Matrix.Translation((loc))
 
     if bone in vol.vol_joints:
-        rot = skel_old.avatar_skeleton[bone]['rot'] 
-        scale = volumes.vol_joints[bone]['scale']
+        rot = skel_old.avatar_skeleton[bone]["rot"]
+        scale = volumes.vol_joints[bone]["scale"]
         matf = L @ R @ rot @ scale
-        
-        
-            
-        
-        
+
         matf = Z90I @ matf @ Z90
 
     return matf
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-        
-        
-        
-
-        
-
-        
-              
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-
 
 
 def get_real_matrix(armature, bone):
@@ -354,16 +263,11 @@ def get_real_matrix(armature, bone):
     rp = pbpmat @ dbpmatlI @ dbmatl
     rp_composed = rp.inverted() @ pbmat
 
-    
     m3 = dbmatl.to_3x3()
     m4 = m3.to_4x4()
     m4I = m4.inverted()
     real_mat = m4 @ rp_composed @ m4I
     return real_mat
-
-
-
-
 
 
 def get_sl_vector_difference(vec):
@@ -383,44 +287,41 @@ def get_sl_vector_difference(vec):
     for i in range(len(v0)):
         a = v0[i]
         b = v1[i]
-        v.append( abs((a) - (b)) )
+        v.append(abs((a) - (b)))
     return v
-
-
-
-
-
-
-
 
 
 def update_matrices(obj):
     if obj.parent is None:
         obj.matrix_world = obj.matrix_basis
     else:
-        obj.matrix_world = obj.parent.matrix_world @                           obj.matrix_parent_inverse @                           obj.matrix_basis
-
-
-
-
-
-
+        obj.matrix_world = (
+            obj.parent.matrix_world @ obj.matrix_parent_inverse @ obj.matrix_basis
+        )
 
 
 def BuildScaleMatrix(s):
-    return Matrix.Scale(s[0],4,(1,0,0)) @ Matrix.Scale(s[1],4,(0,1,0)) @ Matrix.Scale(s[2],4,(0,0,1))
+    return (
+        Matrix.Scale(s[0], 4, (1, 0, 0))
+        @ Matrix.Scale(s[1], 4, (0, 1, 0))
+        @ Matrix.Scale(s[2], 4, (0, 0, 1))
+    )
+
 
 def BuildRotationMatrixXYZ(r):
-    return  Matrix.Rotation(r[2],4,'Z') @ Matrix.Rotation(r[1],4,'Y') @ Matrix.Rotation(r[0],4,'X')
+    return (
+        Matrix.Rotation(r[2], 4, "Z")
+        @ Matrix.Rotation(r[1], 4, "Y")
+        @ Matrix.Rotation(r[0], 4, "X")
+    )
 
-def BuildMatrix(t,r,s):
-    return   Matrix.Translation(t) @ BuildRotationMatrixXYZ(r) @ BuildScaleMatrix(s)
+
+def BuildMatrix(t, r, s):
+    return Matrix.Translation(t) @ BuildRotationMatrixXYZ(r) @ BuildScaleMatrix(s)
+
 
 def UpdateObjectTransform(ob):
     ob.matrix_world = BuildMatrix(ob.location, ob.rotation_euler, ob.scale)
-
-
-
 
 
 def ident(tmat):
@@ -430,13 +331,9 @@ def ident(tmat):
         one = 1.0
     c = 0
     for i in range(0, 16, 4):
-        tmat[i+c] = one
-        c +=1
+        tmat[i + c] = one
+        c += 1
     return tmat
-
-
-
-
 
 
 def matrix_to_text(mat):
@@ -451,25 +348,9 @@ def matrix_to_text(mat):
 tMatrix = matrix_to_text(mathutils.Matrix())
 
 
-
-
 def print_matrix(mat):
     for r in range(0, 16, 4):
-        print(mat[r:r+4])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        print(mat[r : r + 4])
 
 
 def recompose(
@@ -477,13 +358,12 @@ def recompose(
     bone_space="local",
     offsets=None,
     dBone=None,
-
-
     use_offset_volume=False,
     use_offset_location=False,
     use_offset_rotation=False,
     use_offset_scale=False,
-    process_volume_bones=True):
+    process_volume_bones=True,
+):
 
     print("Processing from pill, using old skeleton file (avatar_skeleton)")
 
@@ -493,113 +373,49 @@ def recompose(
         rig_type = "absolute_" + rig_type
 
     l = skel_old.avatar_skeleton[bone][rig_type]
-    r = skel_old.avatar_skeleton[bone]['rot']  
-    s = skel_old.avatar_skeleton[bone]['scale'] 
+    r = skel_old.avatar_skeleton[bone]["rot"]
+    s = skel_old.avatar_skeleton[bone]["scale"]
 
-    
-    
-    
-    
-    
-
-
-
-
-
-
-
-
-    
-    
     if bone in volumes.vol_joints:
         if process_volume_bones == True:
-            l = skel_old.avatar_skeleton[bone]['pos']
+            l = skel_old.avatar_skeleton[bone]["pos"]
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     if bone_space == "global":
-        
-        
-        
-        
+
         l = skel_old.avatar_skeleton[bone][rig_type]
 
-        
-        
-        
-        
         if use_offset_location == True:
             L_SKEL = mathutils.Matrix.Translation(l)
             L = mathutils.Matrix.Translation(l)
-            M_OFF = offsets['global']['matrix']
+            M_OFF = offsets["global"]["matrix"]
             L = M_OFF @ L_SKEL
-            
-            
+
             l = L.to_translation()
 
-        
-        
         else:
             l = dBone.head_local.copy()
-            
-            
+
             L = mathutils.Matrix.Translation(l)
-            R = mathutils.Matrix.Rotation(math.radians(90.0), 4, 'Z')
+            R = mathutils.Matrix.Rotation(math.radians(90.0), 4, "Z")
             RI = R.inverted()
             L = R @ L
-            
-            
+
             l = L.to_translation()
 
+    l_ofs, r_ofs, s_ofs = offsets[bone_space]["matrix"].decompose()
 
-    
-    
-    
-    l_ofs, r_ofs, s_ofs = offsets[bone_space]['matrix'].decompose()
-
-    
     L_mat = mathutils.Matrix.Translation(l)
     L_ofs = mathutils.Matrix.Translation(l_ofs)
 
-    
-    
-    
-    rot = [math.radians(a) for a in r] 
+    rot = [math.radians(a) for a in r]
 
-    R_mat = mathutils.Euler(rot,'XYZ').to_matrix().to_4x4()
+    R_mat = mathutils.Euler(rot, "XYZ").to_matrix().to_4x4()
 
-    
-    
-    
-    
-    
-    
-    
     if use_offset_rotation == True:
         R_ofs = r_ofs.to_matrix().to_4x4()
     else:
-        R_ofs = mathutils.Euler((0,0,0),'XYZ').to_matrix().to_4x4()
+        R_ofs = mathutils.Euler((0, 0, 0), "XYZ").to_matrix().to_4x4()
 
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
     S_mat = mathutils.Matrix()
     S_ofs = mathutils.Matrix()
     for i in range(3):
@@ -608,37 +424,19 @@ def recompose(
         for i in range(3):
             S_ofs[i][i] = s_ofs[i]
 
-    
-    
-    R90y = mathutils.Matrix.Rotation(math.radians(90.0), 4, 'Y')
+    R90y = mathutils.Matrix.Rotation(math.radians(90.0), 4, "Y")
     R90yI = R90y.inverted()
-    R_ofs_f = R_ofs  
+    R_ofs_f = R_ofs
 
-    
     L = L_mat @ L_ofs
     R = R_mat @ R_ofs_f
     S = S_mat @ S_ofs
 
-    
-    
-    
-    
-    
-    if bone_space == 'global':
+    if bone_space == "global":
         L = L_mat
 
-
-
-
-
-
-
-
-
-    
-    
     if 1 == 0:
-        if bone == 'R_UPPER_ARM':
+        if bone == "R_UPPER_ARM":
             print("=====================================")
             print("pill:")
             print("-------------------------------------")
@@ -659,22 +457,15 @@ def recompose(
             print(bone + ":R:", to_deg(R))
             print(R)
             print("offset matrix:")
-            print(offsets[bone_space]['matrix'])
+            print(offsets[bone_space]["matrix"])
             print("=====================================")
-
-
 
     return L, R, S
 
 
-
-
-
-
-def matrify(l,r,s):
+def matrify(l, r, s):
     L = mathutils.Matrix.Translation(l)
-    
-    
+
     R = r.to_matrix().to_4x4()
     S = mathutils.Matrix()
     for i in range(3):
@@ -682,21 +473,17 @@ def matrify(l,r,s):
     return L, R, S
 
 
-
-
 def to_deg(mat):
     eu = mat.to_euler()
     return [math.degrees(round(a, 4)) for a in eu]
 
 
-
-
 def get_pose_matrix_in_other_space(mat, pose_bone):
-    """ Returns the transform matrix relative to pose_bone's current
-        transform space.  In other words, presuming that mat is in
-        armature space, slapping the returned matrix onto pose_bone
-        should give it the armature-space transforms of mat.
-        TODO: try to handle cases with axis-scaled parents better.
+    """Returns the transform matrix relative to pose_bone's current
+    transform space.  In other words, presuming that mat is in
+    armature space, slapping the returned matrix onto pose_bone
+    should give it the armature-space transforms of mat.
+    TODO: try to handle cases with axis-scaled parents better.
     """
     rest = pose_bone.bone.matrix_local.copy()
     rest_inv = rest.inverted()
@@ -709,20 +496,9 @@ def get_pose_matrix_in_other_space(mat, pose_bone):
         par_inv = Matrix()
         par_rest = Matrix()
 
-    
     smat = rest_inv @ (par_rest @ (par_inv @ mat))
 
-    
-    
-    
-    
-
     return smat
-
-
-
-
-
 
 
 def get_rest_pose(pose_bone):
@@ -734,23 +510,18 @@ def get_rest_pose(pose_bone):
     return par_rest.inverted() @ rest
 
 
-
 def safe_object_mode():
     mode = bpy.context.mode
-    
-    
+
     if bpy.context.active_object == None:
         if len(bpy.context.selected_objects) > 0:
             bpy.context.view_layer.objects.active = bpy.context.selected_objects[0]
         return None
-    bpy.ops.object.mode_set(mode='OBJECT')
-    
-    if mode == 'EDIT_ARMATURE':
-        return 'EDIT'
+    bpy.ops.object.mode_set(mode="OBJECT")
+
+    if mode == "EDIT_ARMATURE":
+        return "EDIT"
     return mode
-
-
-
 
 
 def close_enough(a, b, tol=0.000001):
@@ -765,35 +536,15 @@ def close_enough(a, b, tol=0.000001):
     return False
 
 
-
-
-
-
-
-
-
-
-
-def vec_equal(vec1,vec2, tol=0.001):
-    mat = mathutils.Matrix(([vec1[0],vec2[0]],[vec1[1],vec2[1]]))
+def vec_equal(vec1, vec2, tol=0.001):
+    mat = mathutils.Matrix(([vec1[0], vec2[0]], [vec1[1], vec2[1]]))
     D = mat.determinant()
-    if (abs(D) <= tol):
-        mat = mathutils.Matrix(([vec1[0],vec2[0]],[vec1[2],vec2[2]]))
+    if abs(D) <= tol:
+        mat = mathutils.Matrix(([vec1[0], vec2[0]], [vec1[2], vec2[2]]))
         D = mat.determinant()
-        if (abs(D) <= tol):
-            mat = mathutils.Matrix(([vec1[1],vec2[1]],[vec1[2],vec2[2]]))
+        if abs(D) <= tol:
+            mat = mathutils.Matrix(([vec1[1], vec2[1]], [vec1[2], vec2[2]]))
             D = mat.determinant()
-            if (abs(D) <= tol):
+            if abs(D) <= tol:
                 return True
     return False
-
-
-
-
-
-
-
-
-
-
-
