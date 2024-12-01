@@ -1333,6 +1333,8 @@ oni_target_group = "Retarget Bones"
 oni_source_group = "Source Bones"
 
 
+rig_group_all_bones = "All Bones"
+
 rig_group_mbones = "mBones"
 rig_group_vbones = "vBones"
 rig_group_abones = "aBones"
