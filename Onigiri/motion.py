@@ -259,7 +259,7 @@ def retarget_hard(inRig):
     if proxyRig.animation_data:
         if proxyRig.animation_data.action:
             frame_start = proxyRig.animation_data.action.frame_range[0]
-    bpy.context.scene.frame_set(frame_start)
+    bpy.context.scene.frame_set(int(frame_start))
 
     proxyRig.animation_data_clear()
     bpy.ops.object.mode_set(mode="POSE")
@@ -409,7 +409,7 @@ def retarget_soft(inRig, report=False):
     if proxyRig.animation_data:
         if proxyRig.animation_data.action:
             frame_start = proxyRig.animation_data.action.frame_range[0]
-    bpy.context.scene.frame_set(frame_start)
+    bpy.context.scene.frame_set(int(frame_start))
 
     proxyRig.animation_data_clear()
     bpy.ops.object.mode_set(mode="POSE")
@@ -549,7 +549,7 @@ def retarget_soft(inRig, report=False):
         if outRig.animation_data:
             if outRig.animation_data.action:
                 frame_start = outRig.animation_data.action.frame_range[0]
-        bpy.context.scene.frame_set(frame_start)
+        bpy.context.scene.frame_set(int(frame_start))
 
         outRig.animation_data_clear()
         mode = bpy.context.mode
@@ -691,7 +691,7 @@ def retarget_custom(inRig=None, outRig=None):
     if proxyRig.animation_data:
         if proxyRig.animation_data.action:
             frame_start = proxyRig.animation_data.action.frame_range[0]
-    bpy.context.scene.frame_set(frame_start)
+    bpy.context.scene.frame_set(int(frame_start))
 
     proxyRig.animation_data_clear()
     bpy.ops.object.mode_set(mode="POSE")
@@ -820,7 +820,7 @@ def retarget_custom(inRig=None, outRig=None):
         if outRig.animation_data:
             if outRig.animation_data.action:
                 frame_start = outRig.animation_data.action.frame_range[0]
-        bpy.context.scene.frame_set(frame_start)
+        bpy.context.scene.frame_set(int(frame_start))
 
         outRig.animation_data_clear()
         mode = bpy.context.mode
@@ -961,24 +961,19 @@ def add_groups(inRig=None, outRig=None):
     inRig.select_set(True)
     utils.activate(inRig)
     bpy.ops.object.mode_set(mode="POSE")
-    bpy.ops.pose.group_add()
-    inRig.pose.bone_groups.active.name = props["groups"]["director"]
-    inRig.pose.bone_groups.active.color_set = props["themes"]["director"]
-    bpy.ops.pose.group_add()
-    inRig.pose.bone_groups.active.name = props["groups"]["reskin"]
-    inRig.pose.bone_groups.active.color_set = props["themes"]["reskin"]
+    
+    inRig.data.collections.new(props["groups"]["director"])
+    inRig.data.collections.new(props["groups"]["reskin"])
+    
     bpy.ops.object.mode_set(mode="OBJECT")
     inRig.select_set(False)
 
     outRig.select_set(True)
     utils.activate(outRig)
     bpy.ops.object.mode_set(mode="POSE")
-    bpy.ops.pose.group_add()
-    outRig.pose.bone_groups.active.name = props["groups"]["actor"]
-    outRig.pose.bone_groups.active.color_set = props["themes"]["actor"]
-    bpy.ops.pose.group_add()
-    outRig.pose.bone_groups.active.name = props["groups"]["reskin"]
-    outRig.pose.bone_groups.active.color_set = props["themes"]["reskin"]
+    inRig.data.collections.new(props["groups"]["actor"])
+    inRig.data.collections.new(props["groups"]["reskin"])
+    
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
@@ -1020,7 +1015,7 @@ def update_map(inRig=None):
                     frame_start = inRig.animation_data.action.frame_range[0]
             if has_action == False:
                 frame_start = bpy.context.scene.frame_start
-            bpy.context.scene.frame_set(frame_start)
+            bpy.context.scene.frame_set(int(frame_start))
 
             for boneObj in proxyRig.pose.bones:
                 for cname in boneObj["oni_motion_constraints"]:
@@ -1130,28 +1125,30 @@ def update_map(inRig=None):
 
             bpy.ops.object.mode_set(mode="OBJECT")
 
-            bpy.context.scene.frame_set(frame_current)
+            bpy.context.scene.frame_set(int(frame_current))
 
-    for boneObj in inRig.pose.bones:
-        boneObj.bone_group = None
-    for boneObj in outRig.pose.bones:
-        boneObj.bone_group = None
+    for c in inRig.data.collections:
+        for b in inRig.data.bones:
+            c.unassign(b)
+
+    for c in outRig.data.collections:
+        for b in outRig.data.bones:
+            c.unassign(b)
 
     bad_group = False
     for rename_in_bone in rename.keys():
-        if rename_in_bone not in inRig.pose.bones:
+        if rename_in_bone not in inRig.data.bones:
             continue
         rename_out_bone = rename[rename_in_bone]
+        
         director_group = props["groups"]["director"]
         actor_group = props["groups"]["actor"]
 
         try:
-            inRig.pose.bones[rename_in_bone].bone_group = inRig.pose.bone_groups[
-                director_group
-            ]
-            outRig.pose.bones[rename_out_bone].bone_group = outRig.pose.bone_groups[
-                actor_group
-            ]
+            inRig.data.collections[director_group].assign(inRig.data.bones[rename_in_bone])
+            inRig.data.bones[rename_in_bone].palette = props["themes"]["director"]
+            outRig.data.collections[actor_group].assign(outRig.data.bones[rename_out_bone])
+            outRig.data.bones[rename_out_bone].palette = props["themes"]["actor"]
         except:
             bad_group = True
             pass
@@ -1159,9 +1156,10 @@ def update_map(inRig=None):
         reskin_group = props["groups"]["reskin"]
         reskin_bones = reskin.get(rename_in_bone, [])
         for bone in reskin_bones:
-            if bone not in inRig.pose.bones:
+            if bone not in inRig.data.bones:
                 continue
-            inRig.pose.bones[bone].bone_group = inRig.pose.bone_groups[reskin_group]
+            inRig.data.collections[reskin_group].assign(inRig.data.bones[bone])            
+            inRig.data.bones[bone].palette = props["themes"]["reskin"]
 
     utils.set_state(state)
 
@@ -1190,20 +1188,20 @@ def apply_map(inRig=None, outRig=None):
         director_group = props["groups"]["director"]
         actor_group = props["groups"]["actor"]
 
-        inRig.pose.bones[rename_in_bone].bone_group = inRig.pose.bone_groups[
-            director_group
-        ]
-        outRig.pose.bones[rename_out_bone].bone_group = outRig.pose.bone_groups[
-            actor_group
-        ]
-        reskin_bones = reskin.get(rename_in_bone, [])
+        inRig.data.collections[director_group].assign(inRig.data.bones[rename_in_bone])
+        inRig.data.bones[rename_in_bone].palette = props["themes"]["director"]
 
+        outRig.data.collections[actor_group].assign(outRig.data.bones[rename_out_bone])
+        outRig.data.bones[rename_out_bone].palette = props["themes"]["actor"]
+
+        reskin_bones = reskin.get(rename_in_bone, [])
         reskin_group = props["groups"]["reskin"]
 
         for bone in reskin_bones:
 
             if bone not in inRig.pose.bones:
                 continue
-            inRig.pose.bones[bone].bone_group = inRig.pose.bone_groups[reskin_group]
+            inRig.data.collections[reskin_group].assign(inRig.data.bones[bone])                        
+            inRig.data.bones[bone].palette = props["themes"]["reskin"]
 
     return True

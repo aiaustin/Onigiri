@@ -1208,7 +1208,7 @@ def write_animation(
     bpy.context.scene.oni_anim.property_unset("export_sl_anim_label_short")
     anim.export_sl_anim_alert = False
 
-    bpy.context.scene.frame_set(frame_current)
+    bpy.context.scene.frame_set(int(frame_current))
 
     print("path:", path)
     print("len file_data:", len(file_data))
@@ -1477,7 +1477,7 @@ def write_mapped_animation(
     bpy.context.scene.oni_anim.property_unset("export_sl_anim_label_short")
     anim.export_sl_anim_alert = False
 
-    bpy.context.scene.frame_set(frame_current)
+    bpy.context.scene.frame_set(int(frame_current))
 
     print("path:", path)
     print("len file_data:", len(file_data))
@@ -1714,7 +1714,7 @@ def key_proxy_rig(armature=None, motion=None, lerp_data=None, flatten=False):
         frames = set(frames)
 
         for frame in frames:
-            bpy.context.scene.frame_set(frame)
+            bpy.context.scene.frame_set(int(frame))
             pmat = motion[bone][frame]["pmat"]
             boneObj = armObj.pose.bones[bone]
             boneObj.matrix = pmat
@@ -2309,7 +2309,7 @@ def get_matrices(armature=None, bones=[], frames=None):
     matrices = {}
 
     for f in frames:
-        bpy.context.scene.frame_set(f)
+        bpy.context.scene.frame_set(int(f))
         for bone in bones:
             bone_lower = bone.lower()
 
@@ -2499,7 +2499,7 @@ def get_deviations(
 
     print("Range taken from frame_start and frame_end, this may not be what you want.")
     for frame in range(frame_start, frame_end + 1):
-        bpy.context.scene.frame_set(frame)
+        bpy.context.scene.frame_set(int(frame))
 
         for boneObj in armObj.pose.bones:
             bone = boneObj.name
@@ -2704,7 +2704,7 @@ def get_motion(armature=None, frame_start=0, frame_end=0, frames=[], bones=[]):
         for boneObj in armObj.data.bones:
             bones.append(boneObj.name)
     for frame in frames:
-        bpy.context.scene.frame_set(frame)
+        bpy.context.scene.frame_set(int(frame))
         for bone in bones:
             if bone not in motion:
                 motion[bone] = {}
@@ -3814,7 +3814,7 @@ def transfer_motion(sarm=None, tarm=None):
 
     matrices = {}
     for frame in frames:
-        bpy.context.scene.frame_set(frame)
+        bpy.context.scene.frame_set(int(frame))
         for boneObj in tarmObj.pose.bones:
             bone = boneObj.name
             if bone not in matrices:
@@ -3883,7 +3883,7 @@ def transfer_motion(sarm=None, tarm=None):
         fc.keyframe_points.foreach_set("co", kfp_data)
         fc.update()
 
-    bpy.context.scene.frame_set(frame_current)
+    bpy.context.scene.frame_set(int(frame_current))
 
     matrices = {}
     for boneObj in tarmObj.pose.bones:
@@ -3955,7 +3955,7 @@ def bake_motion(sarm=None, tarm=None, frame_start=0, frame_end=0):
 
     matrices = {}
     for frame in range(frame_start, frame_end + 1):
-        bpy.context.scene.frame_set(frame)
+        bpy.context.scene.frame_set(int(frame))
         for boneObj in sarmObj.pose.bones:
             bone = boneObj.name
             if bone not in matrices:
@@ -4031,7 +4031,7 @@ def bake_motion(sarm=None, tarm=None, frame_start=0, frame_end=0):
         fc.keyframe_points.foreach_set("co", kfp_data)
         fc.update()
 
-    bpy.context.scene.frame_set(frame_current)
+    bpy.context.scene.frame_set(int(frame_current))
 
     return True
 
@@ -4079,9 +4079,9 @@ def get_frame_range(armature, start=True, end=False):
         frame_end = bpy.context.scene.frame_end
 
     if start == True:
-        bpy.context.scene.frame_set(frame_start)
+        bpy.context.scene.frame_set(int(frame_start))
     if end == True:
-        bpy.context.scene.frame_set(frame_end)
+        bpy.context.scene.frame_set(int(frame_end))
 
     return int(frame_start), int(frame_end)
 
@@ -4144,7 +4144,7 @@ def apply_transforms(arm, report=False):
 
     utils.set_state(state)
 
-    bpy.context.scene.frame_set(frame_current)
+    bpy.context.scene.frame_set(int(frame_current))
 
     return True
 
