@@ -24,6 +24,7 @@ rd = rig_data
 
 from .presets import skeleton as skel
 
+import bpy.types
 
 vbones_to_mbones = {
     "PELVIS": "mPelvis",
@@ -146,24 +147,28 @@ def create_rig(target="default"):
     bpy.ops.object.mode_set(mode="OBJECT")
 
     bpy.ops.object.mode_set(mode="POSE")
-    bpy.ops.pose.group_add()
-    obj[arm].pose.bone_groups.active.name = mod_data.rig_group_mbones
-    obj[arm].pose.bone_groups.active.color_set = mod_data.rig_group_mtheme
-    bpy.ops.pose.group_add()
-    obj[arm].pose.bone_groups.active.name = mod_data.rig_group_vbones
-    obj[arm].pose.bone_groups.active.color_set = mod_data.rig_group_vtheme
+
+    allBones = obj[arm].data.collections.new(mod_data.rig_group_all_bones)
+    obj[arm].data.collections.new(mod_data.rig_group_mbones)
+    obj[arm].data.collections.new(mod_data.rig_group_vbones)
 
     bpy.context.view_layer.objects.active = obj[arm]
     for bone in rig_target:
         if rig_target[bone]["type"] == "bone":
             group = mod_data.rig_group_mbones
+            palette = palette = mod_data.rig_group_mtheme
         else:
             group = mod_data.rig_group_vbones
-        obj[arm].pose.bones[bone].bone_group = obj[arm].pose.bone_groups[group]
+            palette = palette = mod_data.rig_group_vtheme
+
+        boneObj = obj[arm].data.bones[bone]
+        allBones.assign(boneObj)
+        obj[arm].data.collections[group].assign(boneObj)
+        boneObj.color.palette =  palette
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
-    bpy.context.object.data.layers[md.oni_all_bones_layer] = True
+    bpy.context.object.data.collections[mod_data.rig_group_all_bones].is_visible = True
 
     armObj.select_set(True)
     bpy.context.view_layer.objects.active = armObj
@@ -231,33 +236,37 @@ def build_devkit_rig(target="female_neutral", connect=True):
         bpy.ops.object.mode_set(mode="OBJECT")
 
     bpy.ops.object.mode_set(mode="POSE")
-    bpy.ops.pose.group_add()
-    obj[arm].pose.bone_groups.active.name = mod_data.rig_group_mbones
-    obj[arm].pose.bone_groups.active.color_set = mod_data.rig_group_mtheme
-    bpy.ops.pose.group_add()
-    obj[arm].pose.bone_groups.active.name = mod_data.rig_group_vbones
-    obj[arm].pose.bone_groups.active.color_set = mod_data.rig_group_vtheme
-    bpy.ops.pose.group_add()
-    obj[arm].pose.bone_groups.active.name = mod_data.rig_group_abones
-    obj[arm].pose.bone_groups.active.color_set = mod_data.rig_group_atheme
-    bpy.ops.pose.group_add()
-    obj[arm].pose.bone_groups.active.name = mod_data.rig_group_nbones
-    obj[arm].pose.bone_groups.active.color_set = mod_data.rig_group_ntheme
 
+    allBones = obj[arm].data.collections.new(mod_data.rig_group_all_bones)
+    obj[arm].data.collections.new(mod_data.rig_group_mbones)
+    obj[arm].data.collections.new(mod_data.rig_group_vbones)
+    obj[arm].data.collections.new(mod_data.rig_group_abones)
+    obj[arm].data.collections.new(mod_data.rig_group_nbones)
+    
     bpy.context.view_layer.objects.active = obj[arm]
     for bone in skel.avatar_skeleton:
         if skel.avatar_skeleton[bone]["type"] == "bone":
             group = mod_data.rig_group_mbones
+            palette = mod_data.rig_group_mtheme
         elif skel.avatar_skeleton[bone]["type"] == "attachment":
             if " " in bone:
                 group = mod_data.rig_group_nbones
+                palette = mod_data.rig_group_ntheme
             else:
                 group = mod_data.rig_group_abones
+                palette = mod_data.rig_group_atheme
         else:
             group = mod_data.rig_group_vbones
+            palette = mod_data.rig_group_vtheme
 
-        obj[arm].pose.bones[bone].bone_group = obj[arm].pose.bone_groups[group]
+        boneObj = obj[arm].data.bones[bone]
+        allBones.assign(boneObj)
+        obj[arm].data.collections[group].assign(boneObj)
+        boneObj.color.palette =  palette
 
+    bpy.ops.object.mode_set(mode="OBJECT")
+
+    bpy.context.object.data.collections[mod_data.rig_group_all_bones].is_visible = True
     bpy.ops.object.mode_set(mode="OBJECT")
 
     armObj["onigiri"] = globals.version
@@ -1878,18 +1887,23 @@ def attach_proxy_rig(armature=None, clean=False):
 
     bpy.ops.object.mode_set(mode="POSE")
     for b in obj[glue].pose.bones:
+        
         for c in b.constraints:
             b.constraints.remove(c)
 
-    for g in obj[glue].pose.bone_groups:
-        obj[glue].pose.bone_groups.remove(g)
+        #for g in glueObj.data.collections:
+        #        g.unassign(b)
 
-    bpy.ops.pose.group_add()
-    glueObj.pose.bone_groups.active.name = "Glue"
-    glueObj.pose.bone_groups.active.color_set = "THEME07"
+    ## Remove all collections(bone groups) , i commented because it crash blender
+    #for g in glueObj.data.collections:
+    #    glueObj.data.collections.remove(g)
 
-    for boneObj in glueObj.pose.bones:
-        boneObj.bone_group = glueObj.pose.bone_groups["Glue"]
+    glueGroup = glueObj.data.collections.new("Glue")
+    glueObj.data.collections.move(glueGroup.index, 0)    
+
+    for boneObj in glueObj.data.bones:        
+        glueGroup.assign(boneObj)        
+        boneObj.color.palette =  "THEME07"
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
@@ -2251,7 +2265,7 @@ def build_rig(rig_class="pos", rotate=False, connect=False):
 
     bpy.ops.object.mode_set(mode="POSE")
     
-    obj[arm].data.collections.new(mod_data.rig_group_all_bones)
+    allBones = obj[arm].data.collections.new(mod_data.rig_group_all_bones)
     obj[arm].data.collections.new(mod_data.rig_group_mbones)
     obj[arm].data.collections.new(mod_data.rig_group_vbones)
     obj[arm].data.collections.new(mod_data.rig_group_abones)
@@ -2274,6 +2288,7 @@ def build_rig(rig_class="pos", rotate=False, connect=False):
             palette = mod_data.rig_group_vtheme
 
         boneObj = obj[arm].data.bones[bone]
+        allBones.assign(boneObj)        
         obj[arm].data.collections[group].assign(boneObj)
         boneObj.color.palette =  palette
 
@@ -2433,14 +2448,14 @@ def reset_layer_state(armature):
     else:
         armObj = armature
 
-    armObj.data.layers[0] = True
+    armObj.data.collections[0].is_visible = True
 
-    for i in range(1, len(armObj.data.layers)):
-        armObj.data.layers[i] = False
+    for i in range(1, len(armObj.data.collections)):
+        armObj.data.collections[i].is_visible = False
 
     for layer in visible.default:
         index = visible.layers[layer]
-        armObj.data.layers[index] = True
+        armObj.data.collections[index].is_visible = True
     return True
 
 
