@@ -20,9 +20,9 @@ LL_MAX_PELVIS_OFFSET = 5.0
 
 Z90 = mathutils.Matrix(
     (
-    ( 0.0000,  1.0000, 0.0000, 0.0000),
-    (-1.0000,  0.0000, 0.0000, 0.0000),
-    ( 0.0000,  0.0000, 1.0000, 0.0000),
+        (0.0000, 1.0000, 0.0000, 0.0000),
+        (-1.0000, 0.0000, 0.0000, 0.0000),
+        (0.0000, 0.0000, 1.0000, 0.0000),
         (0.0000, 0.0000, 0.0000, 1.0000),
     )
 )
@@ -33,7 +33,7 @@ pelvis_names = {"mpelvis", "avatar_mPelvis", "hip", "hips", "origin", "COG"}
 
 if 1 == 1:
     props = {}
-    
+
     props["bake_proxy"] = False
     props["FATAL"] = False
 
@@ -46,19 +46,19 @@ def export_sl_anim(armature=None, path=None):
 
     obj = bpy.data.objects
     armObj = obj[armature]
-    
+
     bpy.context.view_layer.update()
     frame_current = bpy.context.scene.frame_current
 
     oni = bpy.context.scene.onigiri
     onia = bpy.context.scene.oni_anim_props
     anim = bpy.context.scene.oni_anim
-    oni_anim = anim 
+    oni_anim = anim
 
     if oni.export_sl_limitations_check_disabled != True:
         if oni.animation_time > 60:
             print("Skipping SL max time check")
-            
+
     anim.export_sl_anim_label = "Saving: please wait..."
     anim.export_sl_anim_label_short = anim.export_sl_anim_label
     anim.export_sl_anim_alert = True
@@ -78,12 +78,12 @@ def export_sl_anim(armature=None, path=None):
         "Resample is turned off until a rewrite, this is only useful for reducing file size which is less needed now"
     )
     anim_resample = False
-    
+
     anim_resample_rate_rotation = anim.anim_resample_rate_rotation
     anim_resample_rate_location = anim.anim_resample_rate_location
 
     anim_deviation_detection = anim.anim_deviation_detection
-    
+
     anim_deviation_rotation = anim.anim_deviation_rotation
     anim_deviation_location = anim.anim_deviation_location
     anim_linear = oni_anim.anim_linear
@@ -194,7 +194,7 @@ def export_sl_anim(armature=None, path=None):
         frame_start=frame_start,
         frame_end=frame_end,
         anim_fps=anim_fps,
-        )
+    )
 
     total_time = time_calc["total_time"]
     loop_in_point = time_calc["loop_in_point"]
@@ -224,7 +224,7 @@ def export_sl_anim(armature=None, path=None):
         else:
             print("Avastar checking is enabled, properties will be processed")
     if is_onigiri == False and is_avastar == False and export_onigiri_disabled == False:
-        txt  = "This rig is not flagged as being compatible with Second Life, you can disable \n"
+        txt = "This rig is not flagged as being compatible with Second Life, you can disable \n"
         txt += "the Onigiri rig checking in order to attempt to export this if you like, \n"
         txt += "then try again."
         print(txt)
@@ -237,7 +237,7 @@ def export_sl_anim(armature=None, path=None):
         and export_onigiri_disabled == False
         and export_avastar_disabled == True
     ):
-        txt  = "This is not a Onigiri rig, it is an Avastar rig, Avastar export feature is disabled \n"
+        txt = "This is not a Onigiri rig, it is an Avastar rig, Avastar export feature is disabled \n"
         txt += "and Onigiri rig checking is enabled.  This combination of settings prevent the \n"
         txt += "animation from this rig to be exported.  Change at least one of these and try again."
         print(txt)
@@ -296,7 +296,7 @@ def export_sl_anim(armature=None, path=None):
             )
             return False
         print("Exporting linear motion...")
-        
+
         lerp_data = get_animated_keys(
             armature=armObj.name, frame_start=frame_start, frame_end=frame_end
         )
@@ -310,7 +310,7 @@ def export_sl_anim(armature=None, path=None):
             bones.append(bone)
             for trs in lerp_data[bone]:
                 frames.extend(lerp_data[bone][trs])
-        
+
         motion = get_motion(armature=armObj.name, frames=frames, bones=bones)
         if motion == False:
             print("Motion data returned False from linear process")
@@ -344,7 +344,7 @@ def export_sl_anim(armature=None, path=None):
                 )
             else:
                 print("Use Source Keys enable, gathering keys...")
-                
+
                 lerp_source = get_source_keys(
                     armature=armObj.name, frame_start=frame_start, frame_end=frame_end
                 )
@@ -389,7 +389,7 @@ def export_sl_anim(armature=None, path=None):
                 anim_use_source_keys = False
                 anim_use_target_keys = False
                 has_keys = False
-            
+
             else:
                 print("Found keys, processing...")
                 lerp_data = {}
@@ -449,11 +449,11 @@ def export_sl_anim(armature=None, path=None):
                         mark_tol=mark_tol,
                         mark_tol_rot=mark_tol_rot,
                         mark_tol_loc=mark_tol_loc,
-                        )
-                    
+                    )
+
                     if lerp_smooth == False:
                         print("Return from smooth motion resulted nothing")
-                        
+
                     else:
                         for bone in lerp_smooth:
                             if bone not in lerp_data:
@@ -488,9 +488,9 @@ def export_sl_anim(armature=None, path=None):
                     )
 
         if has_keys == False:
-        
+
             print("No key sources, using baked motion...")
-            
+
             motion = get_motion(
                 armature=armObj.name,
                 frame_start=frame_start,
@@ -506,7 +506,7 @@ def export_sl_anim(armature=None, path=None):
                 mark_tol=mark_tol,
                 mark_tol_rot=mark_tol_rot,
                 mark_tol_loc=mark_tol_loc,
-                )
+            )
             if lerp_data == False:
                 print("Return from baking resulted in False")
                 popup("No detected animation, bake failed", "Error", "ERROR")
@@ -526,7 +526,7 @@ def export_sl_anim(armature=None, path=None):
             return False
 
         if 1 == 0:
-            
+
             print(
                 "Return from get_bone_data with is_avastar set to",
                 is_avastar,
@@ -564,7 +564,7 @@ def export_sl_anim(armature=None, path=None):
 
         print("Deviation...")
         print("Exporting interpolated motion...")
-        
+
         lerp_data = get_animated_keys(
             armature=armObj.name, frame_start=frame_start, frame_end=frame_end
         )
@@ -599,9 +599,9 @@ def export_sl_anim(armature=None, path=None):
             print(
                 "This can happen with static poses or baking an animation so you can ignore it if that's the case."
             )
-            
+
         if 1 == 0:
-        
+
             if "rots" in lerp_data[bone]:
                 rots = lerp_data[bone]["rots"]
                 changes = get_speed_changes(
@@ -611,7 +611,7 @@ def export_sl_anim(armature=None, path=None):
                     frame_end=frame_end,
                     transform="rot",
                     tol=anim_deviation_rotation,
-                    )
+                )
                 frames = rots[:]
                 frames.extend(changes)
                 lerp_data[bone]["rots"] = sorted(set(frames))
@@ -624,7 +624,7 @@ def export_sl_anim(armature=None, path=None):
                     frame_end=frame_end,
                     transform="loc",
                     tol=anim_deviation_location,
-                    )
+                )
 
         if 1 == 0:
             rots = lerp_data[bone].get("rots", [])
@@ -644,7 +644,7 @@ def export_sl_anim(armature=None, path=None):
             time_slices=time_slices,
             is_avastar=is_avastar,
         )
-        
+
         if bone_data == False:
             print("Bone data returned False from interpolation process")
             popup("Bone data was not valid", "Error", "ERROR")
@@ -683,9 +683,9 @@ def export_sl_anim(armature=None, path=None):
             armature=proxyObj.name, motion=motion, lerp_data=lerp_data, flatten=False
         )
         remove_deps(armature=proxyObj.name)
-        
+
         props["bake_proxy"] = False
-        
+
         proxyObj.location.y += 0.4
         print(
             "Your selected rig was copied and the accumulated animation from controllers were applied as keys to this rig."
@@ -702,10 +702,10 @@ def export_sl_anim(armature=None, path=None):
     if is_avastar == True:
         print("Translating avastar bone names")
         bone_list = []
-        
+
         if oni.export_avastar_deform_bones == True:
             print("export avastar deform bones is True")
-            
+
             for bone in bone_data:
                 if bone not in skel.avatar_skeleton:
                     bone_list.append(bone)
@@ -716,7 +716,7 @@ def export_sl_anim(armature=None, path=None):
             print("Key detection: deform or control bones for source keys:")
             use_control = False
             pelvis_bones = {"Pelvis", "COG"}
-            
+
             deform_rots = []
             deform_locs = []
             control_rots = []
@@ -761,7 +761,7 @@ def export_sl_anim(armature=None, path=None):
 
             if use_control == True:
                 print("Control bones!  This will override any deform bone animation.")
-                
+
                 control_temp = control_rots
                 control_temp.extend(control_locs)
                 control_bones = set(control_temp)
@@ -790,7 +790,7 @@ def export_sl_anim(armature=None, path=None):
                         "Deform bones!  This will utilise the mBones, Volume bones and any attachment bones."
                     )
                 else:
-                    txt  = "While attempting to automatically detect animation from control bones\n"
+                    txt = "While attempting to automatically detect animation from control bones\n"
                     txt += "there we no detectable keys or motion.  The process then was to try and\n"
                     txt += "find keys or motion on the deform bones but this failed as well.  There\n"
                     txt += "is nothing to export."
@@ -821,14 +821,14 @@ def export_sl_anim(armature=None, path=None):
                 )
                 return False
             bone_data = bone_data_temp
-            
+
             print("Generating an ordered bone list from a mapped animation")
             for boneObj in armObj.data.bones:
                 bone = boneObj.name
 
                 if bone in rename_map:
                     tbone = rename_map[bone]
-                    
+
                     if tbone not in bone_data:
                         print("Missing tbone in bone_data, that's fine:", tbone)
                         continue
@@ -851,7 +851,7 @@ def export_sl_anim(armature=None, path=None):
                 loop_in_point=loop_in_point,
                 loop_out_point=loop_out_point,
                 path=path,
-                )
+            )
 
             if result == False:
                 txt = "animutils::export_sl_anim: ERROR - write_mapped_animation returned false!"
@@ -950,8 +950,8 @@ def export_sl_anim(armature=None, path=None):
         loop_in_point=loop_in_point,
         loop_out_point=loop_out_point,
         path=path,
-        )
-    
+    )
+
     if result == False:
         txt = "animutils::export_sl_anim: ERROR - write_animation returned false!"
         return False
@@ -975,12 +975,12 @@ def write_animation(
     loop_in_point=None,
     loop_out_point=None,
     path=None,
-    ):
+):
 
     oni = bpy.context.scene.onigiri
     onia = bpy.context.scene.oni_anim_props
     anim = bpy.context.scene.oni_anim
-    oni_anim = anim 
+    oni_anim = anim
 
     obj = bpy.data.objects
     armObj = obj[armature]
@@ -1001,19 +1001,19 @@ def write_animation(
         )
 
     file_content["header"]["anim_length"] = struct.pack("f", total_time)
-    
+
     file_content["header"]["emote_name"] = struct.pack(
         "%dsB" % len(anim.anim_emote_name), bytes(anim.anim_emote_name, "utf8"), 0
     )
-    
+
     file_content["header"]["loop_in"] = struct.pack("f", loop_in_point)
     file_content["header"]["loop_out"] = struct.pack("f", loop_out_point)
-    
+
     file_content["header"]["loop"] = (anim.anim_loop).to_bytes(4, byteorder="little")
-    
+
     file_content["header"]["ease_in"] = struct.pack("f", anim.anim_ease_in_duration)
     file_content["header"]["ease_out"] = struct.pack("f", anim.anim_ease_out_duration)
-    
+
     if anim.anim_hand_pose_enabled == True:
         hp = int(anim.anim_hand_pose)
         file_content["header"]["hand_pose"] = struct.pack("i", hp)
@@ -1032,7 +1032,7 @@ def write_animation(
         file_content["joints"][bone]["name"] = struct.pack(
             "%dsB" % len(bone), bytes(bone, "utf8"), 0
         )
-        
+
         priority = anim.anim_base_priority
         if armObj.pose.bones[bone].get("priority_enabled") == 1:
             if armObj.pose.bones[bone].get("priority") != None:
@@ -1053,7 +1053,7 @@ def write_animation(
             file_content["joints"][bone]["rot_data"] = []
 
             for i in range(rot_count):
-                x,y,z = rots_[i]
+                x, y, z = rots_[i]
                 t = time_[i]
                 time_data = struct.pack("H", t)
                 file_content["joints"][bone]["rot_data"].extend(time_data)
@@ -1082,7 +1082,7 @@ def write_animation(
             file_content["joints"][bone]["loc_data"] = []
 
             for i in range(loc_count):
-                x,y,z = locs_[i]
+                x, y, z = locs_[i]
                 t = time_[i]
                 time_data = struct.pack("H", t)
                 file_content["joints"][bone]["loc_data"].extend(time_data)
@@ -1123,16 +1123,16 @@ def write_animation(
 
     oni_anim = bpy.context.scene.oni_anim
     oni = bpy.context.scene.onigiri
-    
+
     if oni_anim.anim_details == True:
-        T = str( round(total_time, 2) )
-        F = str( round(oni.animation_fps, 2) )
-        L = str( int(oni_anim.anim_loop) )
-        I = str( round(loop_in_point, 2) )
-        O = str( round(loop_out_point, 2) )
-        E = str( round(oni_anim.anim_ease_in_duration, 2) )
-        Z = str( round(oni_anim.anim_ease_out_duration, 2) )
-        P = str( oni_anim.anim_base_priority )
+        T = str(round(total_time, 2))
+        F = str(round(oni.animation_fps, 2))
+        L = str(int(oni_anim.anim_loop))
+        I = str(round(loop_in_point, 2))
+        O = str(round(loop_out_point, 2))
+        E = str(round(oni_anim.anim_ease_in_duration, 2))
+        Z = str(round(oni_anim.anim_ease_out_duration, 2))
+        P = str(oni_anim.anim_base_priority)
 
         dets_enabled = {
             "T": oni_anim.anim_details_time,
@@ -1143,7 +1143,7 @@ def write_animation(
             "E": oni_anim.anim_details_ease_in,
             "Z": oni_anim.anim_details_ease_out,
             "P": oni_anim.anim_details_priority,
-            }
+        }
 
         details = {
             "T": T,
@@ -1154,7 +1154,7 @@ def write_animation(
             "E": E,
             "Z": Z,
             "P": P,
-            }
+        }
 
         cr = "\n"
         print_string = (
@@ -1182,7 +1182,7 @@ def write_animation(
             + "Base Priority, integer from 0 to 6 (P): "
             + P
             + cr
-            )
+        )
         print(print_string)
 
         file_name = path.split(".")[0]
@@ -1191,7 +1191,7 @@ def write_animation(
         for det in details:
             if dets_enabled[det] == True:
                 print(" - detail enabled:", det)
-                anim_dets += space 
+                anim_dets += space
                 anim_dets += det + details[det]
                 space = " "
         anim_dets += "#"
@@ -1199,7 +1199,7 @@ def write_animation(
         print("- Appended details -")
         print(anim_dets)
         print(" -------------------")
-    
+
     animF = open(path, "wb")
     animF.write(file_data)
     animF.close()
@@ -1238,12 +1238,12 @@ def write_mapped_animation(
     loop_in_point=None,
     loop_out_point=None,
     path=None,
-    ):
+):
 
     oni = bpy.context.scene.onigiri
     onia = bpy.context.scene.oni_anim_props
     anim = bpy.context.scene.oni_anim
-    oni_anim = anim 
+    oni_anim = anim
 
     obj = bpy.data.objects
     armObj = obj[armature]
@@ -1264,19 +1264,19 @@ def write_mapped_animation(
         )
 
     file_content["header"]["anim_length"] = struct.pack("f", total_time)
-    
+
     file_content["header"]["emote_name"] = struct.pack(
         "%dsB" % len(anim.anim_emote_name), bytes(anim.anim_emote_name, "utf8"), 0
     )
-    
+
     file_content["header"]["loop_in"] = struct.pack("f", loop_in_point)
     file_content["header"]["loop_out"] = struct.pack("f", loop_out_point)
-    
+
     file_content["header"]["loop"] = (anim.anim_loop).to_bytes(4, byteorder="little")
-    
+
     file_content["header"]["ease_in"] = struct.pack("f", anim.anim_ease_in_duration)
     file_content["header"]["ease_out"] = struct.pack("f", anim.anim_ease_out_duration)
-    
+
     if anim.anim_hand_pose_enabled == True:
         hp = int(anim.anim_hand_pose)
         file_content["header"]["hand_pose"] = struct.pack("i", hp)
@@ -1301,7 +1301,7 @@ def write_mapped_animation(
         file_content["joints"][bone]["name"] = struct.pack(
             "%dsB" % len(bone), bytes(bone, "utf8"), 0
         )
-        
+
         priority = anim.anim_base_priority
         if armObj.pose.bones[sbone].get("priority_enabled") == 1:
             if armObj.pose.bones[sbone].get("priority") != None:
@@ -1322,7 +1322,7 @@ def write_mapped_animation(
             file_content["joints"][bone]["rot_data"] = []
 
             for i in range(rot_count):
-                x,y,z = rots_[i]
+                x, y, z = rots_[i]
                 t = time_[i]
                 time_data = struct.pack("H", t)
                 file_content["joints"][bone]["rot_data"].extend(time_data)
@@ -1351,7 +1351,7 @@ def write_mapped_animation(
             file_content["joints"][bone]["loc_data"] = []
 
             for i in range(loc_count):
-                x,y,z = locs_[i]
+                x, y, z = locs_[i]
                 t = time_[i]
                 time_data = struct.pack("H", t)
                 file_content["joints"][bone]["loc_data"].extend(time_data)
@@ -1392,16 +1392,16 @@ def write_mapped_animation(
 
     oni_anim = bpy.context.scene.oni_anim
     oni = bpy.context.scene.onigiri
-    
+
     if oni_anim.anim_details == True:
-        T = str( round(total_time, 2) )
-        F = str( round(oni.animation_fps, 2) )
-        L = str( int(oni_anim.anim_loop) )
-        I = str( round(loop_in_point, 2) )
-        O = str( round(loop_out_point, 2) )
-        E = str( round(oni_anim.anim_ease_in_duration, 2) )
-        Z = str( round(oni_anim.anim_ease_out_duration, 2) )
-        P = str( oni_anim.anim_base_priority )
+        T = str(round(total_time, 2))
+        F = str(round(oni.animation_fps, 2))
+        L = str(int(oni_anim.anim_loop))
+        I = str(round(loop_in_point, 2))
+        O = str(round(loop_out_point, 2))
+        E = str(round(oni_anim.anim_ease_in_duration, 2))
+        Z = str(round(oni_anim.anim_ease_out_duration, 2))
+        P = str(oni_anim.anim_base_priority)
 
         dets_enabled = {
             "T": oni_anim.anim_details_time,
@@ -1412,7 +1412,7 @@ def write_mapped_animation(
             "E": oni_anim.anim_details_ease_in,
             "Z": oni_anim.anim_details_ease_out,
             "P": oni_anim.anim_details_priority,
-            }
+        }
 
         details = {
             "T": T,
@@ -1423,7 +1423,7 @@ def write_mapped_animation(
             "E": E,
             "Z": Z,
             "P": P,
-            }
+        }
 
         cr = "\n"
         print_string = (
@@ -1451,7 +1451,7 @@ def write_mapped_animation(
             + "Base Priority, integer from 0 to 6 (P): "
             + P
             + cr
-            )
+        )
         print(print_string)
 
         file_name = path.split(".")[0]
@@ -1460,7 +1460,7 @@ def write_mapped_animation(
         for det in details:
             if dets_enabled[det] == True:
                 print(" - detail enabled:", det)
-                anim_dets += space 
+                anim_dets += space
                 anim_dets += det + details[det]
                 space = " "
         anim_dets += "#"
@@ -1468,7 +1468,7 @@ def write_mapped_animation(
         print("- Appended details -")
         print(anim_dets)
         print(" -------------------")
-    
+
     animF = open(path, "wb")
     animF.write(file_data)
     animF.close()
@@ -1505,7 +1505,7 @@ def get_baked_animation(
     mark_tol=False,
     mark_tol_rot=0.001,
     mark_tol_loc=0.001,
-    ):
+):
 
     if abs(frame_start - frame_end) == 0:
         print("get_baked_animation reports: no frames to examine")
@@ -1529,8 +1529,8 @@ def get_baked_animation(
     if mark_tol == True:
         print("  tolerance marking enabled, checking for motion...")
         for bone in motion:
-            
-            frames = [ f for f in motion[bone] ]
+
+            frames = [f for f in motion[bone]]
             f0 = frames[0]
             rot_start = motion[bone][f0]["rot"]
             loc_start = motion[bone][f0]["loc"]
@@ -1538,7 +1538,7 @@ def get_baked_animation(
             for frame in frames:
                 rot = motion[bone][frame]["rot"]
                 loc = motion[bone][frame]["loc"]
-                
+
                 rot_mark = False
                 loc_mark = False
                 for i in range(3):
@@ -1576,7 +1576,7 @@ def get_baked_animation(
     if 1 == 0:
         print("---------------------------------------------")
         print("Going into get_key_stops:")
-        
+
         print("animated:", animated)
         print("frame_start:", frame_start)
         print("frame_end:", frame_end)
@@ -1589,8 +1589,8 @@ def get_baked_animation(
         print(key_stops)
         print("---------------------------------------------")
 
-    keep_rots = set() 
-    keep_locs = set() 
+    keep_rots = set()
+    keep_locs = set()
     if oni_anim.anim_resample == True:
         print("resampling baked animation")
         r = [
@@ -1623,7 +1623,7 @@ def get_baked_animation(
                     if "locs" not in stage_one[bone]:
                         stage_one[bone]["locs"] = []
                     stage_one[bone]["locs"].append(frame)
-    
+
     if oni.export_volume_motion == False:
         bones_del = []
         for bone in stage_one:
@@ -1636,7 +1636,7 @@ def get_baked_animation(
 
     pelvis_bones = {"mpelvis", "hip", "hips"}
     if onia.disable_pelvis_location_animation == True:
-        
+
         bones_del = []
         for bone in stage_one:
             bone_lower = bone.lower()
@@ -1648,15 +1648,15 @@ def get_baked_animation(
                 bone,
             )
             stage_one.pop(bone, "")
- 
+
     if onia.disable_location_offsets == True:
-        
+
         bones_del = []
         for bone in stage_one:
             bone_lower = bone.lower()
             if bone_lower not in pelvis_bones:
                 stage_one[bone].pop("locs", [])
-            
+
             if len(stage_one[bone]) == 0:
                 bones_del.append(bone)
         for bone in bones_del:
@@ -1669,17 +1669,17 @@ def get_baked_animation(
     if mark_tol == True:
         lerp_data = {}
         for bone in stage_one:
-            
+
             lerp_data[bone] = {}
             if "rots" in stage_one[bone]:
-                
+
                 rots = stage_one[bone]["rots"]
                 frames = clean_frames(
                     bone=bone, motion=motion, frames=rots, tol=mrot, transform="rot"
                 )
                 lerp_data[bone]["rots"] = frames
             if "locs" in stage_one[bone]:
-                
+
                 locs = stage_one[bone]["locs"]
                 frames = clean_frames(
                     bone=bone, motion=motion, frames=locs, tol=mloc, transform="loc"
@@ -1698,7 +1698,7 @@ def remove_isolated_keys(armature=None):
     for fcurve in action.fcurves:
         if len(fcurve.keyframe_points) < 2:
             action.fcurves.remove(fcurve)
-            count +=1
+            count += 1
     return count
 
 
@@ -1741,7 +1741,7 @@ def get_animated_frames(
     frame_start=0,
     frame_end=0,
     action=False,
-    ):
+):
 
     oni = bpy.context.scene.onigiri
     onia = bpy.context.scene.oni_anim_props
@@ -1774,8 +1774,8 @@ def get_animated_frames(
         loc_frames.extend(locs)
         loc_frames.append(frame_end)
     else:
-        rot_frames = [i for i in range(frame_start, frame_end+1)]
-        loc_frames = [i for i in range(frame_start, frame_end+1)]
+        rot_frames = [i for i in range(frame_start, frame_end + 1)]
+        loc_frames = [i for i in range(frame_start, frame_end + 1)]
 
     if action == False:
         frame_data = {}
@@ -1867,7 +1867,7 @@ def get_animated_frames(
         if oni_anim.anim_resample == True:
             frames.append(frame_start)
             frames.append(frame_end)
-        
+
         frames_set = set(frames)
         frame_numbers = list(sorted(frames_set))
 
@@ -1880,7 +1880,7 @@ def get_animated_frames(
 
             new_frames.append(frame_numbers[0])
 
-            for f in range( 1, len(frame_numbers), stride):
+            for f in range(1, len(frame_numbers), stride):
                 new_frames.append(f)
             new_frames.append(frame_numbers[-1])
 
@@ -1934,19 +1934,19 @@ def get_animated_keys(armature=None, frame_start=0, frame_end=0):
             loc_rot = "rots"
 
             if idx == 0:
-                
+
                 continue
 
         elif transform_type == "rotation_euler" and rot_mode != "QUATERNION":
             loc_rot = "rots"
 
         elif transform_type == "location":
-            
+
             bone_lower = real_bone.lower()
             if bone_lower == "mpelvis" or bone_lower == "hip" or bone_lower == "hips":
                 if onia.disable_pelvis_location_animation == True:
                     continue
-            
+
             elif onia.disable_location_offsets == True:
                 continue
 
@@ -1979,7 +1979,7 @@ def get_animated_keys(armature=None, frame_start=0, frame_end=0):
             loc_rot = "rots"
 
         else:
-            
+
             continue
 
         if real_bone not in frame_data:
@@ -2072,7 +2072,7 @@ def get_source_keys(armature=None, frame_start=0, frame_end=0):
             if use_location == True:
                 loc_rot = "locs"
         else:
-            
+
             continue
         if loc_rot == "":
             continue
@@ -2110,7 +2110,7 @@ def get_target_keys(
     armature=None,
     frame_start=0,
     frame_end=0,
-    ):
+):
 
     oni = bpy.context.scene.onigiri
     onia = bpy.context.scene.oni_anim_props
@@ -2134,7 +2134,7 @@ def get_target_keys(
             if cObj.type in constraint_types:
                 if cObj.target == None:
                     continue
-                
+
                 tarmObj = cObj.target
 
                 tarmReal = armObj.get("oni_motion_director")
@@ -2166,7 +2166,7 @@ def get_target_keys(
                 continue
             fcurves = obj[tarm].animation_data.action.fcurves
             for fc in fcurves:
-                
+
                 dp, idx = fc.data_path, fc.array_index
 
                 bone_path, delimiter, transform_type = dp.rpartition(".")
@@ -2193,7 +2193,7 @@ def get_target_keys(
                     if use_location == True:
                         loc_rot = "locs"
                 else:
-                    
+
                     continue
                 if loc_rot == "":
                     continue
@@ -2231,7 +2231,7 @@ def get_action_keys(armature=None, action=None):
     obj = bpy.data.objects
     armObj = obj[armature]
     actionObj = bpy.data.actions[action]
-    been_here = False 
+    been_here = False
     fcurves = actionObj.fcurves
     frame_data = {}
 
@@ -2249,7 +2249,7 @@ def get_action_keys(armature=None, action=None):
         rot_mode = armObj.pose.bones[real_bone].rotation_mode
         if transform_type == "rotation_quaternion" and rot_mode == "QUATERNION":
             lrs = "rotation"
-            
+
             if idx == 0:
                 continue
         elif transform_type == "rotation_euler" and rot_mode != "QUATERNION":
@@ -2291,7 +2291,7 @@ def get_action_keys(armature=None, action=None):
             continue
 
         frames = [int(k.co.x) for k in fc.keyframe_points]
-        
+
         for f in frames:
             if f not in frame_data:
                 frame_data[f] = {}
@@ -2352,7 +2352,7 @@ def get_matrices(armature=None, bones=[], frames=None):
             m4 = m3.to_4x4()
             m4I = m4.inverted()
             mF = m4 @ rp_composed @ m4I
-            
+
             matrices[bone][f] = {}
             matrices[bone][f]["matrix"] = mF
 
@@ -2371,11 +2371,11 @@ def clean_motion(matrices=None, rot_tol=1.0, loc_tol=0.01):
                 print("  f:", f)
                 print("  m:")
                 print(matrices[b][f])
-        
+
     cleaned_mats = {}
     for bone in matrices:
         cleaned_mats[bone] = {}
-        
+
         last_rot = []
         last_loc = []
         first = True
@@ -2385,7 +2385,7 @@ def clean_motion(matrices=None, rot_tol=1.0, loc_tol=0.01):
             mat = matrices[bone][frame]["matrix"].copy()
             rot = mat.to_euler()
             loc = mat.to_translation()
-            
+
             if first:
                 first = False
                 last_rot = rot
@@ -2396,16 +2396,16 @@ def clean_motion(matrices=None, rot_tol=1.0, loc_tol=0.01):
             for r in range(3):
                 mark = False
                 if close_enough(rot[r], last_rot[r], tol=eu_tol) == True:
-                    
+
                     mark = True
-                    
+
                     cleaned_mats[bone][last_frame]["rot"] = True
                     cleaned_mats[bone][frame]["rot"] = True
                     break
 
             if mark:
                 last_rot = rot
-                
+
                 last_frame = frame
                 mark = False
 
@@ -2413,13 +2413,13 @@ def clean_motion(matrices=None, rot_tol=1.0, loc_tol=0.01):
                 mark = False
                 if close_enough(loc[l], last_loc[l], tol=loc_tol) == True:
                     mark = True
-                    
+
                     cleaned_mats[bone][last_frame]["loc"] = True
                     cleaned_mats[bone][frame]["loc"] = True
                     break
 
             if mark:
-                
+
                 last_loc = loc
                 last_frame = frame
                 mark = False
@@ -2471,7 +2471,7 @@ def get_deviations(
     mark_tol=False,
     mark_tol_rot=0.01,
     mark_tol_loc=0.001,
-    ):
+):
 
     oni = bpy.context.scene.onigiri
     onia = bpy.context.scene.oni_anim_props
@@ -2500,7 +2500,7 @@ def get_deviations(
     print("Range taken from frame_start and frame_end, this may not be what you want.")
     for frame in range(frame_start, frame_end + 1):
         bpy.context.scene.frame_set(int(frame))
-        
+
         for boneObj in armObj.pose.bones:
             bone = boneObj.name
 
@@ -2527,15 +2527,15 @@ def get_deviations(
     if mark_tol == True:
         print("  tolerance marking enabled, checking for motion...")
         for bone in matrices:
-            
-            frames = [ f for f in matrices[bone] ]
+
+            frames = [f for f in matrices[bone]]
             f0 = frames[0]
             rot_start = matrices[bone][f0]["rot"]
             loc_start = matrices[bone][f0]["loc"]
             for frame in range(1, len(frames)):
                 rot = matrices[bone][frame]["rot"]
                 loc = matrices[bone][frame]["loc"]
-                
+
                 rot_mark = False
                 loc_mark = False
                 for i in range(3):
@@ -2562,7 +2562,7 @@ def get_deviations(
     st = time.time()
 
     print("Gathering stops")
-    
+
     key_stops = get_key_stops(
         motion=matrices,
         bones=animated,
@@ -2576,12 +2576,12 @@ def get_deviations(
     _ce = close_enough
     _round = round
     lerp_data = {}
-    
+
     print("Gathering rate changes...")
     for bone in animated:
-        
+
         lerp_data[bone] = {}
-        
+
         rots = get_speed_changes(
             bone=bone,
             motion=matrices,
@@ -2591,15 +2591,15 @@ def get_deviations(
             tol=drot,
         )
         if len(rots) != 0:
-            
+
             rots = set(rots)
             rots = sorted(rots)
             lerp_data[bone]["rots"] = rots
 
-        locs=[]
+        locs = []
 
         if len(locs) != 0:
-            
+
             locs = set(locs)
             locs = sorted(locs)
             lerp_data[bone]["locs"] = locs
@@ -2616,7 +2616,7 @@ def get_deviations(
             bone_lower = bone.lower()
             if bone_lower in pelvis_bones:
                 del lerp_data[bone]
-    
+
     if onia.disable_location_offsets == True:
         for bone in lerp_data:
             bone_lower = bone.lower()
@@ -2628,37 +2628,37 @@ def get_deviations(
 
     print("composing binary data...")
     st = time.time()
-    
+
     bone_data = {}
     for bone in lerp_data:
-        
+
         bone_data[bone] = {}
         if lerp_data[bone].get("rots") != None:
-            
+
             frames = lerp_data[bone]["rots"]
 
             for frame in frames:
-                
+
                 mat = matrices[bone][frame]["rmat"]
                 sl_rot = get_sl_rotation(bone=bone, matrix=mat)
                 if bone_data[bone].get("rot") == None:
                     bone_data[bone]["rot"] = {}
-                
+
                     bone_data[bone]["rot"]["values"] = []
                     bone_data[bone]["rot"]["times"] = []
                 bone_data[bone]["rot"]["values"].append(sl_rot)
                 bone_data[bone]["rot"]["times"].append(time_slices[frame])
 
         if lerp_data[bone].get("locs") != None:
-            
+
             frames = lerp_data[bone]["locs"]
             for frame in frames:
-                
+
                 mat = matrices[bone][frame]["rmat"]
                 sl_loc = get_sl_location(armature=armature, bone=bone, matrix=mat)
                 if bone_data[bone].get("loc") == None:
                     bone_data[bone]["loc"] = {}
-                
+
                     bone_data[bone]["loc"]["values"] = []
                     bone_data[bone]["loc"]["times"] = []
                 bone_data[bone]["loc"]["values"].append(sl_loc)
@@ -2695,7 +2695,7 @@ def get_motion(armature=None, frame_start=0, frame_end=0, frames=[], bones=[]):
 
     if len(frames) == 0:
         print("No frames delivered, using range instead")
-        frames = list( range(frame_start, frame_end + 1) )
+        frames = list(range(frame_start, frame_end + 1))
     if len(bones) == 0:
         print(
             "animutils::get_motion : reports - no bones delivered, using armature instead:",
@@ -2726,26 +2726,26 @@ def get_animated_bones(
     motion=None,
     mark_tol_rot=0.01,
     mark_tol_loc=0.001,
-    ):
+):
     mrot = mark_tol_rot
     mloc = mark_tol_loc
 
     animated = set()
-    
+
     print(
         "motion_data was used as a container but doesn't exist, using (motion) as passed instead"
     )
-    
+
     for bone in motion:
-        
-        frames = [ f for f in motion[bone] ]
+
+        frames = [f for f in motion[bone]]
         f0 = frames[0]
         rot_start = motion[bone][f0]["rot"]
         loc_start = motion[bone][f0]["loc"]
         for frame in range(1, len(frames)):
             rot = motion[bone][frame]["rot"]
             loc = motion[bone][frame]["loc"]
-            
+
             rot_mark = False
             loc_mark = False
             for i in range(3):
@@ -2772,7 +2772,7 @@ def get_bone_data(
         print("-----------------------------------------------------------------------")
         bone_data = {}
         for bone in lerp_data:
-            
+
             if bone not in avastar_to_sl.bone_map:
                 print("Skipping missing bone in map:", bone)
                 continue
@@ -2780,12 +2780,12 @@ def get_bone_data(
 
             bone_data[bone] = {}
             if lerp_data[bone].get("rots") != None:
-                
+
                 frames = lerp_data[bone]["rots"]
                 for frame in frames:
-                    
+
                     mat = motion[bone][frame]["rmat"]
-                    
+
                     sl_rot = get_sl_rotation(bone=real_bone, matrix=mat)
                     if bone_data[bone].get("rot") == None:
                         bone_data[bone]["rot"] = {}
@@ -2797,7 +2797,7 @@ def get_bone_data(
             if lerp_data[bone].get("locs") != None:
                 frames = lerp_data[bone]["locs"]
                 for frame in frames:
-                    
+
                     mat = motion[bone][frame]["rmat"]
                     sl_loc = get_sl_location(armature=armature, bone=bone, matrix=mat)
                     if bone_data[bone].get("loc") == None:
@@ -2810,13 +2810,13 @@ def get_bone_data(
     else:
         bone_data = {}
         for bone in lerp_data:
-            
+
             bone_data[bone] = {}
             if lerp_data[bone].get("rots") != None:
-                
+
                 frames = lerp_data[bone]["rots"]
                 for frame in frames:
-                    
+
                     mat = motion[bone][frame]["rmat"]
                     sl_rot = get_sl_rotation(bone=bone, matrix=mat)
                     if bone_data[bone].get("rot") == None:
@@ -2829,7 +2829,7 @@ def get_bone_data(
             if lerp_data[bone].get("locs") != None:
                 frames = lerp_data[bone]["locs"]
                 for frame in frames:
-                    
+
                     mat = motion[bone][frame]["rmat"]
                     sl_loc = get_sl_location(armature=armature, bone=bone, matrix=mat)
                     if bone_data[bone].get("loc") == None:
@@ -2846,12 +2846,12 @@ def calculate_time(
     frame_start=None,
     frame_end=None,
     anim_fps=None,
-    ):
+):
 
     oni = bpy.context.scene.onigiri
     onia = bpy.context.scene.oni_anim_props
     anim = bpy.context.scene.oni_anim
-    oni_anim = anim 
+    oni_anim = anim
 
     time_calc = {}
 
@@ -2883,18 +2883,18 @@ def calculate_time(
     time_calc["time_per_frame"] = time_per_frame
 
     if anim.anim_loop_advanced == True:
-        
+
         loop_in_point = round(anim.anim_loop_in_time, 6)
         loop_out_point = round(anim.anim_loop_out_time, 6)
-    
+
     else:
-        
+
         loop_in = abs(anim_start_frame - anim.anim_loop_in_frame)
         loop_range = abs(anim.anim_loop_in_frame - anim.anim_loop_out_frame)
         loop_out = loop_in + loop_range
-        
-        loop_in_point   = round( ( loop_in  * time_per_frame), 6)
-        loop_out_point  = round( ( loop_out * time_per_frame), 6)
+
+        loop_in_point = round((loop_in * time_per_frame), 6)
+        loop_out_point = round((loop_out * time_per_frame), 6)
 
     time_calc["loop_in_point"] = loop_in_point
     time_calc["loop_out_point"] = loop_out_point
@@ -2965,7 +2965,7 @@ def calculate_time(
 
 
 def get_real_matrix(armature, bone):
-    bone_lower = bone.lower() 
+    bone_lower = bone.lower()
 
     armObj = bpy.data.objects[armature]
     pbmat = armObj.pose.bones[bone].matrix.copy()
@@ -3017,7 +3017,7 @@ def get_real_matrix(armature, bone):
 
 
 def get_matrix_pair(armature, bone):
-    
+
     bone_lower = bone.lower()
 
     armObj = bpy.data.objects[armature]
@@ -3080,11 +3080,11 @@ def get_sl_rotation(bone=None, matrix=None):
 
     if old == True:
         deg = skel.avatar_skeleton[bone]["rot"]
-        
+
     else:
-        
+
         if bone not in avastar_normalized.bone_map:
-            
+
             eu = matrix.to_euler()
             deg = [math.degrees(a) for a in eu]
         else:
@@ -3097,7 +3097,7 @@ def get_sl_rotation(bone=None, matrix=None):
     euler = mathutils.Euler(rot_offset, "ZXY")
     mat3 = euler.to_matrix()
     ROTATION = mat3.to_4x4()
-    quat = ( Z90I @ matrix @ ROTATION @ Z90 ).to_quaternion().normalized()
+    quat = (Z90I @ matrix @ ROTATION @ Z90).to_quaternion().normalized()
     rot_x = round(quat.x, 6)
     rot_y = round(quat.y, 6)
     rot_z = round(quat.z, 6)
@@ -3105,7 +3105,7 @@ def get_sl_rotation(bone=None, matrix=None):
     y = F32_to_U16(rot_y, -1, 1)
     z = F32_to_U16(rot_z, -1, 1)
 
-    return tuple((x,y,z))
+    return tuple((x, y, z))
 
 
 def get_sl_location(armature=None, bone=None, matrix=None):
@@ -3115,41 +3115,41 @@ def get_sl_location(armature=None, bone=None, matrix=None):
 
     arm_scale = armObj.scale
 
-    deg = (0,0,0)
+    deg = (0, 0, 0)
 
     rad = [math.radians(a) for a in deg]
 
     rot_offset = [rad[1], rad[0], rad[2]]
 
     if bone in volumes.vol_joints:
-            vbs_x, vbs_y, vbs_z = [
+        vbs_x, vbs_y, vbs_z = [
             volumes.vol_joints[bone]["scale"][1],
             volumes.vol_joints[bone]["scale"][0],
             volumes.vol_joints[bone]["scale"][2],
-            ]
+        ]
     else:
-        vbs_x, vbs_y, vbs_z = mathutils.Vector((0,0,0))
+        vbs_x, vbs_y, vbs_z = mathutils.Vector((0, 0, 0))
 
     bs_x, bs_y, bs_z = armObj.pose.bones[bone].scale
 
     if 1 == 1:
-    
-        vbx_x, vbx_y, vbs_z = 0.0,0.0,0.0
-        bs_x, bs_y, bs_z = 1.0,1.0,1.0
-        
+
+        vbx_x, vbx_y, vbs_z = 0.0, 0.0, 0.0
+        bs_x, bs_y, bs_z = 1.0, 1.0, 1.0
+
     if armObj.pose.bones[bone].parent:
         cloc = armObj.data.bones[bone].matrix_local.to_translation()
         ploc = armObj.data.bones[bone].parent.matrix_local.to_translation()
         offset = mathutils.Vector((cloc - ploc))
-        LOCATION += offset 
+        LOCATION += offset
 
     ROTATION = mathutils.Euler(rot_offset, "ZYX").to_matrix().to_4x4()
 
     scale_composed = list()
     sc = scale_composed
-    sc.append( arm_scale[0]/(vbs_x + bs_x) )
-    sc.append( arm_scale[1]/(vbs_y + bs_y) )
-    sc.append( arm_scale[2]/(vbs_z + bs_z) )
+    sc.append(arm_scale[0] / (vbs_x + bs_x))
+    sc.append(arm_scale[1] / (vbs_y + bs_y))
+    sc.append(arm_scale[2] / (vbs_z + bs_z))
     SCALE = mathutils.Matrix()
 
     SCALE[0][0] = sc[0]
@@ -3157,49 +3157,49 @@ def get_sl_location(armature=None, bone=None, matrix=None):
     SCALE[2][2] = sc[2]
 
     SCALE = mathutils.Matrix()
-    
+
     loc = Z90I @ SCALE @ ROTATION @ LOCATION
     loc_x, loc_y, loc_z = loc
 
-    x = F32_to_U16(loc_x/LL_MAX_PELVIS_OFFSET, -1, 1)
-    y = F32_to_U16(loc_y/LL_MAX_PELVIS_OFFSET, -1, 1)
-    z = F32_to_U16(loc_z/LL_MAX_PELVIS_OFFSET, -1, 1)
+    x = F32_to_U16(loc_x / LL_MAX_PELVIS_OFFSET, -1, 1)
+    y = F32_to_U16(loc_y / LL_MAX_PELVIS_OFFSET, -1, 1)
+    z = F32_to_U16(loc_z / LL_MAX_PELVIS_OFFSET, -1, 1)
 
     if bone == "LEFT_HANDLE disabled":
         print("LOCATION:", LOCATION)
-        
+
         pass
-    return tuple((x,y,z))
+    return tuple((x, y, z))
 
 
 def get_sl_time(total=0, tpf=0, start=0, stop=0):
-    
+
     slices = {}
 
-    frame = start 
+    frame = start
     count = stop - start
-    for c in range(count+1):
+    for c in range(count + 1):
         t = tpf * (c)
         s = F32_to_U16(float(t), 0, total)
         slices[frame] = s
         frame += 1
 
-    return slices 
+    return slices
 
 
 def F32_to_U16(val, lower, upper):
     val = llclamp(val, lower, upper)
-    
+
     val -= lower
     val /= upper - lower
-    
-    return int(math.floor(val*U16MAX))
+
+    return int(math.floor(val * U16MAX))
 
 
 def llclamp(a, minval, maxval):
-    if a<minval:
+    if a < minval:
         return minval
-    if a>maxval:
+    if a > maxval:
         return maxval
     return a
 
@@ -3208,7 +3208,7 @@ def popup(message="", title="Message Box", icon="INFO"):
     def draw(self, context):
         self.layout.label(text=message)
 
-    bpy.context.window_manager.popup_menu(draw, title = title, icon = icon)
+    bpy.context.window_manager.popup_menu(draw, title=title, icon=icon)
     return
 
 
@@ -3232,12 +3232,12 @@ def recycle_actions():
     oni_alib = bpy.context.scene.oni_alib
     if oni_alib.get("actions") == None:
         oni_alib["actions"] = {}
-    
+
     del_actions = []
     for a in oni_alib["actions"].keys():
         if a not in actions:
             del_actions.append(a)
-    
+
     for a in del_actions:
         del oni_alib["actions"][a]
 
@@ -3278,7 +3278,7 @@ def attach_proxy(armature=None, proxy="ANIM_PROXY_RIG"):
     bpy.ops.object.mode_set(mode="POSE")
     for boneObj in tarmObj.pose.bones:
         tbone = boneObj.name
-        sbone = tbone 
+        sbone = tbone
         bpy.data.objects[tarm].data.bones.active = bpy.data.objects[tarm].data.bones[
             sbone
         ]
@@ -3298,7 +3298,7 @@ def attach_proxy(armature=None, proxy="ANIM_PROXY_RIG"):
         bc["Copy Rotation"].owner_space = "WORLD"
         bc["Copy Rotation"].influence = 1
         bc["Copy Rotation"].name = "ONI Copy Rot"
- 
+
     bpy.ops.object.mode_set(mode="OBJECT")
 
     return tarmObj
@@ -3315,7 +3315,7 @@ def get_key_stops(
 
     lerp_data = {}
 
-    _abs = abs 
+    _abs = abs
     _ce = close_enough
     _round = round
 
@@ -3331,10 +3331,10 @@ def get_key_stops(
         loc_start_state = "stopped"
 
         for frame in range(frame_start, frame_end + 1):
-            
+
             rot_now = motion[bone][frame]["pquat"]
             loc_now = motion[bone][frame]["loc"]
-            
+
             rot_mark = False
             loc_mark = False
 
@@ -3350,13 +3350,13 @@ def get_key_stops(
                         rot_now_state = "ascending"
                     elif rot_now_axis < rot_start_axis:
                         rot_now_state = "descending"
-                    
+
                     else:
                         print("rot tolerance triggers non motion in a motion sequence")
                     break
-                
+
                 else:
-                    
+
                     rot_now_state = "stopped"
 
             for i in range(3):
@@ -3369,7 +3369,7 @@ def get_key_stops(
                         loc_now_state = "ascending"
                     elif loc_now_axis < loc_start_axis:
                         loc_now_state = "descending"
-                    
+
                     else:
                         print("loc tolerance triggers non motion in a motion sequence")
                     break
@@ -3382,23 +3382,23 @@ def get_key_stops(
                     lerp_data[bone] = {}
                 if "rots" not in lerp_data[bone]:
                     lerp_data[bone]["rots"] = []
-                    
+
                     lerp_data[bone]["rots"].append(frame_start)
 
                 lerp_data[bone]["rots"].append(frame - 1)
-            
+
             if loc_now_state != loc_start_state:
                 loc_start_state = loc_now_state
                 if bone not in lerp_data:
                     lerp_data[bone] = {}
                 if "locs" not in lerp_data[bone]:
                     lerp_data[bone]["locs"] = []
-                    
+
                     lerp_data[bone]["locs"].append(frame_start)
                 lerp_data[bone]["locs"].append(frame - 1)
 
             if frame == frame_end:
-                
+
                 if bone in lerp_data:
                     if "rots" not in lerp_data[bone] and "locs" not in lerp_data[bone]:
                         lerp_data[bone]["rots"] = [frame]
@@ -3423,10 +3423,10 @@ def clean_frames(
     frames=None,
     transform=None,
     tol=0.001,
-    ):
-    
+):
+
     frames_set = set(frames)
-    
+
     frames_list = sorted(frames_set)
 
     start = frames_list[0]
@@ -3449,13 +3449,13 @@ def clean_frames(
     for frame in frames_list:
         frame_entry += 1
         tr_now = motion[bone][frame][transform]
-        
+
         for i in range(3):
             if _ce(tr_start[i], tr_now[i], tol=tol) == True:
                 tr_animated.append(frame)
                 tr_start = tr_now[:]
                 hit_now = True
-                
+
                 break
 
             hit_now = False
@@ -3466,13 +3466,13 @@ def clean_frames(
 
         if frame_entry > 2:
             if hit_now == True:
-                
+
                 if hits[1] == False and hits[2] == False:
-                    tr_animated.append(frame-1)
+                    tr_animated.append(frame - 1)
 
     if len(tr_animated) > 0:
         frames_cleaned = [start]
-        frames_cleaned.extend( sorted(tr_animated) )
+        frames_cleaned.extend(sorted(tr_animated))
         frames_cleaned.append(end)
 
     return frames_cleaned
@@ -3485,12 +3485,12 @@ def get_speed_changes(
     frame_end=0,
     transform=None,
     tol=0.001,
-    ):
+):
 
     oni = bpy.context.scene.onigiri
     onia = bpy.context.scene.oni_anim_props
     anim = bpy.context.scene.oni_anim
-    oni_anim = anim 
+    oni_anim = anim
 
     anim_fps = oni.animation_fps
     anim_start_frame = frame_start
@@ -3500,14 +3500,14 @@ def get_speed_changes(
     total_time = round(total_steps / anim_fps, 6)
     time_per_frame = round(total_time / total_steps, 6)
     tpf = time_per_frame
-    
+
     if abs(frame_start - frame_end) == 0:
         print("get_speed_changes reports: no frames to process")
         return False
 
     lerp_data = {}
 
-    _abs = abs 
+    _abs = abs
 
     has_keys = False
 
@@ -3540,17 +3540,17 @@ def get_speed_changes(
             speed_dif = abs(speed_start - speed_now)
 
             if speed_dif < tol:
-                
+
                 continue
             else:
-                
+
                 speed_start = speed_dif
                 loc_start = loc_now.copy()
-                
+
                 key_set.append(frame)
                 has_keys = True
                 continue
-            
+
         return []
 
     else:
@@ -3559,7 +3559,7 @@ def get_speed_changes(
 
         rot_start = motion[bone][frame_start]["rquat"]
 
-        speed_start = mathutils.Quaternion().angle 
+        speed_start = mathutils.Quaternion().angle
 
         for frame in range(frame_start, frame_end + 1):
             rot_now = motion[bone][frame]["rquat"]
@@ -3569,17 +3569,17 @@ def get_speed_changes(
 
             if speed_dif < tol:
                 speed_start = speed_dif
-                
+
                 continue
             else:
-                
+
                 speed_start = speed_dif
                 rot_start = rot_now.copy()
-                
-                key_set.append(frame-1)
+
+                key_set.append(frame - 1)
                 has_keys = True
                 continue
-            
+
     if has_keys == False:
         return []
 
@@ -3596,11 +3596,11 @@ def get_rate_changes(
     frame_end=0,
     transform=None,
     tol=0.001,
-    ):
+):
 
     lerp_data = {}
 
-    _abs = abs 
+    _abs = abs
 
     has_keys = False
 
@@ -3610,7 +3610,7 @@ def get_rate_changes(
 
     key_set = []
 
-    trs_start = matrices[bone][frame_start][transform] 
+    trs_start = matrices[bone][frame_start][transform]
 
     speed_start = {}
     for i in range(3):
@@ -3621,7 +3621,7 @@ def get_rate_changes(
 
         speed_now = []
         for i in range(3):
-            speed_now.append( _abs(trs_start[i] - trs_now[i]) )
+            speed_now.append(_abs(trs_start[i] - trs_now[i]))
 
         for i in range(3):
 
@@ -3629,16 +3629,16 @@ def get_rate_changes(
 
             if speed_now != speed_start[i]:
                 if speed_now < tol:
-                    
+
                     continue
-                
+
                 speed_start[i] = speed_now
                 trs_start = trs_now[:]
 
-                key_set.append(frame-1)
+                key_set.append(frame - 1)
                 has_keys = True
                 break
-            
+
     if has_keys == False:
         return []
 
@@ -3668,7 +3668,7 @@ def convert_animated_controllers(source=None, target=None):
     bpy.ops.object.mode_set(mode="POSE")
     bpy.ops.pose.select_all(action="DESELECT")
     for boneObj in avaRig.data.bones:
-        
+
         bone = boneObj.name
         if bone in mod_data.all_pbones:
             continue
@@ -3678,13 +3678,13 @@ def convert_animated_controllers(source=None, target=None):
         boneObj.select = False
 
     bpy.ops.object.mode_set(mode="EDIT")
-    
+
     for boneObj in avaRig.data.edit_bones:
         bone = boneObj.name
         if bone not in mod_data.all_pbones:
             avaRig.data.edit_bones.remove(boneObj)
     bpy.ops.object.mode_set(mode="OBJECT")
-    
+
     for bone in mod_data.pbones_map:
         if bone not in avaRig.data.bones:
             continue
@@ -3695,7 +3695,7 @@ def convert_animated_controllers(source=None, target=None):
     oniRig.animation_data_create()
     oniRig.animation_data.action = animObj
 
-    return animObj 
+    return animObj
 
 
 def morph_to(source=None, target=None, morph=False):
@@ -3720,7 +3720,7 @@ def morph_to(source=None, target=None, morph=False):
         sourceObj.animation_data_create()
     if sourceObj.animation_data.action == None:
         actionObj = bpy.data.actions.new("MORPH_TO")
-    
+
     shifter.move_keys(arm=source, start=start, range=2, marker=True)
 
     return True
@@ -3751,7 +3751,7 @@ def get_keyframes(arm, report=False):
 
 
 def transfer_motion(sarm=None, tarm=None):
-    
+
     frame_current = bpy.context.scene.frame_current
 
     obj = bpy.data.objects
@@ -3769,8 +3769,8 @@ def transfer_motion(sarm=None, tarm=None):
     cnames = []
     for boneObj in tarmObj.pose.bones:
         bone = boneObj.name
-        tarmObj.data.bones.active = boneObj.bone 
-        
+        tarmObj.data.bones.active = boneObj.bone
+
         bc = boneObj.constraints
         conObj = bc.new("COPY_LOCATION")
         cname = conObj.name
@@ -3781,7 +3781,7 @@ def transfer_motion(sarm=None, tarm=None):
         conObj.influence = 1
         conObj.name = "ONI " + cname
         cnames.append(conObj.name)
-        
+
         bc = boneObj.constraints
         conObj = bc.new("COPY_ROTATION")
         cname = conObj.name
@@ -3832,7 +3832,7 @@ def transfer_motion(sarm=None, tarm=None):
     transform_types = [".rotation_euler", ".location", ".scale"]
     for bone_path in fcurve_paths:
         bone = fcurve_paths[bone_path]
-        
+
         dp = bone_path + ".rotation_quaternion"
         fc = actionObj.fcurves.new(data_path=dp, index=0)
         fc.group = groups[bone]
@@ -3855,10 +3855,10 @@ def transfer_motion(sarm=None, tarm=None):
     for fc in tfcurves:
         dp, idx = fc.data_path, fc.array_index
         bone_path, delimiter, transform = dp.rpartition(".")
-        
+
         bone = fcurve_paths[bone_path]
         if bone not in tarmObj.data.bones:
-            
+
             continue
 
         fc.keyframe_points.add(count=len(frames))
@@ -3872,7 +3872,7 @@ def transfer_motion(sarm=None, tarm=None):
             elif transform == "location":
                 samples.append(matrices[bone][frame].to_translation()[idx])
             elif transform == "scale":
-                
+
                 samples.append(1)
 
         kfp_data = []
@@ -3914,10 +3914,10 @@ def bake_motion(sarm=None, tarm=None, frame_start=0, frame_end=0):
 
     if abs(frame_start - frame_end) == 0:
         print("No frames to record, using animation range instead")
-        
+
         frame_start = int(bpy.context.scene.frame_start)
         frame_end = int(bpy.context.scene.frame_end)
-        
+
     frame_current = bpy.context.scene.frame_current
 
     obj = bpy.data.objects
@@ -3968,7 +3968,7 @@ def bake_motion(sarm=None, tarm=None, frame_start=0, frame_end=0):
     fcurve_paths = {}
     for boneObj in tarmObj.pose.bones:
         bone = boneObj.name
-        
+
         if bone not in tarmObj.pose.bones:
             continue
         path_key = 'pose.bones["' + boneObj.name + '"]'
@@ -3977,7 +3977,7 @@ def bake_motion(sarm=None, tarm=None, frame_start=0, frame_end=0):
     transform_types = [".rotation_euler", ".location", ".scale"]
     for bone_path in fcurve_paths:
         bone = fcurve_paths[bone_path]
-        
+
         dp = bone_path + ".rotation_quaternion"
         fc = actionObj.fcurves.new(data_path=dp, index=0)
         fc.group = groups[bone]
@@ -4000,16 +4000,16 @@ def bake_motion(sarm=None, tarm=None, frame_start=0, frame_end=0):
     for fc in tfcurves:
         dp, idx = fc.data_path, fc.array_index
         bone_path, delimiter, transform = dp.rpartition(".")
-        
+
         bone = fcurve_paths[bone_path]
         if bone not in tarmObj.data.bones:
-            
+
             continue
-        
+
         if bone not in matrices:
             continue
 
-        frames = list(range(frame_start, frame_end +1))
+        frames = list(range(frame_start, frame_end + 1))
         fc.keyframe_points.add(count=len(frames))
 
         samples = []
@@ -4037,32 +4037,32 @@ def bake_motion(sarm=None, tarm=None, frame_start=0, frame_end=0):
 
 
 def get_matrix_basis(armature=None, bone=None):
-        if isinstance(armature, str) == False:
-            armature = armature.name
-        if isinstance(bone, str) == False:
-            bone = bone.name
+    if isinstance(armature, str) == False:
+        armature = armature.name
+    if isinstance(bone, str) == False:
+        bone = bone.name
 
-        armObj = bpy.data.objects[armature]
-        pbmat = armObj.pose.bones[bone].matrix.copy()
-        dbmat = armObj.data.bones[bone].matrix.copy()
-        dbmatl = armObj.data.bones[bone].matrix_local.copy()
-        if armObj.pose.bones[bone].parent:
-            pbpmat = armObj.pose.bones[bone].parent.matrix.copy()
-            dbpmatl = armObj.data.bones[bone].parent.matrix_local.copy()
-        else:
-            pbpmat = mathutils.Matrix()
-            dbpmatl = mathutils.Matrix()
-        if armObj.pose.bones[bone].parent:
-            dbpmat = armObj.data.bones[bone].parent.matrix.copy()
-        else:
-            dbpmat = mathutils.Matrix()
-        pbmatI = pbmat.inverted()
-        pbpmatI = pbpmat.inverted()
-        dbpmatlI = dbpmatl.inverted()
-        rp = pbpmat @ dbpmatlI @ dbmatl
-        rp_composed = rp.inverted() @ pbmat
+    armObj = bpy.data.objects[armature]
+    pbmat = armObj.pose.bones[bone].matrix.copy()
+    dbmat = armObj.data.bones[bone].matrix.copy()
+    dbmatl = armObj.data.bones[bone].matrix_local.copy()
+    if armObj.pose.bones[bone].parent:
+        pbpmat = armObj.pose.bones[bone].parent.matrix.copy()
+        dbpmatl = armObj.data.bones[bone].parent.matrix_local.copy()
+    else:
+        pbpmat = mathutils.Matrix()
+        dbpmatl = mathutils.Matrix()
+    if armObj.pose.bones[bone].parent:
+        dbpmat = armObj.data.bones[bone].parent.matrix.copy()
+    else:
+        dbpmat = mathutils.Matrix()
+    pbmatI = pbmat.inverted()
+    pbpmatI = pbpmat.inverted()
+    dbpmatlI = dbpmatl.inverted()
+    rp = pbpmat @ dbpmatlI @ dbmatl
+    rp_composed = rp.inverted() @ pbmat
 
-        return rp_composed
+    return rp_composed
 
 
 def get_frame_range(armature, start=True, end=False):
@@ -4077,16 +4077,13 @@ def get_frame_range(armature, start=True, end=False):
     else:
         frame_start = bpy.context.scene.frame_start
         frame_end = bpy.context.scene.frame_end
-    
-    frame_start = int(frame_start)
-    frame_end = int(frame_end)
 
     if start == True:
         bpy.context.scene.frame_set(int(frame_start))
     if end == True:
         bpy.context.scene.frame_set(int(frame_end))
 
-    return frame_start, frame_end
+    return int(frame_start), int(frame_end)
 
 
 def apply_transforms(arm, report=False):
@@ -4101,14 +4098,14 @@ def apply_transforms(arm, report=False):
     sarmObj = bpy.context.object
 
     frame_current = bpy.context.scene.frame_current
-    
+
     start_frame, end_frame = get_frame_range(sarmObj, start=True)
 
     sarmObj.select_set(False)
     tarmObj.select_set(True)
     utils.activate(tarmObj)
     tarmObj.animation_data_clear()
-    
+
     rigutils.rebind(tarmObj, report=True)
     bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
 
@@ -4203,12 +4200,12 @@ def merge_actions(actions=None, armature=None):
 
             bone_path, delimiter, transform = fc.data_path.rpartition(".")
 
-            if 1 == 1: 
-                
+            if 1 == 1:
+
                 array_index = fc.array_index
 
                 if fc.data_path not in kfp_data:
-                    
+
                     kfp_data[fc.data_path] = {}
                 if fc.array_index not in kfp_data[fc.data_path]:
                     kfp_data[fc.data_path][fc.array_index] = {}
@@ -4220,7 +4217,7 @@ def merge_actions(actions=None, armature=None):
                     kfp_data[fc.data_path][fc.array_index]["handle_right_type"] = []
                     kfp_data[fc.data_path][fc.array_index]["interpolation"] = []
                     kfp_data[fc.data_path][fc.array_index]["period"] = []
-                    
+
                     kfp_data[fc.data_path][fc.array_index]["co"] = []
                     kfp_data[fc.data_path][fc.array_index]["co.x"] = []
                     kfp_data[fc.data_path][fc.array_index]["co.y"] = []
@@ -4243,7 +4240,7 @@ def merge_actions(actions=None, armature=None):
                         kfp.interpolation
                     )
                     kfp_data[fc.data_path][fc.array_index]["period"].append(kfp.period)
-                    
+
                     kfp_data[fc.data_path][fc.array_index]["co"].extend(
                         list(kfp.co.copy())
                     )
@@ -4267,10 +4264,10 @@ def merge_actions(actions=None, armature=None):
         srcAnim = bpy.data.actions[action]
 
         for fc in srcAnim.fcurves:
-            
+
             bone_path, delimiter, transform = fc.data_path.rpartition(".")
             bone = fcurve_paths[bone_path]
-            
+
             if fc.data_path in kfp_data:
                 dp = bone_path + "." + transform
                 fc = animObj.fcurves.new(data_path=dp, index=fc.array_index)
@@ -4280,19 +4277,19 @@ def merge_actions(actions=None, armature=None):
 
     print("applying data...")
     print(" - foreach_set (skipped) ...")
-    
+
     print("   adding keyframes only...")
     for fc in animObj.fcurves:
-        
+
         count = len(kfp_data[fc.data_path][fc.array_index]["co.x"])
         fc.keyframe_points.add(count=count)
-        
+
     print(" - foreach_set finished!")
 
     print(" - additional data, contains x and y now...")
-    
+
     for fc in animObj.fcurves:
-        
+
         if fc.data_path in kfp_data:
             index = 0
             for kfp in fc.keyframe_points:
@@ -4365,7 +4362,7 @@ def split_time(frame_start=0, frame_end=0, fill_fps=24, fill_time=60):
     frame_end = int(frame_end)
 
     frame_range = frame_start + frame_end - 1
-    
+
     total_time = frame_range / fill_fps
 
     print("- Split Time Stats -")
@@ -4408,8 +4405,8 @@ def split_time(frame_start=0, frame_end=0, fill_fps=24, fill_time=60):
             newAction = actionObj.copy()
             newAction.use_fake_user = True
             name = newAction.name
-            
-            actions[name] = "" 
+
+            actions[name] = ""
             oni_alib["actions"][name] = {}
             oni_alib["actions"][name]["flagged"] = True
 
@@ -4424,12 +4421,12 @@ def split_time(frame_start=0, frame_end=0, fill_fps=24, fill_time=60):
         for action in actions:
             actionObj = bpy.data.actions[action]
             actionObj["frame_start"] = frame_now
-            
+
             if count == clones:
                 actionObj["frame_end"] = frame_end
             else:
                 actionObj["frame_end"] = frame_now + frames
-            
+
             frame_now = frame_now + frames + 1
             actionObj["frame_range"] = True
             print("next pass for frame_now:", frame_now)
@@ -4439,12 +4436,12 @@ def split_time(frame_start=0, frame_end=0, fill_fps=24, fill_time=60):
     frame_now = frame_start
     for action in actions:
         actions[action]["frame_start"] = frame_now
-        
+
         if count == clones:
             actions[action]["frame_end"] = frame_end
         else:
             actions[action]["frame_end"] = frame_now + frames
-        
+
         frame_now = frame_now + frames + 1
         print("next pass for frame_now:", frame_now)
         count += 1
@@ -4461,15 +4458,15 @@ def write_lsl(source=None, target=None, actions=None, prefix="Anim", fps=24):
     n = 0
     anim_list = []
     for a in actions:
-        
+
         n += 1
         ns = str(n)
         zf = ns.zfill(3)
-        anim_name = prefix + "_" + zf 
+        anim_name = prefix + "_" + zf
         anim_list.append(anim_name)
 
     time_list = []
-    
+
     action_list = [a for a in actions]
     for action in actions:
         frame_start = actions[action]["frame_start"]
@@ -4485,7 +4482,7 @@ def write_lsl(source=None, target=None, actions=None, prefix="Anim", fps=24):
                 "/",
                 final_time,
             )
-            
+
             if action == action_list[-1]:
                 print(
                     "Last action has a zero issue, dividing the original by 2 to get a sane result"
@@ -4533,18 +4530,18 @@ def write_lsl(source=None, target=None, actions=None, prefix="Anim", fps=24):
     split_stop = oni_split.split_stop
     split_on_start = str(oni_split.split_on_start).upper()
 
-    code = code.replace( "%ANIM_LIST", anim_string, 1 )
-    code = code.replace( "%TIME_LIST", time_string, 1 )
-    code = code.replace( "%DEBUG", split_debug, 1 )
-    code = code.replace( "%KILL", split_kill, 1 )
-    code = code.replace( "%OWNER_ONLY", split_owner, 1 )
-    code = code.replace( "%ANIM_LOOP", split_loop, 1 )
-    code = code.replace( "%ON_TOUCH", split_touch, 1 )
-    code = code.replace( "%ON_LISTEN", split_listen, 1 )
-    code = code.replace( "%ON_START", split_on_start, 1 )
-    code = code.replace( "%CHANNEL", split_channel, 1 )
-    code = code.replace( "%START", split_start, 1 )
-    code = code.replace( "%STOP", split_stop, 1 )
+    code = code.replace("%ANIM_LIST", anim_string, 1)
+    code = code.replace("%TIME_LIST", time_string, 1)
+    code = code.replace("%DEBUG", split_debug, 1)
+    code = code.replace("%KILL", split_kill, 1)
+    code = code.replace("%OWNER_ONLY", split_owner, 1)
+    code = code.replace("%ANIM_LOOP", split_loop, 1)
+    code = code.replace("%ON_TOUCH", split_touch, 1)
+    code = code.replace("%ON_LISTEN", split_listen, 1)
+    code = code.replace("%ON_START", split_on_start, 1)
+    code = code.replace("%CHANNEL", split_channel, 1)
+    code = code.replace("%START", split_start, 1)
+    code = code.replace("%STOP", split_stop, 1)
 
     f = open(target, "w")
     f.write(code)
