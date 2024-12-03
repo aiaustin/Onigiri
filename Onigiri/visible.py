@@ -1,6 +1,3 @@
-
-
-
 layers = {}
 
 layers["base"] = 1
@@ -15,10 +12,9 @@ layers["tail"] = 9
 layers["spine"] = 10
 
 
-layers["groin"] = 1 
+layers["groin"] = 1
 
-default = {'base', 'hand'}
-
+default = {"base", "hand"}
 
 
 layers["base"] = 0
@@ -34,38 +30,33 @@ layers["spine"] = 0
 layers["groin"] = 0
 
 
-
 bones = {}
 bones["base"] = {
-    'mKneeRight', 'mAnkleRight', 'mGroin', 'mHipRight',
-    'mAnkleLeft', 'mFootLeft', 'mChest', 'mElbowLeft',
-    'mShoulderRight', 'mEyeLeft', 'mFootRight',
-    'mCollarLeft', 'mKneeLeft', 'mSkull', 'mWristLeft',
-    'mToeRight', 'mEyeRight', 'mElbowRight', 'mTorso',
-    'mShoulderLeft', 'mNeck', 'mCollarRight', 'mHipLeft',
-    'mHead', 'mPelvis', 'mWristRight', 'mToeLeft'
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    "mKneeRight",
+    "mAnkleRight",
+    "mGroin",
+    "mHipRight",
+    "mAnkleLeft",
+    "mFootLeft",
+    "mChest",
+    "mElbowLeft",
+    "mShoulderRight",
+    "mEyeLeft",
+    "mFootRight",
+    "mCollarLeft",
+    "mKneeLeft",
+    "mSkull",
+    "mWristLeft",
+    "mToeRight",
+    "mEyeRight",
+    "mElbowRight",
+    "mTorso",
+    "mShoulderLeft",
+    "mNeck",
+    "mCollarRight",
+    "mHipLeft",
+    "mHead",
+    "mPelvis",
+    "mWristRight",
+    "mToeLeft",
+}

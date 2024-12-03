@@ -1,4 +1,7 @@
 # Onigiri
-Rigging addon for blender 2.80+ 
-Download zip from release page 3.5b.
+
+Rigging addon for blender 4.1+
+
+Download zip from release page.
+
 Enjoy the rice.

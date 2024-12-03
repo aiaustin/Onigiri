@@ -3,9 +3,8 @@
 # underscores to replace the spaces so that they match in coming data from collada
 # files.  This initially used in the devkit processor code for reading in dae files.
 avatar_skeleton = {
-    "mPelvis":
-    {
-        "aliases": ['hip', 'avatar_mPelvis'],
+    "mPelvis": {
+        "aliases": ["hip", "avatar_mPelvis"],
         "pivot": (0.0, 0.0, 1.067015),
         "pos": (0.0, 0.0, 1.067),
         "end": (0.0, 0.0, 0.084),
@@ -15,8 +14,7 @@ avatar_skeleton = {
         "parent": "",
         "connected": False,
     },
-    "PELVIS":
-    {
+    "PELVIS": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (-0.01, 0, -0.02),
@@ -27,8 +25,7 @@ avatar_skeleton = {
         "parent": "mPelvis",
         "connected": False,
     },
-    "BUTT":
-    {
+    "BUTT": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (-0.06, 0, -0.1),
@@ -39,8 +36,7 @@ avatar_skeleton = {
         "parent": "mPelvis",
         "connected": False,
     },
-    "mSpine1":
-    {
+    "mSpine1": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.084073),
         "pos": (0.0, 0.0, 0.084),
@@ -51,8 +47,7 @@ avatar_skeleton = {
         "parent": "mPelvis",
         "connected": True,
     },
-    "mSpine2":
-    {
+    "mSpine2": {
         "aliases": [],
         "pivot": (0.0, 0.0, -0.084073),
         "pos": (0.0, 0.0, -0.084),
@@ -63,9 +58,8 @@ avatar_skeleton = {
         "parent": "mSpine1",
         "connected": True,
     },
-    "mTorso":
-    {
-        "aliases": ['abdomen', 'avatar_mTorso'],
+    "mTorso": {
+        "aliases": ["abdomen", "avatar_mTorso"],
         "pivot": (0.0, 0.0, 0.084073),
         "pos": (0.0, 0.0, 0.084),
         "end": (-0.015, 0.0, 0.205),
@@ -75,8 +69,7 @@ avatar_skeleton = {
         "parent": "mSpine2",
         "connected": True,
     },
-    "BELLY":
-    {
+    "BELLY": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.028, 0, 0.04),
@@ -87,8 +80,7 @@ avatar_skeleton = {
         "parent": "mTorso",
         "connected": False,
     },
-    "LEFT_HANDLE":
-    {
+    "LEFT_HANDLE": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.1, 0.058),
@@ -99,8 +91,7 @@ avatar_skeleton = {
         "parent": "mTorso",
         "connected": False,
     },
-    "RIGHT_HANDLE":
-    {
+    "RIGHT_HANDLE": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, -0.1, 0.058),
@@ -111,8 +102,7 @@ avatar_skeleton = {
         "parent": "mTorso",
         "connected": False,
     },
-    "LOWER_BACK":
-    {
+    "LOWER_BACK": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.023),
@@ -123,8 +113,7 @@ avatar_skeleton = {
         "parent": "mTorso",
         "connected": False,
     },
-    "mSpine3":
-    {
+    "mSpine3": {
         "aliases": [],
         "pivot": (-0.015368, 0.0, 0.204877),
         "pos": (-0.015, 0.0, 0.205),
@@ -135,8 +124,7 @@ avatar_skeleton = {
         "parent": "mTorso",
         "connected": True,
     },
-    "mSpine4":
-    {
+    "mSpine4": {
         "aliases": [],
         "pivot": (0.015368, 0.0, -0.204877),
         "pos": (0.015, 0.0, -0.205),
@@ -147,9 +135,8 @@ avatar_skeleton = {
         "parent": "mSpine3",
         "connected": True,
     },
-    "mChest":
-    {
-        "aliases": ['chest', 'avatar_mChest'],
+    "mChest": {
+        "aliases": ["chest", "avatar_mChest"],
         "pivot": (-0.015368, 0.0, 0.204877),
         "pos": (-0.015, 0.0, 0.205),
         "end": (-0.01, 0.0, 0.25),
@@ -159,8 +146,7 @@ avatar_skeleton = {
         "parent": "mSpine4",
         "connected": True,
     },
-    "CHEST":
-    {
+    "CHEST": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.028, 0, 0.07),
@@ -171,8 +157,7 @@ avatar_skeleton = {
         "parent": "mChest",
         "connected": False,
     },
-    "LEFT_PEC":
-    {
+    "LEFT_PEC": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.119, 0.082, 0.042),
@@ -183,8 +168,7 @@ avatar_skeleton = {
         "parent": "mChest",
         "connected": False,
     },
-    "RIGHT_PEC":
-    {
+    "RIGHT_PEC": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.119, -0.082, 0.042),
@@ -195,8 +179,7 @@ avatar_skeleton = {
         "parent": "mChest",
         "connected": False,
     },
-    "UPPER_BACK":
-    {
+    "UPPER_BACK": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.017),
@@ -207,9 +190,8 @@ avatar_skeleton = {
         "parent": "mChest",
         "connected": False,
     },
-    "mNeck":
-    {
-        "aliases": ['neck', 'avatar_mNeck'],
+    "mNeck": {
+        "aliases": ["neck", "avatar_mNeck"],
         "pivot": (-0.009507, 0.0, 0.251108),
         "pos": (-0.01, 0.0, 0.251),
         "end": (0.0, 0.0, 0.077),
@@ -219,8 +201,7 @@ avatar_skeleton = {
         "parent": "mChest",
         "connected": True,
     },
-    "NECK":
-    {
+    "NECK": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0, 0.02),
@@ -231,9 +212,8 @@ avatar_skeleton = {
         "parent": "mNeck",
         "connected": False,
     },
-    "mHead":
-    {
-        "aliases": ['head', 'avatar_mHead'],
+    "mHead": {
+        "aliases": ["head", "avatar_mHead"],
         "pivot": (0.0, -0.0, 0.07563),
         "pos": (0.0, -0.0, 0.076),
         "end": (0.0, 0.0, 0.079),
@@ -243,8 +223,7 @@ avatar_skeleton = {
         "parent": "mNeck",
         "connected": True,
     },
-    "HEAD":
-    {
+    "HEAD": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.02, 0, 0.07),
@@ -255,9 +234,8 @@ avatar_skeleton = {
         "parent": "mHead",
         "connected": False,
     },
-    "mSkull":
-    {
-        "aliases": ['figureHair', 'avatar_mSkull'],
+    "mSkull": {
+        "aliases": ["figureHair", "avatar_mSkull"],
         "pivot": (0.0, 0.0, 0.079),
         "pos": (0.0, 0.0, 0.079),
         "end": (0.0, 0.0, 0.033),
@@ -267,9 +245,8 @@ avatar_skeleton = {
         "parent": "mHead",
         "connected": False,
     },
-    "mEyeRight":
-    {
-        "aliases": ['avatar_mEyeRight'],
+    "mEyeRight": {
+        "aliases": ["avatar_mEyeRight"],
         "pivot": (0.098466, -0.036, 0.079),
         "pos": (0.098, -0.036, 0.079),
         "end": (0.025, 0.0, 0.0),
@@ -279,9 +256,8 @@ avatar_skeleton = {
         "parent": "mHead",
         "connected": False,
     },
-    "mEyeLeft":
-    {
-        "aliases": ['avatar_mEyeLeft'],
+    "mEyeLeft": {
+        "aliases": ["avatar_mEyeLeft"],
         "pivot": (0.098461, 0.036, 0.079),
         "pos": (0.098, 0.036, 0.079),
         "end": (0.025, 0.0, 0.0),
@@ -291,8 +267,7 @@ avatar_skeleton = {
         "parent": "mHead",
         "connected": False,
     },
-    "mFaceRoot":
-    {
+    "mFaceRoot": {
         "aliases": [],
         "pivot": (0.025, 0.0, 0.045),
         "pos": (0.025, 0.0, 0.045),
@@ -303,8 +278,7 @@ avatar_skeleton = {
         "parent": "mHead",
         "connected": False,
     },
-    "mFaceEyeAltRight":
-    {
+    "mFaceEyeAltRight": {
         "aliases": [],
         "pivot": (0.073466, -0.036, 0.03393),
         "pos": (0.073, -0.036, 0.034),
@@ -315,8 +289,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceEyeAltLeft":
-    {
+    "mFaceEyeAltLeft": {
         "aliases": [],
         "pivot": (0.073461, 0.036, 0.03393),
         "pos": (0.073, 0.036, 0.034),
@@ -327,8 +300,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceForeheadLeft":
-    {
+    "mFaceForeheadLeft": {
         "aliases": [],
         "pivot": (0.061, 0.035, 0.083),
         "pos": (0.061, 0.035, 0.083),
@@ -339,8 +311,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceForeheadRight":
-    {
+    "mFaceForeheadRight": {
         "aliases": [],
         "pivot": (0.061, -0.035, 0.083),
         "pos": (0.061, -0.035, 0.083),
@@ -351,8 +322,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceEyebrowOuterLeft":
-    {
+    "mFaceEyebrowOuterLeft": {
         "aliases": [],
         "pivot": (0.064, 0.051, 0.048),
         "pos": (0.064, 0.051, 0.048),
@@ -363,8 +333,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceEyebrowCenterLeft":
-    {
+    "mFaceEyebrowCenterLeft": {
         "aliases": [],
         "pivot": (0.07, 0.043, 0.056),
         "pos": (0.07, 0.043, 0.056),
@@ -375,8 +344,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceEyebrowInnerLeft":
-    {
+    "mFaceEyebrowInnerLeft": {
         "aliases": [],
         "pivot": (0.075, 0.022, 0.051),
         "pos": (0.075, 0.022, 0.051),
@@ -387,8 +355,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceEyebrowOuterRight":
-    {
+    "mFaceEyebrowOuterRight": {
         "aliases": [],
         "pivot": (0.064, -0.051, 0.048),
         "pos": (0.064, -0.051, 0.048),
@@ -399,8 +366,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceEyebrowCenterRight":
-    {
+    "mFaceEyebrowCenterRight": {
         "aliases": [],
         "pivot": (0.07, -0.043, 0.056),
         "pos": (0.07, -0.043, 0.056),
@@ -411,8 +377,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceEyebrowInnerRight":
-    {
+    "mFaceEyebrowInnerRight": {
         "aliases": [],
         "pivot": (0.075, -0.022, 0.051),
         "pos": (0.075, -0.022, 0.051),
@@ -423,8 +388,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceEyeLidUpperLeft":
-    {
+    "mFaceEyeLidUpperLeft": {
         "aliases": [],
         "pivot": (0.073, 0.036, 0.034),
         "pos": (0.073, 0.036, 0.034),
@@ -435,8 +399,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceEyeLidLowerLeft":
-    {
+    "mFaceEyeLidLowerLeft": {
         "aliases": [],
         "pivot": (0.073, 0.036, 0.034),
         "pos": (0.073, 0.036, 0.034),
@@ -447,8 +410,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceEyeLidUpperRight":
-    {
+    "mFaceEyeLidUpperRight": {
         "aliases": [],
         "pivot": (0.073, -0.036, 0.034),
         "pos": (0.073, -0.036, 0.034),
@@ -459,8 +421,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceEyeLidLowerRight":
-    {
+    "mFaceEyeLidLowerRight": {
         "aliases": [],
         "pivot": (0.073, -0.036, 0.034),
         "pos": (0.073, -0.036, 0.034),
@@ -471,8 +432,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceEar1Left":
-    {
+    "mFaceEar1Left": {
         "aliases": [],
         "pivot": (0.0, 0.08, 0.002),
         "pos": (0.0, 0.08, 0.002),
@@ -483,8 +443,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceEar2Left":
-    {
+    "mFaceEar2Left": {
         "aliases": [],
         "pivot": (-0.019, 0.018, 0.025),
         "pos": (-0.019, 0.018, 0.025),
@@ -495,8 +454,7 @@ avatar_skeleton = {
         "parent": "mFaceEar1Left",
         "connected": True,
     },
-    "mFaceEar1Right":
-    {
+    "mFaceEar1Right": {
         "aliases": [],
         "pivot": (0.0, -0.08, 0.002),
         "pos": (0.0, -0.08, 0.002),
@@ -507,8 +465,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceEar2Right":
-    {
+    "mFaceEar2Right": {
         "aliases": [],
         "pivot": (-0.019, -0.018, 0.025),
         "pos": (-0.019, -0.018, 0.025),
@@ -519,8 +476,7 @@ avatar_skeleton = {
         "parent": "mFaceEar1Right",
         "connected": True,
     },
-    "mFaceNoseLeft":
-    {
+    "mFaceNoseLeft": {
         "aliases": [],
         "pivot": (0.086, 0.015, -0.004),
         "pos": (0.086, 0.015, -0.004),
@@ -531,8 +487,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceNoseCenter":
-    {
+    "mFaceNoseCenter": {
         "aliases": [],
         "pivot": (0.102, 0.0, 0.0),
         "pos": (0.102, 0.0, 0.0),
@@ -543,8 +498,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceNoseRight":
-    {
+    "mFaceNoseRight": {
         "aliases": [],
         "pivot": (0.086, -0.015, -0.004),
         "pos": (0.086, -0.015, -0.004),
@@ -555,8 +509,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceCheekLowerLeft":
-    {
+    "mFaceCheekLowerLeft": {
         "aliases": [],
         "pivot": (0.05, 0.034, -0.031),
         "pos": (0.05, 0.034, -0.031),
@@ -567,8 +520,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceCheekUpperLeft":
-    {
+    "mFaceCheekUpperLeft": {
         "aliases": [],
         "pivot": (0.07, 0.034, -0.005),
         "pos": (0.07, 0.034, -0.005),
@@ -579,8 +531,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceCheekLowerRight":
-    {
+    "mFaceCheekLowerRight": {
         "aliases": [],
         "pivot": (0.05, -0.034, -0.031),
         "pos": (0.05, -0.034, -0.031),
@@ -591,8 +542,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceCheekUpperRight":
-    {
+    "mFaceCheekUpperRight": {
         "aliases": [],
         "pivot": (0.07, -0.034, -0.005),
         "pos": (0.07, -0.034, -0.005),
@@ -603,8 +553,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceJaw":
-    {
+    "mFaceJaw": {
         "aliases": [],
         "pivot": (-0.001, 0.0, -0.015),
         "pos": (-0.001, 0.0, -0.015),
@@ -615,8 +564,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceChin":
-    {
+    "mFaceChin": {
         "aliases": [],
         "pivot": (0.074, 0.0, -0.054),
         "pos": (0.074, 0.0, -0.054),
@@ -627,8 +575,7 @@ avatar_skeleton = {
         "parent": "mFaceJaw",
         "connected": False,
     },
-    "mFaceTeethLower":
-    {
+    "mFaceTeethLower": {
         "aliases": [],
         "pivot": (0.021, 0.0, -0.039),
         "pos": (0.021, 0.0, -0.039),
@@ -639,8 +586,7 @@ avatar_skeleton = {
         "parent": "mFaceJaw",
         "connected": False,
     },
-    "mFaceLipLowerLeft":
-    {
+    "mFaceLipLowerLeft": {
         "aliases": [],
         "pivot": (0.045, 0.0, 0.0),
         "pos": (0.045, 0.0, 0.0),
@@ -651,8 +597,7 @@ avatar_skeleton = {
         "parent": "mFaceTeethLower",
         "connected": False,
     },
-    "mFaceLipLowerRight":
-    {
+    "mFaceLipLowerRight": {
         "aliases": [],
         "pivot": (0.045, 0.0, 0.0),
         "pos": (0.045, 0.0, 0.0),
@@ -663,8 +608,7 @@ avatar_skeleton = {
         "parent": "mFaceTeethLower",
         "connected": False,
     },
-    "mFaceLipLowerCenter":
-    {
+    "mFaceLipLowerCenter": {
         "aliases": [],
         "pivot": (0.045, 0.0, 0.0),
         "pos": (0.045, 0.0, 0.0),
@@ -675,8 +619,7 @@ avatar_skeleton = {
         "parent": "mFaceTeethLower",
         "connected": False,
     },
-    "mFaceTongueBase":
-    {
+    "mFaceTongueBase": {
         "aliases": [],
         "pivot": (0.039, 0.0, 0.005),
         "pos": (0.039, 0.0, 0.005),
@@ -687,8 +630,7 @@ avatar_skeleton = {
         "parent": "mFaceTeethLower",
         "connected": False,
     },
-    "mFaceTongueTip":
-    {
+    "mFaceTongueTip": {
         "aliases": [],
         "pivot": (0.022, 0.0, 0.007),
         "pos": (0.022, 0.0, 0.007),
@@ -699,8 +641,7 @@ avatar_skeleton = {
         "parent": "mFaceTongueBase",
         "connected": True,
     },
-    "mFaceJawShaper":
-    {
+    "mFaceJawShaper": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
@@ -711,8 +652,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceForeheadCenter":
-    {
+    "mFaceForeheadCenter": {
         "aliases": [],
         "pivot": (0.069, 0.0, 0.065),
         "pos": (0.069, 0.0, 0.065),
@@ -723,8 +663,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceNoseBase":
-    {
+    "mFaceNoseBase": {
         "aliases": [],
         "pivot": (0.094, 0.0, -0.016),
         "pos": (0.094, 0.0, -0.016),
@@ -735,8 +674,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceTeethUpper":
-    {
+    "mFaceTeethUpper": {
         "aliases": [],
         "pivot": (0.02, 0.0, -0.03),
         "pos": (0.02, 0.0, -0.03),
@@ -747,8 +685,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceLipUpperLeft":
-    {
+    "mFaceLipUpperLeft": {
         "aliases": [],
         "pivot": (0.045, 0.0, -0.003),
         "pos": (0.045, 0.0, -0.003),
@@ -759,8 +696,7 @@ avatar_skeleton = {
         "parent": "mFaceTeethUpper",
         "connected": False,
     },
-    "mFaceLipUpperRight":
-    {
+    "mFaceLipUpperRight": {
         "aliases": [],
         "pivot": (0.045, 0.0, -0.003),
         "pos": (0.045, 0.0, -0.003),
@@ -771,8 +707,7 @@ avatar_skeleton = {
         "parent": "mFaceTeethUpper",
         "connected": False,
     },
-    "mFaceLipCornerLeft":
-    {
+    "mFaceLipCornerLeft": {
         "aliases": [],
         "pivot": (0.028, -0.019, -0.01),
         "pos": (0.028, -0.019, -0.01),
@@ -783,8 +718,7 @@ avatar_skeleton = {
         "parent": "mFaceTeethUpper",
         "connected": False,
     },
-    "mFaceLipCornerRight":
-    {
+    "mFaceLipCornerRight": {
         "aliases": [],
         "pivot": (0.028, 0.019, -0.01),
         "pos": (0.028, 0.019, -0.01),
@@ -795,8 +729,7 @@ avatar_skeleton = {
         "parent": "mFaceTeethUpper",
         "connected": False,
     },
-    "mFaceLipUpperCenter":
-    {
+    "mFaceLipUpperCenter": {
         "aliases": [],
         "pivot": (0.045, 0.0, -0.003),
         "pos": (0.045, 0.0, -0.003),
@@ -807,8 +740,7 @@ avatar_skeleton = {
         "parent": "mFaceTeethUpper",
         "connected": False,
     },
-    "mFaceEyecornerInnerLeft":
-    {
+    "mFaceEyecornerInnerLeft": {
         "aliases": [],
         "pivot": (0.075, 0.017, 0.032),
         "pos": (0.075, 0.017, 0.032),
@@ -819,8 +751,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceEyecornerInnerRight":
-    {
+    "mFaceEyecornerInnerRight": {
         "aliases": [],
         "pivot": (0.075, -0.017, 0.032),
         "pos": (0.075, -0.017, 0.032),
@@ -831,8 +762,7 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mFaceNoseBridge":
-    {
+    "mFaceNoseBridge": {
         "aliases": [],
         "pivot": (0.091, 0.0, 0.02),
         "pos": (0.091, 0.0, 0.02),
@@ -843,9 +773,8 @@ avatar_skeleton = {
         "parent": "mFaceRoot",
         "connected": False,
     },
-    "mCollarLeft":
-    {
-        "aliases": ['lCollar', 'avatar_mCollarLeft'],
+    "mCollarLeft": {
+        "aliases": ["lCollar", "avatar_mCollarLeft"],
         "pivot": (-0.020927, 0.084665, 0.165396),
         "pos": (-0.021, 0.085, 0.165),
         "end": (0.0, 0.079, 0.0),
@@ -855,8 +784,7 @@ avatar_skeleton = {
         "parent": "mChest",
         "connected": False,
     },
-    "L_CLAVICLE":
-    {
+    "L_CLAVICLE": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.02, 0, 0.02),
@@ -867,9 +795,8 @@ avatar_skeleton = {
         "parent": "mCollarLeft",
         "connected": False,
     },
-    "mShoulderLeft":
-    {
-        "aliases": ['lShldr', 'avatar_mShoulderLeft'],
+    "mShoulderLeft": {
+        "aliases": ["lShldr", "avatar_mShoulderLeft"],
         "pivot": (0.0, 0.079, -0.0),
         "pos": (0.0, 0.079, -0.0),
         "end": (0.0, 0.247, 0.0),
@@ -879,8 +806,7 @@ avatar_skeleton = {
         "parent": "mCollarLeft",
         "connected": True,
     },
-    "L_UPPER_ARM":
-    {
+    "L_UPPER_ARM": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.12, 0.01),
@@ -891,9 +817,8 @@ avatar_skeleton = {
         "parent": "mShoulderLeft",
         "connected": False,
     },
-    "mElbowLeft":
-    {
-        "aliases": ['lForeArm', 'avatar_mElbowLeft'],
+    "mElbowLeft": {
+        "aliases": ["lForeArm", "avatar_mElbowLeft"],
         "pivot": (0.0, 0.248, 0.0),
         "pos": (0.0, 0.248, 0.0),
         "end": (0.0, 0.205, 0.0),
@@ -903,8 +828,7 @@ avatar_skeleton = {
         "parent": "mShoulderLeft",
         "connected": True,
     },
-    "L_LOWER_ARM":
-    {
+    "L_LOWER_ARM": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.1, 0.0),
@@ -915,9 +839,8 @@ avatar_skeleton = {
         "parent": "mElbowLeft",
         "connected": False,
     },
-    "mWristLeft":
-    {
-        "aliases": ['lHand', 'avatar_mWristLeft'],
+    "mWristLeft": {
+        "aliases": ["lHand", "avatar_mWristLeft"],
         "pivot": (-0.0, 0.204846, 0.0),
         "pos": (-0.0, 0.205, 0.0),
         "end": (0.0, 0.06, 0.0),
@@ -927,8 +850,7 @@ avatar_skeleton = {
         "parent": "mElbowLeft",
         "connected": True,
     },
-    "L_HAND":
-    {
+    "L_HAND": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.01, 0.05, 0.0),
@@ -939,8 +861,7 @@ avatar_skeleton = {
         "parent": "mWristLeft",
         "connected": False,
     },
-    "mHandMiddle1Left":
-    {
+    "mHandMiddle1Left": {
         "aliases": [],
         "pivot": (0.013, 0.101, 0.015),
         "pos": (0.013, 0.101, 0.015),
@@ -951,8 +872,7 @@ avatar_skeleton = {
         "parent": "mWristLeft",
         "connected": False,
     },
-    "mHandMiddle2Left":
-    {
+    "mHandMiddle2Left": {
         "aliases": [],
         "pivot": (-0.001, 0.04, -0.006),
         "pos": (-0.001, 0.04, -0.006),
@@ -963,8 +883,7 @@ avatar_skeleton = {
         "parent": "mHandMiddle1Left",
         "connected": True,
     },
-    "mHandMiddle3Left":
-    {
+    "mHandMiddle3Left": {
         "aliases": [],
         "pivot": (-0.001, 0.049, -0.008),
         "pos": (-0.001, 0.049, -0.008),
@@ -975,8 +894,7 @@ avatar_skeleton = {
         "parent": "mHandMiddle2Left",
         "connected": True,
     },
-    "mHandIndex1Left":
-    {
+    "mHandIndex1Left": {
         "aliases": [],
         "pivot": (0.038, 0.097, 0.015),
         "pos": (0.038, 0.097, 0.015),
@@ -987,8 +905,7 @@ avatar_skeleton = {
         "parent": "mWristLeft",
         "connected": False,
     },
-    "mHandIndex2Left":
-    {
+    "mHandIndex2Left": {
         "aliases": [],
         "pivot": (0.017, 0.036, -0.006),
         "pos": (0.017, 0.036, -0.006),
@@ -999,8 +916,7 @@ avatar_skeleton = {
         "parent": "mHandIndex1Left",
         "connected": True,
     },
-    "mHandIndex3Left":
-    {
+    "mHandIndex3Left": {
         "aliases": [],
         "pivot": (0.014, 0.032, -0.006),
         "pos": (0.014, 0.032, -0.006),
@@ -1011,8 +927,7 @@ avatar_skeleton = {
         "parent": "mHandIndex2Left",
         "connected": True,
     },
-    "mHandRing1Left":
-    {
+    "mHandRing1Left": {
         "aliases": [],
         "pivot": (-0.01, 0.099, 0.009),
         "pos": (-0.01, 0.099, 0.009),
@@ -1023,8 +938,7 @@ avatar_skeleton = {
         "parent": "mWristLeft",
         "connected": False,
     },
-    "mHandRing2Left":
-    {
+    "mHandRing2Left": {
         "aliases": [],
         "pivot": (-0.013, 0.038, -0.008),
         "pos": (-0.013, 0.038, -0.008),
@@ -1035,8 +949,7 @@ avatar_skeleton = {
         "parent": "mHandRing1Left",
         "connected": True,
     },
-    "mHandRing3Left":
-    {
+    "mHandRing3Left": {
         "aliases": [],
         "pivot": (-0.013, 0.04, -0.009),
         "pos": (-0.013, 0.04, -0.009),
@@ -1047,8 +960,7 @@ avatar_skeleton = {
         "parent": "mHandRing2Left",
         "connected": True,
     },
-    "mHandPinky1Left":
-    {
+    "mHandPinky1Left": {
         "aliases": [],
         "pivot": (-0.031, 0.095, 0.003),
         "pos": (-0.031, 0.095, 0.003),
@@ -1059,8 +971,7 @@ avatar_skeleton = {
         "parent": "mWristLeft",
         "connected": False,
     },
-    "mHandPinky2Left":
-    {
+    "mHandPinky2Left": {
         "aliases": [],
         "pivot": (-0.024, 0.025, -0.006),
         "pos": (-0.024, 0.025, -0.006),
@@ -1071,8 +982,7 @@ avatar_skeleton = {
         "parent": "mHandPinky1Left",
         "connected": True,
     },
-    "mHandPinky3Left":
-    {
+    "mHandPinky3Left": {
         "aliases": [],
         "pivot": (-0.015, 0.018, -0.004),
         "pos": (-0.015, 0.018, -0.004),
@@ -1083,8 +993,7 @@ avatar_skeleton = {
         "parent": "mHandPinky2Left",
         "connected": True,
     },
-    "mHandThumb1Left":
-    {
+    "mHandThumb1Left": {
         "aliases": [],
         "pivot": (0.031, 0.026, 0.004),
         "pos": (0.031, 0.026, 0.004),
@@ -1095,8 +1004,7 @@ avatar_skeleton = {
         "parent": "mWristLeft",
         "connected": False,
     },
-    "mHandThumb2Left":
-    {
+    "mHandThumb2Left": {
         "aliases": [],
         "pivot": (0.028, 0.032, -0.001),
         "pos": (0.028, 0.032, -0.001),
@@ -1107,8 +1015,7 @@ avatar_skeleton = {
         "parent": "mHandThumb1Left",
         "connected": True,
     },
-    "mHandThumb3Left":
-    {
+    "mHandThumb3Left": {
         "aliases": [],
         "pivot": (0.023, 0.031, -0.001),
         "pos": (0.023, 0.031, -0.001),
@@ -1119,9 +1026,8 @@ avatar_skeleton = {
         "parent": "mHandThumb2Left",
         "connected": True,
     },
-    "mCollarRight":
-    {
-        "aliases": ['rCollar', 'avatar_mCollarRight'],
+    "mCollarRight": {
+        "aliases": ["rCollar", "avatar_mCollarRight"],
         "pivot": (-0.020927, -0.085, 0.165396),
         "pos": (-0.021, -0.085, 0.165),
         "end": (0.0, -0.079, 0.0),
@@ -1131,8 +1037,7 @@ avatar_skeleton = {
         "parent": "mChest",
         "connected": False,
     },
-    "R_CLAVICLE":
-    {
+    "R_CLAVICLE": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.02, 0, 0.02),
@@ -1143,9 +1048,8 @@ avatar_skeleton = {
         "parent": "mCollarRight",
         "connected": False,
     },
-    "mShoulderRight":
-    {
-        "aliases": ['rShldr', 'avatar_mShoulderRight'],
+    "mShoulderRight": {
+        "aliases": ["rShldr", "avatar_mShoulderRight"],
         "pivot": (0.0, -0.079418, -0.0),
         "pos": (0.0, -0.079, -0.0),
         "end": (0.0, -0.247, 0.0),
@@ -1155,8 +1059,7 @@ avatar_skeleton = {
         "parent": "mCollarRight",
         "connected": True,
     },
-    "R_UPPER_ARM":
-    {
+    "R_UPPER_ARM": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, -0.12, 0.01),
@@ -1167,9 +1070,8 @@ avatar_skeleton = {
         "parent": "mShoulderRight",
         "connected": False,
     },
-    "mElbowRight":
-    {
-        "aliases": ['rForeArm', 'avatar_mElbowRight'],
+    "mElbowRight": {
+        "aliases": ["rForeArm", "avatar_mElbowRight"],
         "pivot": (0.0, -0.248, -0.0),
         "pos": (0.0, -0.248, -0.0),
         "end": (0.0, -0.205, 0.0),
@@ -1179,8 +1081,7 @@ avatar_skeleton = {
         "parent": "mShoulderRight",
         "connected": True,
     },
-    "R_LOWER_ARM":
-    {
+    "R_LOWER_ARM": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, -0.1, 0.0),
@@ -1191,9 +1092,8 @@ avatar_skeleton = {
         "parent": "mElbowRight",
         "connected": False,
     },
-    "mWristRight":
-    {
-        "aliases": ['rHand', 'avatar_mWristRight'],
+    "mWristRight": {
+        "aliases": ["rHand", "avatar_mWristRight"],
         "pivot": (-0.0, -0.205, -0.0),
         "pos": (0.0, -0.205, -0.0),
         "end": (0.0, -0.06, 0.0),
@@ -1203,8 +1103,7 @@ avatar_skeleton = {
         "parent": "mElbowRight",
         "connected": True,
     },
-    "R_HAND":
-    {
+    "R_HAND": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.01, -0.05, 0.0),
@@ -1215,8 +1114,7 @@ avatar_skeleton = {
         "parent": "mWristRight",
         "connected": False,
     },
-    "mHandMiddle1Right":
-    {
+    "mHandMiddle1Right": {
         "aliases": [],
         "pivot": (0.013, -0.101, 0.015),
         "pos": (0.013, -0.101, 0.015),
@@ -1227,8 +1125,7 @@ avatar_skeleton = {
         "parent": "mWristRight",
         "connected": False,
     },
-    "mHandMiddle2Right":
-    {
+    "mHandMiddle2Right": {
         "aliases": [],
         "pivot": (-0.001, -0.04, -0.006),
         "pos": (-0.001, -0.04, -0.006),
@@ -1239,8 +1136,7 @@ avatar_skeleton = {
         "parent": "mHandMiddle1Right",
         "connected": True,
     },
-    "mHandMiddle3Right":
-    {
+    "mHandMiddle3Right": {
         "aliases": [],
         "pivot": (-0.001, -0.049, -0.008),
         "pos": (-0.001, -0.049, -0.008),
@@ -1251,8 +1147,7 @@ avatar_skeleton = {
         "parent": "mHandMiddle2Right",
         "connected": True,
     },
-    "mHandIndex1Right":
-    {
+    "mHandIndex1Right": {
         "aliases": [],
         "pivot": (0.038, -0.097, 0.015),
         "pos": (0.038, -0.097, 0.015),
@@ -1263,8 +1158,7 @@ avatar_skeleton = {
         "parent": "mWristRight",
         "connected": False,
     },
-    "mHandIndex2Right":
-    {
+    "mHandIndex2Right": {
         "aliases": [],
         "pivot": (0.017, -0.036, -0.006),
         "pos": (0.017, -0.036, -0.006),
@@ -1275,8 +1169,7 @@ avatar_skeleton = {
         "parent": "mHandIndex1Right",
         "connected": True,
     },
-    "mHandIndex3Right":
-    {
+    "mHandIndex3Right": {
         "aliases": [],
         "pivot": (0.014, -0.032, -0.006),
         "pos": (0.014, -0.032, -0.006),
@@ -1287,8 +1180,7 @@ avatar_skeleton = {
         "parent": "mHandIndex2Right",
         "connected": True,
     },
-    "mHandRing1Right":
-    {
+    "mHandRing1Right": {
         "aliases": [],
         "pivot": (-0.01, -0.099, 0.009),
         "pos": (-0.01, -0.099, 0.009),
@@ -1299,8 +1191,7 @@ avatar_skeleton = {
         "parent": "mWristRight",
         "connected": False,
     },
-    "mHandRing2Right":
-    {
+    "mHandRing2Right": {
         "aliases": [],
         "pivot": (-0.013, -0.038, -0.008),
         "pos": (-0.013, -0.038, -0.008),
@@ -1311,8 +1202,7 @@ avatar_skeleton = {
         "parent": "mHandRing1Right",
         "connected": True,
     },
-    "mHandRing3Right":
-    {
+    "mHandRing3Right": {
         "aliases": [],
         "pivot": (-0.013, -0.04, -0.009),
         "pos": (-0.013, -0.04, -0.009),
@@ -1323,8 +1213,7 @@ avatar_skeleton = {
         "parent": "mHandRing2Right",
         "connected": True,
     },
-    "mHandPinky1Right":
-    {
+    "mHandPinky1Right": {
         "aliases": [],
         "pivot": (-0.031, -0.095, 0.003),
         "pos": (-0.031, -0.095, 0.003),
@@ -1335,8 +1224,7 @@ avatar_skeleton = {
         "parent": "mWristRight",
         "connected": False,
     },
-    "mHandPinky2Right":
-    {
+    "mHandPinky2Right": {
         "aliases": [],
         "pivot": (-0.024, -0.025, -0.006),
         "pos": (-0.024, -0.025, -0.006),
@@ -1347,8 +1235,7 @@ avatar_skeleton = {
         "parent": "mHandPinky1Right",
         "connected": True,
     },
-    "mHandPinky3Right":
-    {
+    "mHandPinky3Right": {
         "aliases": [],
         "pivot": (-0.015, -0.018, -0.004),
         "pos": (-0.015, -0.018, -0.004),
@@ -1359,8 +1246,7 @@ avatar_skeleton = {
         "parent": "mHandPinky2Right",
         "connected": True,
     },
-    "mHandThumb1Right":
-    {
+    "mHandThumb1Right": {
         "aliases": [],
         "pivot": (0.031, -0.026, 0.004),
         "pos": (0.031, -0.026, 0.004),
@@ -1371,8 +1257,7 @@ avatar_skeleton = {
         "parent": "mWristRight",
         "connected": False,
     },
-    "mHandThumb2Right":
-    {
+    "mHandThumb2Right": {
         "aliases": [],
         "pivot": (0.028, -0.032, -0.001),
         "pos": (0.028, -0.032, -0.001),
@@ -1383,8 +1268,7 @@ avatar_skeleton = {
         "parent": "mHandThumb1Right",
         "connected": True,
     },
-    "mHandThumb3Right":
-    {
+    "mHandThumb3Right": {
         "aliases": [],
         "pivot": (0.023, -0.031, -0.001),
         "pos": (0.023, -0.031, -0.001),
@@ -1395,8 +1279,7 @@ avatar_skeleton = {
         "parent": "mHandThumb2Right",
         "connected": True,
     },
-    "mWingsRoot":
-    {
+    "mWingsRoot": {
         "aliases": [],
         "pivot": (-0.014, 0.0, 0.0),
         "pos": (-0.014, 0.0, 0.0),
@@ -1407,8 +1290,7 @@ avatar_skeleton = {
         "parent": "mChest",
         "connected": False,
     },
-    "mWing1Left":
-    {
+    "mWing1Left": {
         "aliases": [],
         "pivot": (-0.099, 0.105, 0.181),
         "pos": (-0.099, 0.105, 0.181),
@@ -1419,8 +1301,7 @@ avatar_skeleton = {
         "parent": "mWingsRoot",
         "connected": False,
     },
-    "mWing2Left":
-    {
+    "mWing2Left": {
         "aliases": [],
         "pivot": (-0.168, 0.169, 0.067),
         "pos": (-0.168, 0.169, 0.067),
@@ -1431,8 +1312,7 @@ avatar_skeleton = {
         "parent": "mWing1Left",
         "connected": True,
     },
-    "mWing3Left":
-    {
+    "mWing3Left": {
         "aliases": [],
         "pivot": (-0.181, 0.183, 0.0),
         "pos": (-0.181, 0.183, 0.0),
@@ -1443,8 +1323,7 @@ avatar_skeleton = {
         "parent": "mWing2Left",
         "connected": True,
     },
-    "mWing4Left":
-    {
+    "mWing4Left": {
         "aliases": [],
         "pivot": (-0.171, 0.173, 0.0),
         "pos": (-0.171, 0.173, 0.0),
@@ -1455,8 +1334,7 @@ avatar_skeleton = {
         "parent": "mWing3Left",
         "connected": True,
     },
-    "mWing4FanLeft":
-    {
+    "mWing4FanLeft": {
         "aliases": [],
         "pivot": (-0.171, 0.173, 0.0),
         "pos": (-0.171, 0.173, 0.0),
@@ -1467,8 +1345,7 @@ avatar_skeleton = {
         "parent": "mWing3Left",
         "connected": True,
     },
-    "mWing1Right":
-    {
+    "mWing1Right": {
         "aliases": [],
         "pivot": (-0.099, -0.105, 0.181),
         "pos": (-0.099, -0.105, 0.181),
@@ -1479,8 +1356,7 @@ avatar_skeleton = {
         "parent": "mWingsRoot",
         "connected": False,
     },
-    "mWing2Right":
-    {
+    "mWing2Right": {
         "aliases": [],
         "pivot": (-0.168, -0.169, 0.067),
         "pos": (-0.168, -0.169, 0.067),
@@ -1491,8 +1367,7 @@ avatar_skeleton = {
         "parent": "mWing1Right",
         "connected": True,
     },
-    "mWing3Right":
-    {
+    "mWing3Right": {
         "aliases": [],
         "pivot": (-0.181, -0.183, 0.0),
         "pos": (-0.181, -0.183, 0.0),
@@ -1503,8 +1378,7 @@ avatar_skeleton = {
         "parent": "mWing2Right",
         "connected": True,
     },
-    "mWing4Right":
-    {
+    "mWing4Right": {
         "aliases": [],
         "pivot": (-0.171, -0.173, 0.0),
         "pos": (-0.171, -0.173, 0.0),
@@ -1515,8 +1389,7 @@ avatar_skeleton = {
         "parent": "mWing3Right",
         "connected": True,
     },
-    "mWing4FanRight":
-    {
+    "mWing4FanRight": {
         "aliases": [],
         "pivot": (-0.171, -0.173, 0.0),
         "pos": (-0.171, -0.173, 0.0),
@@ -1527,9 +1400,8 @@ avatar_skeleton = {
         "parent": "mWing3Right",
         "connected": True,
     },
-    "mHipRight":
-    {
-        "aliases": ['rThigh', 'avatar_mHipRight'],
+    "mHipRight": {
+        "aliases": ["rThigh", "avatar_mHipRight"],
         "pivot": (0.03362, -0.128806, -0.041086),
         "pos": (0.034, -0.129, -0.041),
         "end": (-0.001, 0.049, -0.491),
@@ -1539,8 +1411,7 @@ avatar_skeleton = {
         "parent": "mPelvis",
         "connected": False,
     },
-    "R_UPPER_LEG":
-    {
+    "R_UPPER_LEG": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (-0.02, 0.05, -0.22),
@@ -1551,9 +1422,8 @@ avatar_skeleton = {
         "parent": "mHipRight",
         "connected": False,
     },
-    "mKneeRight":
-    {
-        "aliases": ['rShin', 'avatar_mKneeRight'],
+    "mKneeRight": {
+        "aliases": ["rShin", "avatar_mKneeRight"],
         "pivot": (-0.00078, 0.048635, -0.490922),
         "pos": (-0.001, 0.049, -0.491),
         "end": (-0.029, 0.0, -0.469),
@@ -1563,8 +1433,7 @@ avatar_skeleton = {
         "parent": "mHipRight",
         "connected": True,
     },
-    "R_LOWER_LEG":
-    {
+    "R_LOWER_LEG": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (-0.02, 0.0, -0.2),
@@ -1575,9 +1444,8 @@ avatar_skeleton = {
         "parent": "mKneeRight",
         "connected": False,
     },
-    "mAnkleRight":
-    {
-        "aliases": ['rFoot', 'avatar_mAnkleRight'],
+    "mAnkleRight": {
+        "aliases": ["rFoot", "avatar_mAnkleRight"],
         "pivot": (-0.028869, 0.0, -0.468494),
         "pos": (-0.029, 0.0, -0.468),
         "end": (0.112, 0.0, -0.061),
@@ -1587,8 +1455,7 @@ avatar_skeleton = {
         "parent": "mKneeRight",
         "connected": True,
     },
-    "R_FOOT":
-    {
+    "R_FOOT": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.077, 0.0, -0.041),
@@ -1599,9 +1466,8 @@ avatar_skeleton = {
         "parent": "mAnkleRight",
         "connected": False,
     },
-    "mFootRight":
-    {
-        "aliases": ['avatar_mFootRight'],
+    "mFootRight": {
+        "aliases": ["avatar_mFootRight"],
         "pivot": (0.111956, -0.0, -0.060637),
         "pos": (0.112, -0.0, -0.061),
         "end": (0.105, -0.01, 0.0),
@@ -1611,9 +1477,8 @@ avatar_skeleton = {
         "parent": "mAnkleRight",
         "connected": True,
     },
-    "mToeRight":
-    {
-        "aliases": ['avatar_mToeRight'],
+    "mToeRight": {
+        "aliases": ["avatar_mToeRight"],
         "pivot": (0.105399, -0.010408, -0.000104),
         "pos": (0.109, 0.0, 0.0),
         "end": (0.02, 0.0, 0.0),
@@ -1623,9 +1488,8 @@ avatar_skeleton = {
         "parent": "mFootRight",
         "connected": False,
     },
-    "mHipLeft":
-    {
-        "aliases": ['lThigh', 'avatar_mHipLeft'],
+    "mHipLeft": {
+        "aliases": ["lThigh", "avatar_mHipLeft"],
         "pivot": (0.033757, 0.126765, -0.040998),
         "pos": (0.034, 0.127, -0.041),
         "end": (-0.001, -0.046, -0.491),
@@ -1635,8 +1499,7 @@ avatar_skeleton = {
         "parent": "mPelvis",
         "connected": False,
     },
-    "L_UPPER_LEG":
-    {
+    "L_UPPER_LEG": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (-0.02, -0.05, -0.22),
@@ -1647,9 +1510,8 @@ avatar_skeleton = {
         "parent": "mHipLeft",
         "connected": False,
     },
-    "mKneeLeft":
-    {
-        "aliases": ['lShin', 'avatar_mKneeLeft'],
+    "mKneeLeft": {
+        "aliases": ["lShin", "avatar_mKneeLeft"],
         "pivot": (-0.000887, -0.045568, -0.491053),
         "pos": (-0.001, -0.046, -0.491),
         "end": (-0.029, 0.001, -0.469),
@@ -1659,8 +1521,7 @@ avatar_skeleton = {
         "parent": "mHipLeft",
         "connected": True,
     },
-    "L_LOWER_LEG":
-    {
+    "L_LOWER_LEG": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (-0.02, 0.0, -0.2),
@@ -1671,9 +1532,8 @@ avatar_skeleton = {
         "parent": "mKneeLeft",
         "connected": False,
     },
-    "mAnkleLeft":
-    {
-        "aliases": ['lFoot', 'avatar_mAnkleLeft'],
+    "mAnkleLeft": {
+        "aliases": ["lFoot", "avatar_mAnkleLeft"],
         "pivot": (-0.028887, 0.001378, -0.468449),
         "pos": (-0.029, 0.001, -0.468),
         "end": (0.112, 0.0, -0.061),
@@ -1683,8 +1543,7 @@ avatar_skeleton = {
         "parent": "mKneeLeft",
         "connected": True,
     },
-    "L_FOOT":
-    {
+    "L_FOOT": {
         "aliases": [],
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.077, 0.0, -0.041),
@@ -1695,9 +1554,8 @@ avatar_skeleton = {
         "parent": "mAnkleLeft",
         "connected": False,
     },
-    "mFootLeft":
-    {
-        "aliases": ['avatar_mFootLeft'],
+    "mFootLeft": {
+        "aliases": ["avatar_mFootLeft"],
         "pivot": (0.111956, -0.0, -0.06062),
         "pos": (0.112, -0.0, -0.061),
         "end": (0.105, 0.008, 0.001),
@@ -1707,9 +1565,8 @@ avatar_skeleton = {
         "parent": "mAnkleLeft",
         "connected": True,
     },
-    "mToeLeft":
-    {
-        "aliases": ['avatar_mToeLeft'],
+    "mToeLeft": {
+        "aliases": ["avatar_mToeLeft"],
         "pivot": (0.105387, 0.00827, 0.000871),
         "pos": (0.109, 0.0, 0.0),
         "end": (0.02, 0.0, 0.0),
@@ -1719,8 +1576,7 @@ avatar_skeleton = {
         "parent": "mFootLeft",
         "connected": False,
     },
-    "mTail1":
-    {
+    "mTail1": {
         "aliases": [],
         "pivot": (-0.116, 0.0, 0.047),
         "pos": (-0.116, 0.0, 0.047),
@@ -1731,8 +1587,7 @@ avatar_skeleton = {
         "parent": "mPelvis",
         "connected": False,
     },
-    "mTail2":
-    {
+    "mTail2": {
         "aliases": [],
         "pivot": (-0.197, 0.0, 0.0),
         "pos": (-0.197, 0.0, 0.0),
@@ -1743,8 +1598,7 @@ avatar_skeleton = {
         "parent": "mTail1",
         "connected": True,
     },
-    "mTail3":
-    {
+    "mTail3": {
         "aliases": [],
         "pivot": (-0.168, 0.0, 0.0),
         "pos": (-0.168, 0.0, 0.0),
@@ -1755,8 +1609,7 @@ avatar_skeleton = {
         "parent": "mTail2",
         "connected": True,
     },
-    "mTail4":
-    {
+    "mTail4": {
         "aliases": [],
         "pivot": (-0.142, 0.0, 0.0),
         "pos": (-0.142, 0.0, 0.0),
@@ -1767,8 +1620,7 @@ avatar_skeleton = {
         "parent": "mTail3",
         "connected": True,
     },
-    "mTail5":
-    {
+    "mTail5": {
         "aliases": [],
         "pivot": (-0.112, 0.0, 0.0),
         "pos": (-0.112, 0.0, 0.0),
@@ -1779,8 +1631,7 @@ avatar_skeleton = {
         "parent": "mTail4",
         "connected": True,
     },
-    "mTail6":
-    {
+    "mTail6": {
         "aliases": [],
         "pivot": (-0.094, 0.0, 0.0),
         "pos": (-0.094, 0.0, 0.0),
@@ -1791,8 +1642,7 @@ avatar_skeleton = {
         "parent": "mTail5",
         "connected": True,
     },
-    "mGroin":
-    {
+    "mGroin": {
         "aliases": [],
         "pivot": (0.064, 0.0, -0.097),
         "pos": (0.064, 0.0, -0.097),
@@ -1803,8 +1653,7 @@ avatar_skeleton = {
         "parent": "mPelvis",
         "connected": False,
     },
-    "mHindLimbsRoot":
-    {
+    "mHindLimbsRoot": {
         "aliases": [],
         "pivot": (-0.2, 0.0, 0.084),
         "pos": (-0.2, 0.0, 0.084),
@@ -1815,8 +1664,7 @@ avatar_skeleton = {
         "parent": "mPelvis",
         "connected": False,
     },
-    "mHindLimb1Left":
-    {
+    "mHindLimb1Left": {
         "aliases": [],
         "pivot": (-0.204, 0.129, -0.125),
         "pos": (-0.204, 0.129, -0.125),
@@ -1827,8 +1675,7 @@ avatar_skeleton = {
         "parent": "mHindLimbsRoot",
         "connected": False,
     },
-    "mHindLimb2Left":
-    {
+    "mHindLimb2Left": {
         "aliases": [],
         "pivot": (0.002, -0.046, -0.491),
         "pos": (0.002, -0.046, -0.491),
@@ -1839,8 +1686,7 @@ avatar_skeleton = {
         "parent": "mHindLimb1Left",
         "connected": True,
     },
-    "mHindLimb3Left":
-    {
+    "mHindLimb3Left": {
         "aliases": [],
         "pivot": (-0.03, -0.003, -0.468),
         "pos": (-0.03, -0.003, -0.468),
@@ -1851,8 +1697,7 @@ avatar_skeleton = {
         "parent": "mHindLimb2Left",
         "connected": True,
     },
-    "mHindLimb4Left":
-    {
+    "mHindLimb4Left": {
         "aliases": [],
         "pivot": (0.112, 0.0, -0.061),
         "pos": (0.112, 0.0, -0.061),
@@ -1863,8 +1708,7 @@ avatar_skeleton = {
         "parent": "mHindLimb3Left",
         "connected": True,
     },
-    "mHindLimb1Right":
-    {
+    "mHindLimb1Right": {
         "aliases": [],
         "pivot": (-0.204, -0.129, -0.125),
         "pos": (-0.204, -0.129, -0.125),
@@ -1875,8 +1719,7 @@ avatar_skeleton = {
         "parent": "mHindLimbsRoot",
         "connected": False,
     },
-    "mHindLimb2Right":
-    {
+    "mHindLimb2Right": {
         "aliases": [],
         "pivot": (0.002, 0.046, -0.491),
         "pos": (0.002, 0.046, -0.491),
@@ -1887,8 +1730,7 @@ avatar_skeleton = {
         "parent": "mHindLimb1Right",
         "connected": True,
     },
-    "mHindLimb3Right":
-    {
+    "mHindLimb3Right": {
         "aliases": [],
         "pivot": (-0.03, 0.003, -0.468),
         "pos": (-0.03, 0.003, -0.468),
@@ -1899,8 +1741,7 @@ avatar_skeleton = {
         "parent": "mHindLimb2Right",
         "connected": True,
     },
-    "mHindLimb4Right":
-    {
+    "mHindLimb4Right": {
         "aliases": [],
         "pivot": (0.112, 0.0, -0.061),
         "pos": (0.112, 0.0, -0.061),
@@ -1911,8 +1752,7 @@ avatar_skeleton = {
         "parent": "mHindLimb3Right",
         "connected": True,
     },
-    "Alt_Left_Ear":
-    {
+    "Alt_Left_Ear": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -1922,8 +1762,7 @@ avatar_skeleton = {
         "parent": "mFaceEar1Left",
         "connected": False,
     },
-    "Alt_Left_Eye":
-    {
+    "Alt_Left_Eye": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -1933,8 +1772,7 @@ avatar_skeleton = {
         "parent": "mFaceEyeAltLeft",
         "connected": False,
     },
-    "Alt_Right_Ear":
-    {
+    "Alt_Right_Ear": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -1944,8 +1782,7 @@ avatar_skeleton = {
         "parent": "mFaceEar1Right",
         "connected": False,
     },
-    "Alt_Right_Eye":
-    {
+    "Alt_Right_Eye": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -1955,8 +1792,7 @@ avatar_skeleton = {
         "parent": "mFaceEyeAltRight",
         "connected": False,
     },
-    "Chest":
-    {
+    "Chest": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.15, 0.0, -0.1),
         "end": (0.0, 0.0, 0.03),
@@ -1966,8 +1802,7 @@ avatar_skeleton = {
         "parent": "mChest",
         "connected": False,
     },
-    "Chin":
-    {
+    "Chin": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.12, 0.0, -0.04),
         "end": (0.0, 0.0, 0.03),
@@ -1977,8 +1812,7 @@ avatar_skeleton = {
         "parent": "mHead",
         "connected": False,
     },
-    "Groin":
-    {
+    "Groin": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -1988,8 +1822,7 @@ avatar_skeleton = {
         "parent": "mGroin",
         "connected": False,
     },
-    "Jaw":
-    {
+    "Jaw": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -1999,8 +1832,7 @@ avatar_skeleton = {
         "parent": "mFaceJaw",
         "connected": False,
     },
-    "L_Forearm":
-    {
+    "L_Forearm": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.113, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -2010,8 +1842,7 @@ avatar_skeleton = {
         "parent": "mElbowLeft",
         "connected": False,
     },
-    "L_Lower_Leg":
-    {
+    "L_Lower_Leg": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (-0.044, -0.007, -0.261),
         "end": (0.0, 0.0, 0.03),
@@ -2021,8 +1852,7 @@ avatar_skeleton = {
         "parent": "mKneeLeft",
         "connected": False,
     },
-    "L_Upper_Arm":
-    {
+    "L_Upper_Arm": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.01, 0.15, -0.01),
         "end": (0.0, 0.0, 0.03),
@@ -2032,8 +1862,7 @@ avatar_skeleton = {
         "parent": "mShoulderLeft",
         "connected": False,
     },
-    "L_Upper_Leg":
-    {
+    "L_Upper_Leg": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (-0.019, -0.034, -0.31),
         "end": (0.0, 0.0, 0.03),
@@ -2043,8 +1872,7 @@ avatar_skeleton = {
         "parent": "mHipLeft",
         "connected": False,
     },
-    "Left_Ear":
-    {
+    "Left_Ear": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.015, 0.08, 0.017),
         "end": (0.0, 0.0, 0.03),
@@ -2054,8 +1882,7 @@ avatar_skeleton = {
         "parent": "mHead",
         "connected": False,
     },
-    "Left_Eyeball":
-    {
+    "Left_Eyeball": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -2065,8 +1892,7 @@ avatar_skeleton = {
         "parent": "mEyeLeft",
         "connected": False,
     },
-    "Left_Foot":
-    {
+    "Left_Foot": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -2076,8 +1902,7 @@ avatar_skeleton = {
         "parent": "mFootLeft",
         "connected": False,
     },
-    "Left_Hand":
-    {
+    "Left_Hand": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.08, -0.02),
         "end": (0.0, 0.0, 0.03),
@@ -2087,8 +1912,7 @@ avatar_skeleton = {
         "parent": "mWristLeft",
         "connected": False,
     },
-    "Left_Hind_Foot":
-    {
+    "Left_Hind_Foot": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -2098,8 +1922,7 @@ avatar_skeleton = {
         "parent": "mHindLimb4Left",
         "connected": False,
     },
-    "Left_Hip":
-    {
+    "Left_Hip": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -2109,8 +1932,7 @@ avatar_skeleton = {
         "parent": "mHipLeft",
         "connected": False,
     },
-    "Left_Pec":
-    {
+    "Left_Pec": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.104, 0.082, 0.247),
         "end": (0.0, 0.0, 0.03),
@@ -2120,8 +1942,7 @@ avatar_skeleton = {
         "parent": "mTorso",
         "connected": False,
     },
-    "Left_Ring_Finger":
-    {
+    "Left_Ring_Finger": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (-0.006, 0.019, -0.002),
         "end": (0.0, 0.0, 0.03),
@@ -2131,8 +1952,7 @@ avatar_skeleton = {
         "parent": "mHandRing1Left",
         "connected": False,
     },
-    "Left_Shoulder":
-    {
+    "Left_Shoulder": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.08),
         "end": (0.0, 0.0, 0.03),
@@ -2142,8 +1962,7 @@ avatar_skeleton = {
         "parent": "mCollarLeft",
         "connected": False,
     },
-    "Left_Wing":
-    {
+    "Left_Wing": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -2153,8 +1972,7 @@ avatar_skeleton = {
         "parent": "mWing4Left",
         "connected": False,
     },
-    "Mouth":
-    {
+    "Mouth": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.12, 0.0, 0.001),
         "end": (0.0, 0.0, 0.03),
@@ -2164,8 +1982,7 @@ avatar_skeleton = {
         "parent": "mHead",
         "connected": False,
     },
-    "Neck":
-    {
+    "Neck": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -2175,8 +1992,7 @@ avatar_skeleton = {
         "parent": "mNeck",
         "connected": False,
     },
-    "Nose":
-    {
+    "Nose": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.1, 0.0, 0.05),
         "end": (0.0, 0.0, 0.03),
@@ -2186,16 +2002,14 @@ avatar_skeleton = {
         "parent": "mHead",
         "connected": False,
     },
-
     # Kludged in, seems the uploader can accept this as an animated bone but it's weird.
-    "Avatar_Center":
-    {
+    "Avatar_Center": {
         "pivot": (0.0, 0.0, 0.0),
-        #"pos": (0.0, 0.0, -0.15),
-        #"pos": (0.0, 0.0, 1.067),
+        # "pos": (0.0, 0.0, -0.15),
+        # "pos": (0.0, 0.0, 1.067),
         "pos": (0.0, 0.0, 0.0),
         # -0.15 + 1.067 = 0.917
-        #"pos": (0.0, 0.0, 0.917),
+        # "pos": (0.0, 0.0, 0.917),
         "end": (0.0, 0.0, 0.03),
         "rot": (0.0, 0.0, 0.0),
         "scale": (1.0, 1.0, 1.0),
@@ -2203,10 +2017,7 @@ avatar_skeleton = {
         "parent": "mPelvis",
         "connected": False,
     },
-
-
-    "Pelvis":
-    {
+    "Pelvis": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, -0.15),
         "end": (0.0, 0.0, 0.03),
@@ -2216,8 +2027,7 @@ avatar_skeleton = {
         "parent": "mPelvis",
         "connected": False,
     },
-    "R_Forearm":
-    {
+    "R_Forearm": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, -0.12, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -2227,8 +2037,7 @@ avatar_skeleton = {
         "parent": "mElbowRight",
         "connected": False,
     },
-    "R_Lower_Leg":
-    {
+    "R_Lower_Leg": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (-0.044, -0.007, -0.262),
         "end": (0.0, 0.0, 0.03),
@@ -2238,8 +2047,7 @@ avatar_skeleton = {
         "parent": "mKneeRight",
         "connected": False,
     },
-    "R_Upper_Arm":
-    {
+    "R_Upper_Arm": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.01, -0.13, 0.01),
         "end": (0.0, 0.0, 0.03),
@@ -2249,8 +2057,7 @@ avatar_skeleton = {
         "parent": "mShoulderRight",
         "connected": False,
     },
-    "R_Upper_Leg":
-    {
+    "R_Upper_Leg": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (-0.017, 0.041, -0.31),
         "end": (0.0, 0.0, 0.03),
@@ -2260,8 +2067,7 @@ avatar_skeleton = {
         "parent": "mHipRight",
         "connected": False,
     },
-    "Right_Ear":
-    {
+    "Right_Ear": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.015, -0.08, 0.017),
         "end": (0.0, 0.0, 0.03),
@@ -2271,8 +2077,7 @@ avatar_skeleton = {
         "parent": "mHead",
         "connected": False,
     },
-    "Right_Eyeball":
-    {
+    "Right_Eyeball": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -2282,8 +2087,7 @@ avatar_skeleton = {
         "parent": "mEyeRight",
         "connected": False,
     },
-    "Right_Foot":
-    {
+    "Right_Foot": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -2293,8 +2097,7 @@ avatar_skeleton = {
         "parent": "mFootRight",
         "connected": False,
     },
-    "Right_Hand":
-    {
+    "Right_Hand": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, -0.08, -0.02),
         "end": (0.0, 0.0, 0.03),
@@ -2304,8 +2107,7 @@ avatar_skeleton = {
         "parent": "mWristRight",
         "connected": False,
     },
-    "Right_Hind_Foot":
-    {
+    "Right_Hind_Foot": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -2315,8 +2117,7 @@ avatar_skeleton = {
         "parent": "mHindLimb4Right",
         "connected": False,
     },
-    "Right_Hip":
-    {
+    "Right_Hip": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -2326,8 +2127,7 @@ avatar_skeleton = {
         "parent": "mHipRight",
         "connected": False,
     },
-    "Right_Pec":
-    {
+    "Right_Pec": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.104, -0.082, 0.247),
         "end": (0.0, 0.0, 0.03),
@@ -2337,8 +2137,7 @@ avatar_skeleton = {
         "parent": "mTorso",
         "connected": False,
     },
-    "Right_Ring_Finger":
-    {
+    "Right_Ring_Finger": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (-0.006, -0.019, -0.002),
         "end": (0.0, 0.0, 0.03),
@@ -2348,8 +2147,7 @@ avatar_skeleton = {
         "parent": "mHandRing1Right",
         "connected": False,
     },
-    "Right_Shoulder":
-    {
+    "Right_Shoulder": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.08),
         "end": (0.0, 0.0, 0.03),
@@ -2359,8 +2157,7 @@ avatar_skeleton = {
         "parent": "mCollarRight",
         "connected": False,
     },
-    "Right_Wing":
-    {
+    "Right_Wing": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -2370,8 +2167,7 @@ avatar_skeleton = {
         "parent": "mWing4Right",
         "connected": False,
     },
-    "Skull":
-    {
+    "Skull": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.15),
         "end": (0.0, 0.0, 0.03),
@@ -2381,8 +2177,7 @@ avatar_skeleton = {
         "parent": "mHead",
         "connected": False,
     },
-    "Spine":
-    {
+    "Spine": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (-0.15, 0.0, -0.1),
         "end": (0.0, 0.0, 0.03),
@@ -2392,8 +2187,7 @@ avatar_skeleton = {
         "parent": "mChest",
         "connected": False,
     },
-    "Stomach":
-    {
+    "Stomach": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.092, 0.0, 0.088),
         "end": (0.0, 0.0, 0.03),
@@ -2403,8 +2197,7 @@ avatar_skeleton = {
         "parent": "mPelvis",
         "connected": False,
     },
-    "Tail_Base":
-    {
+    "Tail_Base": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -2414,8 +2207,7 @@ avatar_skeleton = {
         "parent": "mTail1",
         "connected": False,
     },
-    "Tail_Tip":
-    {
+    "Tail_Tip": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (-0.025, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),
@@ -2425,8 +2217,7 @@ avatar_skeleton = {
         "parent": "mTail6",
         "connected": False,
     },
-    "Tongue":
-    {
+    "Tongue": {
         "pivot": (0.0, 0.0, 0.0),
         "pos": (0.0, 0.0, 0.0),
         "end": (0.0, 0.0, 0.03),

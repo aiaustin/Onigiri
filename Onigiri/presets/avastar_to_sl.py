@@ -338,14 +338,8 @@ bone_map = {
     "FootRight": "mFootRight",
     "ToeRight": "mToeRight",
     "aAvatar Center": "Avatar Center",
-    'PelvisInv': 'PelvisInv',
-    'COG': 'mPelvis',
-    'Origin': 'Origin',
-    'Tinker': 'Tinker',
-
+    "PelvisInv": "PelvisInv",
+    "COG": "mPelvis",
+    "Origin": "Origin",
+    "Tinker": "Tinker",
 }
-
-
-
-
-
