@@ -45,7 +45,6 @@ import importlib
 import traceback
 
 from collections import deque
-
 import xml.etree.ElementTree as ET
 
 from bpy_extras.io_utils import ImportHelper, ExportHelper
@@ -40148,13 +40147,13 @@ class OnigiriMotionMixerAddSource(bpy.types.Operator):
 
             bpy.ops.object.mode_set(mode="POSE")
             
-            sourceObj.data.collections.new(mixer_group_source_inactive_name)            
-            #sourceObj.pose.bone_groups.active.color_set = (mixer_group_source_inactive_theme)            
+            sourceObj.data.collections.new(mixer_group_source_inactive_name)                        
             sourceObj.data.collections.new(mixer_group_source_active_name)
-            #sourceObj.pose.bone_groups.active.color_set = (mixer_group_source_active_theme)
+            
 
             for boneObj in sourceObj.data.bones:
                 sourceObj.data.collections[mixer_group_source_inactive_name].assign(boneObj)
+                boneObj.palette = mixer_group_source_inactive_theme
 
             bpy.ops.object.mode_set(mode="OBJECT")
             sourceObj.select_set(False)
@@ -40378,7 +40377,9 @@ class OnigiriMotionMixerSetAnchor(bpy.types.Operator):
 
         targetObj = oni_mixer["target"]
         sourceObj = obj[self.name]
+
         targetObj.data.collections[mixer_group_source_active_name].assign(targetObj.pose.bones[bone])
+        targetObj.pose.bones[bone].palette = mixer_group_source_active_theme
         
         obj[self.name].data.collections[mixer_group_source_active_name].assign(obj[self.name].pose.bones[bone])
 
@@ -61677,10 +61678,8 @@ class OnigiriSimCustomAction(bpy.types.Operator):
 
                 base_collection = armObj.data.collections.get(sim.props["group_base"])
                 if base_collection == None:
-                    base_collection = armObj.data.collections.new(sim.props["group_base"])
+                    base_collection = armObj.data.collections.new(sim.props["group_base"])                
                 
-                #armObj.pose.bone_groups.active.color_set = sim.props["theme_base"]
-
                 group_base = sim.props["group_base"]
                 base_collection.assign(boneObj)
                 boneObj.palette = sim.props["theme_base"]
