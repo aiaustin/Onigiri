@@ -40012,7 +40012,7 @@ class OnigiriMotionMixerLockTarget(bpy.types.Operator):
 
         for boneObj in targetObj.pose.bones:
             inactiveCollection.assign(boneObj)
-            boneObj.palette = mixer_group_target_inactive_theme
+            boneObj.color.palette = mixer_group_target_inactive_theme
 
         bpy.ops.object.mode_set(mode="OBJECT")
 
@@ -40153,7 +40153,7 @@ class OnigiriMotionMixerAddSource(bpy.types.Operator):
 
             for boneObj in sourceObj.data.bones:
                 sourceObj.data.collections[mixer_group_source_inactive_name].assign(boneObj)
-                boneObj.palette = mixer_group_source_inactive_theme
+                boneObj.color.palette = mixer_group_source_inactive_theme
 
             bpy.ops.object.mode_set(mode="OBJECT")
             sourceObj.select_set(False)
@@ -40226,7 +40226,7 @@ class OnigiriMotionMixerRemoveSource(bpy.types.Operator):
 
         for bone in sources:
             targetObj.data.collections[mixer_group_target_inactive_name].assign(bone)
-            bone.palette = mixer_group_target_active_theme
+            bone.color.palette = mixer_group_target_active_theme
 
             constraints = targetObj.pose.bones[bone].constraints
             for c in constraints:
@@ -40379,7 +40379,7 @@ class OnigiriMotionMixerSetAnchor(bpy.types.Operator):
         sourceObj = obj[self.name]
 
         targetObj.data.collections[mixer_group_source_active_name].assign(targetObj.pose.bones[bone])
-        targetObj.pose.bones[bone].palette = mixer_group_source_active_theme
+        targetObj.pose.bones[bone].color.palette = mixer_group_source_active_theme
         
         obj[self.name].data.collections[mixer_group_source_active_name].assign(obj[self.name].pose.bones[bone])
 
@@ -40708,7 +40708,7 @@ class OnigiriMotionMixerRemoveBones(bpy.types.Operator):
         for bone in bone_names:
             for sourceObj in oni_mixer["sources"]:
                 sourceObj.data.collections[mixer_group_source_inactive_name].assign(bone)
-                #bone.palette = mixer_group_source_inactive_theme                
+                #bone.color.palette = mixer_group_source_inactive_theme                
 
             targetObj.data.collections[mixer_group_target_inactive_name].assign(bone)            
 
@@ -61682,7 +61682,7 @@ class OnigiriSimCustomAction(bpy.types.Operator):
                 
                 group_base = sim.props["group_base"]
                 base_collection.assign(boneObj)
-                boneObj.palette = sim.props["theme_base"]
+                boneObj.color.palette = sim.props["theme_base"]
 
         if disable_armatures == True:
             print("Disabling armature modifiers")

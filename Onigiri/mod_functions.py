@@ -1181,7 +1181,7 @@ def add_bone_to_group(armature="", bone="", group="", theme=""):
     boneObj = bpy.data.objects[armature].pose.bones[bone]
     bpy.data.objects[armature].data.collections[group].assign(boneObj)
     if theme != "":
-        boneObj.palette = theme    
+        boneObj.color.palette = theme    
 
     bpy.ops.object.mode_set(mode="OBJECT")
     bpy.ops.object.select_all(action="DESELECT")

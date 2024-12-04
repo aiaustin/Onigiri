@@ -1146,9 +1146,9 @@ def update_map(inRig=None):
         
         try:
             inRig.data.collections[director_group].assign(inRig.data.bones[rename_in_bone])
-            inRig.data.bones[rename_in_bone].palette = props["themes"]["director"]
+            inRig.data.bones[rename_in_bone].color.palette = props["themes"]["director"]
             outRig.data.collections[actor_group].assign(outRig.data.bones[rename_out_bone])
-            outRig.data.bones[rename_out_bone].palette = props["themes"]["actor"]
+            outRig.data.bones[rename_out_bone].color.palette = props["themes"]["actor"]
         except:
             bad_group = True
             pass
@@ -1159,7 +1159,7 @@ def update_map(inRig=None):
             if bone not in inRig.data.bones:
                 continue
             inRig.data.collections[reskin_group].assign(inRig.data.bones[bone])            
-            inRig.data.bones[bone].palette = props["themes"]["reskin"]
+            inRig.data.bones[bone].color.palette = props["themes"]["reskin"]
 
     utils.set_state(state)
 
@@ -1192,10 +1192,10 @@ def apply_map(inRig=None, outRig=None):
         actor_group = props["groups"]["actor"]
 
         inRig.data.collections[director_group].assign(inRig.data.bones[rename_in_bone])
-        inRig.data.bones[rename_in_bone].palette = props["themes"]["director"]
+        inRig.data.bones[rename_in_bone].color.palette = props["themes"]["director"]
 
         outRig.data.collections[actor_group].assign(outRig.data.bones[rename_out_bone])
-        outRig.data.bones[rename_out_bone].palette = props["themes"]["actor"]
+        outRig.data.bones[rename_out_bone].color.palette = props["themes"]["actor"]
         
         reskin_bones = reskin.get(rename_in_bone, [])
         reskin_group = props["groups"]["reskin"]
@@ -1205,6 +1205,6 @@ def apply_map(inRig=None, outRig=None):
             if bone not in inRig.pose.bones:
                 continue
             inRig.data.collections[reskin_group].assign(inRig.data.bones[bone])                        
-            inRig.data.bones[bone].palette = props["themes"]["reskin"]
+            inRig.data.bones[bone].color.palette = props["themes"]["reskin"]
 
     return True

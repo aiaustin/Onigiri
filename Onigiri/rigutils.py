@@ -1787,7 +1787,7 @@ def attach_slave_rig(
 
     for boneObj in slaveObj.data.bones:
         slaveCollection.assign(boneObj)
-        boneObj.palette = mod_data.slave_group_theme
+        boneObj.color.palette = mod_data.slave_group_theme
 
     lname = "ONI Copy Loc"
     rname = "ONI Copy Rot"
@@ -2109,10 +2109,10 @@ def build_sl_rig(rig_class="pos", store=True, rotate=False):
     for bone in skel.avatar_skeleton:
         if skel.avatar_skeleton[bone]["type"] == "bone":
             obj[arm].data.collections[mod_data.rig_group_mbones].assign(bone)
-            bone.palette = mod_data.rig_group_mtheme
+            bone.color.palette = mod_data.rig_group_mtheme
         else:            
             obj[arm].data.collections[mod_data.rig_group_vbones].assign(bone)
-            bone.palette = mod_data.rig_group_vtheme
+            bone.color.palette = mod_data.rig_group_vtheme
         
 
     bpy.ops.object.mode_set(mode="OBJECT")
@@ -2826,7 +2826,7 @@ def freeze(armature=None, bones=[], transforms=True, influence=1):
 
     for boneObj in glueObj.data.bones:
         glueCollection.assign(boneObj)
-        boneObj.palette = "THEME07"        
+        boneObj.color.palette = "THEME07"        
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
@@ -3598,17 +3598,17 @@ def set_bone_groups(armObj):
         boneObj = armObj.data.bones[bone]
         if skel.avatar_skeleton[bone]["type"] == "bone":
             armObj.data.collections[mod_data.rig_group_mbones].assign(boneObj)
-            boneObj.palette = mod_data.rig_group_mtheme
+            boneObj.color.palette = mod_data.rig_group_mtheme
         elif skel.avatar_skeleton[bone]["type"] == "attachment":
             if " " in bone:
                 armObj.data.collections[mod_data.rig_group_nbones].assign(boneObj)
-                boneObj.palette = mod_data.rig_group_ntheme
+                boneObj.color.palette = mod_data.rig_group_ntheme
             else:
                 armObj.data.collections[mod_data.rig_group_abones].assign(boneObj)
-                boneObj.palette = mod_data.rig_group_atheme
+                boneObj.color.palette = mod_data.rig_group_atheme
         else:
             armObj.data.collections[mod_data.rig_group_vbones].assign(boneObj)
-            boneObj.palette = mod_data.rig_group_vtheme
+            boneObj.color.palette = mod_data.rig_group_vtheme
 
     bpy.ops.object.mode_set(mode="OBJECT")
 

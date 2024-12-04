@@ -113,7 +113,7 @@ def snap(sarm=None, tarms=[], type="rig", source=[]):
 
     for boneObj in glueObj.pose.bones:
         glueCollection.assign(boneObj)        
-        boneObj.palette = "THEME07"
+        boneObj.color.palette = "THEME07"
 
     bpy.ops.object.mode_set(mode="EDIT")
     for boneObj in glueObj.data.edit_bones:
@@ -485,7 +485,7 @@ def morph(
 
     for boneObj in glueObj.pose.bones:
         glueCollection.assign(boneObj)        
-        boneObj.palette = "THEME07"
+        boneObj.color.palette = "THEME07"
 
     bpy.ops.object.mode_set(mode="EDIT")
     for boneObj in glueObj.data.edit_bones:
@@ -817,7 +817,7 @@ def freeze(sarm):
 
     for boneObj in glueObj.pose.bones:
         glueCollection.assign(boneObj)
-        boneObj.palette = "THEME01"        
+        boneObj.color.palette = "THEME01"        
 
     bpy.ops.object.mode_set(mode="OBJECT")
 

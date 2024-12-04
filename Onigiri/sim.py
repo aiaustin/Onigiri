@@ -377,7 +377,7 @@ def build_bone(actor=None, director=None, head=None, tail=None, vertices=[]):
 
     group_base = props["group_base"]
     colObj.assign(boneObj)    
-    boneObj.palette = props["theme_base"]
+    boneObj.color.palette = props["theme_base"]
 
     utils.set_state(new_state)
 
@@ -671,6 +671,6 @@ def vertex_constraint(
     
     group_base = sim.props["group_base"]
     colObj.assign(boneObj)
-    boneObj.palette = props["theme_base"]    
+    boneObj.color.palette = props["theme_base"]    
 
     return True

@@ -1900,7 +1900,7 @@ def vertex_constraint(
         coll = armObj.data.collections.new(props["constraint_group_base"])
     
     coll.assign(boneObj)
-    boneObj.palette = props["constraint_theme_base"]    
+    boneObj.color.palette = props["constraint_theme_base"]    
     group_base = sim.props["constraint_group_base"]
 
     return True

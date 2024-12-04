@@ -96,13 +96,13 @@ def auto_weight_colors(bone="", state=""):
             
         boneObj = bpy.data.objects[arm].pose.bones[bone]
         boneCollection.assign(boneObj)
-        boneObj.palette = md.cc_rename_selected_color
+        boneObj.color.palette = md.cc_rename_selected_color
 
         if bone in ccp["remap_stored"]["reskin"]:
             for child in ccp["remap_stored"]["reskin"][bone]:
                 boneObj = bpy.data.objects[arm].pose.bones[child]
                 bpy.data.objects[arm].data.collections[md.cc_reskin_selected_name].assign(boneObj)
-                boneObj.palette = md.cc_reskin_selected_color
+                boneObj.color.palette = md.cc_reskin_selected_color
 
     elif state == "reset":
         bpy.data.objects[arm].data.collections[md.cc_rename_group].assign(bpy.data.objects[arm].pose.bones[bone])
