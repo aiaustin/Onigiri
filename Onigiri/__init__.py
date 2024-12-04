@@ -472,10 +472,8 @@ def retarget_mode(context):
             bpy.ops.pose.select_all(action="DESELECT")
 
             del obj[onir.retarget_source_name]["bone_map"][onir.retarget_source_bone]
-
-        boneObj.bone_group = bpy.data.objects[onir.retarget_rig].pose.bone_groups[
-            oni_source_group
-        ]
+        
+        bpy.data.objects[onir.retarget_rig].data.collections[oni_source_group].assign(boneObj)
 
         for b in obj[onir.retarget_source_name].data.bones:
             b.hide_select = True
@@ -521,9 +519,7 @@ def retarget_mode(context):
             onir.retarget_target_bone
         ] = onir.retarget_source_bone
 
-        boneObj.bone_group = bpy.data.objects[onir.retarget_rig].pose.bone_groups[
-            oni_target_group
-        ]
+        bpy.data.objects[onir.retarget_rig].data.collections[oni_target_group].assign(boneObj)
 
         for b in obj[onir.retarget_target_name].data.bones:
             b.hide_select = True
@@ -573,7 +569,7 @@ def animation_retarget():
             boneObj.hide_select = False
         for boneObj in obj[onir.retarget_target_name_backup].data.bones:
             boneObj.hide_select = False
-
+        
         remove_bone_groups(onir.retarget_source_name_backup)
         remove_bone_groups(onir.retarget_target_name_backup)
 
@@ -828,7 +824,6 @@ def apply_map_pose(arm, cc_pose):
                     popup(txt, "Error", "ERROR")
                     return {"FINISHED"}
                 else:
-
                     selected[meshObj.name] = meshObj.modifiers[mod.name]
 
         if 1 == 0:
@@ -2594,7 +2589,7 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
             print("Move toggled to True")
             in_bone = onemap.props["input_bone"]
             onemap.props["move_bone"] = in_bone
-            inRig.pose.bones[in_bone].bone_group = inRig.pose.bone_groups["Move"]
+            inRig.data.collections["Move"].assign(inRig.pose.bones[in_bone])            
 
         if self.onemap_move == False:
             bpy.ops.onigiri.onemap_move()
@@ -2663,13 +2658,13 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
             onemap.props["HALT"] = True
         outRig = inRig["oni_onemap_actor"]
 
-        inRig.pose.bones[bone_name].bone_group = inRig.pose.bone_groups["Anchor"]
+        inRig.data.collections["Anchor"].assign(inRig.pose.bones[bone_name])
 
         oni_onemap_reskin = inRig.get("oni_onemap_reskin", [])
         if bone_name in oni_onemap_reskin:
             reskin_bones = oni_onemap_reskin[bone_name]
-            for bone in reskin_bones:
-                inRig.pose.bones[bone].bone_group = inRig.pose.bone_groups["Branch"]
+            for bone in reskin_bones:                
+                inRig.data.collections["Branch"].assign(inRig.pose.bones[bone])
 
         return True
 
@@ -2678,8 +2673,8 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
         outRig = bpy.context.active_object
         bone_name = onemap.props["group_output_bone"]
         group_name = onemap.props["group_output_name"]
-
-        outRig.pose.bones[bone_name].bone_group = outRig.pose.bone_groups[group_name]
+        
+        outRig.data.collections[group_name].assign(outRig.pose.bones[bone_name])
         return True
 
     def trigger_onemap_update_map(self):
@@ -3447,8 +3442,8 @@ class OnigiriOneMapReskin(bpy.types.Operator):
                 inRig["oni_onemap_reskin"][anchor_bone] = reskin_bones
                 onemap.update_map(input=inRig, output=outRig)
 
-                for bone in reskin_bones:
-                    inRig.pose.bones[bone].bone_group = inRig.pose.bone_groups["Branch"]
+                for bone in reskin_bones:                    
+                    inRig.data.collections["Branch"].assign(inRig.pose.bones[bone])
 
         print("Color reskin bone exiting resking without resetting fake properties")
 
@@ -6157,28 +6152,25 @@ class OnigiriSnapAction(bpy.types.Operator):
         inRig.select_set(True)
         outRig.select_set(True)
 
-        for g in inRig.pose.bone_groups:
-            inRig.pose.bone_groups.remove(g)
-        for g in outRig.pose.bone_groups:
-            outRig.pose.bone_groups.remove(g)
+        for g in inRig.data.collections: 
+            inRig.data.collections.remove(g)
+
+        for g in outRig.data.collections:
+            outRig.data.collections.remove(g)
 
         bpy.ops.object.mode_set(mode="POSE")
 
-        bpy.context.view_layer.objects.active = inRig
-        bpy.ops.pose.group_add()
-        inRig.pose.bone_groups.active.name = snap.props["director_group_base"]
-        inRig.pose.bone_groups.active.color_set = snap.props["director_theme_base"]
-        bpy.ops.pose.group_add()
-        inRig.pose.bone_groups.active.name = snap.props["director_group_mapped"]
-        inRig.pose.bone_groups.active.color_set = snap.props["director_theme_mapped"]
+        bpy.context.view_layer.objects.active = inRig        
+        inRig.data.collections.new(snap.props["director_group_base"])
+        #inRig.pose.bone_groups.active.color_set = snap.props["director_theme_base"]        
+        inRig.data.collections.new(snap.props["director_group_mapped"])
+        #inRig.pose.bone_groups.active.color_set = snap.props["director_theme_mapped"]
 
-        bpy.context.view_layer.objects.active = outRig
-        bpy.ops.pose.group_add()
-        outRig.pose.bone_groups.active.name = snap.props["actor_group_base"]
-        outRig.pose.bone_groups.active.color_set = snap.props["actor_theme_base"]
-        bpy.ops.pose.group_add()
-        outRig.pose.bone_groups.active.name = snap.props["actor_group_mapped"]
-        outRig.pose.bone_groups.active.color_set = snap.props["actor_theme_mapped"]
+        bpy.context.view_layer.objects.active = outRig        
+        outRig.data.collections.new(snap.props["actor_group_base"])
+        #outRig.pose.bone_groups.active.color_set = snap.props["actor_theme_base"]        
+        outRig.data.collections.new(snap.props["actor_group_mapped"])
+        #outRig.pose.bone_groups.active.color_set = snap.props["actor_theme_mapped"]
 
         snap.apply_map(director=inRig, actor=outRig)
 
@@ -14421,10 +14413,8 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
                 reskin_bones.extend(reskin_candidates)
                 ccp["remap_stored"]["reskin"][anchor] = reskin_bones
 
-                for bone in reskin_candidates:
-                    obj[source].pose.bones[bone].bone_group = bpy.data.objects[
-                        source
-                    ].pose.bone_groups[cc_reskin_group]
+                for bone in reskin_candidates:                    
+                    bpy.data.objects[source].data.collections[cc_reskin_group].assign(obj[source].pose.bones[bone])
 
             ccp["map_editor"]["active_anchor"] = ""
 
@@ -14745,9 +14735,8 @@ class CharacterConverterSetRename(bpy.types.Operator):
 
         bpy.ops.pose.group_unassign()
 
-        obj[armObj.name].pose.bones[boneObj.name].bone_group = obj[
-            armObj.name
-        ].pose.bone_groups[cc_rename_group]
+        
+        obj[armObj.name].data.collections[cc_rename_group].assign(obj[armObj.name].pose.bones[boneObj.name])
 
         obj[armObj.name].data.bones[boneObj.name].select = False
 
@@ -14809,9 +14798,7 @@ class CharacterConverterSetReskin(bpy.types.Operator):
 
             child_list.append(boneObj.name)
 
-            obj[armObj.name].pose.bones[boneObj.name].bone_group = obj[
-                armObj.name
-            ].pose.bone_groups[cc_reskin_group]
+            obj[armObj.name].data.collections[cc_reskin_group].assign(obj[armObj.name].pose.bones[boneObj.name])
 
             obj[armObj.name].data.bones[boneObj.name].hide_select = True
 
@@ -14870,9 +14857,7 @@ class CharacterConverterSetTarget(bpy.types.Operator):
         armObj = obj[ccp.target_rig_name]
 
         boneObj = bpy.context.selected_pose_bones[0]
-        obj[armObj.name].pose.bones[boneObj.name].bone_group = obj[
-            armObj.name
-        ].pose.bone_groups[cc_rename_group]
+        obj[armObj.name].data.collections[cc_rename_group].assign(obj[armObj.name].pose.bones[boneObj.name])
         obj[armObj.name].data.bones[boneObj.name].select = False
         ccp.set_rename_target = boneObj.name
 
@@ -39785,16 +39770,16 @@ class OnigiriMotionMixerProperties(bpy.types.PropertyGroup):
             print("Bone groups reset")
 
             bpy.context.view_layer.objects.active = targetObj
-            for g in targetObj.pose.bone_groups:
-                targetObj.pose.bone_groups.remove(g)
+            for g in targetObj.data.collections:
+                targetObj.data.collections.remove(g)
             for boneObj in targetObj.pose.bones:
                 constraints = boneObj.constraints
                 for c in constraints:
                     boneObj.constraints.remove(c)
         if sources:
             for o in sources:
-                for g in o.pose.bone_groups:
-                    o.pose.bone_groups.remove(g)
+                for g in o.data.collections:
+                    o.data.collections.remove(g)
 
         return
 
@@ -40023,21 +40008,20 @@ class OnigiriMotionMixerLockTarget(bpy.types.Operator):
 
         bpy.context.view_layer.objects.active = targetObj
         bpy.ops.object.mode_set(mode="OBJECT")
-        for g in targetObj.pose.bone_groups:
-            targetObj.pose.bone_groups.remove(g)
+
+        for g in targetObj.data.collections:
+            targetObj.data.collections.remove(g)
 
         bpy.ops.object.mode_set(mode="POSE")
-        bpy.ops.pose.group_add()
-        targetObj.pose.bone_groups.active.name = mixer_group_target_inactive_name
-        targetObj.pose.bone_groups.active.color_set = mixer_group_target_inactive_theme
-        bpy.ops.pose.group_add()
-        targetObj.pose.bone_groups.active.name = mixer_group_target_active_name
-        targetObj.pose.bone_groups.active.color_set = mixer_group_target_active_theme
+        
+        inactiveCollection = targetObj.data.collections.new(mixer_group_target_inactive_name)
+        
+        targetObj.data.collections.new(mixer_group_target_active_name)
+        #targetObj.pose.bone_groups.active.color_set = mixer_group_target_active_theme
 
         for boneObj in targetObj.pose.bones:
-            boneObj.bone_group = targetObj.pose.bone_groups[
-                mixer_group_target_inactive_name
-            ]
+            inactiveCollection.assign(boneObj)
+            boneObj.palette = mixer_group_target_inactive_theme
 
         bpy.ops.object.mode_set(mode="OBJECT")
 
@@ -40247,8 +40231,8 @@ class OnigiriMotionMixerRemoveSource(bpy.types.Operator):
         sourceObj.select_set(True)
         bpy.context.view_layer.objects.active = sourceObj
 
-        for g in sourceObj.pose.bone_groups:
-            sourceObj.pose.bone_groups.remove(g)
+        for g in sourceObj.data.collections:
+            sourceObj.data.collections.remove(g)
 
         targetObj = oni_mixer["target"]
         target = targetObj.name
@@ -40256,9 +40240,8 @@ class OnigiriMotionMixerRemoveSource(bpy.types.Operator):
         sources = oni_mixer["maps"]["sources"].get(self.name, [])
 
         for bone in sources:
-            targetObj.pose.bones[bone].bone_group = targetObj.pose.bone_groups[
-                mixer_group_target_inactive_name
-            ]
+            targetObj.data.collections[mixer_group_target_inactive_name].assign(bone)
+            bone.palette = mixer_group_target_active_theme
 
             constraints = targetObj.pose.bones[bone].constraints
             for c in constraints:
@@ -40749,12 +40732,10 @@ class OnigiriMotionMixerRemoveBones(bpy.types.Operator):
 
         for bone in bone_names:
             for sourceObj in oni_mixer["sources"]:
-                sourceObj.pose.bones[bone].bone_group = sourceObj.pose.bone_groups[
-                    mixer_group_source_inactive_name
-                ]
-            targetObj.pose.bones[bone].bone_group = targetObj.pose.bone_groups[
-                mixer_group_target_inactive_name
-            ]
+                sourceObj.data.collections[mixer_group_source_inactive_name].assign(bone)
+                #bone.palette = mixer_group_source_inactive_theme                
+
+            targetObj.data.collections[mixer_group_target_inactive_name].assign(bone)            
 
             for arm in oni_mixer["maps"]["sources"]:
                 oni_mixer["maps"]["sources"][arm].pop(bone, "")
