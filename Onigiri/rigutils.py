@@ -1778,31 +1778,30 @@ def attach_slave_rig(
     masterObj.data.display_type = "STICK"
     masterObj.show_in_front = True
 
-    for g in obj[slave].pose.bone_groups:
-        obj[slave].pose.bone_groups.remove(g)
+    for g in obj[slave].data.collections:  ## maybe crash blender
+        obj[slave].data.collections.remove(g)
 
     bpy.ops.object.mode_set(mode="POSE")
 
-    bpy.ops.pose.group_add()
-    slaveObj.pose.bone_groups.active.name = mod_data.slave_group_name
-    slaveObj.pose.bone_groups.active.color_set = mod_data.slave_group_theme
+    slaveCollection = slaveObj.data.collections.new(mod_data.slave_group_name)
 
-    for boneObj in slaveObj.pose.bones:
-        boneObj.bone_group = slaveObj.pose.bone_groups[mod_data.slave_group_name]
+    for boneObj in slaveObj.data.bones:
+        slaveCollection.assign(boneObj)
+        boneObj.palette = mod_data.slave_group_theme
 
     lname = "ONI Copy Loc"
     rname = "ONI Copy Rot"
     sname = "ONI Copy Sca"
 
     bone_list = []
-    for boneObj in obj[slave].pose.bones:
-        if boneObj.name in obj[master].pose.bones:
+    for boneObj in obj[slave].data.bones:
+        if boneObj.name in obj[master].data.bones:
             bone_list.append(boneObj)
 
     for boneObj in bone_list:
         sbone = boneObj.name
         obj[slave].data.bones.active = obj[slave].data.bones[sbone]
-        bc = obj[slave].pose.bones[sbone].constraints
+        bc = obj[slave].data.bones[sbone].constraints
         bc.new("COPY_LOCATION")
         bc["Copy Location"].target = masterObj
         bc["Copy Location"].subtarget = sbone
@@ -1813,7 +1812,7 @@ def attach_slave_rig(
     for boneObj in bone_list:
         sbone = boneObj.name
         obj[slave].data.bones.active = obj[slave].data.bones[sbone]
-        bc = obj[slave].pose.bones[sbone].constraints
+        bc = obj[slave].data.bones[sbone].constraints
         bc.new("COPY_ROTATION")
         bc["Copy Rotation"].target = masterObj
         bc["Copy Rotation"].subtarget = sbone
@@ -1824,7 +1823,7 @@ def attach_slave_rig(
     for boneObj in bone_list:
         sbone = boneObj.name
         obj[slave].data.bones.active = obj[slave].data.bones[sbone]
-        bc = obj[slave].pose.bones[sbone].constraints
+        bc = obj[slave].data.bones[sbone].constraints
         bc.new("COPY_SCALE")
         bc["Copy Scale"].target = masterObj
         bc["Copy Scale"].subtarget = sbone
@@ -2102,20 +2101,19 @@ def build_sl_rig(rig_class="pos", store=True, rotate=False):
         bpy.ops.object.transform_apply(rotation=True, location=False, scale=False)
 
     bpy.ops.object.mode_set(mode="POSE")
-    bpy.ops.pose.group_add()
-    obj[arm].pose.bone_groups.active.name = mod_data.rig_group_mbones
-    obj[arm].pose.bone_groups.active.color_set = mod_data.rig_group_mtheme
-    bpy.ops.pose.group_add()
-    obj[arm].pose.bone_groups.active.name = mod_data.rig_group_vbones
-    obj[arm].pose.bone_groups.active.color_set = mod_data.rig_group_vtheme
+    
+    obj[arm].data.collections.new(mod_data.rig_group_mbones) #mod_data.rig_group_mtheme
+    obj[arm].data.collections.new(mod_data.rig_group_vbones) #mod_data.rig_group_vtheme
 
     bpy.context.view_layer.objects.active = obj[arm]
     for bone in skel.avatar_skeleton:
         if skel.avatar_skeleton[bone]["type"] == "bone":
-            group = mod_data.rig_group_mbones
-        else:
-            group = mod_data.rig_group_vbones
-        obj[arm].pose.bones[bone].bone_group = obj[arm].pose.bone_groups[group]
+            obj[arm].collections[mod_data.rig_group_mbones].assign(bone)
+            bone.palette = mod_data.rig_group_mtheme
+        else:            
+            obj[arm].collections[mod_data.rig_group_vbones].assign(bone)
+            bone.palette = mod_data.rig_group_vtheme
+        
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
@@ -2817,19 +2815,18 @@ def freeze(armature=None, bones=[], transforms=True, influence=1):
         boneObj.parent = None
 
     bpy.ops.object.mode_set(mode="POSE")
-    for b in obj[glue].pose.bones:
+    for b in obj[glue].data.bones:
         for c in b.constraints:
             b.constraints.remove(c)
 
-    for g in obj[glue].pose.bone_groups:
-        obj[glue].pose.bone_groups.remove(g)
+    for g in obj[glue].data.collections: ## maybe crash
+        obj[glue].data.collections.remove(g)
+    
+    glueCollection = glueObj.data.collections.new("Glue") # "THEME07"
 
-    bpy.ops.pose.group_add()
-    glueObj.pose.bone_groups.active.name = "Glue"
-    glueObj.pose.bone_groups.active.color_set = "THEME07"
-
-    for boneObj in glueObj.pose.bones:
-        boneObj.bone_group = glueObj.pose.bone_groups["Glue"]
+    for boneObj in glueObj.data.bones:
+        glueCollection.assign(boneObj)
+        boneObj.palette = "THEME07"        
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
@@ -2841,10 +2838,10 @@ def freeze(armature=None, bones=[], transforms=True, influence=1):
 
     if transforms == True:
 
-        for boneObj in sarmObj.pose.bones:
+        for boneObj in sarmObj.data.bones:
             sbone = boneObj.name
             sarmObj.data.bones.active = sarmObj.data.bones[sbone]
-            bc = sarmObj.pose.bones[sbone].constraints
+            bc = sarmObj.data.bones[sbone].constraints
             CO = bc.new("COPY_TRANSFORMS")
             CO.target = glueObj
             CO.subtarget = sbone
@@ -2858,10 +2855,10 @@ def freeze(armature=None, bones=[], transforms=True, influence=1):
 
     else:
 
-        for boneObj in sarmObj.pose.bones:
+        for boneObj in sarmObj.data.bones:
             sbone = boneObj.name
             sarmObj.data.bones.active = sarmObj.data.bones[sbone]
-            bc = sarmObj.pose.bones[sbone].constraints
+            bc = sarmObj.data.bones[sbone].constraints
             CO = bc.new("COPY_ROTATION")
             CO.target = glueObj
             CO.subtarget = sbone
@@ -2872,10 +2869,10 @@ def freeze(armature=None, bones=[], transforms=True, influence=1):
             else:
                 CO.influence = 0
             CO.name = "ONI Frozen ROT"
-        for boneObj in sarmObj.pose.bones:
+        for boneObj in sarmObj.data.bones:
             sbone = boneObj.name
             sarmObj.data.bones.active = sarmObj.data.bones[sbone]
-            bc = sarmObj.pose.bones[sbone].constraints
+            bc = sarmObj.data.bones[sbone].constraints
             CO = bc.new("COPY_LOCATION")
             CO.target = glueObj
             CO.subtarget = sbone
@@ -2886,10 +2883,10 @@ def freeze(armature=None, bones=[], transforms=True, influence=1):
             else:
                 CO.influence = 0
             CO.name = "ONI Frozen LOC"
-        for boneObj in sarmObj.pose.bones:
+        for boneObj in sarmObj.data.bones:
             sbone = boneObj.name
             sarmObj.data.bones.active = sarmObj.data.bones[sbone]
-            bc = sarmObj.pose.bones[sbone].constraints
+            bc = sarmObj.data.bones[sbone].constraints
             CO = bc.new("COPY_SCALE")
             CO.target = glueObj
             CO.subtarget = sbone
@@ -3589,32 +3586,28 @@ def set_bone_groups(armObj):
     utils.activate(armObj)
 
     bpy.ops.object.mode_set(mode="POSE")
-    bpy.ops.pose.group_add()
-    armObj.pose.bone_groups.active.name = mod_data.rig_group_mbones
-    armObj.pose.bone_groups.active.color_set = mod_data.rig_group_mtheme
-    bpy.ops.pose.group_add()
-    armObj.pose.bone_groups.active.name = mod_data.rig_group_vbones
-    armObj.pose.bone_groups.active.color_set = mod_data.rig_group_vtheme
-    bpy.ops.pose.group_add()
-    armObj.pose.bone_groups.active.name = mod_data.rig_group_abones
-    armObj.pose.bone_groups.active.color_set = mod_data.rig_group_atheme
-    bpy.ops.pose.group_add()
-    armObj.pose.bone_groups.active.name = mod_data.rig_group_nbones
-    armObj.pose.bone_groups.active.color_set = mod_data.rig_group_ntheme
+
+    armObj.collections.new(mod_data.rig_group_mbones)
+    armObj.collections.new(mod_data.rig_group_vbones)
+    armObj.collections.new(mod_data.rig_group_abones)
+    armObj.collections.new(mod_data.rig_group_nbones)
 
     for bone in skel.avatar_skeleton:
         if bone not in armObj.data.bones:
             continue
         if skel.avatar_skeleton[bone]["type"] == "bone":
-            group = mod_data.rig_group_mbones
+            armObj.data.collections[mod_data.rig_group_mbones].assign(bone)
+            bone.palette = mod_data.rig_group_mtheme
         elif skel.avatar_skeleton[bone]["type"] == "attachment":
             if " " in bone:
-                group = mod_data.rig_group_nbones
+                armObj.data.collections[mod_data.rig_group_nbones].assign(bone)
+                bone.palette = mod_data.rig_group_ntheme
             else:
-                group = mod_data.rig_group_abones
+                armObj.data.collections[mod_data.rig_group_abones].assign(bone)
+                bone.palette = mod_data.rig_group_atheme
         else:
-            group = mod_data.rig_group_vbones
-        armObj.pose.bones[bone].bone_group = armObj.pose.bone_groups[group]
+            armObj.data.collections[mod_data.rig_group_vbones].assign(bone)
+            bone.palette = mod_data.rig_group_vtheme
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
