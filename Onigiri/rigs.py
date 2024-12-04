@@ -147,20 +147,19 @@ def create_rig(target="default"):
     bpy.ops.object.mode_set(mode="OBJECT")
 
     bpy.ops.object.mode_set(mode="POSE")
-    bpy.ops.pose.group_add()
-    obj[arm].pose.bone_groups.active.name = mod_data.rig_group_mbones
-    obj[arm].pose.bone_groups.active.color_set = mod_data.rig_group_mtheme
-    bpy.ops.pose.group_add()
-    obj[arm].pose.bone_groups.active.name = mod_data.rig_group_vbones
-    obj[arm].pose.bone_groups.active.color_set = mod_data.rig_group_vtheme
+    
+    obj[arm].data.collections.new(mod_data.rig_group_mbones)        
+    obj[arm].data.collections.new( mod_data.rig_group_vbones)    
 
     bpy.context.view_layer.objects.active = obj[arm]
     for bone in rig_target:
+        boneObj = obj[arm].pose.bones[bone]
         if rig_target[bone]["type"] == "bone":
-            group = mod_data.rig_group_mbones
-        else:
-            group = mod_data.rig_group_vbones
-        obj[arm].pose.bones[bone].bone_group = obj[arm].pose.bone_groups[group]
+            obj[arm].data.collections[mod_data.rig_group_mbones].assign(boneObj)
+            boneObj.palette = mod_data.rig_group_mtheme            
+        else:            
+            obj[arm].data.collections[mod_data.rig_group_vbones].assign(boneObj)
+            boneObj.palette = mod_data.rig_group_vtheme
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
@@ -1673,17 +1672,16 @@ def attach_slave_rig(
     masterObj.data.display_type = "STICK"
     masterObj.show_in_front = True
 
-    for g in obj[slave].pose.bone_groups:
-        obj[slave].pose.bone_groups.remove(g)
+    for g in obj[slave].data.collections:
+        obj[slave].data.collections.remove(g)
 
     bpy.ops.object.mode_set(mode="POSE")
 
-    bpy.ops.pose.group_add()
-    slaveObj.pose.bone_groups.active.name = mod_data.slave_group_name
-    slaveObj.pose.bone_groups.active.color_set = mod_data.slave_group_theme
+    colObj = slaveObj.data.collectionsnew(mod_data.slave_group_name)    
 
     for boneObj in slaveObj.pose.bones:
-        boneObj.bone_group = slaveObj.pose.bone_groups[mod_data.slave_group_name]
+        colObj.assign(boneObj)
+        boneObj.palette = mod_data.slave_group_theme        
 
     lname = "ONI Copy Loc"
     rname = "ONI Copy Rot"
@@ -1785,15 +1783,14 @@ def attach_proxy_rig(armature=None, clean=False):
         for c in b.constraints:
             b.constraints.remove(c)
 
-    for g in obj[glue].pose.bone_groups:
-        obj[glue].pose.bone_groups.remove(g)
+    for g in obj[glue].data.collections:
+        obj[glue].data.collections.remove(g)
 
-    bpy.ops.pose.group_add()
-    glueObj.pose.bone_groups.active.name = "Glue"
-    glueObj.pose.bone_groups.active.color_set = "THEME07"
+    glueCollection = glueObj.data.collections.new("Glue")   
 
     for boneObj in glueObj.pose.bones:
-        boneObj.bone_group = glueObj.pose.bone_groups["Glue"]
+        glueCollection.assign(boneObj)
+        boneObj.palette = "THEME07"        
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
@@ -1992,20 +1989,19 @@ def build_sl_rig(rig_class="pos", store=True, rotate=False):
         bpy.ops.object.transform_apply(rotation=True, location=False, scale=False)
 
     bpy.ops.object.mode_set(mode="POSE")
-    bpy.ops.pose.group_add()
-    obj[arm].pose.bone_groups.active.name = mod_data.rig_group_mbones
-    obj[arm].pose.bone_groups.active.color_set = mod_data.rig_group_mtheme
-    bpy.ops.pose.group_add()
-    obj[arm].pose.bone_groups.active.name = mod_data.rig_group_vbones
-    obj[arm].pose.bone_groups.active.color_set = mod_data.rig_group_vtheme
+    
+    obj[arm].data.collections.new(mod_data.rig_group_mbones)
+    obj[arm].data.collections.new(mod_data.rig_group_vbones)    
 
     bpy.context.view_layer.objects.active = obj[arm]
     for bone in skel.avatar_skeleton:
+        boneObj = obj[arm].pose.bones[bone]
         if skel.avatar_skeleton[bone]["type"] == "bone":
-            group = mod_data.rig_group_mbones
+            obj[arm].data.collections[mod_data.rig_group_mbones].assign(boneObj)
+            boneObj.palette = mod_data.rig_group_mtheme            
         else:
-            group = mod_data.rig_group_vbones
-        obj[arm].pose.bones[bone].bone_group = obj[arm].pose.bone_groups[group]
+            obj[arm].data.collections[mod_data.rig_group_vbones].assign(boneObj)
+            boneObj.palette = mod_data.rig_group_vtheme            
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
@@ -2154,32 +2150,28 @@ def build_rig(rig_class="pos", rotate=False, connect=True):
         bpy.ops.object.transform_apply(rotation=True, location=False, scale=False)
 
     bpy.ops.object.mode_set(mode="POSE")
-    bpy.ops.pose.group_add()
-    obj[arm].pose.bone_groups.active.name = mod_data.rig_group_mbones
-    obj[arm].pose.bone_groups.active.color_set = mod_data.rig_group_mtheme
-    bpy.ops.pose.group_add()
-    obj[arm].pose.bone_groups.active.name = mod_data.rig_group_vbones
-    obj[arm].pose.bone_groups.active.color_set = mod_data.rig_group_vtheme
-    bpy.ops.pose.group_add()
-    obj[arm].pose.bone_groups.active.name = mod_data.rig_group_abones
-    obj[arm].pose.bone_groups.active.color_set = mod_data.rig_group_atheme
-    bpy.ops.pose.group_add()
-    obj[arm].pose.bone_groups.active.name = mod_data.rig_group_nbones
-    obj[arm].pose.bone_groups.active.color_set = mod_data.rig_group_ntheme
+    
+    obj[arm].data.collections.new(mod_data.rig_group_mbones)   
+    obj[arm].data.collections.new(mod_data.rig_group_vbones
+    obj[arm].data.collections.new(mod_data.rig_group_abones
+    obj[arm].data.collections.new(mod_data.rig_group_nbones    
 
     bpy.context.view_layer.objects.active = obj[arm]
     for bone in skel.avatar_skeleton:
+        boneObj = obj[arm].pose.bones[bone]        
         if skel.avatar_skeleton[bone]["type"] == "bone":
-            group = mod_data.rig_group_mbones
+            obj[arm].data.collections[mod_data.rig_group_mbones].assign(boneObj)
+            boneObj.palette = mod_data.rig_group_mtheme
         elif skel.avatar_skeleton[bone]["type"] == "attachment":
             if " " in bone:
-                group = mod_data.rig_group_nbones
+                obj[arm].data.collections[mod_data.rig_group_nbones].assign(boneObj)
+                boneObj.palette = mod_data.rig_group_ntheme
             else:
-                group = mod_data.rig_group_abones
+                obj[arm].data.collections[mod_data.rig_group_abones].assign(boneObj)
+                boneObj.palette = mod_data.rig_group_atheme
         else:
-            group = mod_data.rig_group_vbones
-
-        obj[arm].pose.bones[bone].bone_group = obj[arm].pose.bone_groups[group]
+            obj[arm].data.collections[mod_data.rig_group_vbones].assign(boneObj)            
+            boneObj.palette = mod_data.rig_group_vtheme        
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
@@ -2697,15 +2689,14 @@ def freeze(armature=None, bones=[], transforms=True, influence=1):
         for c in b.constraints:
             b.constraints.remove(c)
 
-    for g in obj[glue].pose.bone_groups:
-        obj[glue].pose.bone_groups.remove(g)
-
-    bpy.ops.pose.group_add()
-    glueObj.pose.bone_groups.active.name = "Glue"
-    glueObj.pose.bone_groups.active.color_set = "THEME07"
+    for g in obj[glue].data.collections:
+        obj[glue].data.collections.remove(g)
+    
+    glueCollection = glueObj.data.collections.new("Glue")    
 
     for boneObj in glueObj.pose.bones:
-        boneObj.bone_group = glueObj.pose.bone_groups["Glue"]
+        glueCollection.assign(boneObj)
+        boneObj.palette = "THEME07"
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
@@ -2945,8 +2936,8 @@ def remove_pose_groups(arm):
         OBJ = obj[arm]
     else:
         OBJ = arm
-    for g in OBJ.pose.bone_groups:
-        OBJ.pose.bone_groups.remove(g)
+    for g in OBJ.data.collections:
+        OBJ.data.collections.remove(g)
     print("rigs::remove_pose_groups reports: finished")
     return
 
@@ -3450,32 +3441,30 @@ def set_bone_groups(armObj):
     utils.activate(armObj)
 
     bpy.ops.object.mode_set(mode="POSE")
-    bpy.ops.pose.group_add()
-    armObj.pose.bone_groups.active.name = mod_data.rig_group_mbones
-    armObj.pose.bone_groups.active.color_set = mod_data.rig_group_mtheme
-    bpy.ops.pose.group_add()
-    armObj.pose.bone_groups.active.name = mod_data.rig_group_vbones
-    armObj.pose.bone_groups.active.color_set = mod_data.rig_group_vtheme
-    bpy.ops.pose.group_add()
-    armObj.pose.bone_groups.active.name = mod_data.rig_group_abones
-    armObj.pose.bone_groups.active.color_set = mod_data.rig_group_atheme
-    bpy.ops.pose.group_add()
-    armObj.pose.bone_groups.active.name = mod_data.rig_group_nbones
-    armObj.pose.bone_groups.active.color_set = mod_data.rig_group_ntheme
+    
+    armObj.data.collections.new(mod_data.rig_group_mbones)
+    armObj.data.collections.new(mod_data.rig_group_vbones)       
+    armObj.data.collections.new(mod_data.rig_group_abones)        
+    armObj.data.collections.new(mod_data.rig_group_nbones)    
 
     for bone in skel.avatar_skeleton:
+        boneObj = armObj.pose.bones[bone]
         if bone not in armObj.data.bones:
             continue
         if skel.avatar_skeleton[bone]["type"] == "bone":
-            group = mod_data.rig_group_mbones
+            armObj.data.collections[mod_data.rig_group_mbones].assign(boneObj)
+            boneObj.palette = mod_data.rig_group_mtheme
         elif skel.avatar_skeleton[bone]["type"] == "attachment":
             if " " in bone:
-                group = mod_data.rig_group_nbones
+                armObj.data.collections[mod_data.rig_group_nbones].assign(boneObj)
+                boneObj.palette = mod_data.rig_group_ntheme
             else:
-                group = mod_data.rig_group_abones
+                armObj.data.collections[mod_data.rig_group_abones].assign(boneObj)
+                boneObj.palette = mod_data.rig_group_atheme
         else:
-            group = mod_data.rig_group_vbones
-        armObj.pose.bones[bone].bone_group = armObj.pose.bone_groups[group]
+            armObj.data.collections[mod_data.rig_group_vbones].assign(boneObj)
+            boneObj.palette = mod_data.rig_group_vtheme
+        
 
     bpy.ops.object.mode_set(mode="OBJECT")
 

@@ -1146,7 +1146,7 @@ def map_to_template(animation_arm):
     return True
 
 
-def create_bone_group(armature="", group="", theme=""):
+def create_bone_group(armature="", group="", theme=""): ## theme is deprecated
     arm = armature
     bpy.ops.object.mode_set(mode="OBJECT")
     bpy.ops.object.select_all(action="DESELECT")
@@ -1155,29 +1155,22 @@ def create_bone_group(armature="", group="", theme=""):
     bpy.context.view_layer.objects.active = bpy.data.objects[arm]
     bpy.ops.object.mode_set(mode="POSE")
 
-    try:
+    colObj = bpy.context.object.data.collections.get[group]
 
-        existing = bpy.context.object.pose.bone_groups[group]
+    if colObj != None:
         if oni_flags["debug"] == 1:
-            print(
-                "Bone group already exists for",
-                "[" + arm + "] " + "[" + group + "] " + "- skipping add function",
-            )
-        return bpy.data.objects[arm].pose.bone_groups.active.name
-    except:
-        pass
+            print("Bone group already exists for", "[" + arm + "] " + "[" + group + "] " + "- skipping add function",)
+        return colObj
 
-    bpy.ops.pose.group_add()
-    bpy.data.objects[arm].pose.bone_groups.active.name = group
-    bpy.data.objects[arm].pose.bone_groups.active.color_set = theme
+    colObj = bpy.data.objects[arm].data.collections.new(group)    
 
     bpy.ops.object.mode_set(mode="OBJECT")
     bpy.ops.object.select_all(action="DESELECT")
 
-    return bpy.data.objects[arm].pose.bone_groups.active.name
+    return colObj
 
 
-def add_bone_to_group(armature="", bone="", group=""):
+def add_bone_to_group(armature="", bone="", group="", theme=""):
 
     bpy.ops.object.mode_set(mode="OBJECT")
     bpy.ops.object.select_all(action="DESELECT")
@@ -1185,9 +1178,10 @@ def add_bone_to_group(armature="", bone="", group=""):
     bpy.context.view_layer.objects.active = bpy.data.objects[armature]
     bpy.ops.object.mode_set(mode="POSE")
 
-    bpy.data.objects[armature].pose.bones[bone].bone_group = bpy.data.objects[
-        armature
-    ].pose.bone_groups[group]
+    boneObj = bpy.data.objects[armature].pose.bones[bone]
+    bpy.data.objects[armature].data.collections[group].assign(boneObj)
+    if theme != "":
+        boneObj.palette = theme    
 
     bpy.ops.object.mode_set(mode="OBJECT")
     bpy.ops.object.select_all(action="DESELECT")
@@ -3559,8 +3553,8 @@ def get_armature():
 
 def remove_armature_groups(arm):
     obj = bpy.data.objects
-    for g in obj[arm].pose.bone_groups:
-        obj[arm].pose.bone_groups.remove(g)
+    for g in obj[arm].data.collections:
+        obj[arm].data.collections.remove(g)
     print("remove_armature_groups reports: finished")
     return
 

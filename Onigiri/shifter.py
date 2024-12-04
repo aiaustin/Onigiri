@@ -106,15 +106,14 @@ def snap(sarm=None, tarms=[], type="rig", source=[]):
     bpy.context.view_layer.objects.active = glueObj
 
     obj = bpy.data.objects
-    for g in obj[glue].pose.bone_groups:
-        obj[glue].pose.bone_groups.remove(g)
-
-    bpy.ops.pose.group_add()
-    glueObj.pose.bone_groups.active.name = "Glue"
-    glueObj.pose.bone_groups.active.color_set = "THEME07"
+    for g in obj[glue].data.collections:
+        obj[glue].data.collections.remove(g)
+ 
+    glueCollection = glueObj.data.collections.new("Glue")    
 
     for boneObj in glueObj.pose.bones:
-        boneObj.bone_group = glueObj.pose.bone_groups["Glue"]
+        glueCollection.assign(boneObj)        
+        boneObj.palette = "THEME07"
 
     bpy.ops.object.mode_set(mode="EDIT")
     for boneObj in glueObj.data.edit_bones:
@@ -479,15 +478,14 @@ def morph(
     bpy.context.view_layer.objects.active = glueObj
 
     obj = bpy.data.objects
-    for g in obj[glue].pose.bone_groups:
-        obj[glue].pose.bone_groups.remove(g)
-
-    bpy.ops.pose.group_add()
-    glueObj.pose.bone_groups.active.name = "Glue"
-    glueObj.pose.bone_groups.active.color_set = "THEME07"
+    for g in obj[glue].data.collections:
+        obj[glue].data.collections.remove(g)
+ 
+    glueCollection = glueObj.data.collections.new("Glue")    
 
     for boneObj in glueObj.pose.bones:
-        boneObj.bone_group = glueObj.pose.bone_groups["Glue"]
+        glueCollection.assign(boneObj)        
+        boneObj.palette = "THEME07"
 
     bpy.ops.object.mode_set(mode="EDIT")
     for boneObj in glueObj.data.edit_bones:
@@ -812,15 +810,14 @@ def freeze(sarm):
         for c in b.constraints:
             b.constraints.remove(c)
 
-    for g in obj[glue].pose.bone_groups:
-        obj[glue].pose.bone_groups.remove(g)
+    for g in obj[glue].data.collections:
+        obj[glue].data.collections.remove(g)
 
-    bpy.ops.pose.group_add()
-    glueObj.pose.bone_groups.active.name = "Glue"
-    glueObj.pose.bone_groups.active.color_set = "THEME01"
+    glueCollection = glueObj.data.collections.new("Glue")    
 
     for boneObj in glueObj.pose.bones:
-        boneObj.bone_group = glueObj.pose.bone_groups["Glue"]
+        glueCollection.assign(boneObj)
+        boneObj.palette = "THEME01"        
 
     bpy.ops.object.mode_set(mode="OBJECT")
 

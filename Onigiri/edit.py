@@ -89,32 +89,26 @@ def auto_weight_colors(bone="", state=""):
 
     arm = bpy.context.active_object.name
     if state == "active":
-        if md.cc_rename_selected_name not in obj[arm].pose.bone_groups:
-            bpy.ops.pose.group_add()
-            obj[arm].pose.bone_groups.active.name = md.cc_rename_selected_name
-            obj[arm].pose.bone_groups.active.color_set = md.cc_rename_selected_color
-
-            bpy.ops.pose.group_add()
-            obj[arm].pose.bone_groups.active.name = md.cc_reskin_selected_name
-            obj[arm].pose.bone_groups.active.color_set = md.cc_reskin_selected_color
-        bpy.data.objects[arm].pose.bones[bone].bone_group = bpy.data.objects[
-            arm
-        ].pose.bone_groups[md.cc_rename_selected_name]
+        boneCollection = obj[arm].data.collections.get(md.cc_rename_selected_name)
+        if boneCollection == None:            
+            boneCollection = obj[arm].data.collections.new(md.cc_rename_selected_name)                 
+            obj[arm].data.collections.new(md.cc_reskin_selected_name)
+            
+        boneObj = (bpy.data.objects[arm].pose.bones[bone];
+        boneCollection.assign(boneObj)
+        boneObj.palette = md.cc_rename_selected_color
 
         if bone in ccp["remap_stored"]["reskin"]:
             for child in ccp["remap_stored"]["reskin"][bone]:
-                bpy.data.objects[arm].pose.bones[child].bone_group = bpy.data.objects[
-                    arm
-                ].pose.bone_groups[md.cc_reskin_selected_name]
+                boneObj = bpy.data.objects[arm].pose.bones[child]
+                bpy.data.objects[arm].data.collections[md.cc_reskin_selected_name].assign(boneObj)
+                boneObj.palette = md.cc_reskin_selected_color
+
     elif state == "reset":
-        bpy.data.objects[arm].pose.bones[bone].bone_group = bpy.data.objects[
-            arm
-        ].pose.bone_groups[md.cc_rename_group]
+        bpy.data.objects[arm].data.collections[md.cc_rename_group].assign(bpy.data.objects[arm].pose.bones[bone])
         if bone in ccp["remap_stored"]["reskin"]:
             for child in ccp["remap_stored"]["reskin"][bone]:
-                bpy.data.objects[arm].pose.bones[child].bone_group = bpy.data.objects[
-                    arm
-                ].pose.bone_groups[md.cc_reskin_group]
+                bpy.data.objects[arm].data.collections[md.cc_reskin_group].assign(bpy.data.objects[arm].pose.bones[child])
 
     print("auto_weight_colors reports: exiting with bone and state:", bone, state)
 

@@ -5,7 +5,6 @@ import time
 import mathutils
 from . import utils
 
-
 if 1 == 1:
 
     props = {}
@@ -372,12 +371,13 @@ def build_bone(actor=None, director=None, head=None, tail=None, vertices=[]):
 
     conObj.name = "ONI Sim " + cname
 
-    if props["group_base"] not in aObj.pose.bone_groups:
-        bpy.ops.pose.group_add()
-    aObj.pose.bone_groups.active.name = props["group_base"]
-    aObj.pose.bone_groups.active.color_set = props["theme_base"]
+    colObj = aObj.data.collections.get(props["group_base"])
+    if colObj == None:    
+        colObj = aObj.data.collections.new(props["group_base"])
+
     group_base = props["group_base"]
-    boneObj.bone_group = aObj.pose.bone_groups[group_base]
+    colObj.assign(boneObj)    
+    boneObj.palette = props["theme_base"]
 
     utils.set_state(new_state)
 
@@ -665,11 +665,12 @@ def vertex_constraint(
 
     conObj.name = "ONI Sim " + cname
 
-    if props["group_base"] not in armObj.pose.bone_groups:
-        bpy.ops.pose.group_add()
-    armObj.pose.bone_groups.active.name = props["group_base"]
-    armObj.pose.bone_groups.active.color_set = props["theme_base"]
+    colObj = armObj.data.collections.get(props["group_base"])
+    if colObj == None:
+        colObj = armObj.data.collections.new(props["group_base"])   
+    
     group_base = sim.props["group_base"]
-    boneObj.bone_group = armObj.pose.bone_groups[group_base]
+    colObj.assign(boneObj)
+    boneObj.palette = props["theme_base"]    
 
     return True

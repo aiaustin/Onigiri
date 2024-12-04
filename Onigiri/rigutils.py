@@ -3073,8 +3073,8 @@ def remove_pose_groups(arm):
         OBJ = obj[arm]
     else:
         OBJ = arm
-    for g in OBJ.pose.bone_groups:
-        OBJ.pose.bone_groups.remove(g)
+    for g in OBJ.data.collections:
+        OBJ.data.collections.remove(g)
     print("rigs::remove_pose_groups reports: finished")
     return
 

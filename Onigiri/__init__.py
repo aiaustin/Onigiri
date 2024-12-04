@@ -6161,15 +6161,15 @@ class OnigiriSnapAction(bpy.types.Operator):
 
         bpy.context.view_layer.objects.active = inRig        
         inRig.data.collections.new(snap.props["director_group_base"])
-        #inRig.pose.bone_groups.active.color_set = snap.props["director_theme_base"]        
+        #inRig.data.collections.active.color_set = snap.props["director_theme_base"]        
         inRig.data.collections.new(snap.props["director_group_mapped"])
-        #inRig.pose.bone_groups.active.color_set = snap.props["director_theme_mapped"]
+        #inRig.data.collections.active.color_set = snap.props["director_theme_mapped"]
 
         bpy.context.view_layer.objects.active = outRig        
         outRig.data.collections.new(snap.props["actor_group_base"])
-        #outRig.pose.bone_groups.active.color_set = snap.props["actor_theme_base"]        
+        #outRig.data.collections.active.color_set = snap.props["actor_theme_base"]        
         outRig.data.collections.new(snap.props["actor_group_mapped"])
-        #outRig.pose.bone_groups.active.color_set = snap.props["actor_theme_mapped"]
+        #outRig.data.collections.active.color_set = snap.props["actor_theme_mapped"]
 
         snap.apply_map(director=inRig, actor=outRig)
 
@@ -40008,7 +40008,7 @@ class OnigiriMotionMixerLockTarget(bpy.types.Operator):
         inactiveCollection = targetObj.data.collections.new(mixer_group_target_inactive_name)
         
         targetObj.data.collections.new(mixer_group_target_active_name)
-        #targetObj.pose.bone_groups.active.color_set = mixer_group_target_active_theme
+        #targetObj.data.collections.active.color_set = mixer_group_target_active_theme
 
         for boneObj in targetObj.pose.bones:
             inactiveCollection.assign(boneObj)

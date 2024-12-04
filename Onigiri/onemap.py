@@ -83,9 +83,11 @@ def apply_map(input=None, output=None):
     outRig = output
 
     for boneObj in inRig.pose.bones:
-        boneObj.bone_group = None
+        for colObj in inRig.data.collections:
+            colObj.unassign(boneObj)
     for boneObj in outRig.pose.bones:
-        boneObj.bone_group = None
+        for colObj in outRig.data.collections:
+            colObj.unassign(boneObj)
 
     rename = inRig.get("oni_onemap_rename", {})
     reskin = inRig.get("oni_onemap_reskin", {})
@@ -93,16 +95,14 @@ def apply_map(input=None, output=None):
         if rename_in_bone not in inRig.pose.bones:
             continue
         rename_out_bone = rename[rename_in_bone]
-        inRig.pose.bones[rename_in_bone].bone_group = inRig.pose.bone_groups["Rename"]
-        outRig.pose.bones[rename_out_bone].bone_group = outRig.pose.bone_groups[
-            "Output"
-        ]
+        inRig.data.collections["Rename"].assign(inRig.pose.bones[rename_in_bone])
+        outRig.data.collections["Output"].assign(outRig.pose.bones[rename_out_bone])
         reskin_bones = reskin.get(rename_in_bone, [])
         for bone in reskin_bones:
 
             if bone not in inRig.pose.bones:
                 continue
-            inRig.pose.bones[bone].bone_group = inRig.pose.bone_groups["Reskin"]
+            inRig.data.collections["Reskin"].assign(inRig.pose.bones[bone])
 
     return True
 
@@ -213,38 +213,34 @@ def update_map(input=None, output=None, rename=None, reskin=None, controllers=Tr
                     conObj.influence = 0
 
     for boneObj in inRig.pose.bones:
-        boneObj.bone_group = None
+        for colObj in inRig.data.collections:
+            colObj.unassign(boneObj)
     for boneObj in outRig.pose.bones:
-        boneObj.bone_group = None
+        for colObj in outRig.data.collections:
+            colObj.unassign(boneObj)
 
     for rename_in_bone in rename:
         if rename_in_bone not in inRig.pose.bones:
             continue
         rename_out_bone = rename[rename_in_bone]
-        inRig.pose.bones[rename_in_bone].bone_group = inRig.pose.bone_groups["Rename"]
-        outRig.pose.bones[rename_out_bone].bone_group = outRig.pose.bone_groups[
-            "Output"
-        ]
+        inRig.data.collections["Rename"].assign(inRig.pose.bones[rename_in_bone])
+        outRig.data.collections["Output"].assign(outRig.pose.bones[rename_out_bone])
         reskin_bones = reskin.get(rename_in_bone, [])
         for bone in reskin_bones:
             if bone not in inRig.pose.bones:
                 continue
-            inRig.pose.bones[bone].bone_group = inRig.pose.bone_groups["Reskin"]
+            inRig.data.collections["Reskin"].assign(inRig.pose.bones[bone])
 
     if 1 == 0:
         if props["group_input_bone"] != "":
             input_bone = props["group_input_bone"]
             input_group = props["group_input_name"]
-            inRig.pose.bones[input_bone].bone_group = inRig.pose.bone_groups[
-                input_group
-            ]
+            inRig.data.collections[input_group].assign(inRig.pose.bones[input_bone])
 
         if props["group_output_bone"] != "":
             output_bone = props["group_output_bone"]
             output_group = props["group_output_name"]
-            outRig.pose.bones[output_bone].bone_group = outRig.pose.bone_groups[
-                output_group
-            ]
+            outRig.data.collections[output_group].assign(outRig.pose.bones[output_bone])
 
     bpy.context.scene.oni_onemap.onemap_message = "Ready!"
 
@@ -259,10 +255,10 @@ def ready(input=None, output=None):
         o.select_set(False)
     inRig = input
     outRig = output
-    for g in inRig.pose.bone_groups:
-        inRig.pose.bone_groups.remove(g)
-    for g in outRig.pose.bone_groups:
-        outRig.pose.bone_groups.remove(g)
+    for g in inRig.data.collections:
+        inRig.data.collections.remove(g)
+    for g in outRig.data.collections:
+        outRig.data.collections.remove(g)
 
     if 1 == 0:
         inRig.select_set(True)
@@ -285,20 +281,18 @@ def ready(input=None, output=None):
     bpy.context.view_layer.objects.active = outRig
     bpy.ops.object.mode_set(mode="POSE")
 
-    for group in output_groups:
-        bpy.ops.pose.group_add()
-        outRig.pose.bone_groups.active.name = group
-        outRig.pose.bone_groups.active.color_set = output_groups[group]
+    for group in output_groups:        
+        outRig.data.collections.new(group)
+        #outRig.data.collections.active.color_set = output_groups[group]
 
     outRig.select_set(False)
     inRig.select_set(True)
     bpy.context.view_layer.objects.active = inRig
 
     bpy.ops.object.mode_set(mode="POSE")
-    for group in input_groups:
-        bpy.ops.pose.group_add()
-        inRig.pose.bone_groups.active.name = group
-        inRig.pose.bone_groups.active.color_set = input_groups[group]
+    for group in input_groups:        
+        inRig.data.collections.new(group)
+        #inRig.data.collections.active.color_set = input_groups[group]
 
     bpy.ops.object.mode_set(mode="OBJECT")
 

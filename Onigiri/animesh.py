@@ -225,9 +225,7 @@ def animesh_mode(context):
 
             del obj[ani.animesh_source_name]["bone_map"][ani.animesh_source_bone]
 
-        boneObj.bone_group = bpy.data.objects[ani.animesh_source_name].pose.bone_groups[
-            oni_source_group
-        ]
+        bpy.data.objects[ani.animesh_source_name].data.collections[oni_source_group].assign(boneObj)
 
         for b in obj[ani.animesh_source_name].data.bones:
             b.hide_select = True
@@ -256,31 +254,22 @@ def animesh_mode(context):
 
             del obj[ani.animesh_source_name]["bone_map"][source_bone_value]
 
-            bpy.context.view_layer.objects.active = bpy.data.objects[
-                ani.animesh_source_name
-            ]
+            bpy.context.view_layer.objects.active = bpy.data.objects[ani.animesh_source_name]
             obj[ani.animesh_source_name].data.bones[source_bone_value].select = True
             bpy.ops.pose.group_unassign()
             bpy.ops.pose.select_all(action="DESELECT")
 
-            bpy.context.view_layer.objects.active = bpy.data.objects[
-                ani.animesh_source_name
-            ]
+            bpy.context.view_layer.objects.active = bpy.data.objects[ani.animesh_source_name]
 
         obj[ani.animesh_source_name]["bone_map"][ani.animesh_source_bone] = {}
-        obj[ani.animesh_source_name]["bone_map"][ani.animesh_source_bone][
-            target_rig
-        ] = ani.animesh_target_bone
+        obj[ani.animesh_source_name]["bone_map"][ani.animesh_source_bone][target_rig] = ani.animesh_target_bone
 
         obj[target_rig]["bone_map"][ani.animesh_target_bone] = dict()
         obj[target_rig]["bone_map"][ani.animesh_target_bone][
             ani.animesh_source_name
         ] = ani.animesh_source_bone
 
-        boneObj.bone_group = bpy.data.objects[target_rig].pose.bone_groups[
-            oni_target_group
-        ]
-
+        bpy.data.objects[target_rig].data.collections[oni_target_group].assign(boneObj)
         for b in obj[ani.animesh_source_name].data.bones:
             b.hide_select = False
         for arm in ani["targets"]:

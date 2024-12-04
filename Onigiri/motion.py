@@ -1174,9 +1174,12 @@ def update_map(inRig=None):
 def apply_map(inRig=None, outRig=None):
 
     for boneObj in inRig.pose.bones:
-        boneObj.bone_group = None
+        for colObj in inRig.data.collections:
+            colObj.unassign(boneObj)
+            
     for boneObj in outRig.pose.bones:
-        boneObj.bone_group = None
+        for colObj in outRig.data.collections:
+            colObj.unassign(boneObj)
 
     rename = inRig.get("oni_onemap_rename", {})
     reskin = inRig.get("oni_onemap_reskin", {})

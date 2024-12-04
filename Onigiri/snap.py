@@ -113,16 +113,18 @@ def apply_map(director=None, actor=None):
         snap = False
 
     for boneObj in inRig.pose.bones:
-        boneObj.bone_group = None
+        for colObj in inRig.data.collections:
+            colObj.unassign(boneObj)
     for boneObj in outRig.pose.bones:
-        boneObj.bone_group = None
+        for colObj in outRig.data.collections:
+            colObj.unassign(boneObj)
 
     director_group_base = props["director_group_base"]
     actor_group_base = props["actor_group_base"]
     for boneObj in inRig.pose.bones:
-        boneObj.bone_group = inRig.pose.bone_groups[director_group_base]
+        inRig.data.collections[director_group_base].assign(boneObj)
     for boneObj in outRig.pose.bones:
-        boneObj.bone_group = outRig.pose.bone_groups[actor_group_base]
+        outRig.data.collections[actor_group_base].assign(boneObj)
 
     rename = inRig.get("oni_onemap_rename", {})
     director_group_mapped = props["director_group_mapped"]
@@ -134,12 +136,8 @@ def apply_map(director=None, actor=None):
         rename_out_bone = rename[rename_in_bone]
         if rename_out_bone not in outRig.data.bones:
             continue
-        inRig.pose.bones[rename_in_bone].bone_group = inRig.pose.bone_groups[
-            director_group_mapped
-        ]
-        outRig.pose.bones[rename_out_bone].bone_group = outRig.pose.bone_groups[
-            actor_group_mapped
-        ]
+        inRig.data.collections[director_group_mapped].assign(inRig.pose.bones[rename_in_bone])
+        outRig.data.collections[actor_group_mapped].assign(outRig.pose.bones[rename_out_bone])
 
     for boneObj in inRig.data.bones:
         boneObj.select = False
