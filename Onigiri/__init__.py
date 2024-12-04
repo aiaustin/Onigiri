@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Onigiri",
     "author": "Nessaki",
-    "version": (3, 5, 1, 0),
+    "version": (4, 0, 1, 1),
     "blender": (4, 0, 0),
     "description": "A Japanese dish consisting of small balls or triangles of rice stuffed with a pickled or salted filling, and typically wrapped in dried seaweed.",
     "warning": "",
