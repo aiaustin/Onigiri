@@ -2,6 +2,6 @@
 
 Rigging addon for blender 4.1+ based on [Onigiri](https://github.com/nessaki/Onigiri)
 
-Download zip from Code and use Onigiri directory from that to act as Blender add-on.
+Download from Releases area to obtain a .zip file which can be installed as a Blender Add-on.
 
-Enjoy the rice.
+The .zip is created from the GitHub Repository Code using only the Onigiri directory.
