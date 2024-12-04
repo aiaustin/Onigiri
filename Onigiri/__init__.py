@@ -22788,22 +22788,14 @@ class OnigiriRetargetLoad(bpy.types.Operator, ImportHelper):
             tmap.update({tbone: sbone})
 
             obj[onir.retarget_source_name].data.bones[sbone].select = True
-            obj[onir.retarget_source_name].pose.bones[sbone].bone_group = (
-                bpy.data.objects[onir.retarget_source_name].pose.bone_groups[
-                    oni_source_group
-                ]
-            )
+            bpy.data.objects[onir.retarget_source_name].data.collections[oni_source_group].assign(obj[onir.retarget_source_name].pose.bones[sbone])
 
         bpy.ops.pose.select_all(action="DESELECT")
 
         activate(onir.retarget_target_name)
         for tbone in tmap:
-            obj[onir.retarget_target_name].data.bones[tbone].select = True
-            obj[onir.retarget_target_name].pose.bones[tbone].bone_group = (
-                bpy.data.objects[onir.retarget_target_name].pose.bone_groups[
-                    oni_target_group
-                ]
-            )
+            obj[onir.retarget_target_name].data.bones[tbone].select = True            
+            bpy.data.objects[onir.retarget_target_name].data.collections[oni_target_group].assign(obj[onir.retarget_target_name].pose.bones[tbone])
 
         if len(smap) == 0:
             txt = "There were no matching bones in your loaded map, nothing to do"
@@ -40151,25 +40143,19 @@ class OnigiriMotionMixerAddSource(bpy.types.Operator):
 
             sourceObj.select_set(True)
             bpy.context.view_layer.objects.active = sourceObj
-            for g in sourceObj.pose.bone_groups:
-                sourceObj.pose.bone_groups.remove(g)
+            for g in sourceObj.data.collections:
+                sourceObj.data.collections.remove(g)
 
             bpy.ops.object.mode_set(mode="POSE")
-            bpy.ops.pose.group_add()
-            sourceObj.pose.bone_groups.active.name = mixer_group_source_inactive_name
-            sourceObj.pose.bone_groups.active.color_set = (
-                mixer_group_source_inactive_theme
-            )
-            bpy.ops.pose.group_add()
-            sourceObj.pose.bone_groups.active.name = mixer_group_source_active_name
-            sourceObj.pose.bone_groups.active.color_set = (
-                mixer_group_source_active_theme
-            )
+            
+            sourceObj.data.collections.new(mixer_group_source_inactive_name)            
+            #sourceObj.pose.bone_groups.active.color_set = (mixer_group_source_inactive_theme)            
+            sourceObj.data.collections.new(mixer_group_source_active_name)
+            #sourceObj.pose.bone_groups.active.color_set = (mixer_group_source_active_theme)
 
-            for boneObj in sourceObj.pose.bones:
-                boneObj.bone_group = sourceObj.pose.bone_groups[
-                    mixer_group_source_inactive_name
-                ]
+            for boneObj in sourceObj.data.bones:
+                sourceObj.data.collections[mixer_group_source_inactive_name].assign(boneObj)
+
             bpy.ops.object.mode_set(mode="OBJECT")
             sourceObj.select_set(False)
 
@@ -40367,10 +40353,8 @@ class OnigiriMotionMixerSetAnchor(bpy.types.Operator):
         if oni_mixer["maps"].get("sources") == None:
             oni_mixer["maps"]["sources"] = {}
 
-        for sourceObj in oni_mixer["sources"]:
-            sourceObj.pose.bones[bone].bone_group = sourceObj.pose.bone_groups[
-                mixer_group_source_inactive_name
-            ]
+        for sourceObj in oni_mixer["sources"]:            
+            sourceObj.data.collections[mixer_group_source_inactive_name].assign(sourceObj.pose.bones[bone])
 
         bone_dict = None
         for rig in oni_mixer["maps"]["sources"]:
@@ -40394,12 +40378,10 @@ class OnigiriMotionMixerSetAnchor(bpy.types.Operator):
 
         targetObj = oni_mixer["target"]
         sourceObj = obj[self.name]
-        targetObj.pose.bones[bone].bone_group = targetObj.pose.bone_groups[
-            mixer_group_source_active_name
-        ]
-        obj[self.name].pose.bones[bone].bone_group = obj[self.name].pose.bone_groups[
-            mixer_group_source_active_name
-        ]
+        targetObj.data.collections[mixer_group_source_active_name].assign(targetObj.pose.bones[bone])
+        
+        obj[self.name].data.collections[mixer_group_source_active_name].assign(obj[self.name].pose.bones[bone])
+
         constraints = targetObj.pose.bones[bone].constraints
         for c in constraints:
             if c.type == "COPY_LOCATION":
@@ -40613,9 +40595,7 @@ class OnigiriMotionMixerAddBones(bpy.types.Operator):
             rigObj = boneObj.id_data
             rig = rigObj.name
             for sourceObj in oni_mixer["sources"]:
-                sourceObj.pose.bones[bone].bone_group = sourceObj.pose.bone_groups[
-                    mixer_group_source_inactive_name
-                ]
+                sourceObj.data.collections[mixer_group_source_inactive_name].assign(sourceObj.pose.bones[bone])
             if rig in oni_mixer["maps"]["sources"]:
                 oni_mixer["maps"]["sources"][rig].pop(bone, "")
 
@@ -40629,9 +40609,7 @@ class OnigiriMotionMixerAddBones(bpy.types.Operator):
                 continue
 
             for sourceObj in oni_mixer["sources"]:
-                sourceObj.pose.bones[bone].bone_group = sourceObj.pose.bone_groups[
-                    mixer_group_source_inactive_name
-                ]
+                sourceObj.data.collections[mixer_group_source_inactive_name].assign(sourceObj.pose.bones[bone])
 
             if rig not in oni_mixer["maps"]["sources"]:
 
@@ -40652,12 +40630,8 @@ class OnigiriMotionMixerAddBones(bpy.types.Operator):
         for bone in rig_data:
             armObj = rig_data[bone]["source"]
             arm = armObj.name
-            targetObj.pose.bones[bone].bone_group = targetObj.pose.bone_groups[
-                mixer_group_source_active_name
-            ]
-            obj[arm].pose.bones[bone].bone_group = obj[arm].pose.bone_groups[
-                mixer_group_source_active_name
-            ]
+            targetObj.data.collections[mixer_group_source_active_name].assign(targetObj.pose.bones[bone])
+            obj[arm].data.collections[mixer_group_source_active_name].assign(obj[arm].pose.bones[bone])
             constraints = targetObj.pose.bones[bone].constraints
             for c in constraints:
                 if c.type == "COPY_LOCATION":
@@ -61701,12 +61675,15 @@ class OnigiriSimCustomAction(bpy.types.Operator):
 
                 conObj.name = "ONI Sim " + cname
 
-                if sim.props["group_base"] not in armObj.pose.bone_groups:
-                    bpy.ops.pose.group_add()
-                armObj.pose.bone_groups.active.name = sim.props["group_base"]
-                armObj.pose.bone_groups.active.color_set = sim.props["theme_base"]
+                base_collection = armObj.data.collections.get(sim.props["group_base"])
+                if base_collection == None:
+                    base_collection = armObj.data.collections.new(sim.props["group_base"])
+                
+                #armObj.pose.bone_groups.active.color_set = sim.props["theme_base"]
+
                 group_base = sim.props["group_base"]
-                boneObj.bone_group = armObj.pose.bone_groups[group_base]
+                base_collection.assign(boneObj)
+                boneObj.palette = sim.props["theme_base"]
 
         if disable_armatures == True:
             print("Disabling armature modifiers")

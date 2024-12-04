@@ -1895,12 +1895,13 @@ def vertex_constraint(
 
     conObj.name = "ONI Sim " + cname
 
-    if props["constraint_group_base"] not in armObj.pose.bone_groups:
-        bpy.ops.pose.group_add()
-    armObj.pose.bone_groups.active.name = props["constraint_group_base"]
-    armObj.pose.bone_groups.active.color_set = props["constraint_theme_base"]
+    coll = armObj.data.collections.get(props["constraint_group_base"])
+    if coll == None:
+        coll = armObj.data.collections.new(props["constraint_group_base"])
+    armObj.data.collections.active.name = props["constraint_group_base"]    
+    coll.assign(boneObj)
+    boneObj.palette = props["constraint_theme_base"]    
     group_base = sim.props["constraint_group_base"]
-    boneObj.bone_group = armObj.pose.bone_groups[group_base]
 
     return True
 
