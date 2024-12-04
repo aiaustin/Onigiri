@@ -94,7 +94,7 @@ def auto_weight_colors(bone="", state=""):
             boneCollection = obj[arm].data.collections.new(md.cc_rename_selected_name)                 
             obj[arm].data.collections.new(md.cc_reskin_selected_name)
             
-        boneObj = (bpy.data.objects[arm].pose.bones[bone];
+        boneObj = bpy.data.objects[arm].pose.bones[bone]
         boneCollection.assign(boneObj)
         boneObj.palette = md.cc_rename_selected_color
 
