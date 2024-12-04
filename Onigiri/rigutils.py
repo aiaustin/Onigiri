@@ -2108,10 +2108,10 @@ def build_sl_rig(rig_class="pos", store=True, rotate=False):
     bpy.context.view_layer.objects.active = obj[arm]
     for bone in skel.avatar_skeleton:
         if skel.avatar_skeleton[bone]["type"] == "bone":
-            obj[arm].collections[mod_data.rig_group_mbones].assign(bone)
+            obj[arm].data.collections[mod_data.rig_group_mbones].assign(bone)
             bone.palette = mod_data.rig_group_mtheme
         else:            
-            obj[arm].collections[mod_data.rig_group_vbones].assign(bone)
+            obj[arm].data.collections[mod_data.rig_group_vbones].assign(bone)
             bone.palette = mod_data.rig_group_vtheme
         
 
@@ -3587,10 +3587,10 @@ def set_bone_groups(armObj):
 
     bpy.ops.object.mode_set(mode="POSE")
 
-    armObj.collections.new(mod_data.rig_group_mbones)
-    armObj.collections.new(mod_data.rig_group_vbones)
-    armObj.collections.new(mod_data.rig_group_abones)
-    armObj.collections.new(mod_data.rig_group_nbones)
+    armObj.data.collections.new(mod_data.rig_group_mbones)
+    armObj.data.collections.new(mod_data.rig_group_vbones)
+    armObj.data.collections.new(mod_data.rig_group_abones)
+    armObj.data.collections.new(mod_data.rig_group_nbones)
 
     for bone in skel.avatar_skeleton:
         if bone not in armObj.data.bones:
