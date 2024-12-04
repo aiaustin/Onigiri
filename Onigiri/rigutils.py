@@ -3595,19 +3595,20 @@ def set_bone_groups(armObj):
     for bone in skel.avatar_skeleton:
         if bone not in armObj.data.bones:
             continue
+        boneObj = armObj.data.bones[bone]
         if skel.avatar_skeleton[bone]["type"] == "bone":
-            armObj.data.collections[mod_data.rig_group_mbones].assign(bone)
-            bone.palette = mod_data.rig_group_mtheme
+            armObj.data.collections[mod_data.rig_group_mbones].assign(boneObj)
+            boneObj.palette = mod_data.rig_group_mtheme
         elif skel.avatar_skeleton[bone]["type"] == "attachment":
             if " " in bone:
-                armObj.data.collections[mod_data.rig_group_nbones].assign(bone)
-                bone.palette = mod_data.rig_group_ntheme
+                armObj.data.collections[mod_data.rig_group_nbones].assign(boneObj)
+                boneObj.palette = mod_data.rig_group_ntheme
             else:
-                armObj.data.collections[mod_data.rig_group_abones].assign(bone)
-                bone.palette = mod_data.rig_group_atheme
+                armObj.data.collections[mod_data.rig_group_abones].assign(boneObj)
+                boneObj.palette = mod_data.rig_group_atheme
         else:
-            armObj.data.collections[mod_data.rig_group_vbones].assign(bone)
-            bone.palette = mod_data.rig_group_vtheme
+            armObj.data.collections[mod_data.rig_group_vbones].assign(boneObj)
+            boneObj.palette = mod_data.rig_group_vtheme
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
