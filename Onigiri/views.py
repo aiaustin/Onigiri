@@ -383,7 +383,7 @@ def restore_state():
                 "collections"
             ][cname]["hide_select"]
         else:
-            print("collection missing:", c)
+            print("collection missing:", cname)
 
     for oname in oniv["states"]["data"][ID]["objects"]:
         if oname in obj:

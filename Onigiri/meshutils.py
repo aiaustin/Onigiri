@@ -1,14 +1,11 @@
 import bpy
 import mathutils
-from mathutils import Vector
+from mathutils import Vector,sqrt
 import math
-from math import *
 from . import rigutils
 from . import utils
 from .presets import bone_sides
 
-
-import bpy
 import uuid
 
 
@@ -87,7 +84,7 @@ def remove_empty_groups(mesh):
 
     non_zero = set()
     has_zero = set()
-    if preserve == True:
+    if preserve:
         print("Generating a counterpart set for", mesh)
         for gn in ka:
             name = meshObj.vertex_groups[gn].name
@@ -147,7 +144,7 @@ def get_one_armature(objects=None):
     obj = bpy.data.objects
     arms = {}
 
-    if objects == None:
+    if objects is None:
         print("meshutils::get_one_armature reports: nothing to do")
         return False, False
 
@@ -176,7 +173,7 @@ def get_one_armature(objects=None):
         if len(mods) == 0:
             print("There's no armature modifier available for", mesh)
             return False, False
-        if modObj.object != None:
+        if modObj.object is not None:
             arm = modObj.object.name
             if arm not in arms:
                 arms[arm] = list()
@@ -303,7 +300,7 @@ def merge_groups(group=None, target=None, mesh=None, report=False):
         meshObj = bpy.data.objects[mesh]
 
     if group not in meshObj.vertex_groups:
-        if report == True:
+        if report:
             print("The reskin bone/group doesn't exist in the mesh:", group)
         return False
 
@@ -324,13 +321,13 @@ def merge_groups(group=None, target=None, mesh=None, report=False):
             if temp not in meshObj.vertex_groups:
                 break
             else:
-                if report == True:
+                if report:
                     print(
                         "meshutils::merge_groups reports : Name collision when attempting to get a unique name, trying again:",
                         str(i),
                     )
         if temp in meshObj.vertex_groups:
-            if report == True:
+            if report:
                 print("meshutils::merge_groups reports : unique name failed")
             return False
 
@@ -372,7 +369,7 @@ def merge_fuzzy(group=None, target=None, mesh=None, report=False):
         meshObj = bpy.data.objects[mesh]
 
     if group not in meshObj.vertex_groups:
-        if report == True:
+        if report:
             print("The reskin bone/group doesn't exist in the mesh:", group)
         return False
 
@@ -502,7 +499,7 @@ def get_mesh_armature(mesh=""):
 
     mod = mods[0]
 
-    if obj[mesh].modifiers[mod].object == None:
+    if obj[mesh].modifiers[mod].object is None:
         print(
             "get_mesh_armature reports: armature modifier exists but doesn't point to anything"
         )
@@ -681,7 +678,7 @@ def mesh_integrity_check(mesh=None, armature=None):
         )
 
     status = get_mesh_armature(mesh=mesh)
-    if status == False:
+    if not status:
         print(
             "meshutils::mesh_intergrity_check reports: Mesh did not pass armature validation test -",
             mesh,
@@ -748,8 +745,8 @@ def split_mesh(mesh=None, group_limit=110):
 
     obj = bpy.data.objects
 
-    if mesh == None:
-        if bpy.context.active_object == None:
+    if mesh is None:
+        if bpy.context.active_object is None:
             print(
                 "meshutils::split_mesh reports: No mesh and no active object, can't do anything"
             )
@@ -911,7 +908,7 @@ def build_mesh(shape="diamond"):
 
 def bones_to_mesh(armature=None, bones=[], target=None, separate=False, middle=False):
 
-    if target == None:
+    if target is None:
         target = armature
         print("No target, setting to armature:", armature)
 
@@ -970,7 +967,7 @@ def bones_to_mesh(armature=None, bones=[], target=None, separate=False, middle=F
 
     if len(bones) == 0:
         for boneObj in armObj.data.bones:
-            bones.append(bone.name)
+            bones.append(boneObj.name)
     for bone in bones:
         boneObj = obj[armature].data.bones[bone]
 
@@ -992,7 +989,7 @@ def bones_to_mesh(armature=None, bones=[], target=None, separate=False, middle=F
         head = boneObj.head_local
         tail = boneObj.tail_local
         center = head
-        if middle == True:
+        if middle:
             center = head.lerp(tail, 0.5)
         C = mathutils.Matrix.Translation(center)
 
@@ -1005,7 +1002,7 @@ def bones_to_mesh(armature=None, bones=[], target=None, separate=False, middle=F
         if 1 == 0:
             ci = newObj.matrix_world.inverted()
             vchead = (ci @ mw).to_translation()
-
+            vctail = None # O.o
             newObj.data.vertices[vhead].co = vchead
             newObj.data.vertices[vtail].co = vctail
 
@@ -1025,7 +1022,7 @@ def bones_to_mesh(armature=None, bones=[], target=None, separate=False, middle=F
     for newObj in mesh_list:
         newObj.select_set(True)
 
-    if separate == False:
+    if not separate:
         bpy.ops.object.join()
 
         newObj = bpy.context.object
@@ -1051,7 +1048,7 @@ def bones_to_mesh(armature=None, bones=[], target=None, separate=False, middle=F
 
 def get_exportable_mesh(objects=None, report=False):
     if len(objects) == 0:
-        if report == True:
+        if report:
             print("There are no objects selected to export")
             popup("There's nothing selected", "Error", "ERROR")
         return False
@@ -1061,7 +1058,7 @@ def get_exportable_mesh(objects=None, report=False):
         if o.type == "MESH":
             new_objects.append(o)
     if len(new_objects) == 0:
-        if report == True:
+        if report:
             print("There are no qualified mesh selected to export")
             popup("There's no mesh selected to export", "Error", "ERROR")
         return False
@@ -1073,12 +1070,12 @@ def get_exportable_mesh(objects=None, report=False):
         if arm != False:
             new_arms.add(arm)
     if len(new_arms) == 0:
-        if report == True:
+        if report:
             print("There were no armatures associated with any of the qualified mesh")
             popup("No armatures supplied", "Error", "ERROR")
         return False
     if len(new_arms) > 1:
-        if report == True:
+        if report:
             print(
                 "There were multiple armatures associated with your mesh, we can't export this just yet."
             )
@@ -1173,7 +1170,7 @@ def get_mesh_armature(mesh=""):
 
     mod = mods[0]
 
-    if obj[mesh].modifiers[mod].object == None:
+    if obj[mesh].modifiers[mod].object is None:
         print(
             "get_mesh_armature reports: armature modifier exists but doesn't point to anything"
         )
@@ -1183,9 +1180,7 @@ def get_mesh_armature(mesh=""):
     return arm
 
 
-def clean(
-    object=None, copy=False, rotation=True, location=False, scale=True, pose=True
-):
+def clean(object=None, copy=False, rotation=True, location=False, scale=True, pose=True):
 
     if isinstance(object, str):
         OBJ = bpy.data.objects[object]
@@ -1211,13 +1206,13 @@ def clean(
         if o.type == "MESH":
             mark = True
             break
-    if mark == False:
+    if not mark:
         print("No mesh to process")
         return False
 
     state = utils.get_state()
 
-    if copy == True:
+    if copy:
         for o in selected:
             o.select_set(True)
         utils.activate(o)
@@ -1236,20 +1231,20 @@ def clean(
         meshObj.select_set(True)
         utils.activate(meshObj)
 
-        if pose == True:
+        if pose:
             armObj = None
             if meshObj.parent:
                 if meshObj.parent.type == "ARMATURE":
                     armObj = meshObj.parent
 
-            if armObj == None:
+            if armObj is None:
 
                 for modObj in meshObj.modifiers:
                     if modObj.type == "ARMATURE":
-                        if modObj.object != None:
+                        if modObj.object is not None:
                             armObj = modObj.object
 
-            if armObj != None:
+            if armObj is not None:
                 frame_start = 1
                 if armObj.animation_data:
                     if armObj.animation_data.action:
@@ -1298,7 +1293,7 @@ def freeze(object=None, copy=False):
 
     state = utils.get_state()
 
-    if copy == True:
+    if copy:
         OBJ.select_set(True)
         utils.activate(OBJ)
         bpy.ops.object.duplicate()
@@ -1355,7 +1350,7 @@ def freeze(object=None, copy=False):
     for v in meshObj.data.vertices:
         v.co = mat_h @ v.co
 
-    if copy == False:
+    if not copy:
         utils.set_state(state)
 
     else:
@@ -1430,7 +1425,7 @@ def normalize_weights(meshObj):
         v = 0
         bpy.ops.object.mode_set(mode="OBJECT")
         for vertex in bpy.data.meshes[mesh_name].vertices:
-            if vertex.select == True:
+            if vertex.select:
                 myVertex[v] = vertex.index
                 v += 1
 
@@ -1549,11 +1544,11 @@ def set_normalized_weights(
         print("meshutils::restrict_weights : not a mesh", meshObj.name)
         return False
 
-    if skin != None:
+    if skin is not None:
         skin_data = skin
-    elif armature == None:
+    elif armature is None:
         armObj = get_armature(meshObj)
-        if armObj == False:
+        if not armObj:
             print(
                 "meshutils::restrict_weights : armature not provided or found for",
                 meshObj.name,
@@ -1567,17 +1562,17 @@ def set_normalized_weights(
                 meshObj.name,
             )
 
-    if skin == None:
-        if armObj != None:
-            if armObj.get("oni_collada_matrices") == None:
+    if skin is None:
+        if armObj is not None:
+            if armObj.get("oni_collada_matrices") is None:
                 print("meshutils::restrict_weights : no collada data")
                 return False
-            if armObj["oni_collada_matrices"].get("skin_data") == None:
+            if armObj["oni_collada_matrices"].get("skin_data") is None:
                 print("meshutils::restrict_weights : no collada skin data")
                 return False
             skin_data = armObj["oni_collada_matrices"]["skin_data"]
 
-    if armObj == None:
+    if armObj is None:
         print(
             "meshutils::restrict_weights : none of the provided data returned an armature object, trying mesh as last resort."
         )
@@ -1600,7 +1595,7 @@ def set_normalized_weights(
                 if bonename not in armObj.data.bones:
                     print("Skipping group that is not a bone:", bonename)
                     continue
-                if armObj.data.bones[bonename].use_deform == False:
+                if not armObj.data.bones[bonename].use_deform:
                     print("Skipping bone that is non deformable:", bonename)
                     continue
                 weights.append([g.weight, g.group])

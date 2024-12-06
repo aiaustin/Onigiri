@@ -21,7 +21,7 @@ def animesh_init():
 
     print("animesh_init runs")
 
-    if ani.animesh_mapper_enabled == True:
+    if ani.animesh_mapper_enabled:
 
         print("animesh_init reports: from enabled to disabled -> removing map data")
         ani.animesh_mapper_enabled = False

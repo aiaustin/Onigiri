@@ -147,13 +147,13 @@ def clean_data(context):
 
     oni_paint = bpy.context.scene.get("oni_paint")
     if oni_paint:
-        if oni_paint.get("paint_back_face") != None:
+        if oni_paint.get("paint_back_face") is not None:
             bpy.data.brushes["Draw"].falloff_shape = "PROJECTED"
             bpy.data.brushes["Draw"].use_frontface = False
             bpy.data.brushes["Draw"].use_frontface_falloff = False
 
     if 1 == 1:
-        if getattr(bpy.context.scene, "oni_anim", None) != None:
+        if getattr(bpy.context.scene, "oni_anim", None) is not None:
 
             bpy.context.scene.oni_anim.property_unset("export_sl_anim_label")
             bpy.context.scene.oni_anim.property_unset("export_sl_anim_label_short")
@@ -164,7 +164,7 @@ def clean_data(context):
             bpy.context.scene.oni_anim_props.property_unset("export_sl_bvh_label_short")
             bpy.context.scene.oni_anim_props.export_sl_bvh_alert = False
 
-    if getattr(bpy.context.window_manager, "oni_retarget", None) != None:
+    if getattr(bpy.context.window_manager, "oni_retarget", None) is not None:
         onir = bpy.context.window_manager.oni_retarget
         oni_settings["terminate"] = True
         onir.retarget_source_name = ""
@@ -178,7 +178,7 @@ def clean_data(context):
         onir.retarget_enabled = False
         onir.retarget_text = ""
 
-    if getattr(bpy.context.scene, "onigiri", None) != None:
+    if getattr(bpy.context.scene, "onigiri", None) is not None:
         if oni_flags["debug"] == 1:
             print("Onigiri: clean_data")
 
@@ -207,9 +207,9 @@ def clean_data(context):
             if oni_flags["debug"] == 1:
                 print("Items cleaned:", cleaned_list)
 
-    if getattr(bpy.context.window_manager, "oni_animesh", None) != None:
+    if getattr(bpy.context.window_manager, "oni_animesh", None) is not None:
         ani = bpy.context.window_manager.oni_animesh
-        if ani.get("animesh_mapper_enabled") == True:
+        if ani.get("animesh_mapper_enabled"):
             oni_settings["terminate"] = True
             ani.animesh_mapper_enabled = False
             oni_settings["terminate"] = True
@@ -232,9 +232,7 @@ def clean_on_activate(context):
     try:
         bpy.app.handlers.depsgraph_update_post.remove(clean_on_activate)
     except:
-
         pass
-
 
 onigiri_exists = False
 
@@ -251,7 +249,7 @@ def sanity_check(context):
 
         return
 
-    if bpy.context.active_object == None:
+    if bpy.context.active_object is None:
         return
 
     if bpy.context.active_object.type == "ARMATURE":
@@ -264,7 +262,7 @@ def sanity_check(context):
         else:
             bpy.context.scene.oni_arm_props.use_connect_enabled = False
 
-        if getattr(bpy.context.scene, "oni_run", None) == None:
+        if getattr(bpy.context.scene, "oni_run", None) is None:
             return
 
         if (
@@ -287,7 +285,7 @@ def sanity_check(context):
             oni_settings["terminate"] = True
             bpy.context.scene.oni_arm_props.use_connect_all = False
 
-        if getattr(bpy.context.scene.oni_run, "selected", None) != None:
+        if getattr(bpy.context.scene.oni_run, "selected", None) is not None:
 
             bpy.context.scene.oni_run.last = bpy.context.scene.oni_run.selected
             bpy.context.scene.oni_run.running = True
@@ -299,23 +297,20 @@ def sanity_check(context):
 @persistent
 def joint_properties_handler(context):
 
-    if (
-        getattr(bpy.context.window_manager.oni_joint_data, "joint_data_enabled", False)
-        == False
-    ):
+    if not getattr(bpy.context.window_manager.oni_joint_data, "joint_data_enabled", False):
         return
 
     if len(bpy.context.selected_objects) != 1:
         return
     if bpy.context.selected_objects[0].type != "ARMATURE":
         return
-    if bpy.context.selected_objects[0].get("onigiri") == None:
+    if bpy.context.selected_objects[0].get("onigiri") is None:
         return
 
     ajd = bpy.context.window_manager.oni_joint_data
     jd = joint_data
 
-    if selected_pose_bones() != 1:
+    if bpy.context.selected_pose_bones() != 1:
         ajd.on_state = "off"
         return
 
@@ -342,7 +337,7 @@ def joint_properties_handler(context):
     else:
         ajd.on_state = "off"
 
-    if jd.joint_data[selected_bone]["locked"] == True:
+    if jd.joint_data[selected_bone]["locked"]:
         ajd.joint_locked = True
         jd.joint_data[selected_bone]["locked"] = True
     else:
@@ -371,7 +366,7 @@ def cleanup():
     except:
         pass
     try:
-        if ui_cleanup_finished == True:
+        if ui_cleanup_finished:
             return None
     except:
         pass
@@ -544,7 +539,7 @@ def animation_retarget():
             onir.retarget_target_name,
         )
 
-    if onir.retarget_enabled == True:
+    if onir.retarget_enabled:
 
         print("removing map data from animation retargeting")
         onir.retarget_enabled = False
@@ -574,7 +569,7 @@ def animation_retarget():
 
         return
 
-    elif onir.retarget_enabled == False:
+    elif not onir.retarget_enabled:
         print("adding map data to retargeting pair")
 
         if onir.retarget_target_name_backup not in obj:
@@ -935,7 +930,7 @@ def rebind(arm):
 
         for mesh in selected:
 
-            if oni_settings["debug"] == True:
+            if oni_settings["debug"]:
                 print("rebinding mesh rebind", mesh)
 
             bpy.data.objects[mesh].select_set(True)
@@ -989,7 +984,7 @@ class OnigiriSlidersProperties(bpy.types.PropertyGroup):
     sliders_blank: bpy.props.BoolProperty(default=False, update=update_sliders_blank)
 
     def sliders_menu_enabled(self, context):
-        if self.sliders_menu_enabled == True:
+        if self.sliders_menu_enabled:
             print("Body Shop - enabled")
         else:
             print("Body Shop - disabled")
@@ -1012,11 +1007,11 @@ class OnigiriSlidersProperties(bpy.types.PropertyGroup):
     )
 
     def update_scale(self, context):
-        if self.sliders_scale == True:
+        if self.sliders_scale:
             self["sliders_location"] = False
 
     def update_location(self, context):
-        if self.sliders_location == True:
+        if self.sliders_location:
             self["sliders_scale"] = False
 
     sliders_location: bpy.props.BoolProperty(
@@ -1062,7 +1057,7 @@ class OnigiriSlidersProperties(bpy.types.PropertyGroup):
     def sliders_rig_display_stick(self, context):
         armObj = utils.rig_is_selected()
         if armObj != False:
-            if self.sliders_rig_display_stick == True:
+            if self.sliders_rig_display_stick:
                 if armObj.get("oni_sliders_display_type") == None:
                     armObj["oni_sliders_display_type"] = armObj.data.display_type
                 armObj.data.display_type = "STICK"
@@ -1551,13 +1546,13 @@ class OnigiriCharacterConverterProperties(bpy.types.PropertyGroup):
     blank: bpy.props.BoolProperty(default=False, update=update_blank)
 
     def update_import_pose(self, context):
-        if self.import_pose == True:
+        if self.import_pose:
             self["keep_pose"] = False
         else:
             self["keep_pose"] = True
 
     def update_keep_pose(self, context):
-        if self.keep_pose == True:
+        if self.keep_pose:
             self["import_pose"] = False
         else:
             self["import_pose"] = True
@@ -1849,7 +1844,7 @@ class OnigiriCharacterConverter(bpy.types.Operator):
         else:
             code_map = {}
 
-        if oni_cc.copy == True:
+        if oni_cc.copy:
             for o in mesh:
                 o.select_set(True)
             armObj.select_set(True)
@@ -1883,7 +1878,7 @@ class OnigiriCharacterConverter(bpy.types.Operator):
 
         armObj.animation_data_clear()
 
-        if oni_cc.import_pose == True:
+        if oni_cc.import_pose:
             if len(pose_map) == 0:
                 print("apply imported pose was indicated but there isn't one")
             else:
@@ -1935,7 +1930,7 @@ class OnigiriCharacterConverter(bpy.types.Operator):
         print("Rebinding...")
         rigutils.rebind(armObj)
 
-        if oni_cc.apply_transforms == True:
+        if oni_cc.apply_transforms:
             print("Applying transforms...")
             utils.apply_transforms(
                 object=armObj, rotation=True, location=True, scale=True
@@ -2015,7 +2010,7 @@ class OnigiriCharacterConverter(bpy.types.Operator):
                     break
                 bone_run.add(bone)
 
-        if oni_cc.anchor_unmapped == True:
+        if oni_cc.anchor_unmapped:
             print("Anchor unmapped enabled...")
             for anchor in more_skin:
                 new_reskin = set(more_skin[anchor])
@@ -2106,7 +2101,7 @@ class OnigiriCharacterConverter(bpy.types.Operator):
                 bad_bones.append(boneObj.name)
 
         if len(bad_bones) > 0:
-            if oni_cc.remove_unused == True:
+            if oni_cc.remove_unused:
 
                 state = utils.get_state()
                 armObj.select_set(True)
@@ -2158,7 +2153,7 @@ class OnigiriCharacterConverter(bpy.types.Operator):
                 if gname not in rename_map:
                     bad_groups.append(gname)
 
-            if oni_cc.remove_unknown == True:
+            if oni_cc.remove_unknown:
                 for gname in bad_groups:
 
                     if gname in meshObj.vertex_groups:
@@ -2433,14 +2428,14 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
 
     def update_onemap_platform_opensim(self, context):
         oni_onemap = bpy.context.scene.oni_onemap
-        if oni_onemap.onemap_platform_opensim == True:
+        if oni_onemap.onemap_platform_opensim:
             oni_onemap["onemap_platform_other"] = False
         if oni_onemap.onemap_platform_opensim == False:
             oni_onemap["onemap_platform_other"] = True
 
     def update_onemap_platform_other(self, context):
         oni_onemap = bpy.context.scene.oni_onemap
-        if oni_onemap.onemap_platform_other == True:
+        if oni_onemap.onemap_platform_other:
             oni_onemap["onemap_platform_opensim"] = False
         if oni_onemap.onemap_platform_other == False:
             oni_onemap["onemap_platform_opensim"] = True
@@ -2545,9 +2540,9 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
 
     def update_onemap_reskin(self, context):
         oni_onemap = bpy.context.scene.oni_onemap
-        if self.onemap_reskin == True:
+        if self.onemap_reskin:
 
-            if oni_onemap.onemap_move == True:
+            if oni_onemap.onemap_move:
                 oni_onemap["onemap_reskin"] = False
                 return
 
@@ -2570,9 +2565,9 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
 
     def update_onemap_move(self, context):
         oni_onemap = bpy.context.scene.oni_onemap
-        if self.onemap_move == True:
+        if self.onemap_move:
 
-            if oni_onemap.onemap_reskin == True:
+            if oni_onemap.onemap_reskin:
                 oni_onemap["onemap_move"] = False
                 return
 
@@ -2649,7 +2644,7 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
 
         inRig = onemap.get_director(armature=bpy.context.selected_objects[0].name)
         if inRig == False:
-            if onemap.props["HALT"] == True:
+            if onemap.props["HALT"]:
                 return False
             print(
                 "FATAL ERROR: Missing input rig, save work and restart blender, test halted!"
@@ -3111,9 +3106,9 @@ class OnigiriOneMapBonesMap(bpy.types.Operator):
         if onemap.props["input_bone"] == "" or onemap.props["output_bone"] == "":
             return False
 
-        if oni_onemap.onemap_reskin == True:
+        if oni_onemap.onemap_reskin:
             return False
-        if oni_onemap.onemap_move == True:
+        if oni_onemap.onemap_move:
             return False
 
         return True
@@ -3214,9 +3209,9 @@ class OnigiriOneMapRemoveInputBone(bpy.types.Operator):
         if onemap.props["input_bone"] == "":
             return False
 
-        if oni_onemap.onemap_reskin == True:
+        if oni_onemap.onemap_reskin:
             return False
-        if oni_onemap.onemap_move == True:
+        if oni_onemap.onemap_move:
             return False
 
         return True
@@ -3310,9 +3305,9 @@ class OnigiriOneMapRemoveOutputBone(bpy.types.Operator):
         if onemap.props["output_bone"] == "":
             return False
 
-        if oni_onemap.onemap_reskin == True:
+        if oni_onemap.onemap_reskin:
             return False
-        if oni_onemap.onemap_move == True:
+        if oni_onemap.onemap_move:
             return False
 
         return True
@@ -3691,7 +3686,7 @@ class OnigiriOneMapAction(bpy.types.Operator):
             inRig.select_set(True)
             utils.activate(inRig)
 
-        if oni_onemap.onemap_platform_opensim == True:
+        if oni_onemap.onemap_platform_opensim:
             outRig = rigutils.build_rig(rig_class="pos", rotate=True)
             outRig["oni_onemap_director"] = inRig
             inRig["oni_onemap_actor"] = outRig
@@ -4096,7 +4091,7 @@ class OnigiriOnemapMapLoad(bpy.types.Operator, ImportHelper):
 
             oni_onemap.onemap_template_name = file_prefix
 
-            if oni_onemap.onemap_load_pose == True:
+            if oni_onemap.onemap_load_pose:
                 oni_onemap_pose = armObj.get("oni_onemap_pose")
                 if oni_onemap_pose == None:
                     print("No stored pose")
@@ -4683,7 +4678,7 @@ class OnigiriSnapProperties(bpy.types.PropertyGroup):
     )
 
     def update_snap_symmetry_director(self, context):
-        if self.snap_symmetry_director == True:
+        if self.snap_symmetry_director:
             if (
                 snap.props["director_side_a"] == ""
                 or snap.props["director_side_b"] == ""
@@ -4715,7 +4710,7 @@ class OnigiriSnapProperties(bpy.types.PropertyGroup):
                         boneObj.select = False
 
     def update_snap_symmetry_actor(self, context):
-        if self.snap_symmetry_actor == True:
+        if self.snap_symmetry_actor:
             if snap.props["actor_side_a"] == "" or snap.props["actor_side_b"] == "":
                 self["snap_symmetry_actor"] = False
             else:
@@ -4783,7 +4778,7 @@ class OnigiriSnapProperties(bpy.types.PropertyGroup):
         if o.get("oni_snap_actor") != None or o.get("oni_snap_director") != None:
             self["snap_target"] = not state
             return
-        if self.snap_target == True:
+        if self.snap_target:
             self.snap_target_name = o.name
             return
         else:
@@ -5158,7 +5153,7 @@ class OnigiriSnapMapCollect(bpy.types.Operator):
         director_bones = {}
         for bone in reversed(director_bones_list):
 
-            if oni_snap.snap_deformable == True:
+            if oni_snap.snap_deformable:
                 if inRig.data.bones[bone].use_deform == False:
                     continue
             director_bones[bone] = ""
@@ -5181,7 +5176,7 @@ class OnigiriSnapMapCollect(bpy.types.Operator):
             if len(director_bones) == 0:
                 break
 
-            if oni_snap.snap_fill_protect == True:
+            if oni_snap.snap_fill_protect:
                 if actor_bone in rename_rev:
                     continue
 
@@ -5189,7 +5184,7 @@ class OnigiriSnapMapCollect(bpy.types.Operator):
             director_bone = None
             for c in range(dcount):
                 bone, Nothing = director_bones.popitem()
-                if oni_snap.snap_fill_protect == True:
+                if oni_snap.snap_fill_protect:
                     if bone in rename_map:
                         continue
 
@@ -5207,13 +5202,13 @@ class OnigiriSnapMapCollect(bpy.types.Operator):
         snap.props["actor_bone"] = ""
         snap.props["director_bone"] = ""
 
-        if oni_snap.snap_fill_next == True:
+        if oni_snap.snap_fill_next:
             if director_bone != None:
                 if inRig.pose.bones[director_bone].parent:
                     boneObj = inRig.pose.bones[director_bone].parent
                     bone = boneObj.name
 
-                    if oni_snap.snap_fill_protect == True:
+                    if oni_snap.snap_fill_protect:
                         if bone not in rename_map:
                             boneObj.bone.select = True
                             snap.props["director_bone"] = bone
@@ -5260,7 +5255,7 @@ class OnigiriSnapMapDeposit(bpy.types.Operator):
 
                 if outRig.get("onigiri") == None:
 
-                    if oni_snap.snap_deformable == True:
+                    if oni_snap.snap_deformable:
                         if boneObj.bone.use_deform == False:
                             print("Skipping non-deformabone bone:", boneObj.name)
                             continue
@@ -5276,7 +5271,7 @@ class OnigiriSnapMapDeposit(bpy.types.Operator):
         director_bones = {}
         for bone in reversed(director_bones_list):
 
-            if oni_snap.snap_deformable == True:
+            if oni_snap.snap_deformable:
                 if inRig.data.bones[bone].use_deform == False:
                     continue
             director_bones[bone] = ""
@@ -5299,7 +5294,7 @@ class OnigiriSnapMapDeposit(bpy.types.Operator):
             if len(director_bones) == 0:
                 break
 
-            if oni_snap.snap_fill_protect == True:
+            if oni_snap.snap_fill_protect:
                 if actor_bone in rename_rev:
                     continue
 
@@ -5307,7 +5302,7 @@ class OnigiriSnapMapDeposit(bpy.types.Operator):
             director_bone = None
             for c in range(dcount):
                 bone, Nothing = director_bones.popitem()
-                if oni_snap.snap_fill_protect == True:
+                if oni_snap.snap_fill_protect:
                     if bone in rename_map:
                         continue
 
@@ -5332,7 +5327,7 @@ class OnigiriSnapMapDeposit(bpy.types.Operator):
                     boneObj = inRig.pose.bones[director_bone].parent
                     bone = boneObj.name
 
-                    if oni_snap.snap_fill_protect == True:
+                    if oni_snap.snap_fill_protect:
                         if bone not in rename_map:
                             boneObj.bone.select = True
                             snap.props["director_bone"] = bone
@@ -5397,7 +5392,7 @@ class OnigiriSnapMapFill(bpy.types.Operator):
         director_bones = {}
         for bone in reversed(director_bones_list):
 
-            if oni_snap.snap_deformable == True:
+            if oni_snap.snap_deformable:
                 if inRig.data.bones[bone].use_deform == False:
                     print("Skipping non deform bone:", bone)
                     continue
@@ -5421,7 +5416,7 @@ class OnigiriSnapMapFill(bpy.types.Operator):
             if len(director_bones) == 0:
                 break
 
-            if oni_snap.snap_fill_protect == True:
+            if oni_snap.snap_fill_protect:
                 if actor_bone in rename_rev:
                     if oni_snap.snap_fill_cross == False:
                         break
@@ -5433,7 +5428,7 @@ class OnigiriSnapMapFill(bpy.types.Operator):
             for c in range(dcount):
                 bone, Nothing = director_bones.popitem()
 
-                if oni_snap.snap_fill_protect == True:
+                if oni_snap.snap_fill_protect:
                     if bone in rename_map:
                         if oni_snap.snap_fill_cross == False:
                             break
@@ -5455,13 +5450,13 @@ class OnigiriSnapMapFill(bpy.types.Operator):
         snap.props["actor_bone"] = ""
         snap.props["director_bone"] = ""
 
-        if oni_snap.snap_fill_next == True:
+        if oni_snap.snap_fill_next:
             if director_bone != None:
                 if inRig.pose.bones[director_bone].parent:
                     boneObj = inRig.pose.bones[director_bone].parent
                     bone = boneObj.name
 
-                    if oni_snap.snap_fill_protect == True:
+                    if oni_snap.snap_fill_protect:
                         if bone not in rename_map:
                             boneObj.bone.select = True
                             snap.props["director_bone"] = bone
@@ -5782,7 +5777,7 @@ class OnigiriSnapMapAdd(bpy.types.Operator):
         actor_bone = snap.props["actor_bone"]
         director_bone = snap.props["director_bone"]
 
-        if oni_snap.snap_deformable == True:
+        if oni_snap.snap_deformable:
             if inRig.data.bones[director_bone].use_deform == False:
                 print(
                     "snap_deforable is enabled but use_deform is False:", director_bone
@@ -6035,7 +6030,7 @@ class OnigiriSnapAction(bpy.types.Operator):
             print("Retargeter was not engaged")
         utils.set_state(state)
 
-        if oni_snap.snap_target == True:
+        if oni_snap.snap_target:
             if inRig.name == oni_snap.snap_target_name:
                 print("Target and source are the same, this can't work")
                 popup("Target and source are the same", "Error", "ERROR")
@@ -6972,7 +6967,7 @@ class OnigiriSnapExportMesh(bpy.types.Operator, ExportHelper):
 
             if bone not in rename_map:
 
-                if boneObj.use_deform == True:
+                if boneObj.use_deform:
 
                     missing_from_map.append(bone)
                 else:
@@ -6986,7 +6981,7 @@ class OnigiriSnapExportMesh(bpy.types.Operator, ExportHelper):
 
             if bone not in changed_map:
 
-                if boneObj.use_deform == True:
+                if boneObj.use_deform:
                     missing_from_rig.append(bone)
                 else:
                     print(
@@ -7093,7 +7088,7 @@ class OnigiriSnapExportMesh(bpy.types.Operator, ExportHelper):
         )
         proxyObj["onigiri_converted"] = True
 
-        if oni_mesh.remove_empty_groups == True:
+        if oni_mesh.remove_empty_groups:
 
             bpy.ops.onigiri.remove_unused_groups(method="best")
 
@@ -7102,7 +7097,7 @@ class OnigiriSnapExportMesh(bpy.types.Operator, ExportHelper):
         )
 
         rotate_for_sl = True
-        if rotate_for_sl == True:
+        if rotate_for_sl:
             global_forward = "-X"
         else:
             global_forward = "Y"
@@ -7132,9 +7127,9 @@ class OnigiriSnapExportMesh(bpy.types.Operator, ExportHelper):
         file_out = self.properties.filepath
 
         custom_bind_data = True
-        if custom_bind_data == True:
+        if custom_bind_data:
             print("Converting mapped mesh dae:", file_in)
-            if oni_snap.snap_export_mapped_old == True:
+            if oni_snap.snap_export_mapped_old:
                 collada.export_custom(
                     armature=armature,
                     write_nodes=True,
@@ -7221,7 +7216,7 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
 
     def update_info_onigiri_load_generic_template(self, context):
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onie = bpy.context.window_manager.oni_edit_template
@@ -7262,7 +7257,7 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
 
     def update_info_onigiri_combine_generic_template(self, context):
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onie = bpy.context.window_manager.oni_edit_template
@@ -7310,7 +7305,7 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
 
     def update_source_active(self, context):
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.terminate == True:
+        if onie.terminate:
             onie.terminate = False
             return
 
@@ -7326,7 +7321,7 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
 
     def update_move_name(self, context):
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.terminate == True:
+        if onie.terminate:
             onie.terminate = False
             return
 
@@ -7394,7 +7389,7 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
 
     def update_sbone_name(self, context):
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.terminate == True:
+        if onie.terminate:
             onie.terminate = False
             return
 
@@ -7471,7 +7466,7 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
 
     def update_tbone_name(self, context):
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.terminate == True:
+        if onie.terminate:
             onie.terminate = False
             return
 
@@ -7556,7 +7551,7 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
 
     def update_tarm_name(self, context):
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.terminate == True:
+        if onie.terminate:
             onie.terminate = False
             return
 
@@ -8216,7 +8211,7 @@ class OnigiriCombineGenericTemplate(bpy.types.Operator, ImportHelper):
             for root_key in template_map:
 
                 if root_key == "pose":
-                    if onie.disable_map_pose == True:
+                    if onie.disable_map_pose:
                         continue
 
             onie["template_map_combine"] = template_map
@@ -8392,7 +8387,7 @@ class OnigiriEditTemplateLoadFromTXT(bpy.types.Operator, ImportHelper):
             if tbone in used_targets:
                 duplicates[tbone] = ""
                 continue
-            if oni_edit_template.load_txt_reversed == True:
+            if oni_edit_template.load_txt_reversed:
                 used_targets[sbone] = ""
                 template_map[tbone] = {}
                 template_map[tbone]["Target"] = sbone
@@ -8973,7 +8968,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
         icon_repeat = int(round(bpy.context.region.width / scale_factor))
 
         editor_manual_menu_enabled_icon = "menu_closed"
-        if onie.editor_manual_menu_enabled == True:
+        if onie.editor_manual_menu_enabled:
             editor_manual_menu_enabled_icon = "menu_opened"
 
         row = self.layout.row(align=True)
@@ -8984,7 +8979,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             text="Expand manual editor",
             icon_value=ico.custom_icons[editor_manual_menu_enabled_icon].icon_id,
         )
-        if onie.editor_manual_menu_enabled == True:
+        if onie.editor_manual_menu_enabled:
             layout = self.layout
             box = layout.box()
             box.label(
@@ -9093,7 +9088,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             )
 
             test_ccm = False
-            if test_ccm == True:
+            if test_ccm:
                 row.operator(
                     "onigiri.edit_template_load_ccm",
                     text="Load ccm",
@@ -9113,7 +9108,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 icon_value=ico.custom_icons["loop"].icon_id,
             )
 
-            if test_ccm == True:
+            if test_ccm:
                 row = col.row(align=True)
                 row.operator(
                     "onigiri.edit_template_save_ccm",
@@ -9129,7 +9124,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     icon_value=ico.custom_icons["save"].icon_id,
                 )
 
-                if oni_edit_template.show_map == True:
+                if oni_edit_template.show_map:
                     edit_template_show_map_icon = "menu_opened"
                 else:
                     edit_template_show_map_icon = "menu_closed"
