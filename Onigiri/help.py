@@ -18,7 +18,7 @@ class OnigiriHelpProperties(bpy.types.PropertyGroup):
     def update_help_some_property(self, context):
         onih = bpy.context.window_manager.oni_help
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
 

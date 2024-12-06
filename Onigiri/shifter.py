@@ -233,11 +233,11 @@ def snap(sarm=None, tarms=[], type="rig", source=[]):
         bc["Copy Rotation"].name = rname
         glueObj.data.bones[gbone].select = False
 
-    if onim.get("clean") == None:
+    if onim.get("clean") is None:
         onim["clean"] = {}
-    if onim["clean"].get("objects") == None:
+    if onim["clean"].get("objects") is None:
         onim["clean"]["objects"] = list()
-    if onim["clean"].get("constraints") == None:
+    if onim["clean"].get("constraints") is None:
         onim["clean"]["constraints"] = list()
 
     if glue not in onim["clean"]["objects"]:
@@ -269,7 +269,7 @@ def snap(sarm=None, tarms=[], type="rig", source=[]):
 
     morph_reset(good_targets)
     shaper = True
-    if shaper == True:
+    if shaper:
 
         bpy.context.view_layer.update()
 
@@ -384,11 +384,11 @@ def snap(sarm=None, tarms=[], type="rig", source=[]):
                 data_path="influence"
             )
 
-    if onim.get("clean") == None:
+    if onim.get("clean") is None:
         onim["clean"] = {}
-    if onim["clean"].get("objects") == None:
+    if onim["clean"].get("objects") is None:
         onim["clean"]["objects"] = list()
-    if onim["clean"].get("constraints") == None:
+    if onim["clean"].get("constraints") is None:
         onim["clean"]["constraints"] = list()
 
     if glue not in onim["clean"]["objects"]:
@@ -591,7 +591,7 @@ def morph(
         bc["Copy Scale"].name = sname
         glueObj.data.bones[gbone].select = False
 
-    if reverse == True:
+    if reverse:
         bpy.context.scene.frame_set(peak)
         for gbone in bone_map:
             glueObj.pose.bones[gbone].constraints[lname].influence = 1
@@ -738,8 +738,8 @@ def morph_reset(arms=[]):
             continue
         if obj[arm].type != "ARMATURE":
             continue
-        if obj[arm].animation_data != None:
-            if obj[arm].animation_data.action.get("morph") != None:
+        if obj[arm].animation_data is not None:
+            if obj[arm].animation_data.action.get("morph") is not None:
                 frame_start = obj[arm].animation_data.action["morph"]["frame_start"]
                 frame_range = obj[arm].animation_data.action["morph"]["frame_range"]
                 print("morph restore to frame", frame_start)
@@ -755,7 +755,7 @@ def move_keys(arm=None, start=1, range=2, marker=False):
     obj = bpy.data.objects
     if arm in obj:
         armObj = obj[arm]
-        if armObj.animation_data != None:
+        if armObj.animation_data is not None:
             animObj = armObj.animation_data
             frame_start, frame_end = armObj.animation_data.action.frame_range
             for fcurve in animObj.action.fcurves:
@@ -763,7 +763,7 @@ def move_keys(arm=None, start=1, range=2, marker=False):
 
                     if point.co.x >= start:
                         point.co.x += range
-            if marker == True:
+            if marker:
                 animObj.action["morph"] = {"frame_start": start, "frame_range": range}
 
         else:
@@ -900,7 +900,7 @@ def pose_to(
     current=False,
     pingpong=False,
 ):
-    if sarm == None:
+    if sarm is None:
         print("morph_to reports: nothing to do")
         return False
 
@@ -915,7 +915,7 @@ def pose_to(
     bpy.context.view_layer.update()
     current_frame = bpy.context.scene.frame_current
 
-    if current == True:
+    if current:
         frame_start = current_frame
         frame_stop = frame_start + frame_range
     else:

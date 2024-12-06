@@ -19,7 +19,7 @@ if 1 == 1:
 
 def poll():
     print("reactor::poll :", props["poll_time"])
-    if props["poll_enabled"] == True:
+    if props["poll_enabled"]:
         return props["poll_time"]
     return None
 

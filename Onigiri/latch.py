@@ -22,10 +22,10 @@ def get_director(object):
     aObj = OBJ.get("oni_latch_actor", None)
     dObj = OBJ.get("oni_latch_director", None)
 
-    if aObj == None and dObj == None:
+    if aObj is None and dObj is None:
         return False
 
-    if aObj != None:
+    if aObj is not None:
         return OBJ
 
     if dObj.name not in bpy.context.scene.objects:

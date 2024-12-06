@@ -32,7 +32,7 @@ def import_dae_kit(file_in=None, file_out=None, rebuild=False):
 
         for node in root.iter(f"{n}node"):
             if node.get("type") == "JOINT":
-                if node.attrib.get("name") != None:
+                if node.attrib.get("name") is not None:
                     bone = node.attrib["name"]
                 joints.add(bone)
 
@@ -99,7 +99,7 @@ def import_dae_kit(file_in=None, file_out=None, rebuild=False):
 
     for node in root.iter(f"{n}node"):
         if node.get("type") == "JOINT":
-            if node.attrib.get("name") != None:
+            if node.attrib.get("name") is not None:
                 bone = node.attrib["name"]
                 matrix = node.find(f"{n}matrix")
                 LT = matrix.text.split()
@@ -112,7 +112,7 @@ def import_dae_kit(file_in=None, file_out=None, rebuild=False):
     for node in root.iter(f"{n}node"):
         if node.get("type") == "JOINT":
             matrix = node.find(f"{n}matrix")
-            if node.attrib.get("name") != None:
+            if node.attrib.get("name") is not None:
                 bone = node.attrib["name"]
                 mat_text_list = matrix.text.split()
                 mat_float_list = [float(m) for m in mat_text_list]
@@ -250,9 +250,9 @@ def import_dae_kit(file_in=None, file_out=None, rebuild=False):
             omat = old_joints[parent]
             pmat = omat
 
-        if has_bind == True:
+        if has_bind:
             MF = bmat.inverted() @ cmat
-        elif has_old == True:
+        elif has_old:
             MF = omat.inverted() @ cmat
         else:
             MF = mat.inverted() @ cmat

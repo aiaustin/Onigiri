@@ -44,7 +44,7 @@ def get_safe_name(names=None, max=100, report=False):
         name = get_temp_name()
         if name not in names:
             return name
-        if report == True:
+        if report:
             print(
                 "utils::get_safe_name reports : collision ",
                 name,
@@ -113,7 +113,7 @@ def popup(message="", title="Message Box", icon="INFO"):
 
 
 def format_ctm(container=None):
-    if container == None:
+    if container is None:
         print("format_ctm reports: nothing to do")
         return False
 
@@ -131,7 +131,7 @@ def format_ctm(container=None):
 
 def format_ccm(container=None):
 
-    if container == None:
+    if container is None:
         print("format_ccm reports: nothing to do")
 
     obj = bpy.data.objects
@@ -139,7 +139,7 @@ def format_ccm(container=None):
     rename = container.get("rename")
     reskin = container.get("reskin")
     pose = container.get("pose")
-    if rename == None or reskin == None:
+    if rename is None or reskin is None:
         print("format_ccm reports: container is defective")
         return False
 
@@ -157,7 +157,7 @@ def format_ccm(container=None):
             formatted_text += "        " + '"' + ghost_bone + '"' + ",\n"
         formatted_text += "        ],\n"
     formatted_text += "    }\n"
-    if pose != None:
+    if pose is not None:
 
         formatted_text += "pose = {\n"
         for tbone in pose:
@@ -278,7 +278,7 @@ def add_constraint(
         bc["Child Of"].subtarget = tbone
         bc["Child Of"].influence = influence
         bc["Child Of"].name = "ONI Child Of"
-        if invert == True:
+        if invert:
             context_py = bpy.context.copy()
             context_py["constraint"] = bc.active
             set_inverse(context_py, "ONI Child Of")
@@ -703,7 +703,7 @@ if 1 == 0:
                 vgroup_used[g.group] = True
                 vgroup_name = vgroup_names[g.group]
                 armatch = re.search("((.R|.L)(.(\d){1,}){0,1})(?!.)", vgroup_name)
-                if armatch != None:
+                if armatch is not None:
                     tag = armatch.group()
                     mirror_tag = (
                         tag.replace(".R", ".L")
@@ -763,7 +763,7 @@ def record_rig():
 
     bpy.context.scene.frame_set(1)
 
-    if armObj.data.animation_data != None:
+    if armObj.data.animation_data is not None:
         frame_start, frame_end = armObj.animation_data.action.frame_range
         bpy.context.scene.frame_set(start)
 
@@ -862,7 +862,7 @@ def record_rig():
 
 
 def can_select(object=None):
-    if object == None:
+    if object is None:
         print("can_select: Nothing to do")
         return False
 
@@ -896,7 +896,7 @@ def can_select(object=None):
         )
         return False
 
-    if old_mode != None:
+    if old_mode is not None:
         for o in selected:
             o.select_set(True)
             bpy.ops.object.mode_set(mode=old_mode)
@@ -986,7 +986,7 @@ def get_state(report=True):
     selected = [o for o in bpy.context.selected_objects]
     active = bpy.context.active_object
 
-    if active == None:
+    if active is None:
         if len(selected) > 0:
             activate(selected[0])
             print("No active object in the set, fixed!")
@@ -1017,7 +1017,7 @@ def get_state(report=True):
             bpy.ops.object.mode_set(mode="OBJECT")
             o.select_set(False)
     else:
-        if report == True:
+        if report:
             print("utils::get_state : reports - nothing selected, will process anyway")
 
     for o in selected:
@@ -1045,7 +1045,7 @@ def get_state(report=True):
     state["bones"] = bones
 
     all_objects = [o for o in selected]
-    if active != None:
+    if active is not None:
         all_objects.append(active)
     for o in all_objects:
         o.select_set(True)
@@ -1106,7 +1106,7 @@ def set_state(state):
 
 
 def move_to_top(object=None, modifier=None):
-    if object == None or modifier == None:
+    if object is None or modifier is None:
         return False
     obj = bpy.data.objects
     active = bpy.context.active_object
@@ -1188,7 +1188,7 @@ def activate(object, safe=False):
         OBJ = obj[object]
     else:
         OBJ = object
-    if safe == True:
+    if safe:
         state = get_state()
         OBJ.select_set(True)
         bpy.context.view_layer.objects.active = OBJ
@@ -1207,18 +1207,18 @@ def view_mesh(armature=None, view=False, all=True):
     directors = armObj.get("oni_sim_directors")
 
     d = armObj.get("oni_sim_director")
-    if d != None:
-        if directors != None:
+    if d is not None:
+        if directors is not None:
             directors.append(d)
         else:
             directors = [d]
 
-    if directors != None:
+    if directors is not None:
         for d in directors:
             if is_valid(d):
                 children.append(d)
     for c in children:
-        if all == True:
+        if all:
             c.hide_set(view)
         else:
             if c.type == "MESH":
@@ -1234,11 +1234,11 @@ def view_associated_mesh(armature=None, view=False, children=True, skinned=True)
 
     targets = []
 
-    if children == True:
+    if children:
         if len(armObj.children) > 0:
             targets = [c for c in armObj.children]
 
-    if skinned == True:
+    if skinned:
         for o in obj:
             if o.type == "MESH":
                 for m in o.modifiers:
@@ -1302,20 +1302,20 @@ def is_valid(object):
 
 def has_armature(object=None, report=False):
 
-    if len(bpy.context.selected_objects) == 0 and object == None:
-        if report == True:
+    if len(bpy.context.selected_objects) == 0 and object is None:
+        if report:
             print("has_armature: no object and no selection")
         return False
 
     obj = bpy.data.objects
 
-    if object != None:
+    if object is not None:
         if isinstance(object, str):
             OBJ = obj[object]
         else:
             OBJ = object
         if OBJ.type == "ARMATURE":
-            if report == True:
+            if report:
                 print("has_armature: found", OBJ.name)
 
             return OBJ
@@ -1328,12 +1328,12 @@ def has_armature(object=None, report=False):
             M = match[0]
             armObj = M.object
             if is_valid(armObj):
-                if report == True:
+                if report:
                     print("has_armature: found from mesh modifiers", OBJ.name)
 
                 return armObj
             else:
-                if report == True:
+                if report:
                     print(
                         "utils::has_armature reports : The armature that the single armature modifier points to is invalid"
                     )
@@ -1344,13 +1344,13 @@ def has_armature(object=None, report=False):
             txt = "too many armature modifiers"
         if len(match) == 0:
             txt = "no armature modifiers"
-        if report == True:
+        if report:
             print("utils::has_armature reports :", txt)
         return False
 
     selected = bpy.context.selected_objects
     if len(selected) == 0:
-        if report == True:
+        if report:
             print(
                 "utils::has_armature reports: no argument and no selection, nothing to do"
             )
@@ -1365,7 +1365,7 @@ def has_armature(object=None, report=False):
             arms.append(o)
 
     if len(mesh) == 0 and len(arms) > 1:
-        if report == True:
+        if report:
             print(
                 "utils::has_armature reports : no mesh selected and too many armatures, expected 1 armature or 1 or more mesh and/or armature with it"
             )
@@ -1373,7 +1373,7 @@ def has_armature(object=None, report=False):
 
     if len(mesh) == 0 and len(arms) == 1:
 
-        if report == True:
+        if report:
             print(
                 "utils::has_armature reports : Found armature on the single selected armature:",
                 arms[0].name,
@@ -1381,7 +1381,7 @@ def has_armature(object=None, report=False):
         return arms[0]
 
     if len(mesh) == 0:
-        if report == True:
+        if report:
             print(
                 "utils::has_armature reports : after running excessive tests on the selected objects no qualified mesh or armatures were found"
             )
@@ -1395,32 +1395,32 @@ def has_armature(object=None, report=False):
             if m.type == "ARMATURE":
                 mesh_mods.append(m)
         if len(mesh_mods) == 0:
-            if report == True:
+            if report:
                 print("No qualified modifiers on", o.name)
         else:
-            if report == True:
+            if report:
                 print("Found qualified modifiers on", o.name)
             if len(mesh_mods) > 1:
-                if report == True:
+                if report:
                     print("Too many armature modifiers on", o.name)
             else:
-                if mesh_mods[0].object == None:
-                    if report == True:
+                if mesh_mods[0].object is None:
+                    if report:
                         print("Modifier points to nothing", o.name)
                 else:
                     if is_valid(mesh_mods[0].object):
-                        if report == True:
+                        if report:
                             print("found valid armature modifier on", o.name)
                         objs.add(mesh_mods[0].object)
 
     if len(objs) > 1:
-        if report == True:
+        if report:
             print(
                 "utils::has_armature reports : too many directions, the target objects for qualified mesh with qualified armatures is greater than 1"
             )
         return False
     if len(objs) == 0:
-        if report == True:
+        if report:
             print(
                 "utils::has_armature reports : no qualified armatures armatures were found on the selected mesh"
             )
@@ -1455,7 +1455,7 @@ def duplicate(objects=None):
     choice then return an expected result, False or only those objects that were
     duplicated are selected"""
 
-    if objects == None:
+    if objects is None:
         sources = bpy.context.selected_objects
     else:
         if isinstance(objects, str):
@@ -1491,20 +1491,20 @@ def compose_bone_transforms(
     if location == False and rotation == False and scale == False:
         print("utils::compose_bone_transforms reports : no directive")
         return False
-    if inBone == None:
+    if inBone is None:
         print("utils::compose_bone_transforms reports : no input")
         return False
-    if outBone == None:
+    if outBone is None:
         print("utils::compose_bone_transforms reports : no output")
         return False
 
     in_location, in_rotation, in_scale = inBone.matrix_local.decompose()
     out_location, out_rotation, out_scale = outBone.matrix_local.decompose()
-    if location == True:
+    if location:
         out_location = in_location
-    if rotation == True:
+    if rotation:
         out_rotation = in_rotation
-    if scale == True:
+    if scale:
         out_scale = in_scale
     L = mathutils.Matrix.Translation(out_location)
     R = out_rotation.to_matrix().to_4x4()
@@ -1514,7 +1514,7 @@ def compose_bone_transforms(
 
     M = L @ R @ S
 
-    if apply == True:
+    if apply:
         outBone.matrix = M
 
     return M
@@ -1526,20 +1526,20 @@ def compose_transforms(
     if location == False and rotation == False and scale == False:
         print("utils::compose_transforms reports : no directive")
         return False
-    if matrix_in == None:
+    if matrix_in is None:
         print("utils::compose_transforms reports : no input")
         return False
-    if matrix_out == None:
+    if matrix_out is None:
         print("utils::compose_transforms reports : no output")
         return False
 
     in_location, in_rotation, in_scale = matrix_in.decompose()
     out_location, out_rotation, out_scale = matrix_out.decompose()
-    if location == True:
+    if location:
         out_location = in_location
-    if rotation == True:
+    if rotation:
         out_rotation = in_rotation
-    if scale == True:
+    if scale:
         out_scale = in_scale
     L = mathutils.Matrix.Translation(out_location)
     R = out_rotation.to_matrix().to_4x4()
@@ -1694,7 +1694,7 @@ def get_object_props(object=None, prop=None, scope="all", report=True):
             p = object[prop]
             return object[prop][p]
 
-        if fail == True:
+        if fail:
             print(
                 "Could not return the type of property targeted by",
                 prop,
@@ -1746,7 +1746,7 @@ def get_object_props(object=None, prop=None, scope="all", report=True):
 
         return props
 
-    if prop == None:
+    if prop is None:
         print("utils:get_prop : no property to extract")
         return False
 
@@ -1809,7 +1809,7 @@ def get_stored_scale(boneObj, S=None, truly_weird=True):
     s = s_.copy()
     s[0] = s_[1]
     s[1] = s_[0]
-    if S == None:
+    if S is None:
         S = mathutils.Matrix()
     for i in range(3):
         if s[i] == 0:
@@ -1896,7 +1896,7 @@ def vertex_constraint(
     conObj.name = "ONI Sim " + cname
 
     coll = armObj.data.collections.get(props["constraint_group_base"])
-    if coll == None:
+    if coll is None:
         coll = armObj.data.collections.new(props["constraint_group_base"])
     
     coll.assign(boneObj)

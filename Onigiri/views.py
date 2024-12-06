@@ -112,9 +112,9 @@ def viewable_layers(context):
 
 
 def cleanup(context):
-    if getattr("bpy.context.window_manager", "oni_view", None) != None:
+    if getattr("bpy.context.window_manager", "oni_view", None) is not None:
         oniv = bpy.context.window_manager.oni_view
-        if oniv.get("states") != None:
+        if oniv.get("states") is not None:
             del oniv["states"]
 
 
@@ -177,7 +177,7 @@ def save_state():
     scene_name = bpy.context.scene.name
     ID = get_unique_name()
 
-    if oniv.get("states") == None:
+    if oniv.get("states") is None:
 
         oniv["states"] = dict()
         oniv["states"]["names"] = dict()
@@ -228,7 +228,7 @@ def save_state():
             a.name for a in bpy.context.selected_objects
         ]
 
-        if bpy.context.view_layer.objects.active == None:
+        if bpy.context.view_layer.objects.active is None:
             oniv["states"]["data"][ID]["layers"][view_layer]["active_object"] = None
         else:
             oniv["states"]["data"][ID]["layers"][view_layer][
@@ -301,7 +301,7 @@ def save_state():
         active_object = oniv["states"]["data"][ID]["layers"][view_layer][
             "active_object"
         ]
-        if active_object == None:
+        if active_object is None:
             bpy.context.view_layer.objects.active = None
         else:
             bpy.context.view_layer.objects.active = obj[active_object]
@@ -316,10 +316,10 @@ def restore_state():
     obj = bpy.context.scene.objects
     oniv = bpy.context.window_manager.oni_view
 
-    if oniv.get("states") == None:
+    if oniv.get("states") is None:
         print("Nothing to restore")
         return False
-    if oniv["states"].get("names") == None:
+    if oniv["states"].get("names") is None:
         print("got base but names missing")
         return False
 
@@ -329,7 +329,7 @@ def restore_state():
         return False
 
     selected = [a.name for a in bpy.context.selected_objects]
-    if bpy.context.active_object == None:
+    if bpy.context.active_object is None:
         active_object = None
     else:
         active_object = bpy.context.active_object.name
@@ -427,7 +427,7 @@ def restore_state():
         o.select_set(False)
     for oname in selected:
         obj[oname].select_set(True)
-    if active_object != None:
+    if active_object is not None:
         bpy.context.view_layer.objects.active = obj[active_object]
     del oniv["states"]["data"][ID]
     del oniv["states"]["names"][scene_name]
@@ -438,7 +438,7 @@ def restore_state():
 class OnigiriViewProperties(bpy.types.PropertyGroup):
 
     def update_viewable_layers(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
 
@@ -508,7 +508,7 @@ class OnigiriPanelView(bpy.types.Panel):
 
         row = self.layout.row(align=True)
 
-        if oni_view.get("states") == None:
+        if oni_view.get("states") is None:
 
             oni_view["states"] = dict()
             oni_view["states"]["names"] = dict()

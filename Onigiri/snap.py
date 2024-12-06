@@ -72,7 +72,7 @@ def get_relations(object):
 
 
 def get_director(armature=None):
-    if armature == None:
+    if armature is None:
         return False
     armObj = armature
     if isinstance(armature, str):
@@ -84,10 +84,10 @@ def get_director(armature=None):
     outRig = armObj.get("oni_snap_actor", None)
     inRig = armObj.get("oni_snap_director", None)
 
-    if outRig == None and inRig == None:
+    if outRig is None and inRig is None:
         return False
 
-    if outRig != None:
+    if outRig is not None:
         return armObj
 
     if inRig.name not in bpy.context.scene.objects:
@@ -107,7 +107,7 @@ def apply_map(director=None, actor=None):
 
     release = oni_snap.snap_release
 
-    if follow == True:
+    if follow:
         snap = True
     else:
         snap = False
@@ -144,7 +144,7 @@ def apply_map(director=None, actor=None):
     for boneObj in outRig.data.bones:
         boneObj.select = False
 
-    if snap == True:
+    if snap:
 
         mapped = set()
         bpy.context.view_layer.objects.active = outRig
@@ -195,7 +195,7 @@ def apply_map(director=None, actor=None):
     for bone in rename.keys():
         tbone = rename[bone]
         rename_rev[tbone] = bone
-    if follow == True:
+    if follow:
         for boneObj in outRig.pose.bones:
             abone = boneObj.name
             dbone = ""
@@ -260,20 +260,20 @@ def apply_map(director=None, actor=None):
 
 
 def update_map(inRig=None, anchor=None, target=None, report=False):
-    if inRig == None:
+    if inRig is None:
         print("No inRig")
         return False
-    if anchor == None and target == None:
-        if report == True:
+    if anchor is None and target is None:
+        if report:
             print(
                 "I need at least one bone to deal with, either an anchor or target, you gave me None"
             )
         return False
-    if anchor != None:
-        if report == True:
+    if anchor is not None:
+        if report:
             print("Got anchor")
-    if target != None:
-        if report == True:
+    if target is not None:
+        if report:
             print("Got target")
 
     if isinstance(inRig, str):
@@ -283,8 +283,8 @@ def update_map(inRig=None, anchor=None, target=None, report=False):
     if isinstance(target, str) == False:
         target = tbone.name
 
-    if inRig.get("oni_onemap_rename") == None:
-        if report == True:
+    if inRig.get("oni_onemap_rename") is None:
+        if report:
             print("The inRig doesn't have a rename map")
         return False
     rename_map = inRig["oni_onemap_rename"].to_dict()
@@ -294,7 +294,7 @@ def update_map(inRig=None, anchor=None, target=None, report=False):
 
     if target in rename_rev:
         old_anchor = rename_rev[target]
-        if report == True:
+        if report:
             print("Removing old anchor found from target", anchor)
         rename_map.pop(old_anchor, "")
 

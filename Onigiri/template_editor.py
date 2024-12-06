@@ -31,7 +31,7 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
 
     def update_info_onigiri_load_generic_template(self, context):
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onie = bpy.context.window_manager.oni_edit_template
@@ -62,7 +62,7 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
 
     def update_info_onigiri_combine_generic_template(self, context):
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onie = bpy.context.window_manager.oni_edit_template
@@ -110,7 +110,7 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
 
     def update_source_active(self, context):
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.terminate == True:
+        if onie.terminate:
             onie.terminate = False
             return
 
@@ -126,7 +126,7 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
 
     def update_move_name(self, context):
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.terminate == True:
+        if onie.terminate:
             onie.terminate = False
             return
 
@@ -194,7 +194,7 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
 
     def update_sbone_name(self, context):
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.terminate == True:
+        if onie.terminate:
             onie.terminate = False
             return
 
@@ -271,7 +271,7 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
 
     def update_tbone_name(self, context):
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.terminate == True:
+        if onie.terminate:
             onie.terminate = False
             return
 
@@ -356,7 +356,7 @@ class OnigiriEditTemplateProperties(bpy.types.PropertyGroup):
 
     def update_tarm_name(self, context):
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.terminate == True:
+        if onie.terminate:
             onie.terminate = False
             return
 
@@ -462,7 +462,7 @@ class OnigiriLoadGenericTemplate(bpy.types.Operator, ImportHelper):
                 continue
             template[container] = namespace[container]
 
-        if template != None:
+        if template is not None:
             onie["template_map_convert"] = {}
 
             onie["template_map_convert"] = template
@@ -492,11 +492,11 @@ class OnigiriSaveCCM(bpy.types.Operator, ExportHelper):
     @classmethod
     def poll(cls, context):
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.get("template_map_convert") == None:
+        if onie.get("template_map_convert") is None:
             return False
         if onie["template_map_convert"] == "":
             return False
-        if onie.get("map_type_convert") == None:
+        if onie.get("map_type_convert") is None:
             return False
         if onie["map_type_convert"] == "ccm":
             return False
@@ -557,11 +557,11 @@ class OnigiriSaveCTM(bpy.types.Operator, ExportHelper):
     @classmethod
     def poll(cls, context):
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.get("template_map_convert") == None:
+        if onie.get("template_map_convert") is None:
             return False
         if onie["template_map_convert"] == "":
             return False
-        if onie.get("map_type_convert") == None:
+        if onie.get("map_type_convert") is None:
             return False
         if onie["map_type_convert"] == "ctm":
             return False
@@ -648,7 +648,7 @@ class OnigiriCombineGenericTemplate(bpy.types.Operator, ImportHelper):
             )
             return {"FINISHED"}
 
-        if onie.get("map_type_combine") != None:
+        if onie.get("map_type_combine") is not None:
             if onie["map_type_combine"] == my_type:
                 pass
             else:
@@ -685,7 +685,7 @@ class OnigiriCombineGenericTemplate(bpy.types.Operator, ImportHelper):
 
         if template != "":
 
-            if onie.get("template_map_combine") == None:
+            if onie.get("template_map_combine") is None:
                 onie["template_map_combine"] = {}
 
                 onie["map_files_combine"] = [path_tail]
@@ -697,7 +697,7 @@ class OnigiriCombineGenericTemplate(bpy.types.Operator, ImportHelper):
 
                 print("---------------------------------------------------------------")
 
-                if onie.get("map_files_combine") == None:
+                if onie.get("map_files_combine") is None:
                     onie["map_files_combine"] = list()
                 if path_tail in onie["map_files_combine"]:
                     txt = (
@@ -714,7 +714,7 @@ class OnigiriCombineGenericTemplate(bpy.types.Operator, ImportHelper):
 
             template_map = onie["template_map_combine"].to_dict()
             for root_key in template:
-                if template_map.get(root_key) == None:
+                if template_map.get(root_key) is None:
                     template_map[root_key] = dict()
                 for sub_key in template[root_key]:
                     template_map[root_key].update(
@@ -724,7 +724,7 @@ class OnigiriCombineGenericTemplate(bpy.types.Operator, ImportHelper):
             for root_key in template_map:
 
                 if root_key == "pose":
-                    if onie.disable_map_pose == True:
+                    if onie.disable_map_pose:
                         continue
 
             onie["template_map_combine"] = template_map
@@ -836,7 +836,7 @@ class OnigiriEditTemplateNewCTM(bpy.types.Operator):
     def execute(self, context):
         onie = bpy.context.window_manager.oni_edit_template
 
-        if onie.get("template_editing") != None:
+        if onie.get("template_editing") is not None:
             print("Create new CTM runs but there's already a template in the mapper")
             utils.popup(
                 "You have an active ctm, reset it to start a new one",
@@ -900,7 +900,7 @@ class OnigiriEditTemplateLoadFromTXT(bpy.types.Operator, ImportHelper):
             if tbone in used_targets:
                 duplicates[tbone] = ""
                 continue
-            if oni_edit_template.load_txt_reversed == True:
+            if oni_edit_template.load_txt_reversed:
                 used_targets[sbone] = ""
                 template_map[tbone] = {}
                 template_map[tbone]["Target"] = sbone
@@ -1062,7 +1062,7 @@ class OnigiriEditTemplatePickTarget(bpy.types.Operator):
         print("target picked", tarm)
         onie.terminate = True
 
-        if onie.get("template_editor_targets") == None:
+        if onie.get("template_editor_targets") is None:
             onie["template_editor_targets"] = dict()
 
         if tarm in onie["template_editor_targets"]:
@@ -1170,13 +1170,13 @@ class OnigiriEditTemplateReset(bpy.types.Operator):
     def execute(self, context):
 
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.get("template_editing") != None:
+        if onie.get("template_editing") is not None:
             del onie["template_editing"]
-        if onie.get("template_editing_undo") != None:
+        if onie.get("template_editing_undo") is not None:
             del onie["template_editing_undo"]
-        if onie.get("item") != None:
+        if onie.get("item") is not None:
             del onie["item"]
-        if onie.get("name") != None:
+        if onie.get("name") is not None:
             del onie["name"]
 
         onie.show_rigs = False
@@ -1215,7 +1215,7 @@ class OnigiriEditTemplateRemoveBone(bpy.types.Operator):
         except:
             print("Couldn't remove bone, this is weird:", self.bone)
 
-        if onie.get("template_editing_undo") != None:
+        if onie.get("template_editing_undo") is not None:
             undo_stream = onie["template_editing_undo"]["new"].to_dict()
             ((sbone, tarm_tbone),) = undo_stream.items()
             if self.bone == sbone:
@@ -1374,7 +1374,7 @@ class OnigiriEditTemplateUndo(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.get("template_editing_undo") == None:
+        if onie.get("template_editing_undo") is None:
             return False
         return True
 
@@ -1497,8 +1497,8 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             icon_value=ico.custom_icons["alert"].icon_id,
         )
         if (
-            onie.get("template_map_combine") != None
-            and onie.get("map_files_combine") != None
+            onie.get("template_map_combine") is not None
+            and onie.get("map_files_combine") is not None
         ):
 
             row = col.row(align=True)
@@ -1557,7 +1557,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
         )
 
         test_ccm = False
-        if test_ccm == True:
+        if test_ccm:
             row.operator(
                 "onigiri.edit_template_load_ccm",
                 text="Load ccm",
@@ -1578,7 +1578,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             icon_value=ico.custom_icons["loop"].icon_id,
         )
 
-        if test_ccm == True:
+        if test_ccm:
             row = col.row(align=True)
             row.operator(
                 "onigiri.edit_template_save_ccm",
@@ -1594,11 +1594,11 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 icon_value=ico.custom_icons["save"].icon_id,
             )
 
-            if oni_edit_template.show_map == True:
+            if oni_edit_template.show_map:
                 edit_template_show_map_icon = "menu_opened"
             else:
                 edit_template_show_map_icon = "menu_closed"
-            if oni_edit_template.show_rigs == True:
+            if oni_edit_template.show_rigs:
                 edit_template_show_rigs_icon = "menu_opened"
             else:
                 edit_template_show_rigs_icon = "menu_closed"
@@ -1638,7 +1638,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     text="[" + onie.message + "]",
                 )
 
-                if onie.get("template_editing_undo") != None:
+                if onie.get("template_editing_undo") is not None:
                     edit_template_undo_icon = "reset_warning"
                     row_state = True
                 else:
@@ -1651,7 +1651,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     icon_value=ico.custom_icons[edit_template_undo_icon].icon_id,
                 )
 
-            if oni_edit_template.show_rigs == True:
+            if oni_edit_template.show_rigs:
                 row = col.row(align=True)
 
                 for i in range(icon_repeat):
@@ -1661,7 +1661,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
 
                 if 1 == 0:
                     row = col.row(align=True)
-                    if onie.source_active == True:
+                    if onie.source_active:
                         row.prop(
                             onie,
                             "source_active",
@@ -1725,7 +1725,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                         icon_value=ico.custom_icons["x_red"].icon_id,
                     ).name = target
 
-            if oni_edit_template.show_map == True:
+            if oni_edit_template.show_map:
                 edit_template_change_source_bone_icon = "edit"
                 edit_template_change_target_bone_icon = "edit"
                 edit_template_change_rig_name_icon = "edit"
@@ -2073,7 +2073,7 @@ class OnigiriTemplateSaveOneMap(bpy.types.Operator, ExportHelper):
     @classmethod
     def poll(cls, context):
         oni_onemap = bpy.context.window_manager.oni_onemap
-        if oni_onemap.get("template_map") == None:
+        if oni_onemap.get("template_map") is None:
             return False
         return True
 

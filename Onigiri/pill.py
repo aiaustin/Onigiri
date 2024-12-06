@@ -216,7 +216,7 @@ def matrix_from_list(l):
 def inverse_bind(arm, bone):
     boneObj = bpy.data.objects[arm].data.bones[bone]
 
-    if boneObj.get("bind_mat") != None:
+    if boneObj.get("bind_mat") is not None:
 
         M = list_to_matrix(boneObj["bind_mat"])
         if 1 == 0:
@@ -377,14 +377,14 @@ def recompose(
     s = skel_old.avatar_skeleton[bone]["scale"]
 
     if bone in volumes.vol_joints:
-        if process_volume_bones == True:
+        if process_volume_bones:
             l = skel_old.avatar_skeleton[bone]["pos"]
 
     if bone_space == "global":
 
         l = skel_old.avatar_skeleton[bone][rig_type]
 
-        if use_offset_location == True:
+        if use_offset_location:
             L_SKEL = mathutils.Matrix.Translation(l)
             L = mathutils.Matrix.Translation(l)
             M_OFF = offsets["global"]["matrix"]
@@ -411,7 +411,7 @@ def recompose(
 
     R_mat = mathutils.Euler(rot, "XYZ").to_matrix().to_4x4()
 
-    if use_offset_rotation == True:
+    if use_offset_rotation:
         R_ofs = r_ofs.to_matrix().to_4x4()
     else:
         R_ofs = mathutils.Euler((0, 0, 0), "XYZ").to_matrix().to_4x4()
@@ -420,7 +420,7 @@ def recompose(
     S_ofs = mathutils.Matrix()
     for i in range(3):
         S_mat[i][i] = s[i]
-    if use_offset_scale == True:
+    if use_offset_scale:
         for i in range(3):
             S_ofs[i][i] = s_ofs[i]
 
@@ -513,7 +513,7 @@ def get_rest_pose(pose_bone):
 def safe_object_mode():
     mode = bpy.context.mode
 
-    if bpy.context.active_object == None:
+    if bpy.context.active_object is None:
         if len(bpy.context.selected_objects) > 0:
             bpy.context.view_layer.objects.active = bpy.context.selected_objects[0]
         return None

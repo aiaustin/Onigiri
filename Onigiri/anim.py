@@ -257,7 +257,7 @@ def save_anim(data=None, file=None):
     )
 
     oni_anim_edit = bpy.context.window_manager.oni_anim_edit
-    if oni_anim_edit.anim_hand_pose_enabled == True:
+    if oni_anim_edit.anim_hand_pose_enabled:
         hp = int(oni_edit_anim.anim_hand_pose)
         file_content["header"]["hand_pose"] = struct.pack("i", hp)
     else:
@@ -283,7 +283,7 @@ def save_anim(data=None, file=None):
 
         for rot in joints[bone]["rot"]:
 
-            if file_content["joints"][bone].get("rots") == None:
+            if file_content["joints"][bone].get("rots") is None:
                 file_content["joints"][bone]["rots"] = []
             time_data = struct.pack("H", rot[0])
             x = (rot[1]).to_bytes(2, byteorder="little")
@@ -300,7 +300,7 @@ def save_anim(data=None, file=None):
 
         for loc in joints[bone]["loc"]:
 
-            if file_content["joints"][bone].get("locs") == None:
+            if file_content["joints"][bone].get("locs") is None:
                 file_content["joints"][bone]["locs"] = []
             time_data = struct.pack("H", loc[0])
             x = (loc[1]).to_bytes(2, byteorder="little")
@@ -381,7 +381,7 @@ def get_compatible_bone_list(armature=""):
         elif transform_type == "location":
             loc_rot = "loc"
         else:
-            if oni_settings["debug"] == True:
+            if oni_settings["debug"]:
                 print(
                     "anim::get_compatible_bone_list reports : wrong transform type, skipping...",
                     transform_type,
@@ -440,7 +440,7 @@ def get_animated_bone_names(armature=""):
             if boneObj.name in armObj.data.bones:
                 coord = None
             for fp in fcurve.keyframe_points:
-                if coord == None:
+                if coord is None:
 
                     coord = fp.co
 
@@ -524,9 +524,9 @@ def get_rotation_data(
         print(rot_base)
         print("===================================================================")
 
-    if ac.disable_axis_conversion == False:
+    if not ac.disable_axis_conversion:
 
-        if ac.matrix_converter_enabled == True:
+        if ac.matrix_converter_enabled:
             if mod_flags.oni_flags["debug"] == 1:
                 print("========================================================")
                 print("debug axis conversion enabled:", bone)
@@ -617,9 +617,9 @@ def get_location_data(
 
     ac = bpy.context.scene.oni_anim_advanced
 
-    if ac.disable_axis_conversion == False:
+    if not ac.disable_axis_conversion:
 
-        if ac.matrix_converter_enabled == True:
+        if ac.matrix_converter_enabled:
             if mod_flags.oni_flags["debug"] == 1:
                 print("========================================================")
                 print("debug axis conversion enabled:", bone)
@@ -680,7 +680,7 @@ def get_location_data(
 
         loc = frame_data[bone][frame][matrix_type].to_translation()
 
-    if ac.disable_joint_offsets == False:
+    if not ac.disable_joint_offsets:
 
         loc_offset = obj[arm]["delta_loc_parent"][bone].to_list()
 

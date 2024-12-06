@@ -67,16 +67,16 @@ def write_collada(
 
     use_app_compatible_data = oni_devkit.use_app_compatible_data
 
-    if use_app_compatible_data == True:
-        if armObj.get("oni_devkit_transforms") == None:
+    if use_app_compatible_data:
+        if armObj.get("oni_devkit_transforms") is None:
             use_app_compatible_data = False
             use_rig_data = True
 
-    if use_bind_data == True:
+    if use_bind_data:
         has_bind_data = False
 
         for boneObj in armObj.data.bones:
-            if boneObj.get("bind_mat") != None:
+            if boneObj.get("bind_mat") is not None:
                 has_bind_data = True
 
                 break
@@ -88,7 +88,7 @@ def write_collada(
     process_volume_bones = oni_devkit.process_volume_bones
     process_attachment_bones = oni_devkit.process_attachment_bones
 
-    if process_attachment_bones == True:
+    if process_attachment_bones:
         print("Attachment bones enabled")
 
     rotate_for_sl = oni_devkit.rotate_for_sl
@@ -102,8 +102,8 @@ def write_collada(
     export_full_rig = oni_devkit.export_full_rig
 
     if (
-        realObj.get("oni_devkit_transforms") != None
-        or realObj.get("oni_dae_bind") != None
+        realObj.get("oni_devkit_transforms") is not None
+        or realObj.get("oni_dae_bind") is not None
     ):
         export_path_to_pelvis = False
         export_full_rig = False
@@ -117,7 +117,7 @@ def write_collada(
             "export_full_rig Will NOT work in Second Life, it will be most useful when using other applications."
         )
 
-    if armObj.get("onigiri_converted") != None:
+    if armObj.get("onigiri_converted") is not None:
         print(
             "collada::write_collada reports: converted mesh detected, adjusting export properties"
         )
@@ -125,7 +125,7 @@ def write_collada(
         export_full_rig = False
         rig_class = ""
 
-    if use_app_compatible_data == True and armObj.get("oni_devkit_transforms") != None:
+    if use_app_compatible_data == True and armObj.get("oni_devkit_transforms") is not None:
         print("Exporting using compatible transforms")
 
         bind_pose = {}
@@ -183,14 +183,14 @@ def write_collada(
     joint_pose = {}
 
     sl_rig = None
-    if armObj.get("onigiri") != None:
+    if armObj.get("onigiri") is not None:
         sl_rig = "onigiri"
         print("Found SL compatible rig, maybe:", sl_rig)
-    if armObj.get("avastar") != None:
+    if armObj.get("avastar") is not None:
         sl_rig = "avastar"
         print("Found SL compatible rig, maybe:", sl_rig)
 
-    if use_rig_data == True:
+    if use_rig_data:
 
         print("Running rig_pose exporter")
 
@@ -219,7 +219,7 @@ def write_collada(
                 return False
 
         use_old_transforms = False
-        if use_old_transforms == True:
+        if use_old_transforms:
             print("Using old transform method")
             transforms = rigutils.get_bone_transforms(
                 armature=armature, rig_data=rig_data
@@ -236,7 +236,7 @@ def write_collada(
                 if process_attachment_bones == False:
                     continue
 
-            if use_old_transforms == True:
+            if use_old_transforms:
                 joint_pose[bone] = transforms[bone]["local"]["matrix"]
                 bind_pose[bone] = transforms[bone]["bind_data"]
 
@@ -251,7 +251,7 @@ def write_collada(
                 )
                 bind_pose[bone] = bd[bone]["bind_data"]
 
-    elif use_bind_data == True:
+    elif use_bind_data:
 
         print("Running bind_pose exporter")
 
@@ -278,7 +278,7 @@ def write_collada(
                 rotate_for_sl=rotate_for_sl,
             )
             if bone in realObj.data.bones:
-                if realObj.data.bones[bone].get("bind_mat") == None:
+                if realObj.data.bones[bone].get("bind_mat") is None:
 
                     print("Missing bind data, this is a serious error:", bone)
                     not_bind_info.append(bone)
@@ -371,7 +371,7 @@ def write_collada(
 
         old_ap = False
 
-        if armObj.get("avastar") == None:
+        if armObj.get("avastar") is None:
             print("Not an Avastar rig, I'll try anyway.")
 
         for boneObj in armObj.data.bones:
@@ -384,7 +384,7 @@ def write_collada(
                 if process_attachment_bones == False:
                     continue
 
-            if old_ap == True:
+            if old_ap:
                 matf = ap.get_rig_data(armObj, boneObj)
             else:
                 matf = ava.get_rig_data(armObj, boneObj)
@@ -407,7 +407,7 @@ def write_collada(
             dmgI = RI @ dmgI
             offsets["global"]["matrix"] = dmgI
 
-            if dBone.parent and dBone.parent.use_deform == True:
+            if dBone.parent and dBone.parent.use_deform:
                 pbone = dBone.parent.name
                 rml = dBone.parent.matrix_local.inverted() @ dBone.matrix_local
                 dml = mathutils.Matrix(rig_data[pbone]["matrix_local"]).inverted() @ dmg
@@ -562,7 +562,7 @@ def edit_dae(
 
                         matrices = list()
 
-                        if export_full_rig == True:
+                        if export_full_rig:
 
                             export_path_to_pelvis = False
 
@@ -593,7 +593,7 @@ def edit_dae(
                                     else:
                                         names.append(bone)
 
-                        if export_path_to_pelvis == True:
+                        if export_path_to_pelvis:
                             bone_path = set()
                             names_set = set(names)
 
@@ -645,14 +645,14 @@ def edit_dae(
                                 shorten = [round(a, 6) for a in m]
                                 t = [str(a) for a in shorten]
 
-                                if pretty_mats == True:
+                                if pretty_mats:
                                     text_mat.append("\n")
                                 else:
                                     text_mat.append(" ")
                                 text_mat.append(" ".join(t))
                             matrices.extend(text_mat)
 
-                            if pretty_mats == True:
+                            if pretty_mats:
                                 matrices.append("\n")
                             else:
                                 matrices.append(" ")
@@ -670,12 +670,12 @@ def edit_dae(
                         del matrices
                         del names
 
-    if write_nodes == True:
+    if write_nodes:
         missing_joints = []
         for node in root.iter(f"{n}node"):
             if node.get("type") == "JOINT":
                 matrix = node.find(f"{n}matrix")
-                if node.attrib.get("name") != None:
+                if node.attrib.get("name") is not None:
                     bone = node.attrib["name"]
 
                     if 1 == 0:
@@ -700,7 +700,7 @@ def edit_dae(
             for bone in missing_joints:
                 print("  -", bone)
 
-    if pretty_mats == True:
+    if pretty_mats:
         pretty_nodes(root=root)
 
     tree.write(file_out, xml_declaration=True, encoding="utf-8", method="xml")
@@ -709,7 +709,7 @@ def edit_dae(
 
 
 def compare_nodes(file1, file2, node=None):
-    if node == None:
+    if node is None:
         print("collada::compare_nodes reports: nothing to do")
         return False
 
@@ -740,7 +740,7 @@ def compare_nodes(file1, file2, node=None):
 def replace_scale(bone=None, mat=None, scale=None):
     loc, rot, s = mat.decompose()
     L = mathutils.Matrix.Translation(loc)
-    if scale == None:
+    if scale is None:
         scale = skel.avatar_skeleton[bone]["scale"]
     S = mathutils.Matrix()
     S[0][0] = scale[0]
@@ -761,7 +761,7 @@ def replace_rotation(bone=None, mat=None, rot=None):
     S[2][2] = scale[2]
 
     eu = mat.to_euler()
-    if rot == None:
+    if rot is None:
         rot = skel.avatar_skeleton[bone]["rot"]
         eu = [math.radians(a) for a in rot]
 
@@ -774,7 +774,7 @@ def replace_rotation(bone=None, mat=None, rot=None):
 def replace_location(bone=None, mat=None, loc=None):
     l, rot, scale = mat.decompose()
     L = mathutils.Matrix()
-    if loc == None:
+    if loc is None:
         loc = skel.avatar_skeleton[bone]["pivot"]
     L[0][3] = loc[0]
     L[1][3] = loc[1]
@@ -857,7 +857,7 @@ def pretty_nodes(root=None):
     for node in root.iter(f"{n}node"):
         if node.get("type") == "JOINT":
             matrix = node.find(f"{n}matrix")
-            if node.attrib.get("name") != None:
+            if node.attrib.get("name") is not None:
                 bone = node.attrib["name"]
 
                 tmat = matrix.text.split()
@@ -899,12 +899,12 @@ def save_nodes(file="", root=None):
     for node in root.iter(f"{n}node"):
         if node.get("type") == "JOINT":
             matrix = node.find(f"{n}matrix")
-            if node.attrib.get("name") != None:
+            if node.attrib.get("name") is not None:
                 bone = node.attrib["name"]
 
                 matrix = node.find(f"{n}matrix")
                 tfloats = matrix.text.split()
-                if pretty_it == True:
+                if pretty_it:
 
                     t = list()
                     for tfl in tfloats:
@@ -951,7 +951,7 @@ def replace_nodes(file="", root=None):
     for node in root.iter(f"{n}node"):
         if node.get("type") == "JOINT":
             matrix = node.find(f"{n}matrix")
-            if node.attrib.get("name") != None:
+            if node.attrib.get("name") is not None:
                 bone = node.attrib["name"]
 
                 matrix = node.find(f"{n}matrix")
@@ -974,7 +974,7 @@ def fix_nodes(root=None):
     for node in root.iter(f"{n}node"):
         if node.get("type") == "JOINT":
             matrix = node.find(f"{n}matrix")
-            if node.attrib.get("name") != None:
+            if node.attrib.get("name") is not None:
                 bone = node.attrib["name"]
 
                 if bone in skel.avatar_skeleton:
@@ -995,7 +995,7 @@ def fix_nodes(root=None):
 def get_bind_matrix(
     armature=None, bone=None, process_volume_bones=False, rotate_for_sl=False
 ):
-    if bone == None or armature == None:
+    if bone is None or armature is None:
         return mathutils.Matrix()
 
     armObj = bpy.data.objects[armature]
@@ -1008,7 +1008,7 @@ def get_bind_matrix(
     ROT = mathutils.Matrix()
     S = mathutils.Matrix()
 
-    if process_volume_bones == True:
+    if process_volume_bones:
         if bone in volumes.vol_joints:
             rot = skel.avatar_skeleton[bone]["rot"]
             rot_rad = [math.radians(r) for r in rot]
@@ -1025,7 +1025,7 @@ def get_bind_matrix(
         S[1][1] = scale[1]
         S[2][2] = scale[2]
 
-    if rotate_for_sl == True:
+    if rotate_for_sl:
         matf = R90 @ L @ R90I @ ROT @ S
     else:
         matf = L @ ROT @ S
@@ -1101,7 +1101,7 @@ def get_joint_pose(file=None, bone=None):
     for node in root.iter(f"{n}node"):
         if node.get("type") == "JOINT":
             matrix = node.find(f"{n}matrix")
-            if node.attrib.get("name") != None:
+            if node.attrib.get("name") is not None:
                 bone = node.attrib["name"]
                 matrix = node.find(f"{n}matrix")
                 joint_pose[bone] = matrix.text
@@ -1220,7 +1220,7 @@ def export_custom(
 
                         matrices = list()
 
-                        if export_full_rig == True:
+                        if export_full_rig:
 
                             export_path_to_pelvis = False
 
@@ -1233,7 +1233,7 @@ def export_custom(
                                     if bone not in name_set:
                                         names.append(bone)
 
-                        if export_path_to_pelvis == True:
+                        if export_path_to_pelvis:
                             bone_path = set()
                             names_set = set(names)
 
@@ -1279,14 +1279,14 @@ def export_custom(
                                 shorten = [round(a, 6) for a in m]
                                 t = [str(a) for a in shorten]
 
-                                if pretty_mats == True:
+                                if pretty_mats:
                                     text_mat.append("\n")
                                 else:
                                     text_mat.append(" ")
                                 text_mat.append(" ".join(t))
                             matrices.extend(text_mat)
 
-                            if pretty_mats == True:
+                            if pretty_mats:
                                 matrices.append("\n")
                             else:
                                 matrices.append(" ")
@@ -1307,12 +1307,12 @@ def export_custom(
                         del matrices
                         del names
 
-    if write_nodes == True:
+    if write_nodes:
         missing_joints = []
         for node in root.iter(f"{n}node"):
             if node.get("type") == "JOINT":
                 matrix = node.find(f"{n}matrix")
-                if node.attrib.get("name") != None:
+                if node.attrib.get("name") is not None:
                     bone = node.attrib["name"]
 
                     if bone in joint_pose:
@@ -1330,7 +1330,7 @@ def export_custom(
             for bone in missing_joints:
                 print("  -", bone)
 
-    if pretty_mats == True:
+    if pretty_mats:
         pretty_nodes(root=root)
 
     tree.write(file_out, xml_declaration=True, encoding="utf-8", method="xml")
@@ -1379,11 +1379,11 @@ def pretty_dae(file_in=None, file_out=None):
     for node in root.iter(f"{n}node"):
         if node.get("type") == "JOINT":
             matrix = node.find(f"{n}matrix")
-            if node.attrib.get("name") != None:
+            if node.attrib.get("name") is not None:
 
                 bone = node.attrib["name"]
                 sid = node.attrrib.get("sid")
-                if sid != None:
+                if sid is not None:
                     bone == sid
 
                 tmat = matrix.text.split()
@@ -1411,7 +1411,7 @@ def get_matrices(file=None, base="female_neutral", armature=None, report=False):
     if isinstance(armature, str):
         armObj = bpy.data.objects[armature]
 
-    if file == None:
+    if file is None:
         print("collada::get_matrices : no file, nothing to do")
         return False
 
@@ -1475,12 +1475,12 @@ def get_matrices(file=None, base="female_neutral", armature=None, report=False):
     for node in root.iter(f"{n}node"):
         if node.get("type") == "JOINT":
             matrix = node.find(f"{n}matrix")
-            if matrix == None:
+            if matrix is None:
                 continue
-            if node.attrib.get("name") != None:
+            if node.attrib.get("name") is not None:
                 bone = node.attrib["name"]
                 sid = node.attrib.get("sid")
-                if sid != None:
+                if sid is not None:
                     bone = sid
                 mat = [round(float(i), 6) for i in matrix.text.split()]
                 M = mathutils.Matrix()
@@ -1499,7 +1499,7 @@ def get_matrices(file=None, base="female_neutral", armature=None, report=False):
         pbone = ""
 
         if cbone not in skel.avatar_skeleton:
-            if report == True:
+            if report:
                 print(cbone, "is an unknown bind data bone in SL")
 
         else:
@@ -1507,7 +1507,7 @@ def get_matrices(file=None, base="female_neutral", armature=None, report=False):
             pbone = skel.avatar_skeleton[cbone]["parent"]
 
         if pbone == "":
-            if report == True:
+            if report:
                 print("collada::get_matrices : found root:", cbone)
             pmat = mathutils.Matrix()
             pmati = pmat.inverted()
@@ -1516,11 +1516,11 @@ def get_matrices(file=None, base="female_neutral", armature=None, report=False):
         else:
 
             if pbone not in transforms["bind_data"]:
-                if report == True:
+                if report:
                     print("collada::get_matrices : from file", file)
                     print(" - No bind data for parent", pbone)
-                if armature != None:
-                    if report == True:
+                if armature is not None:
+                    if report:
                         print(
                             " - Skipping extrapolation, armature provided:", armObj.name
                         )
@@ -1529,7 +1529,7 @@ def get_matrices(file=None, base="female_neutral", armature=None, report=False):
                 if 1 == 0:
 
                     if pbone not in transforms["bone_data"]:
-                        if report == True:
+                        if report:
                             print(
                                 pbone,
                                 "is a parent of",
@@ -1540,7 +1540,7 @@ def get_matrices(file=None, base="female_neutral", armature=None, report=False):
                         continue
                 else:
 
-                    if report == True:
+                    if report:
                         print(
                             "parent",
                             pbone,
@@ -1549,7 +1549,7 @@ def get_matrices(file=None, base="female_neutral", armature=None, report=False):
                             "is missing, using broken data instead",
                         )
                     if pbone not in transforms["bone_data"]:
-                        if report == True:
+                        if report:
                             print(
                                 "Fallback broken parent data is missing as well, using identity instead"
                             )
@@ -1632,7 +1632,7 @@ def build_dae_matrices(armature=None, base="female_neutral", report=False):
             dae["bone_data"][bone] = matjc
             dae["real_data"][bone] = matjc
 
-    if armObj == None:
+    if armObj is None:
 
         txt = (
             "collada::build_dae_matrices : no armature, will use " + base + " entirely"
@@ -1654,10 +1654,10 @@ def build_dae_matrices(armature=None, base="female_neutral", report=False):
     R90I = R90.inverted()
 
     is_avaclown = False
-    if armObj.get("avastar") != None:
+    if armObj.get("avastar") is not None:
         is_avaclown = True
 
-    if armObj.get("avastar_converted") != None:
+    if armObj.get("avastar_converted") is not None:
         is_avaclown = False
 
     bone_names = {}
@@ -1790,11 +1790,11 @@ def build_dae_matrices(armature=None, base="female_neutral", report=False):
 
 def fill_matrices(armature=None, base=None, matrices=None):
     armObj = armature
-    if armObj != None:
+    if armObj is not None:
         if isinstance(armature, str):
             armObj = bpy.data.objects[armature]
 
-    if base == None:
+    if base is None:
         base_rig = getattr(real_rig_data, "female_neutra")
     else:
         base_rig = getattr(base_data, base)

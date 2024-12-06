@@ -1,6 +1,6 @@
 import bpy
 import mathutils
-from mathutils import Vector,sqrt
+from mathutils import Vector
 import math
 from . import rigutils
 from . import utils

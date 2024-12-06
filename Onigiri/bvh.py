@@ -21,7 +21,7 @@ def write_armature(
     from mathutils import Matrix, Euler
     from math import degrees
 
-    if buffer == True:
+    if buffer:
         buf = []
     else:
         file = open(filepath, "w", encoding="utf8", newline="\n")
@@ -42,7 +42,7 @@ def write_armature(
 
     node_locations = {}
 
-    if buffer == True:
+    if buffer:
         buf.append("HIERARCHY\n")
     else:
         file.write("HIERARCHY\n")
@@ -66,18 +66,18 @@ def write_armature(
             loc = loc - node_locations[bone.parent.name]
 
         if indent:
-            if buffer == True:
+            if buffer:
                 buf.append("%sJOINT %s\n" % (indent_str, bone_name))
             else:
                 file.write("%sJOINT %s\n" % (indent_str, bone_name))
 
         else:
-            if buffer == True:
+            if buffer:
                 buf.append("%sROOT %s\n" % (indent_str, bone_name))
             else:
                 file.write("%sROOT %s\n" % (indent_str, bone_name))
 
-        if buffer == True:
+        if buffer:
             buf.append("%s{\n" % indent_str)
             buf.append(
                 "%s\tOFFSET %.6f %.6f %.6f\n" % (indent_str, *(loc * global_scale))
@@ -89,7 +89,7 @@ def write_armature(
             )
 
         if (bone.use_connect or root_transform_only) and bone.parent:
-            if buffer == True:
+            if buffer:
                 buf.append(
                     "%s\tCHANNELS 3 %srotation %srotation %srotation\n"
                     % (indent_str, *rot_order_str)
@@ -101,7 +101,7 @@ def write_armature(
                 )
 
         else:
-            if buffer == True:
+            if buffer:
                 buf.append(
                     "%s\tCHANNELS 6 Xposition Yposition Zposition %srotation %srotation %srotation\n"
                     % (indent_str, *rot_order_str)
@@ -120,7 +120,7 @@ def write_armature(
 
         else:
 
-            if buffer == True:
+            if buffer:
                 buf.append("%s\tEnd Site\n" % indent_str)
                 buf.append("%s\t{\n" % indent_str)
                 loc = bone.tail_local - node_locations[bone_name]
@@ -139,7 +139,7 @@ def write_armature(
                 )
                 file.write("%s\t}\n" % indent_str)
 
-        if buffer == True:
+        if buffer:
             buf.append("%s}\n" % indent_str)
         else:
             file.write("%s}\n" % indent_str)
@@ -159,7 +159,7 @@ def write_armature(
             i += 1
             key = "__%d" % i
 
-        if buffer == True:
+        if buffer:
             buf.append("ROOT %s\n" % key)
             buf.append("{\n")
             buf.append("\tOFFSET 0.0 0.0 0.0\n")
@@ -176,7 +176,7 @@ def write_armature(
             serialized_names.append(child_bone)
             write_recursive_nodes(child_bone, indent)
 
-        if buffer == True:
+        if buffer:
             buff.append("}\n")
         else:
             file.write("}\n")
@@ -260,7 +260,7 @@ def write_armature(
     bpy.context.view_layer.update()
     frame_current = scene.frame_current
 
-    if buffer == True:
+    if buffer:
         buf.append("MOTION\n")
         buf.append("Frames: %d\n" % (frame_end - frame_start + 1))
         buf.append(
@@ -302,11 +302,11 @@ def write_armature(
             rot = mat_final.to_euler(dbone.rot_order_str_reverse, dbone.prev_euler)
 
             if not dbone.skip_position:
-                if buffer == True:
+                if buffer:
                     buf.append("%.6f %.6f %.6f " % (loc * global_scale)[:])
                 else:
                     file.write("%.6f %.6f %.6f " % (loc * global_scale)[:])
-            if buffer == True:
+            if buffer:
                 buf.append(
                     "%.6f %.6f %.6f "
                     % (
@@ -327,18 +327,18 @@ def write_armature(
 
             dbone.prev_euler = rot
 
-        if buffer == True:
+        if buffer:
             buf.append("\n")
         else:
             file.write("\n")
-    if buffer == True:
+    if buffer:
         bufstr = "".join(buf)
     else:
         file.close()
 
     scene.frame_set(frame_current)
 
-    if buffer == True:
+    if buffer:
         return bufstr
 
 

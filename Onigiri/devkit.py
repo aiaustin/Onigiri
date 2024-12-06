@@ -58,7 +58,7 @@ def update_preset_source(report=False):
 
             default[prop] = preset[prop]
     else:
-        if armObj.get("oni_devkit_preset") == None:
+        if armObj.get("oni_devkit_preset") is None:
             if report == False:
                 print("Associated armature contains no preset, applying...")
         else:
@@ -74,7 +74,7 @@ def update_preset_source(report=False):
 def get_properties(group=None):
     prop_group = group
 
-    if group == None:
+    if group is None:
         prop_group = bpy.context.scene.oni_devkit
     presets = {}
     for prop in prop_group.__annotations__.keys():
@@ -168,21 +168,21 @@ def export_dae(matrices=None, joint="bone_data", file=None, real=None):
 
     utils.activate(o)
 
-    if matrices == None:
+    if matrices is None:
         print("No bone definitions were available, this is a bug")
         utils.popup("Missing bone definitions, this is a bug in devkit.export_dae()")
         return
 
-    if export_normalized_weights == True:
+    if export_normalized_weights:
         for o in mesh:
             print("Pruning weights for", o.name)
             skin_data = matrices.get("skin_data", None)
-            if skin_data != None:
+            if skin_data is not None:
                 print("devkit::export_dae : found skin data in matrices")
 
             meshutils.set_normalized_weights(o, skin=skin_data)
 
-    if normalize_bones == True:
+    if normalize_bones:
         print("devkit::export_dae : Normalizing scale...")
         for bone_type in matrices:
 
@@ -247,13 +247,13 @@ def export_dae(matrices=None, joint="bone_data", file=None, real=None):
             )
         utils.activate(active)
 
-    if oni_devkit.remove_empty_groups == True:
+    if oni_devkit.remove_empty_groups:
         print("devkit::export_dae - remove empty groups indicated")
         bpy.ops.onigiri.remove_unused_groups(method="best")
 
     file_path = tempfile.gettempdir() + "/onigiri_" + utils.get_temp_name() + ".dae"
 
-    if testing == True:
+    if testing:
         directory = os.path.split(file)[0]
         file_path = directory + "/onigiri_phase_one_export" + ".dae"
         print(
@@ -263,7 +263,7 @@ def export_dae(matrices=None, joint="bone_data", file=None, real=None):
             sep="",
         )
 
-    if rotate_for_sl == True:
+    if rotate_for_sl:
         global_forward = "-X"
     else:
         global_forward = "Y"
@@ -271,7 +271,7 @@ def export_dae(matrices=None, joint="bone_data", file=None, real=None):
     print("bone deform sanity check...")
     use_deform_only = False
     old_deform = {}
-    if use_deform_only == True:
+    if use_deform_only:
         for boneObj in armObj.data.bones:
             if boneObj.name not in bind_pose or boneObj.name not in joint_pose:
                 old_deform[boneObj.name] = boneObj.use_deform
@@ -326,7 +326,7 @@ def export_dae(matrices=None, joint="bone_data", file=None, real=None):
             o.name = name
             o.pop("oni_xml_fix")
             o.pop("name")
-    if armObj.get("oni_xml_fix") == True:
+    if armObj.get("oni_xml_fix"):
         name = armObj["name"]
         armObj.name = name
         armObj.pop("oni_xml_fix")
@@ -376,7 +376,7 @@ def export_dae(matrices=None, joint="bone_data", file=None, real=None):
 
                     Name_array = data
 
-                    if data.text == None:
+                    if data.text is None:
                         print(
                             "devkit::dae_export : the recycled dae file contained no joints, nothing to do"
                         )
@@ -431,7 +431,7 @@ def export_dae(matrices=None, joint="bone_data", file=None, real=None):
 
                         matrices = list()
 
-                        if export_full_rig == True:
+                        if export_full_rig:
 
                             export_path_to_pelvis = False
 
@@ -448,7 +448,7 @@ def export_dae(matrices=None, joint="bone_data", file=None, real=None):
 
                                     names.append(bone_)
 
-                        if export_path_to_pelvis == True:
+                        if export_path_to_pelvis:
                             bone_path = set()
                             names_set = set(names)
 
@@ -490,12 +490,12 @@ def export_dae(matrices=None, joint="bone_data", file=None, real=None):
                                 if bone not in names_set:
                                     names.append(bone)
 
-                        if export_joints == True:
+                        if export_joints:
                             print(
                                 "devkit::export_dae reports - export_joints is enabled"
                             )
 
-                            if real == None:
+                            if real is None:
                                 print(
                                     "devkit::export_dae reports - no real rig, using current for path trace"
                                 )
@@ -523,7 +523,7 @@ def export_dae(matrices=None, joint="bone_data", file=None, real=None):
                                 if sl_bone in names_set:
                                     print("Skipping name in name_set:", sl_bone)
                                     continue
-                                if boneObj.get("oni_joint_export") == None:
+                                if boneObj.get("oni_joint_export") is None:
                                     continue
 
                                 bone_path = rigutils.get_bone_path(armObj, sl_bone)
@@ -626,7 +626,7 @@ def export_dae(matrices=None, joint="bone_data", file=None, real=None):
         for node in root.iter(f"{n}node"):
             if node.get("type") == "JOINT":
                 matrix = node.find(f"{n}matrix")
-                if node.attrib.get("name") != None:
+                if node.attrib.get("name") is not None:
                     bone = node.attrib["name"]
                     if bone in joint_pose:
                         tmat = matrix_to_text(joint_pose[bone])
@@ -727,7 +727,7 @@ def export_dae(matrices=None, joint="bone_data", file=None, real=None):
                 print("node_id  :", node_id)
 
                 skeleton_node = node.find(f"{n}instance_controller/{n}skeleton")
-                if skeleton_node == None:
+                if skeleton_node is None:
                     print(
                         "No skeleton found under instance_controller, this could be a bug in",
                         node_name,
@@ -823,7 +823,7 @@ def pretty_dae(file_in=None, file_out=None):
     for node in root.iter(f"{n}node"):
         if node.get("type") == "JOINT":
             matrix = node.find(f"{n}matrix")
-            if node.attrib.get("name") != None:
+            if node.attrib.get("name") is not None:
                 bone = node.attrib["name"]
 
                 tmat = matrix.text.split()
@@ -850,7 +850,7 @@ def pretty_nodes(root=None):
     for node in root.iter(f"{n}node"):
         if node.get("type") == "JOINT":
             matrix = node.find(f"{n}matrix")
-            if node.attrib.get("name") != None:
+            if node.attrib.get("name") is not None:
                 bone = node.attrib["name"]
 
                 tmat = matrix.text.split()
@@ -896,13 +896,13 @@ def matrix_from_list(l):
 def has_devkit_armature(object=None):
     obj = bpy.data.objects
 
-    if object != None:
+    if object is not None:
         if isinstance(object, str):
             OBJ = obj[object]
         else:
             OBJ = object
         if OBJ.type == "ARMATURE":
-            if OBJ.get("oni_devkit_presets") != None:
+            if OBJ.get("oni_devkit_presets") is not None:
                 print("found devkit armature", OBJ.name)
                 return OBJ
             else:
@@ -914,7 +914,7 @@ def has_devkit_armature(object=None):
         if len(match) == 1:
             armObj = M.object
             if utils.is_valid(armObj):
-                if armObj.get("oni_devkit_presets") != None:
+                if armObj.get("oni_devkit_presets") is not None:
                     print("found armature:", armObj.name)
                     return armObj
                 else:
@@ -957,7 +957,7 @@ def has_devkit_armature(object=None):
     if len(mesh) == 0 and len(arms) == 1:
 
         armObj = arms[0]
-        if armObj.get("oni_devkit_presets") != None:
+        if armObj.get("oni_devkit_presets") is not None:
             print(
                 "devkit::get_devkit_armature reports : Found devkit armature on the single selected armature:",
                 armObj.name,
@@ -986,7 +986,7 @@ def has_devkit_armature(object=None):
             if len(mesh_mods) > 1:
                 print("Too many armature modifiers on", o.name)
             else:
-                if mesh_mods[0].object == None:
+                if mesh_mods[0].object is None:
                     print("Modifier points to nothing", o.name)
                 else:
                     if utils.is_valid(mesh_mods[0].object):
@@ -1037,7 +1037,7 @@ def set_defaults(all=True, area="devkit"):
     for prop in oni_devkit.__annotations__.keys():
         properties.add(prop)
 
-    if all == True:
+    if all:
         for prop in properties:
             oni_devkit.property_unset(prop)
     else:
@@ -1073,7 +1073,7 @@ def load_defaults(file=None, extend=False, report=False):
     script_dir = os.path.dirname(os.path.abspath(__file__))
     devkit_path = oni_settings["paths"]["devkit"]
 
-    if file != None:
+    if file is not None:
         file_name = files[file]
     else:
         file_name = defaults_file
@@ -1086,15 +1086,15 @@ def load_defaults(file=None, extend=False, report=False):
         namespace = {}
         exec(open(file_path, "r", encoding="UTF8").read(), namespace)
         if "devkit_presets" in namespace:
-            if report == True:
+            if report:
                 print("Found devkit_presets")
             name = "devkit_presets"
         elif "presets" in namespace:
-            if report == True:
+            if report:
                 print("Found presets")
             name = "presets"
         else:
-            if report == True:
+            if report:
                 print("No presest")
             return {}
 
@@ -1102,11 +1102,11 @@ def load_defaults(file=None, extend=False, report=False):
 
     except Exception as e:
         print(traceback.format_exc())
-        if report == True:
+        if report:
             print("Error loading default presets, your installation is damaged!")
 
-        if extend == True:
-            if report == True:
+        if extend:
+            if report:
                 print("Error loading default presets, generating from current...")
             oni_devkit = bpy.context.scene.oni_devkit
             properties = set()
@@ -1115,7 +1115,7 @@ def load_defaults(file=None, extend=False, report=False):
             for prop in properties:
                 presets[prop] = getattr(oni_devkit, prop)
 
-    if report == True:
+    if report:
         print("devkit::load_defaults : defaults loaded")
 
     return presets
@@ -1132,7 +1132,7 @@ def get_matrices(
 
     print("rotate =", rotate)
     R90 = mathutils.Matrix.Rotation(math.radians(0.0), 4, "Z")
-    if rotate == True:
+    if rotate:
         R90 = mathutils.Matrix.Rotation(math.radians(90.0), 4, "Z")
     R90I = R90.inverted()
 
@@ -1187,7 +1187,7 @@ def get_matrices(
             dae["real_data"][bone] = matjc
 
     armObj = armature
-    if armObj == None:
+    if armObj is None:
 
         print(
             "devkit::get_matrices : no armature, returning bind and joint data for base only"
@@ -1198,10 +1198,10 @@ def get_matrices(
         armObj = bpy.data.objects[armature]
 
     is_avaclown = False
-    if armObj.get("avastar") != None:
+    if armObj.get("avastar") is not None:
         is_avaclown = True
 
-    if armObj.get("avastar_converted") != None:
+    if armObj.get("avastar_converted") is not None:
         is_avaclown = False
 
     bone_names = {}
@@ -1222,7 +1222,7 @@ def get_matrices(
         bone_rev[tbone] = sbone
 
     print("devkit::get_matrices : base =", base)
-    if base == None:
+    if base is None:
         base_rig = getattr(base_data, "female_neutral")
     else:
         base_rig = getattr(base_data, base)
@@ -1232,7 +1232,7 @@ def get_matrices(
         mb = mathutils.Matrix(base_rig[bone]["matrix_local"])
         base_matrices[bone] = mb
 
-    if base == None:
+    if base is None:
         for bone in skel.avatar_skeleton:
             if bone not in bone_rev:
                 continue
@@ -1253,13 +1253,13 @@ def get_matrices(
         for bone in skel.avatar_skeleton:
 
             if bone.startswith("mSpine"):
-                if report == True:
+                if report:
                     print("Found spine:", bone)
                 bone_dup = globals.spine_chain[bone]
                 if bone_dup not in bone_rev:
                     ml = base_matrices[bone_dup]
                     matrices[bone] = ml
-                    if report == True:
+                    if report:
                         print(
                             "Not in bone_rev, replacing",
                             bone,
@@ -1271,7 +1271,7 @@ def get_matrices(
                 else:
                     ml = matrices[bone_dup]
                     matrices[bone] = ml
-                    if report == True:
+                    if report:
                         print(
                             "Bone appears to be recorded already, replacing",
                             bone,
@@ -1306,7 +1306,7 @@ def get_matrices(
         l_ofs, r_ofs, s_ofs = dmgI.decompose()
 
         use_offset_location = True
-        if use_offset_location == True:
+        if use_offset_location:
             l = matrices[bone].to_translation()
         else:
             l = base_matrices[bone].to_translation()
@@ -1370,7 +1370,7 @@ def get_matrices(
         if bone.startswith("mSpine"):
             bone_dup = globals.spine_chain[bone]
             if bone_dup not in dae["bone_data"]:
-                if report == True:
+                if report:
                     print("Spine bone", bone_dup, "not in dae joints, skipping")
                 continue
             ml = dae["bone_data"][bone_dup]
@@ -1480,10 +1480,10 @@ def reshape(
         print("devkit::reshape reports : not an armature")
         return False
 
-    if matrices == None:
+    if matrices is None:
         print("devkit::reshape reports : no matrices offered")
         transforms = armObj.get("oni_collada_matrices")
-        if transforms == None:
+        if transforms is None:
             print("devkit::reshape reports : no matrices on the armature object")
             return False
         matrices = {}
@@ -1501,14 +1501,14 @@ def reshape(
     state = utils.get_state()
 
     qualified = []
-    if copy == True:
+    if copy:
         for meshObj in mesh:
             meshObj.select_set(True)
         armObj.select_set(True)
         utils.activate(armObj)
         bpy.ops.object.duplicate()
         qualified = [o for o in bpy.context.selected_objects]
-        if delete == True:
+        if delete:
 
             utils.get_state()
             for o in mesh:
@@ -1565,7 +1565,7 @@ def reshape(
             boneObj.matrix = matrices_rotated[bone]
         utils.update()
 
-    if rotate == True:
+    if rotate:
         mw = armObj.matrix_world.copy()
         l = mw.to_translation()
         s = mw.to_scale()
@@ -1620,7 +1620,7 @@ def reshape(
             boneObj.matrix = M
             utils.update()
 
-    if rotate == True:
+    if rotate:
         mw = armObj.matrix_world.copy()
         l = mw.to_translation()
         s = mw.to_scale()

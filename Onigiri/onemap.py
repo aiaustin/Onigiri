@@ -54,7 +54,7 @@ if 1 == 1:
 
 
 def get_director(armature=None):
-    if armature == None:
+    if armature is None:
         return False
     armObj = armature
     if isinstance(armature, str):
@@ -66,10 +66,10 @@ def get_director(armature=None):
     outRig = armObj.get("oni_onemap_actor", None)
     inRig = armObj.get("oni_onemap_director", None)
 
-    if outRig == None and inRig == None:
+    if outRig is None and inRig is None:
         return False
 
-    if outRig != None:
+    if outRig is not None:
         return armObj
 
     if inRig.name not in bpy.context.scene.objects:
@@ -113,28 +113,28 @@ def update_map(input=None, output=None, rename=None, reskin=None, controllers=Tr
 
     state = utils.get_state()
 
-    if rename == None:
+    if rename is None:
         rename = inRig.get("oni_onemap_rename")
 
-    if rename == None:
+    if rename is None:
         print("onemap::update_map : no rename map")
         return False
-    if reskin == None:
+    if reskin is None:
         reskin = inRig.get("oni_onemap_reskin")
-    if reskin == None:
+    if reskin is None:
         print("onemap::update_map : no reskin map, adding empty")
         reskin = {}
 
     oni_onemap = bpy.context.scene.oni_onemap
 
-    if controllers == True:
+    if controllers:
 
-        if oni_onemap.onemap_follow == True:
+        if oni_onemap.onemap_follow:
 
             frame_current = bpy.context.scene.frame_current
             has_action = False
-            if inRig.animation_data != None:
-                if inRig.animation_data.action != None:
+            if inRig.animation_data is not None:
+                if inRig.animation_data.action is not None:
                     has_action = True
                     frame_start = inRig.animation_data.action.frame_range[0]
             if has_action == False:
@@ -168,7 +168,7 @@ def update_map(input=None, output=None, rename=None, reskin=None, controllers=Tr
                 for boneObj in inRig.pose.bones:
 
                     cname = boneObj["oni_onemap_cname"]
-                    if boneObj.constraints.get(cname) != None:
+                    if boneObj.constraints.get(cname) is not None:
                         conObj = boneObj.constraints[cname]
                         if boneObj.name not in rename:
                             conObj.influence = 0
@@ -197,7 +197,7 @@ def update_map(input=None, output=None, rename=None, reskin=None, controllers=Tr
                     if tbone in proxyRig.pose.bones:
                         boneObj = proxyRig.pose.bones[tbone]
                         cname = boneObj["oni_onemap_cname"]
-                        if boneObj.constraints.get(cname) != None:
+                        if boneObj.constraints.get(cname) is not None:
                             proxyRig.data.bones.active = boneObj.bone
                             conObj = boneObj.constraints[cname]
                             conObj.subtarget = tbone
@@ -208,7 +208,7 @@ def update_map(input=None, output=None, rename=None, reskin=None, controllers=Tr
         else:
             for boneObj in inRig.pose.bones:
                 cname = boneObj["oni_onemap_cname"]
-                if boneObj.constraints.get(cname) != None:
+                if boneObj.constraints.get(cname) is not None:
                     conObj = boneObj.constraints[cname]
                     conObj.influence = 0
 
@@ -510,8 +510,8 @@ def attach_proxy(inRig=None, outRig=None):
 
     frame_current = bpy.context.scene.frame_current
     has_action = False
-    if inRig.animation_data != None:
-        if inRig.animation_data.action != None:
+    if inRig.animation_data is not None:
+        if inRig.animation_data.action is not None:
             has_action = True
             frame_start = inRig.animation_data.action.frame_range[0]
     if has_action == False:
@@ -522,7 +522,7 @@ def attach_proxy(inRig=None, outRig=None):
         for C in boneObj.constraints:
 
             cname = boneObj.get("oni_onemap_cname")
-            if cname != None:
+            if cname is not None:
                 if C.name == cname:
                     boneObj.constraints.remove(C)
 

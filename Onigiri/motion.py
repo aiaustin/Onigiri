@@ -81,10 +81,10 @@ def get_director(object, report=False):
     aObj = OBJ.get("oni_motion_actor", None)
     dObj = OBJ.get("oni_motion_director", None)
     
-    if report == True:
+    if report:
         print("motion::get_director examining", OBJ.name, "for the director")
 
-        if aObj == None:
+        if aObj is None:
             print(
                 "motion::get_director : The actor flag is missing so this is not the director"
             )
@@ -94,7 +94,7 @@ def get_director(object, report=False):
                 aObj.name,
             )
 
-        if dObj == None:
+        if dObj is None:
             print(
                 "motion::get_director : The director flag is missing so this is not the actor"
             )
@@ -105,20 +105,20 @@ def get_director(object, report=False):
                 "this must be the actor",
             )
 
-    if aObj == None and dObj == None:
-        if report == True:
+    if aObj is None and dObj is None:
+        if report:
             print("motion::get_director : Could not find a director")
         return False
 
-    if aObj != None:
+    if aObj is not None:
         return OBJ
 
     if dObj.name not in bpy.context.scene.objects:
-        if report == True:
+        if report:
             print("motion::get_director : dObj was not found in the scene")
         return False
 
-    if report == True:
+    if report:
         print("motion::get_director : returning dObj", dObj.name)
     return dObj
 
@@ -344,7 +344,7 @@ def retarget_hard(inRig):
         scale=True,
     )
 
-    if oni_motion.motion_stabilize == True:
+    if oni_motion.motion_stabilize:
         stickyRig = stabilizer(armObj=outRig, bone_map=rename_map)
         inRig["oni_motion_stabilizer"] = stickyRig
         stickyRig.hide_set(True)
@@ -363,7 +363,7 @@ def retarget_soft(inRig, report=False):
     outRig = rigutils.build_rig(rig_class="pos", rotate=True, connect=False)
     outRig.select_set(False)
 
-    if inRig.get("oni_onemap_rename", None) == None:
+    if inRig.get("oni_onemap_rename", None) is None:
         print("motion::retarget_soft : No rename map, using blanks")
     rename_map = inRig.get("oni_onemap_rename", {})
     if len(rename_map):
@@ -473,7 +473,7 @@ def retarget_soft(inRig, report=False):
         good_bones = []
         for boneObj in proxyRig.pose.bones:
             if boneObj.name not in rename_map:
-                if report == True:
+                if report:
                     print("skipping bone", boneObj.name, "not in map")
                 continue
             good_bones.append(boneObj.name)
@@ -518,7 +518,7 @@ def retarget_soft(inRig, report=False):
         conObj.target_space = "WORLD"
         conObj.owner_space = "POSE"
 
-        if defer == True:
+        if defer:
             
             tbone = boneObj.name 
             tmat = inRig.matrix_world.copy()
@@ -544,7 +544,7 @@ def retarget_soft(inRig, report=False):
     outRig.select_set(True)
     utils.activate(outRig)
 
-    if oni_motion.motion_prepare_actor == True:
+    if oni_motion.motion_prepare_actor:
         frame_start = 1
         if outRig.animation_data:
             if outRig.animation_data.action:
@@ -650,7 +650,7 @@ def retarget_soft(inRig, report=False):
                 C.use_y = False
                 C.use_z = False
     
-    if oni_motion.motion_stabilize == True:
+    if oni_motion.motion_stabilize:
         print(
             "Stabilizer used with humanoid non-joint position uploads are likely to be unusable!"
         )
@@ -789,7 +789,7 @@ def retarget_custom(inRig=None, outRig=None):
         conObj.target_space = "WORLD"
         conObj.owner_space = "POSE"
 
-        if defer == True:
+        if defer:
             
             tbone = boneObj.name 
             tmat = inRig.matrix_world.copy()
@@ -815,7 +815,7 @@ def retarget_custom(inRig=None, outRig=None):
     outRig.select_set(True)
     utils.activate(outRig)
 
-    if oni_motion.motion_prepare_actor == True:
+    if oni_motion.motion_prepare_actor:
         frame_start = 1
         if outRig.animation_data:
             if outRig.animation_data.action:
@@ -889,7 +889,7 @@ def retarget_custom(inRig=None, outRig=None):
             
         boneObj["oni_motion_constraints"] = new_list
             
-    if oni_motion.motion_stabilize == True:
+    if oni_motion.motion_stabilize:
         print(
             "Stabilizer used with humanoid non-joint position uploads are likely to be unusable!"
         )
@@ -902,7 +902,7 @@ def retarget_custom(inRig=None, outRig=None):
 
 def stabilizer(armObj=None, bone_map=None):
 
-    if bone_map == None:
+    if bone_map is None:
         bone_map = armObj["oni_onemap_rename"]
 
     rename_rev = set()
@@ -989,11 +989,11 @@ def update_map(inRig=None):
     state = utils.get_state()
 
     rename = inRig.get("oni_onemap_rename")
-    if rename == None:
+    if rename is None:
         print("motion::update_map : no rename map")
         return False
     reskin = inRig.get("oni_onemap_reskin")
-    if reskin == None:
+    if reskin is None:
         print("motion::update_map : no reskin map, adding empty")
         reskin = {}
 
@@ -1009,8 +1009,8 @@ def update_map(inRig=None):
             
             frame_current = bpy.context.scene.frame_current
             has_action = False
-            if inRig.animation_data != None:
-                if inRig.animation_data.action != None:
+            if inRig.animation_data is not None:
+                if inRig.animation_data.action is not None:
                     has_action = True
                     frame_start = inRig.animation_data.action.frame_range[0]
             if has_action == False:
@@ -1071,7 +1071,7 @@ def update_map(inRig=None):
                     if conObj.type == "COPY_ROTATION" or conObj.type == "CHILD_OF":
                         conObj.influence = 1
                     if conObj.type == "COPY_LOCATION":
-                        if oni_motion.motion_constrain_location == True:
+                        if oni_motion.motion_constrain_location:
                             conObj.influence = 1
 
             if 1 == 0:
@@ -1091,7 +1091,7 @@ def update_map(inRig=None):
                         if conObj.type == "CHILD_OF":
                             
                             defer = True
-                            if defer == True:
+                            if defer:
                                 
                                 tmat = inRig.matrix_world.copy()
                                 pmat = proxyRig.matrix_world.copy()
@@ -1116,7 +1116,7 @@ def update_map(inRig=None):
                                 conObj.subtarget = bone
                                 if conObj.type == "COPY_ROTATION":
                                     conObj.influence = 1
-                                if oni_motion.motion_constrain_location == True:
+                                if oni_motion.motion_constrain_location:
                                     if conObj.type == "COPY_LOCATION":
                                         conObj.influence = 1
                                 
@@ -1163,7 +1163,7 @@ def update_map(inRig=None):
 
     utils.set_state(state)
 
-    if bad_group == True:
+    if bad_group:
         print(
             "There was a problem assigning bone group to your rig, if this is a match map please use the (custom) feature"
         )

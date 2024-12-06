@@ -41,9 +41,9 @@ def main(
 
     frame_current = int(bpy.context.scene.frame_current)
 
-    if tarmObj.animation_data == None:
+    if tarmObj.animation_data is None:
         tarmObj.animation_data_create()
-    if tarmObj.animation_data.action == None:
+    if tarmObj.animation_data.action is None:
         AC_OBJ = bpy.data.actions.new("SPLICER")
         tarmObj.animation_data.action = AC_OBJ
 
@@ -71,15 +71,15 @@ def main(
         tmats[bone] = boneObj.matrix.copy()
 
     s_has_action = False
-    if sarmObj.animation_data != None:
-        if sarmObj.animation_data.action != None:
+    if sarmObj.animation_data is not None:
+        if sarmObj.animation_data.action is not None:
             s_has_action = True
             s_actionObj = sarmObj.animation_data.action
             start, end = sarmObj.animation_data.action.frame_range
             s_frame_start = int(start)
             s_frame_end = int(end)
 
-    if spread_enabled == True:
+    if spread_enabled:
         if spread_start == spread_end:
             print(
                 "Preliminary test shows no frame spread to capture but spread is enabled."
@@ -95,8 +95,8 @@ def main(
         return False
 
     s_frame_data = {}
-    if keys == True:
-        if s_has_action == True:
+    if keys:
+        if s_has_action:
             s_frame_data = get_animated_keys(armature=sarmObj.name)
 
             if len(s_frame_data) == 0:
@@ -120,7 +120,7 @@ def main(
 
     print("insertion_range =", insertion_range)
 
-    if gap_insert == True:
+    if gap_insert:
         result = move_keys(
             armature=tarmObj.name, start=frame_current, spread=insertion_range
         )
@@ -130,7 +130,7 @@ def main(
     )
 
     s_motion_data = {}
-    if motion == True:
+    if motion:
         s_motion_data = get_motion(
             armature=sarmObj.name,
             start=s_frame_start,
@@ -182,7 +182,7 @@ def main(
 
                     s_key_data[bone][frame][trs] = True
 
-    if gap_insert == True:
+    if gap_insert:
 
         t_frame = gap_start + frame_current - 1
     else:
@@ -255,9 +255,9 @@ def get_animated_keys(armature=None):
     obj = bpy.data.objects
     armObj = obj[armature]
 
-    if armObj.animation_data == None:
+    if armObj.animation_data is None:
         return []
-    if armObj.animation_data.action == None:
+    if armObj.animation_data.action is None:
         return []
 
     actionObj = armObj.animation_data.action
@@ -376,7 +376,7 @@ def get_matrices(armature=None, start=0, end=0, force=False):
             matrices[bone][frame] = {}
             mat = boneObj.matrix.copy()
             matrices[bone][frame]["matrix"] = mat
-            if force == True:
+            if force:
 
                 boneObj.matrix = mat
             pmat = boneObj.matrix_basis.copy()
@@ -410,7 +410,7 @@ def get_motion(armature=None, start=0, end=0, matrices={}):
                 rot_now = matrices[bone][frame]["rot"]
                 loc_now = matrices[bone][frame]["loc"]
 
-                if close_enough(rot_now, rot_last, tol=0.01) == True:
+                if close_enough(rot_now, rot_last, tol=0.01):
                     if bone not in motion:
                         motion[bone] = {}
                     if frame not in motion[bone]:
@@ -425,7 +425,7 @@ def get_motion(armature=None, start=0, end=0, matrices={}):
                         "matrix"
                     ]
                     rot_last = rot_now
-                if close_enough(loc_now, loc_last, tol=0.01) == True:
+                if close_enough(loc_now, loc_last, tol=0.01):
                     if bone not in motion:
                         motion[bone] = {}
                     if frame not in motion[bone]:

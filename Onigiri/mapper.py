@@ -175,7 +175,7 @@ def restore_rig(armature="", type="", roll=False, data="all"):
     bpy.ops.object.mode_set(mode="POSE")
     bpy.ops.pose.select_all(action="DESELECT")
 
-    if obj[armature].get("bone_map") == None:
+    if obj[armature].get("bone_map") is None:
         print("This armature has no bone map to restore, did you detach previously?")
         popup("No saved data, did you detach this set?", "Error", "ERROR")
         return False
@@ -235,7 +235,7 @@ def restore_rig(armature="", type="", roll=False, data="all"):
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
-    if obj[armature].get("location") != None:
+    if obj[armature].get("location") is not None:
         print("restoring object location for:", armature)
         obj[armature].location = obj[armature]["location"]
 
@@ -283,7 +283,7 @@ def restore_bone(armature="", bone="", type="", roll=False):
         obj[armature].data.edit_bones[bone].tail = obj[armature]["bone_data"][bone][
             "pose"
         ]["tail"]
-        if roll == True:
+        if roll:
             obj[armature].data.edit_bones[bone].roll = obj[armature]["bone_data"][bone][
                 "edit"
             ]["roll"]
@@ -295,7 +295,7 @@ def restore_bone(armature="", bone="", type="", roll=False):
         obj[armature].data.edit_bones[bone].tail = obj[armature]["bone_data"][bone][
             "edit"
         ]["tail"]
-        if roll == True:
+        if roll:
             obj[armature].data.edit_bones[bone].roll = obj[armature]["bone_data"][bone][
                 "edit"
             ]["roll"]
@@ -324,11 +324,11 @@ def snap_to(source=""):
 
     print("snap_to reports: source is -", source)
 
-    if bmp.mapper_retarget_only == True:
+    if bmp.mapper_retarget_only:
 
         print("snap_to reports: retarget_only is enabled, setting map flag only")
 
-        if obj[source].get("bone_map") == None:
+        if obj[source].get("bone_map") is None:
             print("snap_to reports: no bone_map")
             return False
 
@@ -339,7 +339,7 @@ def snap_to(source=""):
         obj[source]["mapped"] = 1
         return True
 
-    if bmp.mapper_morph_pose == True:
+    if bmp.mapper_morph_pose:
         print("snap_to reports: morph_pose enabled, setting map flag only")
         print("snap_to reports: adjusting to visual snap, use (Attach) to complete")
 
@@ -351,7 +351,7 @@ def snap_to(source=""):
 
     bpy.context.view_layer.objects.active = bpy.data.objects[source]
 
-    if obj[source].get("bone_map") == None:
+    if obj[source].get("bone_map") is None:
         print("snap_to reports: no bone_map")
         return False
 
@@ -381,7 +381,7 @@ def snap_to(source=""):
         last_frame = 1000000
         print("will check earliest frame with", last_frame)
         for tarm in bmp["targets"]:
-            if obj[tarm].animation_data != None:
+            if obj[tarm].animation_data is not None:
                 best_frame, nothing = obj[tarm].animation_data.action.frame_range
                 if best_frame < last_frame:
                     last_frame = best_frame
@@ -479,7 +479,7 @@ def fly_paper(armature=""):
     obj = bpy.data.objects
     bmp = bpy.context.window_manager.oni_mapper
 
-    if bmp.mapper_retarget_only == True:
+    if bmp.mapper_retarget_only:
         print("fly_paper reports: mapper_retarget_only is enabled, nothing to do")
         return True
 
@@ -492,7 +492,7 @@ def fly_paper(armature=""):
 
     armObj = obj[armature]
 
-    if armObj.get("fly_paper") != None:
+    if armObj.get("fly_paper") is not None:
         fly = armObj["fly_paper"]
         del armObj["fly_paper"]
         if fly in obj:
@@ -506,7 +506,7 @@ def fly_paper(armature=""):
             except:
                 print("Couldn't delete stale fly paper:", fly)
 
-    if bpy.context.active_object != None:
+    if bpy.context.active_object is not None:
         bpy.ops.object.mode_set(mode="OBJECT")
     bpy.ops.object.select_all(action="DESELECT")
     armObj.select_set(True)
@@ -556,7 +556,7 @@ def fly_paper(armature=""):
     bone_map = armObj["bone_map"].to_dict()
     tarm = armFly.name
 
-    if bmp.mapper_stabilize == True:
+    if bmp.mapper_stabilize:
         bpy.context.view_layer.objects.active = obj[fly]
         for tboneObj in armFly.pose.bones:
             tbone = tboneObj.name

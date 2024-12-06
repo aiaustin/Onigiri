@@ -22,11 +22,11 @@ def get_actor():
 
     armObj = None
     for o in selected:
-        if o.get("oni_ragdoll_directors") != None:
+        if o.get("oni_ragdoll_directors") is not None:
             print("Found actor rig directly:", o.name)
             return o
     for o in selected:
-        if o.get("oni_ragdoll_actor") != None:
+        if o.get("oni_ragdoll_actor") is not None:
             print("Found actor rig on a director object:", o.name)
             return o["oni_ragdoll_actor"]
 
@@ -40,7 +40,7 @@ def create_directors(armObj, source=None, move=True):
         print("Using mesh objects associated with the rig")
     elif source == "pool":
         print("Using a pre-selected pool")
-    elif source == None:
+    elif source is None:
         print("ragdoll::create_directors : reports None, will generate cubes instead")
 
     state = utils.get_state()
@@ -74,7 +74,7 @@ def create_directors(armObj, source=None, move=True):
             for o in bpy.context.selected_objects:
                 o.select_set(False)
 
-    elif source == None:
+    elif source is None:
         print("ragdoll::create_directors: source is None")
         pool = []
 
@@ -187,7 +187,7 @@ def create_directors(armObj, source=None, move=True):
 
         length = dBone.length
 
-        if source == "mesh" or source == None:
+        if source == "mesh" or source is None:
 
             OBJ.dimensions = ((length / 4), length, (length / 4))
 
@@ -232,7 +232,7 @@ def add_constraints(armObj):
 
     for boneObj in armObj.pose.bones:
         cname = boneObj.bone.get("oni_ragdoll_constraint")
-        if cname == None:
+        if cname is None:
             continue
         for cObj in boneObj.constraints:
             if cObj.name == cname:

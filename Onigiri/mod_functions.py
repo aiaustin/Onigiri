@@ -29,10 +29,10 @@ data_path = oni_settings["paths"]["data"]
 
 def terminate(state=""):
     if state == "":
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return True
-    elif state == True:
+    elif state:
         oni_settings["terminate"] = True
     else:
         print("terminate reports: unknown state setting -", state)
@@ -73,7 +73,7 @@ def set_pose_bone_priority(priority=2):
 def apply_transforms(object="", scale=False, rotation=False, location=False):
 
     obj = bpy.data.objects
-    if bpy.context.active_object == None:
+    if bpy.context.active_object is None:
         bpy.context.view_layer.objects.active = obj[object]
     for o in bpy.context.selected_objects:
         o.select_set(False)
@@ -1157,7 +1157,7 @@ def create_bone_group(armature="", group="", theme=""): ## theme is deprecated
 
     colObj = bpy.context.object.data.collections.get[group]
 
-    if colObj != None:
+    if colObj is not None:
         if oni_flags["debug"] == 1:
             print("Bone group already exists for", "[" + arm + "] " + "[" + group + "] " + "- skipping add function",)
         return colObj
@@ -1246,7 +1246,7 @@ def rename_to():
 
 
 def get_mode():
-    if bpy.context.active_object == None:
+    if bpy.context.active_object is None:
         return None
     elif bpy.context.mode == "EDIT_ARMATURE":
         return "EDIT"
@@ -1301,7 +1301,7 @@ def set_obj_mode(mode="", objects=[]):
     type = None
     last_type = None
     for ob in objects:
-        if type == None:
+        if type is None:
 
             last_type = obj[ob].type
         type = obj[ob].type
@@ -1363,7 +1363,7 @@ def set_obj_mode_multi(mode="object", objects=[]):
     type = None
     last_type = None
     for ob in objects:
-        if type == None:
+        if type is None:
 
             last_type = obj[ob].type
         type = obj[ob].type
@@ -1406,7 +1406,7 @@ def safe_select(object=""):
         print("safe_select reports: object not in scene -", object)
         return False
 
-    if bpy.context.active_object == None:
+    if bpy.context.active_object is None:
         bpy.context.view_layer.objects.active = bpy.data.objects[object]
 
     if len(bpy.context.selected_objects) != 0:
@@ -2529,7 +2529,7 @@ def map_from_onigiri(arm, template, add_control_rig=False):
                 used_bones[skel][bone] = target_bone
 
             else:
-                if bpy.data.objects[skel].data.bones[target_bone].use_deform == True:
+                if bpy.data.objects[skel].data.bones[target_bone].use_deform:
                     used_bones[skel][bone] = target_bone
                 else:
                     continue
@@ -2795,7 +2795,7 @@ def map_from_unknown(arm, target_arms, template):
                 used_bones[skel][bone] = target_bone
 
             else:
-                if bpy.data.objects[skel].data.bones[target_bone].use_deform == True:
+                if bpy.data.objects[skel].data.bones[target_bone].use_deform:
                     used_bones[skel][bone] = target_bone
 
             bpy.data.objects[arm].data.edit_bones[bone].head = target_data[skel][
@@ -3028,7 +3028,7 @@ def add_constraint(
         bc["Child Of"].subtarget = tbone
         bc["Child Of"].influence = influence
         bc["Child Of"].name = "ONI Child Of"
-        if invert == True:
+        if invert:
             context_py = bpy.context.copy()
             context_py["constraint"] = bc.active
             bpy.ops.constraint.childof_set_inverse(
@@ -3165,7 +3165,7 @@ def remove_empty_groups():
                 vgroup_used[g.group] = True
                 vgroup_name = vgroup_names[g.group]
                 armatch = re.search("((.R|.L)(.(\d){1,}){0,1})(?!.)", vgroup_name)
-                if armatch != None:
+                if armatch is not None:
                     tag = armatch.group()
                     mirror_tag = (
                         tag.replace(".R", ".L")
@@ -3207,9 +3207,9 @@ def fix_bind_matrices(root, transform=0):
 
             na = controller.find(f"{n}skin/{n}source/{n}Name_array")
             fa = controller.find(f"{n}skin/{n}source/{n}float_array")
-            if na != None:
+            if na is not None:
                 controllers[id]["Name_array"] = na
-            if fa != None:
+            if fa is not None:
                 controllers[id]["float_array"] = fa
 
     if transform == 1:
@@ -3561,7 +3561,7 @@ def remove_armature_groups(arm):
 
 def remove_bone_groups(arm):
     selected = bpy.context.selected_objects
-    if bpy.context.active_object != None:
+    if bpy.context.active_object is not None:
         active = bpy.context.active_object.name
     else:
         active = None
@@ -3589,7 +3589,7 @@ def remove_bone_groups(arm):
         for o in selected:
             o.select_set(True)
         bpy.ops.object.mode_set(mode=old_mode)
-        if active != None:
+        if active is not None:
             bpy.context.view_layer.objects.active = bpy.data.objects[active]
 
     return
@@ -3818,7 +3818,7 @@ def get_mesh_armature(mesh=""):
 
     mod = mods[0]
 
-    if obj[mesh].modifiers[mod].object == None:
+    if obj[mesh].modifiers[mod].object is None:
         print(
             "get_mesh_armature reports: armature modifier exists but doesn't point to anything"
         )
@@ -3863,9 +3863,9 @@ def scale_transforms(elements, scale):
 
 def has_action(armature=""):
     armObj = bpy.data.objects[armature]
-    if armObj.animation_data == None:
+    if armObj.animation_data is None:
         return False
-    if armObj.animation_data.action == None:
+    if armObj.animation_data.action is None:
         return False
     return True
 
@@ -3907,7 +3907,7 @@ def matrix_world(armature_ob, bone_name):
     basis = armature_ob.pose.bones[bone_name].matrix_basis
 
     parent = armature_ob.pose.bones[bone_name].parent
-    if parent == None:
+    if parent is None:
         return local @ basis
     else:
         parent_local = armature_ob.data.bones[parent.name].matrix_local
@@ -4100,7 +4100,7 @@ def rotate_toggle(arm, angle=[90, 0, 0]):
 
     selected = bpy.context.selected_objects
 
-    if bpy.context.active_object != None:
+    if bpy.context.active_object is not None:
         bpy.ops.object.mode_set(mode="OBJECT")
     bpy.ops.object.select_all(action="DESELECT")
     bpy.data.objects[arm].select_set(True)
@@ -4139,11 +4139,11 @@ def clear_transforms(object="", location=False, rotation=False, scale=False):
     bpy.data.objects[object].select_set(True)
     bpy.context.view_layer.objects.active = bpy.data.objects[object]
 
-    if location == True:
+    if location:
         bpy.ops.object.location_clear()
-    if rotation == True:
+    if rotation:
         bpy.ops.object.rotation_clear()
-    if scale == True:
+    if scale:
         bpy.ops.object.scale_clear()
 
     bpy.ops.object.select_all(action="DESELECT")
@@ -4185,7 +4185,7 @@ def rotate_object(
 
     print("rotate_object reports: selected =", bpy.context.selected_objects)
 
-    if apply_before == True:
+    if apply_before:
         bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
 
     old_rot_mode = obj[object].rotation_mode
@@ -4198,12 +4198,12 @@ def rotate_object(
 
     obj[object].rotation_euler = (xrot, yrot, zrot)
 
-    if apply_after == True:
+    if apply_after:
         bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
 
     obj[object].rotation_mode = old_rot_mode
 
-    if apply_pose == True:
+    if apply_pose:
         if obj[object].type != "ARMATURE":
             print("rotate_object reports: apply_pose is True but it's not an armature")
         else:
@@ -4211,7 +4211,7 @@ def rotate_object(
             bpy.ops.pose.armature_apply()
             bpy.ops.object.mode_set(mode="OBJECT")
 
-    if selected != None:
+    if selected is not None:
         bpy.ops.object.mode_set(mode="OBJECT")
         bpy.ops.object.select_all(action="DESELECT")
         selected.select_set(True)
@@ -4236,7 +4236,7 @@ def save_state():
 
     state = get_unique_name()
 
-    if onim.get("states") == None:
+    if onim.get("states") is None:
         onim["states"] = dict()
     else:
         if state in onim["states"]:
@@ -4245,7 +4245,7 @@ def save_state():
     onim["states"][state] = dict()
     onim["states"][state]["mode"] = bpy.context.mode
 
-    if bpy.context.active_object != None:
+    if bpy.context.active_object is not None:
         onim["states"][state]["active"] = bpy.context.active_object.name
     else:
         onim["states"][state]["active"] = ""
@@ -4316,7 +4316,7 @@ def save_armature_state(armature=""):
 
     state = get_unique_name()
 
-    if onim.get("arm_states") == None:
+    if onim.get("arm_states") is None:
         onim["arm_states"] = dict()
     else:
         if state in onim["arm_states"]:
@@ -4597,7 +4597,7 @@ def set_rotation_mode(armature="", mode="QUATERNION"):
 
     id = get_unique_name()
 
-    if onim.get("rotate_state") == None:
+    if onim.get("rotate_state") is None:
         onim["rotate_state"] = {}
     if id in onim["rotate_state"]:
         print(
@@ -4760,7 +4760,7 @@ def get_selected_edges():
     me = ob.data
     se = list()
     for e in me.edges:
-        if e.select == True:
+        if e.select:
             se.append(e.index)
     return se
 
@@ -4770,7 +4770,7 @@ def get_selected_polygons():
     o = bpy.context.selected_objects[0]
     o.update_from_editmode()
     for p in o.data.polygons:
-        if p.select == True:
+        if p.select:
             polys.append(p.index)
 
     return polys
@@ -4860,7 +4860,7 @@ def get_test_angles(reverse=False):
     y = onim.test_angle_y
     z = onim.test_angle_z
 
-    if reverse == True:
+    if reverse:
         pos = -90
         neg = 90
         x = -x
@@ -4869,17 +4869,17 @@ def get_test_angles(reverse=False):
 
     angles = [x, y, z]
 
-    if onim.test_angle_pos_x == True:
+    if onim.test_angle_pos_x:
         angles[0] = pos
-    if onim.test_angle_neg_x == True:
+    if onim.test_angle_neg_x:
         angles[0] = neg
-    if onim.test_angle_pos_y == True:
+    if onim.test_angle_pos_y:
         angles[1] = pos
-    if onim.test_angle_neg_y == True:
+    if onim.test_angle_neg_y:
         angles[1] = neg
-    if onim.test_angle_pos_z == True:
+    if onim.test_angle_pos_z:
         angles[2] = pos
-    if onim.test_angle_neg_z == True:
+    if onim.test_angle_neg_z:
         angles[2] = neg
 
     return angles

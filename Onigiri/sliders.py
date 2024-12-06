@@ -57,7 +57,7 @@ if 1 == 1:
 # pose boe property updaters for the sliders
 # ------------------------------------------------------------------------------------------------
 def update_location_x(self, context):
-    if props["terminate"] == True:
+    if props["terminate"]:
         print("Terminating recursion")
         props["terminate"] = False
         return
@@ -67,7 +67,7 @@ def update_location_x(self, context):
 
 
 def update_location_y(self, context):
-    if props["terminate"] == True:
+    if props["terminate"]:
         print("Terminating recursion")
         props["terminate"] = False
         return
@@ -77,7 +77,7 @@ def update_location_y(self, context):
 
 
 def update_location_z(self, context):
-    if props["terminate"] == True:
+    if props["terminate"]:
         print("Terminating recursion")
         props["terminate"] = False
         return
@@ -87,44 +87,44 @@ def update_location_z(self, context):
 
 
 def update_scale_x(self, context):
-    if props["terminate"] == True:
+    if props["terminate"]:
         print("Terminating recursion")
         props["terminate"] = False
         return
     armObj = bpy.context.selected_objects[0]
     boneObj = armObj.pose.bones[self.name]
     boneObj.scale[0] = 1 + self.oni_sliders_scale_x
-    if self.oni_sliders_scale_y_lock == True:
+    if self.oni_sliders_scale_y_lock:
         boneObj.scale[1] = 1 + self.oni_sliders_scale_x
-    if self.oni_sliders_scale_z_lock == True:
+    if self.oni_sliders_scale_z_lock:
         boneObj.scale[2] = 1 + self.oni_sliders_scale_x
 
 
 def update_scale_y(self, context):
-    if props["terminate"] == True:
+    if props["terminate"]:
         print("Terminating recursion")
         props["terminate"] = False
         return
     armObj = bpy.context.selected_objects[0]
     boneObj = armObj.pose.bones[self.name]
     boneObj.scale[1] = 1 + self.oni_sliders_scale_y
-    if self.oni_sliders_scale_x_lock == True:
+    if self.oni_sliders_scale_x_lock:
         boneObj.scale[0] = 1 + self.oni_sliders_scale_y
-    if self.oni_sliders_scale_z_lock == True:
+    if self.oni_sliders_scale_z_lock:
         boneObj.scale[2] = 1 + self.oni_sliders_scale_y
 
 
 def update_scale_z(self, context):
-    if props["terminate"] == True:
+    if props["terminate"]:
         print("Terminating recursion")
         props["terminate"] = False
         return
     armObj = bpy.context.selected_objects[0]
     boneObj = armObj.pose.bones[self.name]
     boneObj.scale[2] = 1 + self.oni_sliders_scale_z
-    if self.oni_sliders_scale_x_lock == True:
+    if self.oni_sliders_scale_x_lock:
         boneObj.scale[0] = 1 + self.oni_sliders_scale_z
-    if self.oni_sliders_scale_y_lock == True:
+    if self.oni_sliders_scale_y_lock:
         boneObj.scale[1] = 1 + self.oni_sliders_scale_z
 
 
@@ -165,8 +165,8 @@ def reset(boneObj):
 # Record and then set the inherit_scale property of all data bones in this rig.
 # UPDATE: added a matrix property to the bones.
 def set_rig(armObj=None):
-    if armObj == None:
-        if props["this_rig"] == None:
+    if armObj is None:
+        if props["this_rig"] is None:
             return
         armObj = props["this_rig"]
         if utils.is_valid(armObj) == False:
@@ -201,8 +201,8 @@ def restore_rig(armObj=None):
     # If I enter this function with armObj set to False it means that I probably ran from the
     # updater that closed the menu.  In that case I find the object from props['last_rig'] if it
     # exists and I restore from that.
-    if armObj == None:
-        if props["last_rig"] == None:
+    if armObj is None:
+        if props["last_rig"] is None:
             return
         armObj = props["last_rig"]
         if utils.is_valid(armObj) == False:

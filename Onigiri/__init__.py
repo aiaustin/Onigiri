@@ -18,12 +18,8 @@ print(" * OnigiriMotionHipCorrectionEnd : Disabled")
 print(" * OnigiriMotionHipCorrectionReset : Disabled")
 print(" * OnigiriOnemapReverse : Not used yet, see OnigiriInheritReverseMap")
 print(" * Shape importer disabled, serves no user purpose, see (Body Shop)")
-print(
-    " * This old class has been disabled, watch for bugs: CharacterConverterExpandMapper"
-)
-print(
-    " * Bulk animation exporter: export_mapped_animation needs work, see (export_retargeted_animation) instead"
-)
+print(" * This old class has been disabled, watch for bugs: CharacterConverterExpandMapper")
+print(" * Bulk animation exporter: export_mapped_animation needs work, see (export_retargeted_animation) instead")
 
 import re
 import os
@@ -120,9 +116,7 @@ from . import visible
 from . import sliders
 
 if 1 == 0:
-    reload_my_important_modules = [
-        template_editor,
-    ]
+    reload_my_important_modules = [template_editor,]
     for m in reload_my_important_modules:
         importlib.reload(m)
     from .template_editor import *
@@ -955,7 +949,7 @@ def rebind(arm):
                     bpy.ops.object.modifier_apply(modifier=mod)
                     print("Success for Blender 2.9")
                 except:
-                    if bpy.data.objects[mesh].select_get() == False:
+                    if not bpy.data.objects[mesh].select_get():
                         print("init::An important object could not be selected:", mesh)
                     print(
                         "init::Internal Error 502 - Blender 2.9 alternative didn't work, this should not happen, is the object selectable?"
@@ -1058,7 +1052,7 @@ class OnigiriSlidersProperties(bpy.types.PropertyGroup):
         armObj = utils.rig_is_selected()
         if armObj != False:
             if self.sliders_rig_display_stick:
-                if armObj.get("oni_sliders_display_type") == None:
+                if armObj.get("oni_sliders_display_type") is None:
                     armObj["oni_sliders_display_type"] = armObj.data.display_type
                 armObj.data.display_type = "STICK"
 
@@ -1191,7 +1185,7 @@ class OnigiriSlidersStore(bpy.types.Operator):
 
         for armObj in rigs:
             mesh = rigutils.get_associated_mesh
-            if mesh == False:
+            if not mesh:
                 continue
             for o in mesh:
                 o["oni_sliders_mesh"] = o.data.copy()
@@ -1244,7 +1238,7 @@ class OnigiriSlidersRestore(bpy.types.Operator):
 
         for armObj in rigs:
             mesh = rigutils.get_associated_mesh(armObj)
-            if mesh == False:
+            if not mesh:
                 continue
 
             for meshObj in mesh:
@@ -1263,7 +1257,7 @@ class OnigiriSlidersRestore(bpy.types.Operator):
             bpy.ops.object.mode_set(mode="EDIT")
             for boneObj in armObj.data.edit_bones:
 
-                if boneObj.get("oni_sliders_matrix_local") == None:
+                if boneObj.get("oni_sliders_matrix_local") is None:
                     print("Nothing stored, skipping (Restore)")
                     break
                 matrix = mathutils.Matrix(boneObj["oni_sliders_matrix_local"])
@@ -1341,9 +1335,9 @@ class OnigiriSlidersApply(bpy.types.Operator):
             return {"FINISHED"}
 
         for o in mesh:
-            if o.get("oni_sliders_mesh") == None:
+            if o.get("oni_sliders_mesh") is None:
                 o["oni_sliders_mesh"] = o.data.copy()
-            if o.get("oni_sliders_matrix_world") == None:
+            if o.get("oni_sliders_matrix_world") is None:
                 o["oni_sliders_matrix_world"] = o.matrix_world.copy()
 
         if 1 == 0:
@@ -1414,7 +1408,7 @@ class OnigiriSlidersMatch(bpy.types.Operator):
         if len(bpy.context.selected_pose_bones) == 0:
             return False
 
-        if o.get("onigiri") == None:
+        if o.get("onigiri") is None:
             return False
         return True
 
@@ -1640,7 +1634,7 @@ class OnigiriCharacterConverterLoadMap(bpy.types.Operator, ImportHelper):
         oni_onemap = bpy.context.scene.oni_onemap
 
         arm = utils.has_armature(report=True)
-        if arm == False:
+        if not arm:
             print(
                 "Map: No qualified armature was found, do you have multiple rigs targeted?"
             )
@@ -1648,7 +1642,7 @@ class OnigiriCharacterConverterLoadMap(bpy.types.Operator, ImportHelper):
             return {"FINISHED"}
 
         mesh = rigutils.get_mesh(arm)
-        if mesh == False:
+        if not mesh:
             print(
                 "Map returns from rigutils.get_mesh: No qualified mesh was found, this may be a bug?"
             )
@@ -1767,7 +1761,7 @@ class OnigiriCharacterConverter(bpy.types.Operator):
         oni_cc = bpy.context.window_manager.oni_cc
 
         armObj = utils.has_armature()
-        if armObj == False:
+        if not armObj:
             print(
                 "Convert: No qualified armature was found, do you have multiple rigs targeted?"
             )
@@ -1792,7 +1786,7 @@ class OnigiriCharacterConverter(bpy.types.Operator):
         utils.update()
 
         mesh = rigutils.get_associated_mesh(armObj, report=True)
-        if mesh == False:
+        if not mesh:
             print(
                 "Convert returns from rigutils.get_associated_mesh: No qualified mesh was found, this may be a bug?"
             )
@@ -1807,21 +1801,21 @@ class OnigiriCharacterConverter(bpy.types.Operator):
             for g in o.vertex_groups:
                 g.lock_weight = False
 
-        if armObj.get("onigiri_converted") != None:
+        if armObj.get("onigiri_converted") is not None:
             txt = "Armature converted already: " + "[" + armObj.name + "]"
             popup(txt, "Error", "ERROR")
             return {"FINISHED"}
 
         state = utils.get_state()
 
-        if armObj.get("oni_onemap_rename") == None:
+        if armObj.get("oni_onemap_rename") is None:
             print("No map on the rig")
             popup("No map available", "Error", "ERROR")
             utils.set_state(state)
             return {"FINISHED"}
 
         result = rigutils.check_maps(armature=armObj, report=False)
-        if result == False:
+        if not result:
             print("The map contained on the rig is not compatible")
             popup("Incompatible map, see console", "Error", "ERROR")
             utils.set_state(state)
@@ -1829,17 +1823,17 @@ class OnigiriCharacterConverter(bpy.types.Operator):
 
         rename_map = armObj["oni_onemap_rename"].to_dict()
         rename_original = armObj["oni_onemap_rename"].to_dict()
-        if armObj.get("oni_onemap_reskin") != None:
+        if armObj.get("oni_onemap_reskin") is not None:
             reskin_map = armObj["oni_onemap_reskin"].to_dict()
             reskin_original = armObj["oni_onemap_reskin"].to_dict()
         else:
             reskin_map = {}
             reskin_original = {}
-        if armObj.get("oni_onemap_pose") != None:
+        if armObj.get("oni_onemap_pose") is not None:
             pose_map = armObj["oni_onemap_pose"].to_dict()
         else:
             pose_map = {}
-        if armObj.get("oni_onemap_code") != None:
+        if armObj.get("oni_onemap_code") is not None:
             code_map = armObj["oni_onemap_code"].to_dict()
         else:
             code_map = {}
@@ -2170,13 +2164,13 @@ class OnigiriCharacterConverter(bpy.types.Operator):
             print("Some vertex groups were left over that were unidentified...")
             for g in bad_groups:
                 print(" *", g)
-            if oni_cc.remove_unknown == False:
+            if not oni_cc.remove_unknown:
                 print(
                     "You have (Remove Unknown) disabled.  You may wish to enable this to improve your condition"
                 )
             else:
                 print("You have (Remove Unknown) enabled so these groups were removed.")
-            if oni_cc.remove_unused == False:
+            if not oni_cc.remove_unused:
                 print(
                     "You may also wish to use this in combination with (Remove Unused)."
                 )
@@ -2239,7 +2233,7 @@ class OnigiriCharacterConverterPanel(bpy.types.Panel):
             if o.type == "ARMATURE":
                 arms.append(o)
         if len(arms) == 1:
-            if arms[0].get("oni_onemap_rename") != None:
+            if arms[0].get("oni_onemap_rename") is not None:
                 oni_onemap_rename_text = "Armature contains a map!"
                 oni_onemap_rename_icon = "bone_black_red"
         row.prop(
@@ -2387,7 +2381,7 @@ class OnigiriRigsViewBones(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if bpy.context.active_object == None:
+        if bpy.context.active_object is None:
             return False
         if bpy.context.active_object.type != "ARMATURE":
             return False
@@ -2430,14 +2424,14 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
         oni_onemap = bpy.context.scene.oni_onemap
         if oni_onemap.onemap_platform_opensim:
             oni_onemap["onemap_platform_other"] = False
-        if oni_onemap.onemap_platform_opensim == False:
+        if not oni_onemap.onemap_platform_opensim:
             oni_onemap["onemap_platform_other"] = True
 
     def update_onemap_platform_other(self, context):
         oni_onemap = bpy.context.scene.oni_onemap
         if oni_onemap.onemap_platform_other:
             oni_onemap["onemap_platform_opensim"] = False
-        if oni_onemap.onemap_platform_other == False:
+        if not oni_onemap.onemap_platform_other:
             oni_onemap["onemap_platform_opensim"] = True
 
     onemap_platform_opensim: bpy.props.BoolProperty(
@@ -2527,7 +2521,7 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
 
     def update_onemap_view_reskin(self, context):
         oni_onemap = bpy.context.scene.oni_onemap
-        if oni_onemap.onemap_view_reskin == False:
+        if not oni_onemap.onemap_view_reskin:
             oni_onemap["onemap_view_reskin"] = True
             onemap.props["view_reskin_bones"] = ""
 
@@ -2559,7 +2553,7 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
             print("Reskin toggled to True")
             onemap.props["reskin_bone"] = onemap.props["input_bone"]
 
-        if self.onemap_reskin == False:
+        if not self.onemap_reskin:
 
             bpy.ops.onigiri.onemap_reskin()
 
@@ -2585,7 +2579,7 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
             onemap.props["move_bone"] = in_bone
             inRig.data.collections["Move"].assign(inRig.pose.bones[in_bone])            
 
-        if self.onemap_move == False:
+        if not self.onemap_move:
             bpy.ops.onigiri.onemap_move()
 
     onemap_reskin: bpy.props.BoolProperty(
@@ -2628,8 +2622,8 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
                 oni_onemap.onemap_message = "Both objects must be armatures"
                 return False
             if (
-                o.get("oni_onemap_director") == None
-                and o.get("oni_onemap_actor") == None
+                o.get("oni_onemap_director") is None
+                and o.get("oni_onemap_actor") is None
             ):
                 oni_onemap.onemap_message = "Rig error, cyclic match not found!"
                 return False
@@ -2643,7 +2637,7 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
         bone_name = onemap.props["group_input_bone"]
 
         inRig = onemap.get_director(armature=bpy.context.selected_objects[0].name)
-        if inRig == False:
+        if not inRig:
             if onemap.props["HALT"]:
                 return False
             print(
@@ -2673,9 +2667,9 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
 
     def trigger_onemap_update_map(self):
         Rig = bpy.context.selected_objects[0]
-        if Rig.get("oni_onemap_actor") == None:
+        if Rig.get("oni_onemap_actor") is None:
             inRig = Rig.get("oni_onemap_director")
-            if inRig == None:
+            if inRig is None:
                 print(
                     "We have a Houston, there's no inRig when triggering the map updater"
                 )
@@ -2684,7 +2678,7 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
         else:
             inRig = Rig
             outRig = inRig.get("oni_onemap_actor")
-            if outRig == None:
+            if outRig is None:
                 print(
                     "We have a Houston, the inRig was identifed but contains no usable outRig"
                 )
@@ -2754,7 +2748,7 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
     def update_onemap_follow(self, context):
         selected = bpy.context.selected_objects
         inRig = onemap.get_director(armature=selected[0].name)
-        if inRig == False:
+        if not inRig:
             self["onemap_follow"] = not self.onemap_follow
             return
         outRig = inRig["oni_onemap_actor"]
@@ -2780,7 +2774,7 @@ class OnigiriOneMapRemoveMap(bpy.types.Operator):
         if len(bpy.context.selected_objects) != 1:
             return False
         o = bpy.context.selected_objects[0]
-        if o.get("oni_onemap_rename") == None or o.get("oni_onemap_rename") == None:
+        if o.get("oni_onemap_rename") is None or o.get("oni_onemap_rename") is None:
             return False
         return True
 
@@ -2818,7 +2812,7 @@ class OnigiriOnemapReverse(bpy.types.Operator):
         if len(bpy.context.selected_objects) != 1:
             return False
         o = bpy.context.selected_objects[0]
-        if o.get("oni_onemap_rename") == None:
+        if o.get("oni_onemap_rename") is None:
             return False
         return True
 
@@ -2875,16 +2869,16 @@ class OnigiriOneMapNukeSelected(bpy.types.Operator):
         oni_onemap = bpy.context.scene.oni_onemap
 
         inRig = onemap.get_director(armature=bpy.context.selected_objects[0].name)
-        if inRig == False:
+        if not inRig:
             print("There seems to be a wrong rig selected.")
             popup("Bad rig selection", "Error", "ERROR")
             return {"FINISHED"}
 
         oni_onemap.onemap_nuke_selected = False
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = dict()
-        if inRig.get("oni_onemap_reskin") == None:
+        if inRig.get("oni_onemap_reskin") is None:
             inRig["oni_onemap_reskin"] = dict()
 
         outRig = inRig["oni_onemap_actor"]
@@ -2981,7 +2975,7 @@ class OnigiriOneMapMesh(bpy.types.Operator):
     def execute(self, context):
         oni_snap = bpy.context.window_manager.oni_snap
         inRig = onemap.get_director(armature=bpy.context.selected_objects[0].name)
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, this is a programming error")
             return {"FINISHED"}
 
@@ -3017,7 +3011,7 @@ class OnigiriOneMapBones(bpy.types.Operator):
     def execute(self, context):
         oni_snap = bpy.context.window_manager.oni_snap
         inRig = onemap.get_director(armature=bpy.context.selected_objects[0].name)
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, this is a programming error")
             return {"FINISHED"}
         outRig = inRig["oni_onemap_actor"]
@@ -3046,18 +3040,18 @@ class OnigiriOneMapReskinToParent(bpy.types.Operator):
     def poll(cls, context):
         oni_onemap = bpy.context.scene.oni_onemap
         o = bpy.context.active_object
-        if o == None:
+        if o is None:
             return False
         if o.type != "ARMATURE":
             return False
-        if o.get("oni_onemap_rename") == None:
+        if o.get("oni_onemap_rename") is None:
             return False
         if bpy.context.mode != "POSE":
             return False
         selected = bpy.context.selected_pose_bones
         if len(selected) != 1:
             return False
-        if selected[0].parent == None:
+        if selected[0].parent is None:
             return False
         if selected[0].parent.name not in o["oni_onemap_rename"]:
             return False
@@ -3101,7 +3095,7 @@ class OnigiriOneMapBonesMap(bpy.types.Operator):
             return False
         if arms < 2:
             return False
-        if o.get("oni_onemap_director") == None and o.get("oni_onemap_actor") == None:
+        if o.get("oni_onemap_director") is None and o.get("oni_onemap_actor") is None:
             return False
         if onemap.props["input_bone"] == "" or onemap.props["output_bone"] == "":
             return False
@@ -3117,16 +3111,16 @@ class OnigiriOneMapBonesMap(bpy.types.Operator):
         oni_onemap = bpy.context.scene.oni_onemap
 
         inRig = onemap.get_director(armature=bpy.context.selected_objects[0].name)
-        if inRig == False:
+        if not inRig:
             print(
                 "Something is wrong with your state, I was unable to find the input rig to map your bones"
             )
             popup("Fatal Error, check System Console", "Fatal Error", "ERROR")
             return {"FINISHED"}
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = dict()
-        if inRig.get("oni_onemap_reskin") == None:
+        if inRig.get("oni_onemap_reskin") is None:
             inRig["oni_onemap_reskin"] = dict()
 
         outRig = inRig["oni_onemap_actor"]
@@ -3145,7 +3139,7 @@ class OnigiriOneMapBonesMap(bpy.types.Operator):
                 print("Removing old key", bone, "for output", out_bone)
                 del rename_map[bone]
                 old_reskin = reskin_map.pop(bone, [])
-        if reskin_map.get(in_bone) == None:
+        if reskin_map.get(in_bone) is None:
             reskin_map[in_bone] = old_reskin
         else:
             reskin_map[in_bone].extend(old_reskin)
@@ -3203,7 +3197,7 @@ class OnigiriOneMapRemoveInputBone(bpy.types.Operator):
         if arms < 2:
             return False
 
-        if o.get("oni_onemap_director") == None and o.get("oni_onemap_actor") == None:
+        if o.get("oni_onemap_director") is None and o.get("oni_onemap_actor") is None:
             return False
 
         if onemap.props["input_bone"] == "":
@@ -3220,16 +3214,16 @@ class OnigiriOneMapRemoveInputBone(bpy.types.Operator):
         oni_onemap = bpy.context.scene.oni_onemap
 
         inRig = onemap.get_director(armature=bpy.context.selected_objects[0].name)
-        if inRig == False:
+        if not inRig:
             print(
                 "Something is wrong with your state, I was unable to find the input rig to map your bones"
             )
             popup("Fatal Error, check System Console", "Fatal Error", "ERROR")
             return {"FINISHED"}
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = dict()
-        if inRig.get("oni_onemap_reskin") == None:
+        if inRig.get("oni_onemap_reskin") is None:
             inRig["oni_onemap_reskin"] = dict()
 
         outRig = inRig["oni_onemap_actor"]
@@ -3299,7 +3293,7 @@ class OnigiriOneMapRemoveOutputBone(bpy.types.Operator):
         if arms < 2:
             return False
 
-        if o.get("oni_onemap_director") == None and o.get("oni_onemap_actor") == None:
+        if o.get("oni_onemap_director") is None and o.get("oni_onemap_actor") is None:
             return False
 
         if onemap.props["output_bone"] == "":
@@ -3316,16 +3310,16 @@ class OnigiriOneMapRemoveOutputBone(bpy.types.Operator):
         oni_onemap = bpy.context.scene.oni_onemap
 
         inRig = onemap.get_director(armature=bpy.context.selected_objects[0].name)
-        if inRig == False:
+        if not inRig:
             print(
                 "Something is wrong with your state, I was unable to find the input rig to map your bones"
             )
             popup("Fatal Error, check System Console", "Fatal Error", "ERROR")
             return {"FINISHED"}
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = dict()
-        if inRig.get("oni_onemap_reskin") == None:
+        if inRig.get("oni_onemap_reskin") is None:
             inRig["oni_onemap_reskin"] = dict()
 
         outRig = inRig["oni_onemap_actor"]
@@ -3399,9 +3393,9 @@ class OnigiriOneMapReskin(bpy.types.Operator):
         inRig = onemap.get_director(armature=bpy.context.selected_objects[0].name)
         outRig = inRig["oni_onemap_actor"]
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = {}
-        if inRig.get("oni_onemap_reskin") == None:
+        if inRig.get("oni_onemap_reskin") is None:
             inRig["oni_onemap_reskin"] = {}
 
         oni_onemap_rename = inRig["oni_onemap_rename"].to_dict()
@@ -3455,9 +3449,9 @@ class OnigiriOneMapMove(bpy.types.Operator):
 
         inRig = onemap.get_director(armature=bpy.context.selected_objects[0].name)
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = dict()
-        if inRig.get("oni_onemap_reskin") == None:
+        if inRig.get("oni_onemap_reskin") is None:
             inRig["oni_onemap_reskin"] = dict()
 
         outRig = inRig["oni_onemap_actor"]
@@ -3636,7 +3630,7 @@ class OnigiriOneMapAction(bpy.types.Operator):
         if bpy.context.mode != "OBJECT":
             bpy.ops.object.mode_set(mode="OBJECT")
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = {}
 
         frame_start, frame_end = animutils.get_frame_range(inRig, start=True)
@@ -3651,8 +3645,8 @@ class OnigiriOneMapAction(bpy.types.Operator):
         mesh = [o for o in inRig.children if o.type == "MESH"]
         inRig["oni_onemap_mesh"] = mesh
 
-        if inRig.animation_data != None:
-            if inRig.animation_data.action != None:
+        if inRig.animation_data is not None:
+            if inRig.animation_data.action is not None:
                 inRig["oni_onemap_action"] = inRig.animation_data.action.name
 
         for o in mesh:
@@ -3708,9 +3702,9 @@ class OnigiriOneMapAction(bpy.types.Operator):
             onemap.attach_proxy(inRig=inRig, outRig=outRig)
             utils.set_state(state)
 
-            if inRig.get("oni_onemap_rename") == None:
+            if inRig.get("oni_onemap_rename") is None:
                 inRig["oni_onemap_rename"] = {}
-            if inRig.get("oni_onemap_reskin") == None:
+            if inRig.get("oni_onemap_reskin") is None:
                 inRig["oni_onemap_reskin"] = {}
 
             for bone in inRig["oni_onemap_rename"]:
@@ -3812,7 +3806,7 @@ class OnigiriOneMapOutputPick(bpy.types.Operator):
 
         onemap.props["target"] = "other"
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = {}
         for bone in inRig["oni_onemap_rename"]:
             if bone in outRig.data.bones:
@@ -3846,13 +3840,13 @@ class OnigiriOneMapReset(bpy.types.Operator):
         armObj = bpy.context.selected_objects[0]
 
         inRig = onemap.get_director(armature=armObj.name)
-        if inRig == False:
+        if not inRig:
             print("No matching rig, attempting to reset other data anyway...")
 
         else:
 
             outRig = inRig.get("oni_onemap_actor")
-            if outRig != None:
+            if outRig is not None:
                 if outRig.name in bpy.context.scene.objects:
                     outRig.pop("oni_onemap_director", "")
             inRig.pop("oni_onemap_actor", "")
@@ -3870,7 +3864,7 @@ class OnigiriOneMapReset(bpy.types.Operator):
             o.select_set(False)
 
         if inRig != False:
-            if inRig.get("oni_onemap_proxy") != None:
+            if inRig.get("oni_onemap_proxy") is not None:
                 proxyRig = inRig["oni_onemap_proxy"]
                 proxyRig.pop("oni_onemap_proxy", "")
                 if utils.is_valid(proxyRig):
@@ -3886,7 +3880,7 @@ class OnigiriOneMapReset(bpy.types.Operator):
 
             for boneObj in inRig.pose.bones:
                 cname = boneObj.get("oni_onemap_cname")
-                if cname == None:
+                if cname is None:
                     print(
                         "Controllers are missing on",
                         inRig.name,
@@ -3922,17 +3916,17 @@ class OnigiriOneMapReset(bpy.types.Operator):
 
             action = inRig.get("oni_onemap_action")
 
-            if action != None:
-                if inRig.animation_data == None:
+            if action is not None:
+                if inRig.animation_data is None:
                     inRig.animation_data_create()
 
                 action = bpy.data.actions.get(action)
-                if action != None:
+                if action is not None:
                     inRig.animation_data.action = action
 
                 if 1 == 0:
 
-                    if inRig.data.bones[0].get("matrix_local") != None:
+                    if inRig.data.bones[0].get("matrix_local") is not None:
 
                         inRig.select_set(True)
                         utils.activate(inRig)
@@ -4051,13 +4045,13 @@ class OnigiriOnemapMapLoad(bpy.types.Operator, ImportHelper):
                 bone_map[tbone] = sbone
             mapObj["oni_onemap_rename"] = bone_map
             mapObj["oni_onemap_reskin"] = reskin
-        if pose_map != None:
+        if pose_map is not None:
             mapObj["oni_onemap_pose"] = pose_map
             print("Pose map loaded!")
-        if code_map != None:
+        if code_map is not None:
             mapObj["oni_onemap_code"] = code_map
             print("Code map loaded!")
-        if lock_map != None:
+        if lock_map is not None:
             mapObj["oni_onemap_lock"] = lock_map
             print("Lock map loaded!")
 
@@ -4093,7 +4087,7 @@ class OnigiriOnemapMapLoad(bpy.types.Operator, ImportHelper):
 
             if oni_onemap.onemap_load_pose:
                 oni_onemap_pose = armObj.get("oni_onemap_pose")
-                if oni_onemap_pose == None:
+                if oni_onemap_pose is None:
                     print("No stored pose")
                 else:
                     for bone in pose_map:
@@ -4163,7 +4157,7 @@ class OnigiriOnemapMapSave(bpy.types.Operator, ExportHelper):
 
         inRig = bpy.context.selected_objects[0]
 
-        if inRig == False:
+        if not inRig:
             print("The input rig was unattainable but checking this one...")
 
         inRig = bpy.context.selected_objects[0]
@@ -4185,7 +4179,7 @@ class OnigiriOnemapMapSave(bpy.types.Operator, ExportHelper):
             return {"FINISHED"}
         print("Attempting to export map...")
         result = onemap.save_map(input=inRig, file=self.filepath)
-        if result == False:
+        if not result:
             print("Something weird happened when saving the map")
             popup("Something strange happened when saving", "Error", "ERROR")
 
@@ -4220,7 +4214,7 @@ class OnigiriOnemapMapApplyPose(bpy.types.Operator):
         inRig = bpy.context.selected_objects[0]
 
         oni_onemap_pose = inRig.get("oni_onemap_pose")
-        if oni_onemap_pose == None:
+        if oni_onemap_pose is None:
             print("No stored pose")
             popup("No stored pose", "Error", "ERROR")
             return {"FINISHED"}
@@ -4323,7 +4317,7 @@ class OnigiriOnemapMapRemovePrefix(bpy.types.Operator):
         if len(bpy.context.selected_objects) != 1:
             return False
         o = bpy.context.selected_objects[0]
-        if o.get("oni_onemap_rename") == None:
+        if o.get("oni_onemap_rename") is None:
             return False
         return True
 
@@ -4396,7 +4390,7 @@ class OnigiriOnemapMapRenameBones(bpy.types.Operator):
         all_bones = set(b.name for b in armObj.data.bones)
         for boneObj in armObj.data.bones:
             new_bone = utils.get_safe_name(names=all_bones, report=True)
-            if new_bone == False:
+            if not new_bone:
                 print(
                     "There was an error when processing a bone to acquire a unique name"
                 )
@@ -4617,7 +4611,7 @@ class OnigiriSnapProperties(bpy.types.PropertyGroup):
             oni_snap["snap_follow"] = False
         o = bpy.context.selected_objects[0]
         inRig = snap.get_director(armature=o.name)
-        if inRig == False:
+        if not inRig:
             oni_snap["snap_follow"] = False
             return
         oni_snap["snap_lead"] = False
@@ -4638,7 +4632,7 @@ class OnigiriSnapProperties(bpy.types.PropertyGroup):
             oni_snap["snap_lead"] = False
         o = bpy.context.selected_objects[0]
         inRig = snap.get_director(armature=o.name)
-        if inRig == False:
+        if not inRig:
             oni_snap["snap_lead"] = False
             return
         oni_snap["snap_follow"] = False
@@ -4656,13 +4650,13 @@ class OnigiriSnapProperties(bpy.types.PropertyGroup):
     def update_snap_symmetry_enabled(self, context):
         oni_snap = bpy.context.window_manager.oni_snap
 
-        if self.snap_symmetry_enabled == False:
-            if oni_snap.snap_symmetry_director == False:
+        if not self.snap_symmetry_enabled:
+            if not oni_snap.snap_symmetry_director:
                 snap.props["director_side_a"] = ""
                 snap.props["director_side_b"] = ""
                 snap.props["director_side_difference"] = ""
                 snap.props["director_symmetry_display"] = ""
-            if oni_snap.snap_symmetry_actor == False:
+            if not oni_snap.snap_symmetry_actor:
                 snap.props["actor_side_a"] = ""
                 snap.props["actor_side_b"] = ""
                 snap.props["actor_side_difference"] = ""
@@ -4689,7 +4683,7 @@ class OnigiriSnapProperties(bpy.types.PropertyGroup):
                 result = snap.get_difference(
                     snap.props["director_side_a"], snap.props["director_side_a"]
                 )
-                if result == False:
+                if not result:
                     print("The bones chosen were not compatible as a symmetric pair")
                     print(snap.props["director_side_a"])
                     print(snap.props["director_side_b"])
@@ -4717,7 +4711,7 @@ class OnigiriSnapProperties(bpy.types.PropertyGroup):
                 result = snap.get_difference(
                     snap.props["director_side_a"], snap.props["director_side_a"]
                 )
-                if result == False:
+                if not result:
                     print("The bones chosen were not compatible as a symmetric pair")
                     print(snap.props["actor_side_a"])
                     print(snap.props["actor_side_b"])
@@ -4775,7 +4769,7 @@ class OnigiriSnapProperties(bpy.types.PropertyGroup):
             self["snap_target"] = False
             return
 
-        if o.get("oni_snap_actor") != None or o.get("oni_snap_director") != None:
+        if o.get("oni_snap_actor") is not None or o.get("oni_snap_director") is not None:
             self["snap_target"] = not state
             return
         if self.snap_target:
@@ -4824,11 +4818,11 @@ class OnigiriSnapMesh(bpy.types.Operator):
     def execute(self, context):
         oni_snap = bpy.context.window_manager.oni_snap
         inRig = snap.get_director(armature=bpy.context.active_object.name)
-        if inRig == False:
+        if not inRig:
 
             print("No snap director, trying motion director")
             inRig = motion.get_director(bpy.context.active_object)
-            if inRig == False:
+            if not inRig:
                 print("The Director rig is not available, trying selected rig.")
                 inRig = bpy.context.selected_objects[0]
 
@@ -4867,7 +4861,7 @@ class OnigiriSnapViewActorBones(bpy.types.Operator):
     def execute(self, context):
         oni_snap = bpy.context.window_manager.oni_snap
         inRig = snap.get_director(armature=bpy.context.selected_objects[0].name)
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, this is a programming error")
             return {"FINISHED"}
         outRig = inRig["oni_snap_actor"]
@@ -5000,7 +4994,7 @@ class OnigiriSnapViewMappedBones(bpy.types.Operator):
         armObj = bpy.context.selected_objects[0]
 
         inRig = snap.get_director(armObj)
-        if inRig == False:
+        if not inRig:
             print("There's no director so there's nothing engaged to hide")
             popup(
                 "I couldn't find the director, is the mapper engaged?", "Error", "ERROR"
@@ -5011,7 +5005,7 @@ class OnigiriSnapViewMappedBones(bpy.types.Operator):
 
         print("Found outRig:", outRig.name)
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             rename_map = {}
         else:
             rename_map = inRig.get("oni_onemap_rename")
@@ -5057,7 +5051,7 @@ class OnigiriOnemapViewActorBones(bpy.types.Operator):
 
     def execute(self, context):
         inRig = onemap.get_director(armature=bpy.context.selected_objects[0].name)
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, this is a programming error")
             return {"FINISHED"}
         outRig = inRig["oni_onemap_actor"]
@@ -5124,12 +5118,12 @@ class OnigiriSnapMapCollect(bpy.types.Operator):
     def execute(self, context):
         oni_snap = bpy.context.window_manager.oni_snap
         inRig = snap.get_director(armature=bpy.context.active_object.name)
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, this is a programming error")
             return {"FINISHED"}
         outRig = inRig["oni_snap_actor"]
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = {}
 
         director_bone = snap.props["director_bone"]
@@ -5146,7 +5140,7 @@ class OnigiriSnapMapCollect(bpy.types.Operator):
             return {"FINISHED"}
 
         cBone = inRig.pose.bones[director_bone]
-        while cBone != None:
+        while cBone is not None:
             director_bones_list.append(cBone.name)
             cBone = cBone.parent
 
@@ -5154,7 +5148,7 @@ class OnigiriSnapMapCollect(bpy.types.Operator):
         for bone in reversed(director_bones_list):
 
             if oni_snap.snap_deformable:
-                if inRig.data.bones[bone].use_deform == False:
+                if not inRig.data.bones[bone].use_deform:
                     continue
             director_bones[bone] = ""
 
@@ -5191,7 +5185,7 @@ class OnigiriSnapMapCollect(bpy.types.Operator):
                 director_bone = bone
                 break
 
-            if director_bone == None:
+            if director_bone is None:
                 break
             snap.props["actor_bone"] = actor_bone
             snap.props["director_bone"] = director_bone
@@ -5203,7 +5197,7 @@ class OnigiriSnapMapCollect(bpy.types.Operator):
         snap.props["director_bone"] = ""
 
         if oni_snap.snap_fill_next:
-            if director_bone != None:
+            if director_bone is not None:
                 if inRig.pose.bones[director_bone].parent:
                     boneObj = inRig.pose.bones[director_bone].parent
                     bone = boneObj.name
@@ -5239,12 +5233,12 @@ class OnigiriSnapMapDeposit(bpy.types.Operator):
     def execute(self, context):
         oni_snap = bpy.context.window_manager.oni_snap
         inRig = snap.get_director(armature=bpy.context.active_object.name)
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, this is a programming error")
             return {"FINISHED"}
         outRig = inRig["oni_snap_actor"]
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = {}
 
         actor_bones = []
@@ -5253,10 +5247,10 @@ class OnigiriSnapMapDeposit(bpy.types.Operator):
         for boneObj in bpy.context.selected_pose_bones:
             if boneObj.id_data == outRig:
 
-                if outRig.get("onigiri") == None:
+                if outRig.get("onigiri") is None:
 
                     if oni_snap.snap_deformable:
-                        if boneObj.bone.use_deform == False:
+                        if not boneObj.bone.use_deform:
                             print("Skipping non-deformabone bone:", boneObj.name)
                             continue
                 actor_bones.append(boneObj.name)
@@ -5272,7 +5266,7 @@ class OnigiriSnapMapDeposit(bpy.types.Operator):
         for bone in reversed(director_bones_list):
 
             if oni_snap.snap_deformable:
-                if inRig.data.bones[bone].use_deform == False:
+                if not inRig.data.bones[bone].use_deform:
                     continue
             director_bones[bone] = ""
 
@@ -5309,7 +5303,7 @@ class OnigiriSnapMapDeposit(bpy.types.Operator):
                 director_bone = bone
                 break
 
-            if director_bone == None:
+            if director_bone is None:
                 break
             snap.props["actor_bone"] = actor_bone
             snap.props["director_bone"] = director_bone
@@ -5322,7 +5316,7 @@ class OnigiriSnapMapDeposit(bpy.types.Operator):
 
         if 1 == 0:
 
-            if director_bone != None:
+            if director_bone is not None:
                 if inRig.pose.bones[director_bone].parent:
                     boneObj = inRig.pose.bones[director_bone].parent
                     bone = boneObj.name
@@ -5361,13 +5355,13 @@ class OnigiriSnapMapFill(bpy.types.Operator):
     def execute(self, context):
         oni_snap = bpy.context.window_manager.oni_snap
         inRig = snap.get_director(armature=bpy.context.active_object.name)
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, this is a programming error")
             return {"FINISHED"}
         outRig = inRig["oni_snap_actor"]
         relations = outRig["oni_snap_relations"]
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = {}
 
         actor_bone = snap.props["actor_bone"]
@@ -5385,7 +5379,7 @@ class OnigiriSnapMapFill(bpy.types.Operator):
             cbone = pbone
 
         cBone = inRig.pose.bones[director_bone]
-        while cBone != None:
+        while cBone is not None:
             director_bones_list.append(cBone.name)
             cBone = cBone.parent
 
@@ -5393,7 +5387,7 @@ class OnigiriSnapMapFill(bpy.types.Operator):
         for bone in reversed(director_bones_list):
 
             if oni_snap.snap_deformable:
-                if inRig.data.bones[bone].use_deform == False:
+                if not inRig.data.bones[bone].use_deform:
                     print("Skipping non deform bone:", bone)
                     continue
             director_bones[bone] = ""
@@ -5418,7 +5412,7 @@ class OnigiriSnapMapFill(bpy.types.Operator):
 
             if oni_snap.snap_fill_protect:
                 if actor_bone in rename_rev:
-                    if oni_snap.snap_fill_cross == False:
+                    if not oni_snap.snap_fill_cross:
                         break
                     continue
 
@@ -5430,13 +5424,13 @@ class OnigiriSnapMapFill(bpy.types.Operator):
 
                 if oni_snap.snap_fill_protect:
                     if bone in rename_map:
-                        if oni_snap.snap_fill_cross == False:
+                        if not oni_snap.snap_fill_cross:
                             break
                         continue
                 director_bone = bone
                 break
 
-            if director_bone == None:
+            if director_bone is None:
                 break
             snap.props["actor_bone"] = actor_bone
             snap.props["director_bone"] = director_bone
@@ -5451,7 +5445,7 @@ class OnigiriSnapMapFill(bpy.types.Operator):
         snap.props["director_bone"] = ""
 
         if oni_snap.snap_fill_next:
-            if director_bone != None:
+            if director_bone is not None:
                 if inRig.pose.bones[director_bone].parent:
                     boneObj = inRig.pose.bones[director_bone].parent
                     bone = boneObj.name
@@ -5488,14 +5482,14 @@ class OnigiriSnapSelectEndBones(bpy.types.Operator):
     def execute(self, context):
         oni_snap = bpy.context.window_manager.oni_snap
         inRig = snap.get_director(armature=bpy.context.active_object.name)
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, trying selected rig.")
             inRig = bpy.context.selected_objects[0]
         outRig = inRig["oni_snap_actor"]
 
         relations = outRig.get("oni_snap_relations", None)
 
-        if relations == None:
+        if relations is None:
             print("Programming error possibly, no relationship data is available")
             popup(
                 "Relationship data missing, contact programmer",
@@ -5505,7 +5499,7 @@ class OnigiriSnapSelectEndBones(bpy.types.Operator):
             return {"FINISHED"}
 
         rename_map = inRig.get("oni_onemap_rename", {})
-        if inRig.get("oni_onemap_rename") != None:
+        if inRig.get("oni_onemap_rename") is not None:
             rename_map = inRig["oni_onemap_rename"].to_dict()
 
         rename_rev = {}
@@ -5557,14 +5551,14 @@ class OnigiriSnapDeselectNonEndBones(bpy.types.Operator):
     def execute(self, context):
         oni_snap = bpy.context.window_manager.oni_snap
         inRig = snap.get_director(armature=bpy.context.active_object.name)
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, trying selected rig.")
             inRig = bpy.context.selected_objects[0]
         outRig = inRig["oni_snap_actor"]
 
         relations = outRig.get("oni_snap_relations", None)
 
-        if relations == None:
+        if relations is None:
             print("Programming error possibly, no relationship data is available")
             popup(
                 "Relationship data missing, contact programmer",
@@ -5610,11 +5604,11 @@ class OnigiriSnapSelectVolumeBones(bpy.types.Operator):
 
         inRig = snap.get_director(armature=bpy.context.active_object.name)
 
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, trying selected rig.")
             inRig = bpy.context.selected_objects[0]
         outRig = inRig["oni_snap_actor"]
-        if outRig == None:
+        if outRig is None:
             print("Target is not available")
             popup("Target missing", "Error", "ERROR")
             return {"FINISHED"}
@@ -5652,11 +5646,11 @@ class OnigiriSnapSelectAttachBones(bpy.types.Operator):
 
         inRig = snap.get_director(armature=bpy.context.active_object.name)
 
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, trying selected rig.")
             inRig = bpy.context.selected_objects[0]
         outRig = inRig["oni_snap_actor"]
-        if outRig == None:
+        if outRig is None:
             print("Target is not available")
             popup("Target missing", "Error", "ERROR")
             return {"FINISHED"}
@@ -5691,7 +5685,7 @@ class OnigiriSnapSelectDirectorBone(bpy.types.Operator):
     def execute(self, context):
         oni_snap = bpy.context.window_manager.oni_snap
         inRig = snap.get_director(armature=bpy.context.active_object.name)
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, trying selected rig.")
             inRig = bpy.context.selected_objects[0]
         outRig = inRig["oni_snap_actor"]
@@ -5728,7 +5722,7 @@ class OnigiriSnapSelectActorBone(bpy.types.Operator):
     def execute(self, context):
         oni_snap = bpy.context.window_manager.oni_snap
         inRig = snap.get_director(armature=bpy.context.active_object.name)
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, trying selected rig.")
             inRig = bpy.context.selected_objects[0]
         outRig = inRig["oni_snap_actor"]
@@ -5764,12 +5758,12 @@ class OnigiriSnapMapAdd(bpy.types.Operator):
     def execute(self, context):
         oni_snap = bpy.context.window_manager.oni_snap
         inRig = snap.get_director(armature=bpy.context.active_object.name)
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, this is a programming error")
             return {"FINISHED"}
         outRig = inRig["oni_snap_actor"]
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = {}
 
         snap.props["undo"] = inRig["oni_onemap_rename"].to_dict()
@@ -5778,7 +5772,7 @@ class OnigiriSnapMapAdd(bpy.types.Operator):
         director_bone = snap.props["director_bone"]
 
         if oni_snap.snap_deformable:
-            if inRig.data.bones[director_bone].use_deform == False:
+            if not inRig.data.bones[director_bone].use_deform:
                 print(
                     "snap_deforable is enabled but use_deform is False:", director_bone
                 )
@@ -5816,12 +5810,12 @@ class OnigiriSnapMapRemove(bpy.types.Operator):
     def execute(self, context):
         oni_snap = bpy.context.window_manager.oni_snap
         inRig = snap.get_director(armature=bpy.context.active_object.name)
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, this is a programming error")
             return {"FINISHED"}
         outRig = inRig["oni_snap_actor"]
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = {}
 
         directors = []
@@ -5885,12 +5879,12 @@ class OnigiriSnapMapRemoveSingle(bpy.types.Operator):
     def execute(self, context):
         oni_snap = bpy.context.window_manager.oni_snap
         inRig = snap.get_director(armature=bpy.context.active_object.name)
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, this is a programming error")
             return {"FINISHED"}
         outRig = inRig["oni_snap_actor"]
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = {}
 
         rename_map = inRig["oni_onemap_rename"]
@@ -5930,12 +5924,12 @@ class OnigiriSnapMapUndo(bpy.types.Operator):
     def execute(self, context):
         oni_snap = bpy.context.window_manager.oni_snap
         inRig = snap.get_director(armature=bpy.context.active_object.name)
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available, this is a programming error")
             return {"FINISHED"}
         outRig = inRig["oni_snap_actor"]
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = {}
 
         rename_map = snap.props["undo"].copy()
@@ -6009,9 +6003,9 @@ class OnigiriSnapAction(bpy.types.Operator):
             return False
 
         inRig = snap.get_director(armature=bpy.context.selected_objects[0].name)
-        if inRig == False:
+        if not inRig:
             return True
-        if inRig.get("oni_snap_actor") != None:
+        if inRig.get("oni_snap_actor") is not None:
             return False
         return True
 
@@ -6041,7 +6035,7 @@ class OnigiriSnapAction(bpy.types.Operator):
             boneObj.use_connect = False
         bpy.ops.object.mode_set(mode="OBJECT")
 
-        if oni_snap.snap_target == False:
+        if not oni_snap.snap_target:
             outRig = rigutils.build_rig(rig_class="pos", rotate=True)
         else:
             inRig.select_set(False)
@@ -6095,7 +6089,7 @@ class OnigiriSnapAction(bpy.types.Operator):
             boneObj.parent = None
         bpy.ops.object.mode_set(mode="OBJECT")
 
-        if oni_snap.snap_target == False:
+        if not oni_snap.snap_target:
             for boneObj in outRig.data.bones:
                 if boneObj.name in volumes.vol_joints:
                     boneObj.hide = True
@@ -6293,14 +6287,14 @@ class OnigiriSnapReset(bpy.types.Operator):
         state = utils.get_state()
 
         inRig = snap.get_director(armature=armObj.name)
-        if inRig == False:
+        if not inRig:
             print("Nothing to do, can't find a pair, no Director")
             popup("Can't find an engaged set", "Error", "ERROR")
             utils.set_state(state)
             return {"FINISHED"}
 
         outRig = inRig.get("oni_snap_actor")
-        if outRig != None:
+        if outRig is not None:
             if outRig.name in bpy.context.scene.objects:
 
                 outRig.pop("oni_snap_director", "")
@@ -6317,7 +6311,7 @@ class OnigiriSnapReset(bpy.types.Operator):
             inRig.pop("oni_snap_display", "")
             inRig.show_in_front = inRig.pop("oni_show_in_front", True)
 
-        if outRig != None:
+        if outRig is not None:
             for o in bpy.context.selected_objects:
                 o.select_set(False)
 
@@ -6340,7 +6334,7 @@ class OnigiriSnapReset(bpy.types.Operator):
             for boneObj in outRig.pose.bones:
                 boneObj.matrix = mathutils.Matrix(recover_data[boneObj.name]["matrix"])
 
-            if oni_snap.snap_target == False:
+            if not oni_snap.snap_target:
                 outRig.select_set(True)
             else:
                 outRig.select_set(False)
@@ -6385,7 +6379,7 @@ class OnigiriSnapMapAcquire(bpy.types.Operator):
         else:
             print("Set does not contain a Director, loading map onto object instead")
 
-        if mapObj.get("targets") != None:
+        if mapObj.get("targets") is not None:
             target = mapObj["targets"][0]
             if target in bpy.context.scene.objects:
                 mapObj = obj[target]
@@ -6399,7 +6393,7 @@ class OnigiriSnapMapAcquire(bpy.types.Operator):
         mapObj.select_set(True)
         utils.activate(mapObj)
 
-        if mapObj.get("bone_map") == None:
+        if mapObj.get("bone_map") is None:
             print("No map to acquire")
             popup("No map to acquire", "Info", "INFO")
             return {"FINISHED"}
@@ -6486,7 +6480,7 @@ class OnigiriSnapMapApply(bpy.types.Operator, ImportHelper):
         oni_snap = bpy.context.window_manager.oni_snap
 
         mapObj = utils.has_armature(report=True)
-        if mapObj == False:
+        if not mapObj:
             print("-------------------------------------------------------------------")
             print("There's no qualified armature associated with the selected objects.")
             print("There may be too many armatures associated or none at all or there")
@@ -6622,13 +6616,13 @@ class OnigiriSnapMapLoad(bpy.types.Operator, ImportHelper):
                 bone_map[tbone] = sbone
             mapObj["oni_onemap_rename"] = bone_map
             mapObj["oni_onemap_reskin"] = reskin
-        if pose_map != None:
+        if pose_map is not None:
             mapObj["oni_onemap_pose"] = pose_map
             print("Pose map loaded!")
-        if code_map != None:
+        if code_map is not None:
             mapObj["oni_onemap_code"] = code_map
             print("Code map loaded!")
-        if lock_map != None:
+        if lock_map is not None:
             print("Lock map loaded!")
             mapObj["oni_onemap_lock"] = lock_map
 
@@ -6694,7 +6688,7 @@ class OnigiriSnapMapSave(bpy.types.Operator, ExportHelper):
 
     @classmethod
     def poll(cls, context):
-        if bpy.context.active_object == None:
+        if bpy.context.active_object is None:
             return False
         o = bpy.context.active_object
         rename_map = o.get("oni_onemap_rename", [])
@@ -6710,9 +6704,9 @@ class OnigiriSnapMapSave(bpy.types.Operator, ExportHelper):
         path = self.properties.filepath
 
         armObj = bpy.context.active_object
-        if armObj.get("oni_onemap_rename") == None:
+        if armObj.get("oni_onemap_rename") is None:
             inRig = snap.get_director(armature=armObj.name)
-            if inRig == False:
+            if not inRig:
                 print("Can't find a map to save")
                 popup("No available map to save", "Error", "ERROR")
                 return {"FINISHED"}
@@ -6720,7 +6714,7 @@ class OnigiriSnapMapSave(bpy.types.Operator, ExportHelper):
             inRig = armObj
 
         result = snap.save_map(input=inRig, file=self.filepath)
-        if result == False:
+        if not result:
             print("Something weird happened when saving the map")
             popup("Something strange happened when saving", "Error", "ERROR")
 
@@ -6746,7 +6740,7 @@ class OnigiriSnapConvert(bpy.types.Operator):
         if o.type != "ARMATURE":
             return False
         for boneObj in o.data.bones:
-            if boneObj.get("oni_name") != None:
+            if boneObj.get("oni_name") is not None:
                 return False
         return True
 
@@ -6755,7 +6749,7 @@ class OnigiriSnapConvert(bpy.types.Operator):
         armObj = bpy.context.selected_objects[0]
 
         rename_map = armObj.get("oni_onemap_rename")
-        if rename_map == None:
+        if rename_map is None:
             print("No map on the rig to use, load a map first or create one")
             popup("There's no map on the rig", "Error", "ERROR")
             return {"FINISHED"}
@@ -6817,7 +6811,7 @@ class OnigiriSnapConvertUndo(bpy.types.Operator):
         if o.type != "ARMATURE":
             return False
         for boneObj in o.data.bones:
-            if boneObj.get("oni_name") != None:
+            if boneObj.get("oni_name") is not None:
                 return True
         return False
 
@@ -6826,7 +6820,7 @@ class OnigiriSnapConvertUndo(bpy.types.Operator):
 
         for boneObj in armObj.data.bones:
             bone = boneObj.get("oni_name")
-            if bone != None:
+            if bone is not None:
                 boneObj.name = bone
                 del boneObj["oni_name"]
         print("Repair complete")
@@ -6882,19 +6876,19 @@ class OnigiriSnapExportMesh(bpy.types.Operator, ExportHelper):
         state = utils.get_state()
 
         arm, mesh = sim.get_sim_armature(objects=selected)
-        if arm == False:
+        if not arm:
             print("Not a sim object, testing for typical rig")
 
             arm, mesh = meshutils.get_one_armature(objects=selected)
             print("arm:", arm)
-            if arm == False:
+            if not arm:
                 print("There is no usable armature associated with the mesh")
                 popup("Armature failure, see console", "Error", "ERROR")
                 return {"FINISHED"}
 
         armObj = obj[arm]
 
-        if armObj.get("oni_onemap_rename") == None:
+        if armObj.get("oni_onemap_rename") is None:
             print("Can't find a map to use")
             popup("No available map to use", "Error", "ERROR")
             return {"FINISHED"}
@@ -6925,8 +6919,8 @@ class OnigiriSnapExportMesh(bpy.types.Operator, ExportHelper):
         frame_current = bpy.context.scene.frame_current
         for o in bpy.context.selected_objects:
             if o.type == "ARMATURE":
-                if o.animation_data != None:
-                    if o.animation_data.action != None:
+                if o.animation_data is not None:
+                    if o.animation_data.action is not None:
                         frame_start = o.animation_data.action.frame_range[0]
                         bpy.context.scene.frame_set(frame_start)
                         bpy.context.scene.frame_set(frame_current)
@@ -7658,7 +7652,7 @@ class OnigiriLoadGenericTemplate(bpy.types.Operator, ImportHelper):
                 continue
             template[container] = namespace[container]
 
-        if template != None:
+        if template is not None:
             onie["template_map_convert"] = {}
 
             onie["template_map_convert"] = template
@@ -7688,11 +7682,11 @@ class OnigiriSaveCCM(bpy.types.Operator, ExportHelper):
     @classmethod
     def poll(cls, context):
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.get("template_map_convert") == None:
+        if onie.get("template_map_convert") is None:
             return False
         if onie["template_map_convert"] == "":
             return False
-        if onie.get("map_type_convert") == None:
+        if onie.get("map_type_convert") is None:
             return False
         if onie["map_type_convert"] == "ccm":
             return False
@@ -7753,11 +7747,11 @@ class OnigiriSaveCTM(bpy.types.Operator, ExportHelper):
     @classmethod
     def poll(cls, context):
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.get("template_map_convert") == None:
+        if onie.get("template_map_convert") is None:
             return False
         if onie["template_map_convert"] == "":
             return False
-        if onie.get("map_type_convert") == None:
+        if onie.get("map_type_convert") is None:
             return False
         if onie["map_type_convert"] == "ctm":
             return False
@@ -7896,7 +7890,7 @@ class OnigiriLoadTemplates(bpy.types.Operator, ImportHelper):
                 print("No new code to process")
             else:
                 print("Loaded code:", code_map)
-                if onie.disable_map_code == False:
+                if not onie.disable_map_code:
                     print("... over write old code")
                     code_new = code_map
                 else:
@@ -7997,7 +7991,7 @@ class OnigiriLoadTemplates(bpy.types.Operator, ImportHelper):
             reskin_new = all_anchors
 
             pose_new = pose_map
-            if onie.disable_map_pose == False:
+            if not onie.disable_map_pose:
                 if len(pose_old) > 0:
                     for bone in pose_map:
                         pose_old[bone] = pose_map[bone]
@@ -8061,16 +8055,16 @@ class OnigiriSaveTemplates(bpy.types.Operator, ExportHelper):
         known_maps = {"template_map", "rename", "reskin", "pose", "code"}
 
         template = {}
-        if onie.get("oni_onemap_rename") != None:
+        if onie.get("oni_onemap_rename") is not None:
             template["rename"] = onie["oni_onemap_rename"].to_dict()
-        if onie.get("oni_onemap_reskin") != None:
+        if onie.get("oni_onemap_reskin") is not None:
             template["reskin"] = onie["oni_onemap_reskin"].to_dict()
-        if onie.get("oni_onemap_code") != None:
+        if onie.get("oni_onemap_code") is not None:
             template["code"] = onie["oni_onemap_code"].to_dict()
-        if onie.get("oni_onemap_pose") != None:
+        if onie.get("oni_onemap_pose") is not None:
             template["pose"] = onie["oni_onemap_pose"].to_dict()
 
-        if onie.get("oni_onemap_unknown") != None:
+        if onie.get("oni_onemap_unknown") is not None:
             for map_type in onie["oni_onemap_unknown"]:
                 template[map_type] = onie["oni_onemap_unknown"][map_type].to_dict()
 
@@ -8135,7 +8129,7 @@ class OnigiriCombineGenericTemplate(bpy.types.Operator, ImportHelper):
             )
             return {"FINISHED"}
 
-        if onie.get("map_type_combine") != None:
+        if onie.get("map_type_combine") is not None:
             if onie["map_type_combine"] == my_type:
                 pass
             else:
@@ -8172,7 +8166,7 @@ class OnigiriCombineGenericTemplate(bpy.types.Operator, ImportHelper):
 
         if template != "":
 
-            if onie.get("template_map_combine") == None:
+            if onie.get("template_map_combine") is None:
                 onie["template_map_combine"] = {}
 
                 onie["map_files_combine"] = [path_tail]
@@ -8184,7 +8178,7 @@ class OnigiriCombineGenericTemplate(bpy.types.Operator, ImportHelper):
 
                 print("---------------------------------------------------------------")
 
-                if onie.get("map_files_combine") == None:
+                if onie.get("map_files_combine") is None:
                     onie["map_files_combine"] = list()
                 if path_tail in onie["map_files_combine"]:
                     txt = (
@@ -8201,7 +8195,7 @@ class OnigiriCombineGenericTemplate(bpy.types.Operator, ImportHelper):
 
             template_map = onie["template_map_combine"].to_dict()
             for root_key in template:
-                if template_map.get(root_key) == None:
+                if template_map.get(root_key) is None:
                     template_map[root_key] = dict()
                 for sub_key in template[root_key]:
                     template_map[root_key].update(
@@ -8323,7 +8317,7 @@ class OnigiriEditTemplateNewCTM(bpy.types.Operator):
     def execute(self, context):
         onie = bpy.context.window_manager.oni_edit_template
 
-        if onie.get("template_editing") != None:
+        if onie.get("template_editing") is not None:
             print("Create new CTM runs but there's already a template in the mapper")
             utils.popup(
                 "You have an active ctm, reset it to start a new one",
@@ -8479,7 +8473,7 @@ class OnigiriEditTemplateSaveFromCTM(bpy.types.Operator, ExportHelper):
 
             result = onemap.save_template(template=template_map, file=self.filepath)
 
-            if result == False:
+            if not result:
                 print("Couln't write file:", self.filepath)
             return {"FINISHED"}
 
@@ -8556,7 +8550,7 @@ class OnigiriEditTemplatePickTarget(bpy.types.Operator):
         print("target picked", tarm)
         onie.terminate = True
 
-        if onie.get("template_editor_targets") == None:
+        if onie.get("template_editor_targets") is None:
             onie["template_editor_targets"] = dict()
 
         if tarm in onie["template_editor_targets"]:
@@ -8707,13 +8701,13 @@ class OnigiriEditTemplateReset(bpy.types.Operator):
     def execute(self, context):
 
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.get("template_editing") != None:
+        if onie.get("template_editing") is not None:
             del onie["template_editing"]
-        if onie.get("template_editing_undo") != None:
+        if onie.get("template_editing_undo") is not None:
             del onie["template_editing_undo"]
-        if onie.get("item") != None:
+        if onie.get("item") is not None:
             del onie["item"]
-        if onie.get("name") != None:
+        if onie.get("name") is not None:
             del onie["name"]
 
         onie.show_rigs = False
@@ -8752,7 +8746,7 @@ class OnigiriEditTemplateRemoveBone(bpy.types.Operator):
         except:
             print("Couldn't remove bone, this is weird:", self.bone)
 
-        if onie.get("template_editing_undo") != None:
+        if onie.get("template_editing_undo") is not None:
             undo_stream = onie["template_editing_undo"]["new"].to_dict()
             ((sbone, tarm_tbone),) = undo_stream.items()
             if self.bone == sbone:
@@ -8911,7 +8905,7 @@ class OnigiriEditTemplateUndo(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         onie = bpy.context.window_manager.oni_edit_template
-        if onie.get("template_editing_undo") == None:
+        if onie.get("template_editing_undo") is None:
             return False
         return True
 
@@ -9128,7 +9122,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     edit_template_show_map_icon = "menu_opened"
                 else:
                     edit_template_show_map_icon = "menu_closed"
-                if oni_edit_template.show_rigs == True:
+                if oni_edit_template.show_rigs:
                     edit_template_show_rigs_icon = "menu_opened"
                 else:
                     edit_template_show_rigs_icon = "menu_closed"
@@ -9151,10 +9145,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     icon_value=ico.custom_icons[edit_template_show_rigs_icon].icon_id,
                 )
 
-                if (
-                    oni_edit_template.show_map == True
-                    or oni_edit_template.show_rigs == True
-                ):
+                if (oni_edit_template.show_map or oni_edit_template.show_rigs):
 
                     row = col.row(align=True)
                     for i in range(icon_repeat):
@@ -9169,7 +9160,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                         text="[" + onie.message + "]",
                     )
 
-                    if onie.get("template_editing_undo") != None:
+                    if onie.get("template_editing_undo") is not None:
                         edit_template_undo_icon = "reset_warning"
                         row_state = True
                     else:
@@ -9182,7 +9173,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                         icon_value=ico.custom_icons[edit_template_undo_icon].icon_id,
                     )
 
-                if oni_edit_template.show_rigs == True:
+                if oni_edit_template.show_rigs:
                     row = col.row(align=True)
 
                     for i in range(icon_repeat):
@@ -9193,7 +9184,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
 
                     if 1 == 0:
                         row = col.row(align=True)
-                        if onie.source_active == True:
+                        if onie.source_active:
                             row.prop(
                                 onie,
                                 "source_active",
@@ -9256,7 +9247,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                             icon_value=ico.custom_icons["x_red"].icon_id,
                         ).name = target
 
-                if oni_edit_template.show_map == True:
+                if oni_edit_template.show_map:
                     edit_template_change_source_bone_icon = "edit"
                     edit_template_change_target_bone_icon = "edit"
                     edit_template_change_rig_name_icon = "edit"
@@ -9386,7 +9377,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
         oni_onemap = bpy.context.scene.oni_onemap
 
         onemap_menu_enabled_icon = "menu_closed"
-        if oni_edit_template.onemap_menu_enabled == True:
+        if oni_edit_template.onemap_menu_enabled:
             onemap_menu_enabled_icon = "menu_opened"
 
         row.prop(
@@ -9396,7 +9387,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             icon_value=ico.custom_icons[onemap_menu_enabled_icon].icon_id,
         )
 
-        if oni_edit_template.onemap_menu_enabled == True:
+        if oni_edit_template.onemap_menu_enabled:
             layout = self.layout
             box = layout.box()
 
@@ -9482,7 +9473,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             selected = bpy.context.selected_objects
             if len(selected) == 1:
                 rename_map = selected[0].get("oni_onemap_rename")
-                if rename_map != None:
+                if rename_map is not None:
                     anchors = []
                     for bone in rename_map.keys():
                         anchors.append(bone)
@@ -9694,9 +9685,9 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
 
                         input_bone = onemap.props["input_bone"]
                         output_bone = onemap.props["output_bone"]
-                        if oni_onemap.onemap_reskin == True:
+                        if oni_onemap.onemap_reskin:
                             input_bone = onemap.props["reskin_bone"]
-                        if oni_onemap.onemap_move == True:
+                        if oni_onemap.onemap_move:
                             output_bone = onemap.props["move_bone"]
 
                         if input_bone == "":
@@ -9707,8 +9698,8 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                         if input_bone != onemap.props["last_input_bone"]:
 
                             if (
-                                oni_onemap.onemap_move == False
-                                and oni_onemap.onemap_reskin == False
+                                not oni_onemap.onemap_move
+                                and not oni_onemap.onemap_reskin
                             ):
                                 FAKE_PROPERTY_SETTER = oni_onemap.onemap_update_map
 
@@ -9725,8 +9716,8 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                         if 1 == 0:
 
                             if (
-                                oni_onemap.onemap_move == False
-                                and oni_onemap.onemap_reskin == False
+                                not oni_onemap.onemap_move
+                                and not oni_onemap.onemap_reskin
                             ):
                                 FAKE_PROPERTY_SETTER = oni_onemap.onemap_update_map
 
@@ -9791,7 +9782,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
 
                         if 1 == 1:
                             FAKE_PROPERTY_SETTING = oni_onemap.onemap_set_error
-                            if FAKE_PROPERTY_SETTING == False:
+                            if not FAKE_PROPERTY_SETTING:
                                 return None
 
                         mapped_input_bone = " "
@@ -9872,7 +9863,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                             icon_value=ico.custom_icons["map"].icon_id,
                         )
 
-                        if oni_onemap.onemap_view_map == True:
+                        if oni_onemap.onemap_view_map:
 
                             col = box.column(align=True)
                             row = col.row(align=True)
@@ -9927,7 +9918,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
         oni_snap = bpy.context.window_manager.oni_snap
 
         snap_menu_enabled_icon = "menu_closed"
-        if oni_snap.snap_menu_enabled == True:
+        if oni_snap.snap_menu_enabled:
             snap_menu_enabled_icon = "menu_opened"
 
         row.prop(
@@ -9936,7 +9927,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             text="Visual Snap Mapper",
             icon_value=ico.custom_icons[snap_menu_enabled_icon].icon_id,
         )
-        if oni_snap.snap_menu_enabled == True:
+        if oni_snap.snap_menu_enabled:
             layout = self.layout
             box = layout.box()
             col = box.column(align=True)
@@ -10127,7 +10118,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 return None
 
             inRig = snap.get_director(armature=bpy.context.active_object.name)
-            if inRig == False:
+            if not inRig:
                 return None
             outRig = inRig["oni_snap_actor"]
 
@@ -10161,7 +10152,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     actor_bone = pBone.name
                     snap.props["actor_bone"] = actor_bone
 
-            if inRig.get("oni_onemap_rename") != None:
+            if inRig.get("oni_onemap_rename") is not None:
                 rename_mapped = inRig["oni_onemap_rename"].to_dict()
             else:
                 rename_mapped = {}
@@ -10194,10 +10185,10 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             )
 
             if 1 == 0:
-                if oni_snap.snap_symmetry_enabled == True:
+                if oni_snap.snap_symmetry_enabled:
                     if pBone.id_data == inRig:
 
-                        if oni_snap.snap_symmetry_director == False:
+                        if not oni_snap.snap_symmetry_director:
 
                             if snap.props["last_selected_director_bone"] == "":
                                 snap.props["last_selected_director_bone"] = pBone.name
@@ -10227,7 +10218,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                                         "Click This"
                                     )
                     if pBone.id_data == outRig:
-                        if oni_snap.snap_symmetry_actor == False:
+                        if not oni_snap.snap_symmetry_actor:
                             if snap.props["last_selected_actor_bone"] == "":
                                 snap.props["last_selected_actor_bone"] = pBone.name
                                 snap.props["actor_side_a"] = pBone.name
@@ -10247,7 +10238,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                                     snap.props["last_selected_actor_bone"] = pBone.name
                                     snap.props["actor_symmetry_display"] = "Click This"
 
-            if True == False:
+            if True == False: ## O.o
                 col = box.column(align=True)
                 row = col.row(align=True)
                 row.prop(
@@ -10258,7 +10249,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     icon_value=ico.custom_icons["sync"].icon_id,
                 )
 
-            if oni_snap.snap_symmetry_enabled == True:
+            if oni_snap.snap_symmetry_enabled:
 
                 row = col.row(align=True)
                 row.prop(
@@ -10367,7 +10358,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 )
 
             snap_release_icon = "locked_black"
-            if oni_snap.snap_release == True:
+            if oni_snap.snap_release:
                 snap_release_icon = "unlocked_black"
             row.prop(
                 oni_snap,
@@ -10459,7 +10450,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             row = col.row(align=True)
 
             snap_mapped_menu_enabled_icon = "menu_closed"
-            if oni_snap.snap_mapped_menu_enabled == True:
+            if oni_snap.snap_mapped_menu_enabled:
                 snap_mapped_menu_enabled_icon = "menu_opened"
 
             row.prop(
@@ -10468,7 +10459,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 text="View mapped bones",
                 icon_value=ico.custom_icons[snap_menu_enabled_icon].icon_id,
             )
-            if oni_snap.snap_mapped_menu_enabled == True:
+            if oni_snap.snap_mapped_menu_enabled:
 
                 abone_icon = "bone_red"
                 rename_map = inRig.get("oni_onemap_rename", {})
@@ -10747,7 +10738,7 @@ class OnigiriShapeLoad(bpy.types.Operator, ImportHelper):
         oni_shape = bpy.context.window_manager.oni_shape
         armObj = bpy.context.object
         xml = shape.import_shape(file=self.filepath)
-        if xml != None:
+        if xml is not None:
             armObj["oni_shape_data"] = xml
 
         else:
@@ -10792,7 +10783,7 @@ class OnigiriShapeSave(bpy.types.Operator, ExportHelper):
             return False
         o = selected[0]
 
-        if o.get("oni_shape_data") == None:
+        if o.get("oni_shape_data") is None:
             return False
 
         return True
@@ -10806,7 +10797,7 @@ class OnigiriShapeSave(bpy.types.Operator, ExportHelper):
 
         xml = armObj["oni_shape_data"].to_dict()
         result = shape.save_shape(shape=xml, file=self.filepath)
-        if result == False:
+        if not result:
             print("Somthing went wrong")
         else:
             print("saved xml shape to:", self.filepath)
@@ -10828,7 +10819,7 @@ class OnigiriShapeReset(bpy.types.Operator):
         if selected[0].type != "ARMATURE":
             return False
         o = selected[0]
-        if o.get("oni_shape_data") == None:
+        if o.get("oni_shape_data") is None:
             return False
         return True
 
@@ -10859,7 +10850,7 @@ class OnigiriShapeRemove(bpy.types.Operator):
         if selected[0].type != "ARMATURE":
             return False
         o = selected[0]
-        if o.get("oni_shape_data") == None:
+        if o.get("oni_shape_data") is None:
             return False
         return True
 
@@ -10909,7 +10900,7 @@ class OnigiriControllerProperties(bpy.types.PropertyGroup):
     )
 
     def update_controller_stabilize(self, context):
-        if self.controller_stabilize == True:
+        if self.controller_stabilize:
             bpy.ops.onigiri.controller_stabilize(action="on")
         else:
             bpy.ops.onigiri.controller_stabilize(action="off")
@@ -10937,7 +10928,7 @@ class OnigiriControllerProperties(bpy.types.PropertyGroup):
 
     def update_controller_glued(self, context):
 
-        if self.controller_glued == False:
+        if not self.controller_glued:
             armObj = bpy.context.selected_objects[0]
             for boneObj in armObj.pose.bones:
                 for c in boneObj.constraints:
@@ -11000,7 +10991,7 @@ class OnigiriControllerRetarget(bpy.types.Operator):
 
         bone_map = targetObj.get("bone_map")
 
-        if bone_map == None:
+        if bone_map is None:
             print("No existing bone map, checking for bone matches")
             bad_bones = []
             good_bones = []
@@ -11077,7 +11068,7 @@ class OnigiriControllerRetarget(bpy.types.Operator):
 
         sourceObj = rigutils.build_rig(rig_class="pos", rotate=True)
 
-        if sourceObj == False:
+        if not sourceObj:
             print("Something happened when attepmting to generate a Second Life rig")
             popup(
                 "Unknown error when generating a rig, see Console",
@@ -11103,9 +11094,9 @@ class OnigiriControllerRetarget(bpy.types.Operator):
 
         frame_current = bpy.context.scene.frame_current
 
-        if proxyObj.animation_data == None:
+        if proxyObj.animation_data is None:
             print("No animation data, timeline won't be altered")
-        elif proxyObj.animation_data.action == None:
+        elif proxyObj.animation_data.action is None:
             print(
                 "No action is associated with the armature, timeline won't be altered"
             )
@@ -11114,7 +11105,7 @@ class OnigiriControllerRetarget(bpy.types.Operator):
             print("Found action, setting frame to start:", frame_start)
             bpy.context.scene.frame_set(frame_start)
 
-            if oni_controller.controller_to_animation == True:
+            if oni_controller.controller_to_animation:
                 print("Running acquire_animation_details")
                 bpy.ops.onigiri.acquire_animation_details()
 
@@ -11199,10 +11190,10 @@ class OnigiriControllerRetarget(bpy.types.Operator):
 
         sourceObj["controller_target"] = targetObj
 
-        if oni_controller.controller_stabilize == True:
+        if oni_controller.controller_stabilize:
 
             influence = 0
-            if oni_controller.controller_stabilize == True:
+            if oni_controller.controller_stabilize:
                 influence = 1
 
             bone_map = set()
@@ -11252,9 +11243,9 @@ class OnigiriControllerShowBones(bpy.types.Operator):
             return False
         if bpy.context.selected_objects[0].type != "ARMATURE":
             return False
-        if bpy.context.selected_objects[0].get("bone_map") == False:
+        if not bpy.context.selected_objects[0].get("bone_map"):
             return False
-        if bpy.context.selected_objects[0].get("controller_target") == False:
+        if not bpy.context.selected_objects[0].get("controller_target"):
             return False
         return True
 
@@ -11290,9 +11281,9 @@ class OnigiriControllerGlue(bpy.types.Operator):
             return False
         if bpy.context.selected_objects[0].type != "ARMATURE":
             return False
-        if bpy.context.selected_objects[0].get("bone_map") == False:
+        if not bpy.context.selected_objects[0].get("bone_map"):
             return False
-        if bpy.context.selected_objects[0].get("controller_target") == False:
+        if not bpy.context.selected_objects[0].get("controller_target"):
             return False
         return True
 
@@ -11300,7 +11291,7 @@ class OnigiriControllerGlue(bpy.types.Operator):
 
         armObj = bpy.context.selected_objects[0]
 
-        if armObj.get("controller_glued") == None:
+        if armObj.get("controller_glued") is None:
             armObj["controller_glued"] = False
 
         for boneObj in armObj.pose.bones:
@@ -11314,7 +11305,7 @@ class OnigiriControllerGlue(bpy.types.Operator):
 
         armObj["controller_glued"] = True
 
-        if armObj.get("controller_target") != None:
+        if armObj.get("controller_target") is not None:
             bpy.ops.object.mode_set(mode="POSE")
             bpy.ops.pose.armature_apply()
             bpy.ops.object.mode_set(mode="OBJECT")
@@ -11340,17 +11331,17 @@ class OnigiriControllerStabilize(bpy.types.Operator):
         if bpy.context.selected_objects[0].type != "ARMATURE":
             print("Not an armature")
             return {"FINISHED"}
-        if bpy.context.selected_objects[0].get("bone_map") == False:
+        if not bpy.context.selected_objects[0].get("bone_map"):
             print("No bone map available")
             return {"FINISHED"}
-        if bpy.context.selected_objects[0].get("controller_target") == False:
+        if not bpy.context.selected_objects[0].get("controller_target"):
             print("Rig does not appear to be retargeting anyting")
             return {"FINISHED"}
 
         armObj = bpy.context.selected_objects[0]
 
         glueObj = armObj.get("oni_controller_stabilizer")
-        if glueObj == None:
+        if glueObj is None:
             print("This rig does not have a stabilizer")
             oni_controller["controller_stabilize"] = False
             return {"FINISHED"}
@@ -11389,9 +11380,9 @@ class OnigiriControllerPelvisTransform(bpy.types.Operator):
             return False
         if bpy.context.selected_objects[0].type != "ARMATURE":
             return False
-        if bpy.context.selected_objects[0].get("onigiri") == None:
+        if bpy.context.selected_objects[0].get("onigiri") is None:
             return False
-        if bpy.context.selected_objects[0].get("bone_map") == None:
+        if bpy.context.selected_objects[0].get("bone_map") is None:
             return False
         return True
 
@@ -11404,7 +11395,7 @@ class OnigiriControllerPelvisTransform(bpy.types.Operator):
         print("would have enabled or disabled the indicated transform for the pelvis")
 
         ctype = armObj.get("constraint_type")
-        if ctype == None:
+        if ctype is None:
             print("No constraint type detected, this might be a bug")
             popup("Missing constraint type", "Error", "ERROR")
             return {"FINISHED"}
@@ -11449,7 +11440,7 @@ class OnigiriControllerMapReset(bpy.types.Operator):
         utils.activate(o)
         bpy.ops.object.delete()
 
-        if subject != None:
+        if subject is not None:
             subject.select_set(True)
             utils.activate(subject)
 
@@ -11468,7 +11459,7 @@ class OnigiriControllerMapRemove(bpy.types.Operator):
             return False
         if bpy.context.selected_objects[0].type != "ARMATURE":
             return False
-        if bpy.context.selected_objects[0].get("bone_map") == None:
+        if bpy.context.selected_objects[0].get("bone_map") is None:
             return False
         return True
 
@@ -11512,7 +11503,7 @@ class OnigiriControllerAdd(bpy.types.Operator):
         for o in bpy.context.selected_objects:
             if o.type == "ARMATURE":
                 rig_count += 1
-                if o.get("onigiri") != None:
+                if o.get("onigiri") is not None:
                     got_oni = True
         if rig_count == 2 and got_oni:
             return True
@@ -11595,7 +11586,7 @@ class OnigiriControllerTemplateLoad(bpy.types.Operator, ImportHelper):
                 continue
             template[container] = namespace[container]
 
-        if template.get("rename") != None:
+        if template.get("rename") is not None:
             bad_bones = []
             good_bones = []
             bone_map = {}
@@ -11616,7 +11607,7 @@ class OnigiriControllerTemplateLoad(bpy.types.Operator, ImportHelper):
                 popup("Some bones didn't match", "Info", "INFO")
             targetObj["bone_map"] = bone_map
 
-        elif template.get("template_map") != None:
+        elif template.get("template_map") is not None:
             bad_bones = []
             good_bones = []
             bone_map = {}
@@ -11678,7 +11669,7 @@ class OnigiriDynamicProperties(bpy.types.PropertyGroup):
             return
 
         inRig = dynamic.get_director(armature=armObj.name)
-        if inRig == False:
+        if not inRig:
             outRig = armObj
         else:
             outRig = inRig["oni_dynamic_actor"]
@@ -11698,7 +11689,7 @@ class OnigiriDynamicProperties(bpy.types.PropertyGroup):
             return
 
         inRig = dynamic.get_director(armature=armObj.name)
-        if inRig == False:
+        if not inRig:
             outRig = armObj
         else:
             outRig = inRig["oni_dynamic_actor"]
@@ -11767,7 +11758,7 @@ class OnigiriDynamicLoad(bpy.types.Operator, ImportHelper):
                 continue
             template[container] = namespace[container]
 
-        if template.get("rename") != None:
+        if template.get("rename") is not None:
             bad_bones = []
             good_bones = []
             bone_map = {}
@@ -11788,7 +11779,7 @@ class OnigiriDynamicLoad(bpy.types.Operator, ImportHelper):
 
             targetObj["oni_dynamic_template"] = bone_map
 
-        elif template.get("template_map") != None:
+        elif template.get("template_map") is not None:
             bad_bones = []
             good_bones = []
             bone_map = {}
@@ -11870,7 +11861,7 @@ class OnigiriDynamicAction(bpy.types.Operator):
 
         utils.activate(inRig)
 
-        if inRig.get("oni_dynamic_template") == None:
+        if inRig.get("oni_dynamic_template") is None:
             bpy.ops.object.duplicate()
             outRig = bpy.context.object
             inRig["oni_dynamic_actor"] = outRig
@@ -12113,7 +12104,7 @@ class OnigiriDynamicReset(bpy.types.Operator):
         armObj = bpy.context.selected_objects[0]
 
         inRig = dynamic.get_director(armature=armObj.name)
-        if inRig == False:
+        if not inRig:
             print("Nothing to cleanlup")
             return {"FINISHED"}
         outRig = inRig.get("oni_dynamic_actor")
@@ -12121,12 +12112,12 @@ class OnigiriDynamicReset(bpy.types.Operator):
         for o in bpy.context.selected_objects:
             o.select_set(False)
 
-        if proxyRig != None:
+        if proxyRig is not None:
             if proxyRig.name in bpy.context.scene.objects:
                 proxyRig.hide_set(False)
                 proxyRig.select_set(True)
                 utils.activate(proxyRig)
-        if outRig != None:
+        if outRig is not None:
             if outRig.name in bpy.context.scene.objects:
                 outRig.select_set(True)
                 utils.activate(outRig)
@@ -12170,7 +12161,7 @@ class OnigiriDynamicMapRemove(bpy.types.Operator):
             return False
         if selected[0].type != "ARMATURE":
             return False
-        if selected[0].get("oni_dynamic_template") == None:
+        if selected[0].get("oni_dynamic_template") is None:
             return False
         return True
 
@@ -12324,7 +12315,7 @@ class CharacterConverterConvert(bpy.types.Operator):
             armObj.name,
         )
 
-        if ccp.cc_apply_transforms == True:
+        if ccp.cc_apply_transforms:
             mod_functions.apply_transform_chain(armObj.name)
 
         if armObj.get("onigiri_converted") == 1:
@@ -12358,7 +12349,7 @@ class CharacterConverterConvert(bpy.types.Operator):
             cc_rename = armObj.get("oni_onemap_rename")
             cc_reskin = armObj.get("oni_onemap_reskin", {})
             cc_pose = armObj.get("oni_onemap_pose", {})
-            if cc_rename == None:
+            if cc_rename is None:
                 print("There's no loaded map and no map on the rig")
                 popup(
                     "There's no loaded map and no map on the rig", "Map Error", "ERROR"
@@ -12465,8 +12456,8 @@ class CharacterConverterConvert(bpy.types.Operator):
             rebind(arm)
             utils.set_state(state)
 
-        if armObj.animation_data != None:
-            if armObj.animation_data.action != None:
+        if armObj.animation_data is not None:
+            if armObj.animation_data.action is not None:
                 armObj.animation_data.action = None
 
         if ccp.cc_bake_map_pose == 1:
@@ -12492,7 +12483,7 @@ class CharacterConverterConvert(bpy.types.Operator):
             )
 
         state = save_state()
-        if ccp.preserve_animation == False:
+        if not ccp.preserve_animation:
 
             print("Animation not preserved")
             apply_transforms(object=arm, rotation=True, scale=True)
@@ -12505,7 +12496,7 @@ class CharacterConverterConvert(bpy.types.Operator):
 
         restore_state(state)
 
-        if ccp.cc_weight_unmapped_groups == True:
+        if ccp.cc_weight_unmapped_groups:
 
             mesh_groups = {}
             for meshObj in qualified_mesh:
@@ -12548,7 +12539,7 @@ class CharacterConverterConvert(bpy.types.Operator):
                     continue
 
                 meshObj.select_set(True)
-                if meshObj.select_get() == False:
+                if not meshObj.select_get():
                     print(
                         "Mesh is not selectable so it can't be processed:", meshObj.name
                     )
@@ -12596,7 +12587,7 @@ class CharacterConverterConvert(bpy.types.Operator):
                             meshObj.vertex_groups.remove(del_g)
 
             bpy.ops.object.mode_set(mode="OBJECT")
-            if bpy.context.window_manager.cc_props.cc_add_missing_groups == True:
+            if bpy.context.window_manager.cc_props.cc_add_missing_groups:
                 for meshObj in qualified_mesh:
                     bpy.ops.object.select_all(action="DESELECT")
                     meshObj.select_set(True)
@@ -12607,7 +12598,7 @@ class CharacterConverterConvert(bpy.types.Operator):
                             i in cc_reskin[target] for i in mesh_groups[meshObj.name]
                         ):
                             if target not in mesh_groups[meshObj.name]:
-                                if oni_settings["debug"] == True:
+                                if oni_settings["debug"]:
                                     print(
                                         "adding missing target - group / mesh |",
                                         target,
@@ -12629,14 +12620,14 @@ class CharacterConverterConvert(bpy.types.Operator):
 
                 for group in cc_reskin:
                     if group not in mesh_groups[meshObj.name]:
-                        if oni_settings["debug"] == True:
+                        if oni_settings["debug"]:
                             print("skin target missing from mesh:", meshObj.name, group)
                         continue
                     source_weights.clear()
 
                     for rgroup in cc_reskin[group]:
                         if rgroup not in mesh_groups[meshObj.name]:
-                            if oni_settings["debug"] == True:
+                            if oni_settings["debug"]:
                                 print(
                                     "skin source missing from mesh:",
                                     meshObj.name,
@@ -12656,7 +12647,7 @@ class CharacterConverterConvert(bpy.types.Operator):
 
                             del_g = meshObj.vertex_groups.get(rgroup)
 
-                            if del_g != None:
+                            if del_g is not None:
                                 meshObj.vertex_groups.remove(del_g)
                             else:
                                 weight_group_error += 1
@@ -12724,7 +12715,7 @@ class CharacterConverterConvert(bpy.types.Operator):
                 mbone_data[mBone] = {}
                 mbone_data[mBone]["tbone"] = tBone
 
-        if bpy.context.window_manager.cc_props.cc_remove_unused_bones == True:
+        if bpy.context.window_manager.cc_props.cc_remove_unused_bones:
             print("removing unused bones...")
             bpy.ops.object.mode_set(mode="OBJECT")
             bpy.ops.object.select_all(action="DESELECT")
@@ -12736,7 +12727,7 @@ class CharacterConverterConvert(bpy.types.Operator):
                 if tbone not in cc_rename.keys():
                     armObj.data.edit_bones.remove(armObj.data.edit_bones[tbone])
 
-        if bpy.context.window_manager.cc_props.cc_rename_to_targets == True:
+        if bpy.context.window_manager.cc_props.cc_rename_to_targets:
             print("renaming bones...")
 
             for tbone in cc_rename:
@@ -12748,7 +12739,7 @@ class CharacterConverterConvert(bpy.types.Operator):
                     ubone = tbones[tbone]
                     armObj.data.edit_bones[ubone].name = cc_rename[tbone]
 
-        if bpy.context.window_manager.cc_props.cc_connect_links == True:
+        if bpy.context.window_manager.cc_props.cc_connect_links:
             print("connecting bones..")
 
             children = list()
@@ -12756,10 +12747,7 @@ class CharacterConverterConvert(bpy.types.Operator):
 
                 if tbone in tbones:
 
-                    if (
-                        bpy.context.window_manager.cc_props.cc_rename_to_targets
-                        == False
-                    ):
+                    if not bpy.context.window_manager.cc_props.cc_rename_to_targets:
 
                         mbone = tbone
                     else:
@@ -12772,16 +12760,13 @@ class CharacterConverterConvert(bpy.types.Operator):
 
                     cbone = children[0]
 
-                    if (
-                        bpy.context.window_manager.cc_props.cc_rename_to_targets
-                        == False
-                    ):
+                    if not bpy.context.window_manager.cc_props.cc_rename_to_targets:
                         ctbone = tbone
                     else:
                         ctbone = mbone_data[cbone.name]["tbone"]
                     use_connect = tbone_data[ctbone]["use_connect"]
 
-                    if use_connect == True:
+                    if use_connect:
                         armObj.data.edit_bones[mbone].tail = armObj.data.edit_bones[
                             cbone.name
                         ].head
@@ -12791,7 +12776,7 @@ class CharacterConverterConvert(bpy.types.Operator):
                     pass
 
         link_error = 0
-        if bpy.context.window_manager.cc_props.cc_integrity_check == True:
+        if bpy.context.window_manager.cc_props.cc_integrity_check:
 
             for boneObj in armObj.data.edit_bones:
                 bone = boneObj.name
@@ -12846,7 +12831,7 @@ class CharacterConverterConvert(bpy.types.Operator):
 
         armObj["onigiri_converted"] = 1
 
-        if bpy.context.window_manager.cc_props.cc_apply_bone_roll == True:
+        if bpy.context.window_manager.cc_props.cc_apply_bone_roll:
             apply_sl_bone_roll(armObj.name)
         else:
             print("ATTENTION! skipping apply_sl_bone_roll")
@@ -12870,7 +12855,7 @@ class CharacterConverterConvert(bpy.types.Operator):
                 if vgObj.name not in armObj.data.bones:
                     wrong_groups_error = True
                     wrong_groups[mesh].append(vgObj.name)
-        if wrong_groups_error == True:
+        if wrong_groups_error:
             print(
                 "There was an error processing your map, at least one important bone was not mapped properly."
             )
@@ -12894,7 +12879,7 @@ class CharacterConverterConvert(bpy.types.Operator):
                     print(" - bone:", g)
 
         removed_groups = []
-        if ccp.cc_remove_unmatched_groups == True:
+        if ccp.cc_remove_unmatched_groups:
             for meshObj in qualified_mesh:
                 for g in meshObj.vertex_groups:
                     if g.name not in armObj.data.bones:
@@ -12908,7 +12893,7 @@ class CharacterConverterConvert(bpy.types.Operator):
                             removed_groups,
                         )
 
-        if ccp.cc_full_rig == True:
+        if ccp.cc_full_rig:
             for boneObj in armObj.data.bones:
                 if boneObj.name in skel.avatar_skeleton:
                     continue
@@ -13080,7 +13065,7 @@ class CharacterConverterSavePoseLib(bpy.types.Operator, ExportHelper):
         ccl = bpy.context.window_manager.cc_libs
         obj = bpy.data.objects
 
-        if ccl.get("poses_stored") == None:
+        if ccl.get("poses_stored") is None:
             return False
 
         if len(ccl["poses_stored"]) == 0:
@@ -13134,7 +13119,7 @@ class CharacterConverterResetPoseLib(bpy.types.Operator):
         ccl = bpy.context.window_manager.cc_libs
         obj = bpy.data.objects
 
-        if ccl.get("poses_stored") == None:
+        if ccl.get("poses_stored") is None:
             return False
 
         if len(ccl["poses_stored"]) == 0:
@@ -13354,7 +13339,7 @@ class CharacterConverterApplyPose(bpy.types.Operator):
         for bone in poses_stored:
             if bone not in armObj.data.bones:
                 continue
-            if ccl.pose_apply_to_selected == True:
+            if ccl.pose_apply_to_selected:
 
                 if bone not in selected_pose_bones:
                     continue
@@ -13574,7 +13559,7 @@ class CharacterConverterLibProperties(bpy.types.PropertyGroup):
 
     def update_pose_edit_name(self, context):
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
 
@@ -13698,11 +13683,11 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
     )
 
     def update_bake_map_pose(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         ccp = bpy.context.window_manager.cc_props
-        if ccp.cc_bake_map_pose == True:
+        if ccp.cc_bake_map_pose:
 
             ccp.cc_bake_pose_type = "map"
 
@@ -13711,11 +13696,11 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
         return
 
     def update_bake_current_pose(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         ccp = bpy.context.window_manager.cc_props
-        if ccp.cc_bake_current_pose == True:
+        if ccp.cc_bake_current_pose:
 
             ccp.cc_bake_pose_type = "current"
 
@@ -13799,10 +13784,10 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
 
     def populate_custom_map_ui(self, context):
 
-        if bpy.context.window_manager.cc_props.cc_custom_mapping == True:
+        if bpy.context.window_manager.cc_props.cc_custom_mapping:
             print("Mapping Enabled")
 
-        if bpy.context.window_manager.cc_props.cc_custom_mapping == False:
+        if not bpy.context.window_manager.cc_props.cc_custom_mapping:
             print("Mapping Disabled")
 
         return
@@ -13823,10 +13808,10 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
         ccp = bpy.context.window_manager.cc_props
         obj = bpy.data.objects
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
-        if ccp.record_source_rig == True:
+        if ccp.record_source_rig:
             if len(bpy.context.selected_objects) == 0:
                 ccp.ccm_message = "No object selected"
                 oni_settings["terminate"] = True
@@ -13856,7 +13841,7 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
                 ccp.record_source_rig = False
                 return
 
-            if armObj.get("onigiri") != None:
+            if armObj.get("onigiri") is not None:
                 print(
                     "This is a Onigiri rig so it's in the wrong slot, swap your rig choices."
                 )
@@ -13884,7 +13869,7 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
 
             print("Source rig recorded:", armObj.name)
 
-        elif ccp.record_source_rig == False:
+        elif not ccp.record_source_rig:
 
             ccp.load_map_info = "Load a map file"
             ccp.icon_thumb = "load"
@@ -13902,10 +13887,10 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
         ccp = bpy.context.window_manager.cc_props
         obj = bpy.data.objects
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
-        if ccp.record_target_rig == True:
+        if ccp.record_target_rig:
             if ccp.source_rig_name == ccp.target_rig_name and ccp.source_rig_name != "":
                 ccp.ccm_message = "Source and target cannot be the same rigs"
                 oni_settings["terminate"] = True
@@ -13958,7 +13943,7 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
             ccp.target_rig_name = armObj.name
 
             print("Target rig recorded:", armObj.name)
-        elif ccp.record_target_rig == False:
+        elif not ccp.record_target_rig:
 
             ccp.load_map_info = "Load a map file"
             ccp.icon_thumb = "load"
@@ -14047,9 +14032,9 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
 
             ccp.mapper_ready = ""
 
-            if ccp.get("reskin_mapper") != None:
+            if ccp.get("reskin_mapper") is not None:
                 del ccp["reskin_mapper"]
-            if ccp.get("remap_stored") != None:
+            if ccp.get("remap_stored") is not None:
                 del ccp["remap_stored"]
 
         return
@@ -14108,7 +14093,7 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
         ccp = bpy.context.window_manager.cc_props
         obj = bpy.data.objects
         bpy.context.view_layer.update()
-        if ccp.enable_retargeting == True:
+        if ccp.enable_retargeting:
 
             if (
                 obj[ccp.source_rig_name].type != "ARMATURE"
@@ -14194,12 +14179,12 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
         ccp = bpy.context.window_manager.cc_props
         obj = bpy.data.objects
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         print("edit_mode:", ccp.edit_mode)
 
-        if ccp.edit_mode == True:
+        if ccp.edit_mode:
             print("edit_mode: True")
 
             select_map_mode(type="edit")
@@ -14207,7 +14192,7 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
             val = set_obj_mode(
                 mode="pose", objects=[ccp.source_rig_name, ccp.target_rig_name]
             )
-            if val == False:
+            if not val:
                 print(
                     "update_edit_mode returns error from set_obj_mode with ccp.edit_mode =",
                     ccp.edit_mode,
@@ -14253,7 +14238,7 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
             select_map_mode(type="map")
 
             val = set_obj_mode(mode="pose", objects=[ccp.source_rig_name])
-            if val == False:
+            if not val:
                 print(
                     "update_edit_mode returns error from set_obj_mode with ccp.edit_mode =",
                     ccp.edit_mode,
@@ -14263,7 +14248,7 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
         return
 
     def update_hide_mapped_bones(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         ccp = bpy.context.window_manager.cc_props
@@ -14271,7 +14256,7 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
 
         source = ccp.source_rig_name
 
-        if ccp.hide_mapped_bones == True:
+        if ccp.hide_mapped_bones:
 
             for boneObj in obj[source].data.bones:
                 ccp["map_editor"]["hide_mapped_state"][boneObj.name] = boneObj.hide
@@ -14291,14 +14276,14 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
         return
 
     def update_isolation_mode(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         ccp = bpy.context.window_manager.cc_props
         obj = bpy.data.objects
         source = ccp.source_rig_name
 
-        if ccp.isolation_mode == True:
+        if ccp.isolation_mode:
 
             if bpy.context.active_object.name != source:
                 oni_settings["terminate"] = False
@@ -14340,14 +14325,14 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
         return
 
     def update_add_reskin_bone(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         ccp = bpy.context.window_manager.cc_props
         obj = bpy.data.objects
         source = ccp.source_rig_name
 
-        if ccp.add_reskin_bone == True:
+        if ccp.add_reskin_bone:
 
             if bpy.context.active_object.name != source:
                 oni_settings["terminate"] = False
@@ -14369,7 +14354,7 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
             ccp["map_editor"]["active_anchor"] = bone
             return
 
-        if ccp.add_reskin_bone == False:
+        if not ccp.add_reskin_bone:
 
             if bpy.context.active_object.name != source:
                 ccp["map_editor"]["active_anchor"] = ""
@@ -14382,7 +14367,7 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
             anchor = ccp["map_editor"]["active_anchor"]
             reskin_bones = list()
 
-            if ccp["remap_stored"]["reskin"].get(anchor) != None:
+            if ccp["remap_stored"]["reskin"].get(anchor) is not None:
                 reskin_bones = ccp["remap_stored"]["reskin"][anchor].copy()
 
             reskin_selected = list()
@@ -14510,7 +14495,7 @@ class CharacterConverterCheckRigs(bpy.types.Operator):
         obj = bpy.data.objects
 
         if ccp.source_rig_name != "":
-            if obj.get(ccp.source_rig_name) == None:
+            if obj.get(ccp.source_rig_name) is None:
                 oni_settings["terminate"] = True
                 ccp.record_source_rig = False
 
@@ -14523,7 +14508,7 @@ class CharacterConverterCheckRigs(bpy.types.Operator):
                 return True
 
         if ccp.target_rig_name != "":
-            if obj.get(ccp.target_rig_name) == None:
+            if obj.get(ccp.target_rig_name) is None:
                 oni_settings["terminate"] = True
                 ccp.record_target_rig = False
 
@@ -14560,7 +14545,7 @@ class CharacterConverterExpandMapper(bpy.types.Operator):
         obj = bpy.data.objects
 
         if ccp.save_ready != "":
-            if ccp.edit_mode == True:
+            if ccp.edit_mode:
                 ccp.enable_retargeting_label = "Remove map bones"
                 return {"FINISHED"}
 
@@ -14915,7 +14900,7 @@ class CharacterConverterLoadMap(bpy.types.Operator, ImportHelper):
         bpy.ops.pose.select_all(action="DESELECT")
         bpy.ops.object.mode_set(mode="OBJECT")
 
-        if ccp.disable_map_pose == False:
+        if not ccp.disable_map_pose:
             try:
                 cc_pose.update(namespace["pose"])
             except:
@@ -14941,7 +14926,7 @@ class CharacterConverterLoadMap(bpy.types.Operator, ImportHelper):
                 else:
                     print("Missing reskin bone:", b)
 
-            if ghost_empty == True and len(ccm_errors) == 1:
+            if ghost_empty and len(ccm_errors) == 1:
                 print(
                     "DEBUG:__INIT__::CharacterConverterLoadMap reports: ghost key is empty"
                 )
@@ -15319,7 +15304,7 @@ class CharacterConverterEditMap(bpy.types.Operator):
     def poll(cls, context):
         ccp = bpy.context.window_manager.cc_props
         obj = bpy.data.objects
-        if ccp.edit_mode != True:
+        if not ccp.edit_mode:
             return False
 
         source = ccp.source_rig_name
@@ -15342,7 +15327,7 @@ class CharacterConverterEditMap(bpy.types.Operator):
             pass
 
         for boneObj in bpy.context.selected_pose_bones:
-            if obj[source].data.bones[boneObj.name].hide == True:
+            if obj[source].data.bones[boneObj.name].hide:
                 obj[source].data.bones[boneObj.name].select = False
 
         boneObjs = bpy.context.selected_pose_bones
@@ -15579,20 +15564,20 @@ class OnigiriMeshProperties(bpy.types.PropertyGroup):
     )
 
     def update_smooth_normals_simple(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_mesh = bpy.context.scene.oni_mesh
-        if oni_mesh.smooth_normals_simple == True:
+        if oni_mesh.smooth_normals_simple:
             oni_settings["terminate"] = True
             oni_mesh.smooth_normals_advanced = False
 
     def update_smooth_normals_advanced(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_mesh = bpy.context.scene.oni_mesh
-        if oni_mesh.smooth_normals_simple == True:
+        if oni_mesh.smooth_normals_simple:
             oni_settings["terminate"] = True
             oni_mesh.smooth_normals_simple = False
 
@@ -15611,7 +15596,7 @@ class OnigiriMeshProperties(bpy.types.PropertyGroup):
 
     def update_pose_data_safe(self, context):
         oni_mesh = bpy.context.scene.oni_mesh
-        if oni_mesh.use_safe_settings == True:
+        if oni_mesh.use_safe_settings:
             oni_mesh["use_rig_data"] = True
             oni_mesh["use_bind_data"] = False
 
@@ -15619,62 +15604,62 @@ class OnigiriMeshProperties(bpy.types.PropertyGroup):
             oni_mesh["use_app_compatible_data"] = False
 
     def update_pose_data_rig(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_mesh = bpy.context.scene.oni_mesh
-        if oni_mesh.use_rig_data == True:
+        if oni_mesh.use_rig_data:
             oni_settings["terminate"] = True
             oni_mesh.use_bind_data = False
 
             oni_mesh["use_sl_compatible_data"] = False
             oni_mesh["use_app_compatible_data"] = False
-        if oni_mesh.use_rig_data == False:
+        if not oni_mesh.use_rig_data:
             oni_settings["terminate"] = True
             oni_mesh.use_rig_data = True
         return
 
     def update_pose_data_bind(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_mesh = bpy.context.scene.oni_mesh
-        if oni_mesh.use_bind_data == True:
+        if oni_mesh.use_bind_data:
             oni_settings["terminate"] = True
             oni_mesh.use_rig_data = False
 
             oni_mesh["use_sl_compatible_data"] = False
             oni_mesh["use_app_compatible_data"] = False
-        if oni_mesh.use_bind_data == False:
+        if not oni_mesh.use_bind_data:
             oni_settings["terminate"] = True
             oni_mesh.use_rig_data = True
         return
 
     def update_pose_data_sl_compatible(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_mesh = bpy.context.scene.oni_mesh
 
-        if oni_mesh.use_sl_compatible_data == True:
+        if oni_mesh.use_sl_compatible_data:
             oni_settings["terminate"] = True
             oni_mesh.use_rig_data = False
             oni_settings["terminate"] = True
             oni_mesh.use_bind_data = False
             oni_mesh["use_app_compatible_data"] = False
 
-        if oni_mesh.use_sl_compatible_data == False:
+        if not oni_mesh.use_sl_compatible_data:
             oni_settings["terminate"] = True
             oni_mesh.use_rig_data = True
         return
 
     def update_pose_data_app_compatible(self, context):
-        if oni_mesh.use_app_compatible_data == True:
+        if oni_mesh.use_app_compatible_data:
             oni_mesh["use_rig_data"] = False
             oni_mesh["use_bind_data"] = False
             oni_mesh["use_app_compatible_data"] = False
 
-        if oni_mesh.use_app_compatible_data == False:
+        if not oni_mesh.use_app_compatible_data:
             oni_settings["terminate"] = True
             oni_mesh.use_rig_data = True
         return
@@ -15838,14 +15823,14 @@ class OnigiriMeshProperties(bpy.types.PropertyGroup):
 
     def update_export_full_rig(self, context):
         oni_mesh = bpy.context.scene.oni_mesh
-        if oni_mesh.export_full_rig == True:
+        if oni_mesh.export_full_rig:
             oni_mesh.export_path_to_pelvis = False
         else:
             return
 
     def update_export_path_to_pelvis(self, context):
         oni_mesh = bpy.context.scene.oni_mesh
-        if oni_mesh.export_path_to_pelvis == True:
+        if oni_mesh.export_path_to_pelvis:
             oni_mesh.export_full_rig = False
         else:
             return
@@ -16005,11 +15990,11 @@ class OnigiriMeshProperties(bpy.types.PropertyGroup):
     export_open_sim: bpy.props.BoolProperty(default=True)
 
     def update_export_reset(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_mesh = bpy.context.scene.oni_mesh
-        if oni_mesh.export_reset == True:
+        if oni_mesh.export_reset:
             for export_option in oni_settings["dae_export_options"]:
                 bpy.context.scene.oni_mesh.property_unset(export_option)
         oni_settings["terminate"] = True
@@ -16030,13 +16015,13 @@ class OnigiriDevkitProperties(bpy.types.PropertyGroup):
 
         preset = devkit.get_properties()
 
-        if armObj == False:
+        if not armObj:
             print("No armature found, updating preset for defaults...")
             for prop in preset:
 
                 devkit.defaults["onigiri"][prop] = preset[prop]
         else:
-            if armObj.get("oni_devkit_preset") == None:
+            if armObj.get("oni_devkit_preset") is None:
                 print("Associated armature contains no preset, applying...")
             else:
                 print("Armature preset updating...")
@@ -16057,7 +16042,7 @@ class OnigiriDevkitProperties(bpy.types.PropertyGroup):
     def update_use_rig_data(self, context):
         oni_mesh = bpy.context.scene.oni_mesh
         use_rig_data = getattr(self, "use_rig_data")
-        if use_rig_data == True:
+        if use_rig_data:
             self["use_bind_data"] = False
             self["use_sl_compatible_data"] = False
             self["use_app_compatible_data"] = False
@@ -16071,7 +16056,7 @@ class OnigiriDevkitProperties(bpy.types.PropertyGroup):
     def update_use_bind_data(self, context):
         oni_mesh = bpy.context.scene.oni_mesh
         use_bind_data = getattr(self, "use_bind_data")
-        if use_bind_data == True:
+        if use_bind_data:
             self["use_rig_data"] = False
             self["use_sl_compatible_data"] = False
             self["use_app_compatible_data"] = False
@@ -16084,7 +16069,7 @@ class OnigiriDevkitProperties(bpy.types.PropertyGroup):
     def update_use_app_compatible_data(self, context):
         oni_mesh = bpy.context.scene.oni_mesh
         use_app_compatible_data = getattr(self, "use_app_compatible_data")
-        if use_app_compatible_data == True:
+        if use_app_compatible_data:
             self["use_rig_data"] = False
             self["use_bind_data"] = False
             self["use_sl_compatible_data"] = False
@@ -16096,7 +16081,7 @@ class OnigiriDevkitProperties(bpy.types.PropertyGroup):
     def update_use_sl_compatible_data(self, context):
         oni_mesh = bpy.context.scene.oni_mesh
         use_sl_compatible_data = getattr(self, "use_sl_compatible_data")
-        if use_sl_compatible_data == True:
+        if use_sl_compatible_data:
             self["use_rig_data"] = False
             self["use_bind_data"] = False
             self["use_app_compatible_data"] = False
@@ -16332,7 +16317,7 @@ class OnigiriDevkitProperties(bpy.types.PropertyGroup):
     def update_export_full_rig(self, context):
         oni_mesh = bpy.context.scene.oni_mesh
         oni_mesh["export_full_rig"] = getattr(self, "export_full_rig")
-        if self.export_full_rig == True:
+        if self.export_full_rig:
             self["export_path_to_pelvis"] = False
         self.update_preset()
 
@@ -16350,7 +16335,7 @@ class OnigiriDevkitProperties(bpy.types.PropertyGroup):
     def update_export_path_to_pelvis(self, context):
         oni_mesh = bpy.context.scene.oni_mesh
         oni_mesh["export_path_to_pelvis"] = getattr(self, "export_path_to_pelvis")
-        if self.export_path_to_pelvis == True:
+        if self.export_path_to_pelvis:
             self["export_full_rig"] = False
         self.update_preset()
 
@@ -16505,7 +16490,7 @@ class OnigiriDevkitProperties(bpy.types.PropertyGroup):
 
     def update_export_reset(self, context):
         oni_mesh = bpy.context.scene.oni_mesh
-        if oni_mesh.export_reset == True:
+        if oni_mesh.export_reset:
             for export_option in oni_settings["dae_export_options"]:
                 bpy.context.scene.oni_mesh.property_unset(export_option)
         oni_settings["terminate"] = True
@@ -16534,23 +16519,23 @@ class OnigiriDevkitProperties(bpy.types.PropertyGroup):
         if devkit.props["last_source"] == armObj:
             return True
 
-        if armObj == False:
+        if not armObj:
             print("No armature, using defaults")
 
             presets = devkit.defaults["onigiri"]
 
         else:
             print("Got armature", armObj.name)
-            if armObj.get("oni_devkit_preset") != None:
+            if armObj.get("oni_devkit_preset") is not None:
                 print("Got presets from armature")
                 presets = armObj["oni_devkit_preset"].to_dict()
             else:
 
-                if armObj.get("onigiri_converted") != None:
+                if armObj.get("onigiri_converted") is not None:
                     print("Character Converted, using defaults")
                     presets = devkit.defaults["defaults"]
 
-                elif armObj.get("oni_collada_matrices") == None:
+                elif armObj.get("oni_collada_matrices") is None:
                     print("No presets on armature, using default assuming Onigiri")
                     presets = devkit.defaults["onigiri"]
                 else:
@@ -16754,7 +16739,7 @@ class OnigiriDevkitProperties(bpy.types.PropertyGroup):
     )
 
     def update_process_attachment_bones(self, context):
-        if self.process_attachment_bones == False:
+        if not self.process_attachment_bones:
             self["process_unsupported_bones"] = False
             armObj = utils.has_armature()
             if armObj != False:
@@ -16778,7 +16763,7 @@ class OnigiriDevkitProperties(bpy.types.PropertyGroup):
 
     def update_process_unsupported_bones(self, context):
 
-        if self.process_attachment_bones == False:
+        if not self.process_attachment_bones:
             self["process_unsupported_bones"] = False
 
             armObj = utils.has_armature()
@@ -16792,7 +16777,7 @@ class OnigiriDevkitProperties(bpy.types.PropertyGroup):
                             boneObj.use_deform = False
             return
 
-        if self.process_unsupported_bones == True:
+        if self.process_unsupported_bones:
 
             armObj = utils.has_armature()
             if armObj != False:
@@ -16802,7 +16787,7 @@ class OnigiriDevkitProperties(bpy.types.PropertyGroup):
                         if skel.avatar_skeleton[bone]["type"] == "attachment":
                             boneObj.use_deform = True
 
-        if self.process_unsupported_bones == False:
+        if not self.process_unsupported_bones:
             armObj = utils.has_armature()
             if armObj != False:
                 for boneObj in armObj.data.bones:
@@ -16850,7 +16835,7 @@ class OnigiriDevkitProperties(bpy.types.PropertyGroup):
 
         classes = {"default", "neutral", "male_default", "male_neutral"}
         rc = "rig_class_"
-        if state == True:
+        if state:
             self.rig_class_name = name
             classes.remove(name)
             for c in classes:
@@ -16929,7 +16914,7 @@ class OnigiriDevKitPresetLoad(bpy.types.Operator, ImportHelper):
     @classmethod
     def poll(cls, context):
         armObj = utils.has_armature()
-        if armObj == False:
+        if not armObj:
             return False
         return True
 
@@ -16997,9 +16982,9 @@ class OnigiriDevKitPresetLoad(bpy.types.Operator, ImportHelper):
 
         print("Preset loaded onto armature:", armObj.name)
         oni = bpy.context.scene.onigiri
-        if oni.devkit_run_code == True:
+        if oni.devkit_run_code:
             code = {}
-            if namespace.get("code") != None:
+            if namespace.get("code") is not None:
                 code.update(namespace["code"])
                 print("Code loaded, running...")
 
@@ -17038,7 +17023,7 @@ class OnigiriDevKitPresetSave(bpy.types.Operator, ExportHelper):
     @classmethod
     def poll(cls, context):
         armObj = utils.has_armature()
-        if armObj == False:
+        if not armObj:
             return False
 
         return True
@@ -17053,14 +17038,14 @@ class OnigiriDevKitPresetSave(bpy.types.Operator, ExportHelper):
 
         armObj = utils.has_armature()
 
-        if armObj == False:
+        if not armObj:
             print(
                 "This is a Blender bug, your UI selection caused an inconsistancy with Blender, please try again."
             )
             popup("A Blender bug hit you, make your selection again and re-export")
             return {"FINISHED"}
 
-        if armObj.get("oni_devkit_preset") != None:
+        if armObj.get("oni_devkit_preset") is not None:
             print("Found preset on armature")
             presets = armObj["oni_devkit_preset"].to_dict()
         else:
@@ -17072,7 +17057,7 @@ class OnigiriDevKitPresetSave(bpy.types.Operator, ExportHelper):
         formatted += pprint.pformat(presets)
         formatted += "\n"
 
-        if armObj.get("oni_collada_matrices") != None:
+        if armObj.get("oni_collada_matrices") is not None:
             matrices = armObj["oni_collada_matrices"].to_dict()
             formatted += "matrices = "
             formatted += pprint.pformat(matrices)
@@ -17203,16 +17188,16 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
             utils.get_state()
             for o in exported_copies:
 
-                if utils.is_valid(o) == False:
+                if not utils.is_valid(o):
                     continue
                 o.select_set(True)
                 utils.activate(o)
             bpy.ops.object.delete()
-            if state != None:
+            if state is not None:
                 utils.set_state(state)
             return True
 
-        if os.path.isdir(self.filepath) == True:
+        if os.path.isdir(self.filepath):
             txt = "The path below does not contain a filename, it is a directory/path only...\n"
             txt += self.filepath
             txt += "\n"
@@ -17235,7 +17220,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
 
         txt = ""
         armObj = utils.has_armature(report=True)
-        if armObj == False:
+        if not armObj:
             txt = "There is an armature issue, please check the console for more details.\n"
             txt += "This can happen if an armature is missing, the items are not parented,\n"
             txt += (
@@ -17253,7 +17238,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
 
         select_state = armObj.select_get()
         armObj.select_set(True)
-        if armObj.select_get() == False:
+        if not armObj.select_get():
             txt = "INIT: The armature object associated with the mesh that you're attempting to export cannot be examined because it is\n"
             txt += "not selectable.  Make sure that the armature is visible in the scene and that you can select it before you proceed."
             print(txt)
@@ -17310,7 +17295,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
             print(" -", o.name)
 
         exported_copies = []
-        if export_copies == True:
+        if export_copies:
             bpy.ops.object.duplicate()
 
             for o in bpy.context.selected_objects:
@@ -17323,12 +17308,12 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
         for boneObj in armObj.pose.bones:
             boneObj.matrix_basis = zero_matrix
 
-        if oni_devkit.remove_empty_groups == True:
+        if oni_devkit.remove_empty_groups:
 
             bpy.ops.onigiri.remove_unused_groups(method="best")
 
         if 1 == 0:
-            if oni_devkit.limit_groups == True:
+            if oni_devkit.limit_groups:
                 for o in bpy.context.selected_objects:
                     if o.type != "MESH":
                         continue
@@ -17336,7 +17321,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
 
                     limit_weights(mesh=o.name, limit=4)
 
-        if oni_devkit.apply_rig_scale == True:
+        if oni_devkit.apply_rig_scale:
             print(
                 "Applying scale to rig, this could damage everything, do this manually!"
             )
@@ -17351,23 +17336,23 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
 
         if 1 == 1:
 
-            if oni_devkit.use_rig_data == True:
+            if oni_devkit.use_rig_data:
                 print("Running rig data export...")
 
-                if oni_devkit.rig_class_default == True:
+                if oni_devkit.rig_class_default:
                     base = "female_default"
-                elif oni_devkit.rig_class_neutral == True:
+                elif oni_devkit.rig_class_neutral:
                     base = "female_neutral"
-                elif oni_devkit.rig_class_male_default == True:
+                elif oni_devkit.rig_class_male_default:
                     base = "male_default"
-                elif oni_devkit.rig_class_male_neutral == True:
+                elif oni_devkit.rig_class_male_neutral:
                     base = "male_neutral"
                 else:
                     base = None
 
                 txt = ""
                 armObj = utils.has_armature()
-                if armObj == False:
+                if not armObj:
                     txt = "No armature is associated with the mesh.\n"
                     txt += "Make sure your mesh are skinned and that there's\n"
                     txt += "an armature modifier, along with an intended target,\n"
@@ -17384,7 +17369,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
                 print(" - use_bind_pose:", use_bind_pose)
                 print(" - project_rig  :", project_rig)
 
-                if project_rig == True:
+                if project_rig:
                     print(
                         "project_rig is enabled, this will duplicate the rig, complete it, record matrices and then delete it"
                     )
@@ -17406,7 +17391,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
                         fix=False,
                         match=False,
                     )
-                    if result == False:
+                    if not result:
                         print(
                             "The project_rig option failed when attempting to complete the rig, the process will continue but may suffer"
                         )
@@ -17436,7 +17421,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
                     joint="real_data",
                     file=self.filepath,
                 )
-                if result == False:
+                if not result:
                     print("Export seems to have failed")
                     popup("Export failed", "Error", "ERROR")
                 else:
@@ -17444,10 +17429,10 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
                 delete_exported_copies(exported_copies, state=state)
                 return {"FINISHED"}
 
-            elif oni_devkit.use_bind_data == True:
+            elif oni_devkit.use_bind_data:
                 txt = ""
                 armObj = utils.has_armature()
-                if armObj == False:
+                if not armObj:
                     txt = "No armature is associated with the mesh.\n"
                     txt += "Make sure your mesh are skinned and that there's\n"
                     txt += "an armature modifier, along with an intended target,\n"
@@ -17459,7 +17444,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
                     return {"FINISHED"}
 
                 matrices = devkit.get_bind_info(armObj)
-                if matrices == False:
+                if not matrices:
                     print("get_bind_info returned False")
                     popup(
                         "Incompatible data type, try using a different bind data source",
@@ -17475,7 +17460,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
                     file=self.filepath,
                 )
 
-                if result == False:
+                if not result:
                     print("Export seems to have failed")
                     popup("Export failed", "Error", "ERROR")
                 else:
@@ -17485,12 +17470,12 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
                 return {"FINISHED"}
 
         if (
-            oni_devkit.use_sl_compatible_data == True
-            or oni_devkit.use_app_compatible_data == True
+            oni_devkit.use_sl_compatible_data
+            or oni_devkit.use_app_compatible_data
         ):
             print("Running compatible data export...")
             armObj = utils.has_armature()
-            if armObj == False:
+            if not armObj:
                 txt = "No armature is associated with the mesh.\n"
                 txt += "Make sure your mesh are skinned and that there's\n"
                 txt += "an armature modifier, along with an intended target,\n"
@@ -17501,14 +17486,14 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
                 delete_exported_copies(exported_copies, state=state)
                 return {"FINISHED"}
 
-            if oni_devkit.use_sl_compatible_data == True:
+            if oni_devkit.use_sl_compatible_data:
                 joint = "bone_data"
-            elif oni_devkit.use_app_compatible_data == True:
+            elif oni_devkit.use_app_compatible_data:
                 joint = "real_data"
             print("Devkit branch running...")
 
             matrices = armObj.get("oni_collada_matrices")
-            if matrices == None:
+            if matrices is None:
                 print(
                     "OnigiriColladaExporter : No devkit bone definitions were loaded, try a different method"
                 )
@@ -17545,7 +17530,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
                 file=self.filepath,
             )
             print("Devkit banch returned")
-            if result == False:
+            if not result:
                 print("Devkit branch returned an error")
             else:
                 print("Devkit branch succeeded!")
@@ -17580,8 +17565,8 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
 
         use_app_compatible_data = oni_devkit.use_app_compatible_data
 
-        if use_app_compatible_data == True:
-            if armObj.get("oni_devkit_transforms") == None:
+        if use_app_compatible_data:
+            if armObj.get("oni_devkit_transforms") is None:
                 use_app_compatible_data = False
                 use_rig_data = True
                 setattr(oni_devkit, "export_path_to_pelvis", False)
@@ -17592,11 +17577,11 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
                     "collada_export : use_app_compatible_data was enabled but there's no transforms available to use so we fall back to use_rig_data"
                 )
 
-        if use_bind_data == True:
+        if use_bind_data:
             has_bind_data = False
 
             armObj = utils.has_armature()
-            if armObj == False:
+            if not armObj:
                 print(
                     "collada_export : Attempting to find an armature for use with bind data failed."
                 )
@@ -17607,7 +17592,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
                 )
                 return {"FINISHED"}
             for boneObj in armObj.data.bones:
-                if boneObj.get("bind_mat") != None:
+                if boneObj.get("bind_mat") is not None:
                     has_bind_data = True
                     setattr(oni_devkit, "export_path_to_pelvis", False)
                     setattr(oni_devkit, "export_full_rig", False)
@@ -17617,7 +17602,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
                         "collada_export : use_bind_data is enabled and we found the required data on the rig"
                     )
                     break
-            if has_bind_data == False:
+            if not has_bind_data:
                 print(
                     "collada_export : use_bind_data was enabled but there's no bind data on the rig, falling back to use_rig_data"
                 )
@@ -17628,7 +17613,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
 
         new_state = utils.get_state()
         new_kit = meshutils.get_exportable_mesh(objects=selected, report=True)
-        if new_kit == False:
+        if not new_kit:
 
             print(
                 "onigiri.collada_exporter reports: first pass return from meshutils::get_exportable_mesh is False"
@@ -17641,8 +17626,8 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
         utils.set_state(new_state)
 
         if (
-            obj[arm].get("oni_dae_devkit") != None
-            or obj[arm].get("oni_dae_bind") != None
+            obj[arm].get("oni_dae_devkit") is not None
+            or obj[arm].get("oni_dae_bind") is not None
         ):
 
             oni_mesh.export_path_to_pelvis = False
@@ -17654,7 +17639,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
         if export_path_to_pelvis or export_full_rig:
             print("Adding deformer...")
             new_kit = meshutils.get_exportable_mesh(objects=selected, report=True)
-            if new_kit == False:
+            if not new_kit:
 
                 print(
                     "onigiri.collada_exporter reports: return from meshutils::get_exportable_mesh is False"
@@ -17710,16 +17695,16 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
 
         active_selection = [o for o in bpy.context.selected_objects]
 
-        if oni_mesh.remove_empty_groups == True:
+        if oni_mesh.remove_empty_groups:
 
             bpy.ops.onigiri.remove_unused_groups(method="best")
 
-        if oni_devkit.limit_groups == True:
+        if oni_devkit.limit_groups:
             for m in selected_mesh:
                 print("limit groups per vertex of", m)
 
                 limit_weights(mesh=m, limit=4)
-        if oni_devkit.apply_rig_scale == True:
+        if oni_devkit.apply_rig_scale:
             print(
                 "Applying scale to rig, this could damage everything, do this manually!"
             )
@@ -17742,7 +17727,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
                 if g.name not in skel.avatar_skeleton:
                     bad_mesh_groups[o.name].append(g.name)
                     bad_mesh_groups_trigger = True
-        if bad_mesh_groups_trigger == True:
+        if bad_mesh_groups_trigger:
             print(
                 "-----------------------------------------------------------------------------------------------"
             )
@@ -17794,7 +17779,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
 
         use_universal_data = oni_mesh.use_universal_data
 
-        if bpy.context.active_object == None:
+        if bpy.context.active_object is None:
             active_object = active_selection[0]
             bpy.context.view_layer.objects.active = active_object
             print("no active object, fixed:", active_object.name)
@@ -17820,7 +17805,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
             for mod in meshObj.modifiers:
                 if mod.type == "ARMATURE":
                     try:
-                        if mod.object.name != None:
+                        if mod.object.name is not None:
                             pass
                     except:
                         print("no target for armature modifier")
@@ -17868,7 +17853,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
         armature = arm_objects[0]
         armObj = bpy.data.objects[armature]
 
-        if fix_broken_bones == True:
+        if fix_broken_bones:
             print("Fixing use_deform...")
             for dBone in armObj.data.bones:
                 if dBone.name not in skel.avatar_skeleton:
@@ -17876,7 +17861,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
                 else:
                     dBone.use_deform = True
 
-        if apply_scale == True or apply_rotation == True or apply_location == True:
+        if apply_scale or apply_rotation or apply_location:
             print("active_selection:", active_selection)
             print(
                 "Pre-processing requested, this is a destructive process but should not hurt your mesh"
@@ -17889,7 +17874,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
                 utils.activate(o)
             armObj.select_set(True)
 
-            if armObj.select_get() == False:
+            if not armObj.select_get():
                 print("Could not select armature, this may not go well.")
                 print("Make sure the armature is visible and selectable.")
                 popup(
@@ -17910,7 +17895,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
             tempfile.gettempdir() + "/onigiri_" + get_unique_name_short() + ".dae"
         )
 
-        if rotate_for_sl == True:
+        if rotate_for_sl:
             global_forward = "-X"
         else:
             global_forward = "Y"
@@ -17964,7 +17949,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
         file_in = file_path
         file_out = self.properties.filepath
 
-        if armObj.get("onigiri_converted") != None:
+        if armObj.get("onigiri_converted") is not None:
             print(
                 "OnigiriColladaExporter reports: converted rig detected, deferring to collada::write_collada"
             )
@@ -17974,7 +17959,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
 
             oni_devkit.property_unset("use_bind_data")
 
-        if use_universal_data == True:
+        if use_universal_data:
             print("universal retired, deferring to updated use_rig_data")
             oni_mesh.property_unset("use_universal_data")
             oni_devkit.property_unset("use_rig_data")
@@ -17992,7 +17977,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
                 except:
                     print("ONI Warning: unable to remove temporary file:", file_path)
 
-        if use_safe_settings == True:
+        if use_safe_settings:
             print("use_safe_settings is being obsoleted")
             if 1 == 0:
                 print(
@@ -18046,7 +18031,7 @@ class OnigiriColladaExporter(bpy.types.Operator, ExportHelper):
             o.select_set(False)
         for o in selected:
             o.select_set(True)
-        if active != None:
+        if active is not None:
             bpy.context.view_layer.objects.active = active
 
         return {"FINISHED"}
@@ -18162,7 +18147,7 @@ class OnigiriColladaImporter(bpy.types.Operator, ImportHelper):
                 armObj = o
                 has_armature = True
 
-        if has_armature == False:
+        if not has_armature:
             print("No detectable armature was found in the imported items")
             txt = "\n"
             txt += "There was no detectable armature in the imported dae file\n"
@@ -18177,7 +18162,7 @@ class OnigiriColladaImporter(bpy.types.Operator, ImportHelper):
         armObj.select_set(True)
         utils.activate(armObj)
 
-        if oni_import.dae_rotate_collada == True:
+        if oni_import.dae_rotate_collada:
             onia = bpy.context.scene.oni_anim_props
             xrot = onia.x_rotate_value
             yrot = onia.y_rotate_value
@@ -18192,7 +18177,7 @@ class OnigiriColladaImporter(bpy.types.Operator, ImportHelper):
             onia.x_rotate_value = xrot
             onia.y_rotate_value = yrot
             onia.z_rotate_value = zrot
-        if oni_import.dae_fix_scale == True:
+        if oni_import.dae_fix_scale:
             armObj.scale.x = 1
             armObj.scale.y = 1
             armObj.scale.z = 1
@@ -18301,7 +18286,7 @@ class OnigiriDevkitImporter(bpy.types.Operator, ImportHelper):
                 armObj = o
                 has_armature = True
 
-        if has_armature == False:
+        if not has_armature:
 
             bpy.ops.object.delete()
             utils.set_state(state)
@@ -18327,7 +18312,7 @@ class OnigiriDevkitImporter(bpy.types.Operator, ImportHelper):
                 armObj.data.edit_bones.remove(boneObj)
         bpy.ops.object.mode_set(mode="OBJECT")
 
-        if oni_import.dae_rotate_collada == True:
+        if oni_import.dae_rotate_collada:
             onia = bpy.context.scene.oni_anim_props
             xrot = onia.x_rotate_value
             yrot = onia.y_rotate_value
@@ -18343,7 +18328,7 @@ class OnigiriDevkitImporter(bpy.types.Operator, ImportHelper):
             onia.y_rotate_value = yrot
             onia.z_rotate_value = zrot
 
-        if oni_import.dae_fix_scale == True:
+        if oni_import.dae_fix_scale:
             armObj.scale.x = 1
             armObj.scale.y = 1
             armObj.scale.z = 1
@@ -18359,7 +18344,7 @@ class OnigiriDevkitImporter(bpy.types.Operator, ImportHelper):
             match=match,
         )
 
-        if result == False:
+        if not result:
             for o in selected:
                 o.select_set(True)
             armObj.select_set(True)
@@ -18408,9 +18393,9 @@ class OnigiriColladaDataRemove(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         armObj = utils.has_armature()
-        if armObj == False:
+        if not armObj:
             return False
-        if armObj.get("oni_collada_matrices") == None:
+        if armObj.get("oni_collada_matrices") is None:
             return False
         return True
 
@@ -18752,7 +18737,7 @@ class OnigiriPanelImport(bpy.types.Panel):
         oni_import = bpy.context.scene.oni_import
         oni_devkit = bpy.context.scene.oni_devkit
 
-        if oni_import.dae_import_menu_enabled == True:
+        if oni_import.dae_import_menu_enabled:
             dae_import_menu_enabled_icon = "menu_opened"
         else:
             dae_import_menu_enabled_icon = "menu_closed"
@@ -18763,7 +18748,7 @@ class OnigiriPanelImport(bpy.types.Panel):
             text="Dae Import",
             icon_value=ico.custom_icons[dae_import_menu_enabled_icon].icon_id,
         )
-        if oni_import.dae_import_menu_enabled == True:
+        if oni_import.dae_import_menu_enabled:
 
             layout = self.layout
             box = layout.box()
@@ -18853,7 +18838,7 @@ class OnigiriPanelImport(bpy.types.Panel):
         row = self.layout.row(align=True)
         oni_anim_edit = bpy.context.window_manager.oni_anim_edit
 
-        if oni_anim_edit.anim_menu_enabled == True:
+        if oni_anim_edit.anim_menu_enabled:
             anim_menu_enabled_icon = "menu_opened"
         else:
             anim_menu_enabled_icon = "menu_closed"
@@ -18865,7 +18850,7 @@ class OnigiriPanelImport(bpy.types.Panel):
             text="Anim Editor",
             icon_value=ico.custom_icons[anim_menu_enabled_icon].icon_id,
         )
-        if oni_anim_edit.anim_menu_enabled == True:
+        if oni_anim_edit.anim_menu_enabled:
             layout = self.layout
             box = layout.box()
             col = box.column(align=True)
@@ -18890,7 +18875,7 @@ class OnigiriPanelImport(bpy.types.Panel):
             col = box.column(align=True)
             row = col.row(align=True)
 
-            if oni_anim_edit.anim_show_joints_menu_enabled == True:
+            if oni_anim_edit.anim_show_joints_menu_enabled:
                 anim_show_joints_menu_enabled_icon = "menu_opened"
             else:
                 anim_show_joints_menu_enabled_icon = "menu_closed"
@@ -19126,7 +19111,7 @@ class OnigiriPanelImport(bpy.types.Panel):
                 text="Edit Joints",
                 icon_value=ico.custom_icons[anim_show_joints_menu_enabled_icon].icon_id,
             )
-            if oni_anim_edit.anim_show_joints_menu_enabled == True:
+            if oni_anim_edit.anim_show_joints_menu_enabled:
                 row = col.row(align=True)
                 row.operator(
                     "onigiri.anim_reset_joint_priority",
@@ -19134,8 +19119,8 @@ class OnigiriPanelImport(bpy.types.Panel):
                     icon_value=ico.custom_icons["reset"].icon_id,
                 )
 
-                if anim.props.get("anim_data") != None:
-                    if anim.props["anim_data"].get("joints") != None:
+                if anim.props.get("anim_data") is not None:
+                    if anim.props["anim_data"].get("joints") is not None:
                         for anim_joint in anim.props["anim_data"]["joints"]:
                             anim_joint_priority = anim.props["anim_data"]["joints"][
                                 anim_joint
@@ -19232,9 +19217,9 @@ class OnigiriDevKitReshape(bpy.types.Operator):
             return False
 
         armObj = utils.has_armature()
-        if armObj == False:
+        if not armObj:
             return False
-        if armObj.get("oni_collada_matrices") == None:
+        if armObj.get("oni_collada_matrices") is None:
             return False
 
         return True
@@ -19244,7 +19229,7 @@ class OnigiriDevKitReshape(bpy.types.Operator):
         armObj = utils.has_armature()
 
         transforms = armObj.get("oni_collada_matrices")
-        if transforms == None:
+        if transforms is None:
             print(
                 "INIT: OnigiriDevkitReshape reports : no matrices on the armature object"
             )
@@ -19258,7 +19243,7 @@ class OnigiriDevKitReshape(bpy.types.Operator):
         result = devkit.reshape(
             armObj, matrices=matrices, rotate=True, copy=True, delete=False, report=True
         )
-        if result == False:
+        if not result:
             popup("Devkit repair failed")
 
         return {"FINISHED"}
@@ -19280,11 +19265,11 @@ class OnigiriDevKitMasterSet(bpy.types.Operator):
         if len(selected) == 0:
             return False
         armObj = utils.has_armature()
-        if armObj == False:
+        if not armObj:
             return False
-        if armObj.get("oni_collada_matrices") == None:
+        if armObj.get("oni_collada_matrices") is None:
             return False
-        if armObj.get("oni_devkit_master") != None:
+        if armObj.get("oni_devkit_master") is not None:
             devkit.props["master_icon"] = "dot_green"
             devkit.props["master_text"] = "Master: " + armObj.name
             return False
@@ -19433,7 +19418,7 @@ class OnigiriDevKitCombine(bpy.types.Operator):
             if arm == masterObj.name:
                 continue
             armObj = bpy.data.objects[arm]
-            if armObj.get("oni_collada_matrices") == None:
+            if armObj.get("oni_collada_matrices") is None:
                 bad_devkits.append(arm)
                 continue
 
@@ -19841,9 +19826,9 @@ class OnigiriLoadReferenceMap(bpy.types.Operator, ImportHelper):
     @classmethod
     def poll(cls, context):
         onip = bpy.context.scene.oni_anim_props
-        if onip.get("source_armature") == None:
+        if onip.get("source_armature") is None:
             return False
-        if onip.get("target_armature") == None:
+        if onip.get("target_armature") is None:
             return False
         return True
 
@@ -19918,9 +19903,9 @@ class OnigiriMatchPose(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         onip = bpy.context.scene.oni_anim_props
-        if onip.get("source_armature") == None:
+        if onip.get("source_armature") is None:
             return False
-        if onip.get("target_armature") == None:
+        if onip.get("target_armature") is None:
             return False
         return True
 
@@ -19951,7 +19936,7 @@ class OnigiriMatchPose(bpy.types.Operator):
         for boneObj in obj[tarm].data.bones:
             boneObj.select = False
 
-        if oni_anim.get("template_map") != None:
+        if oni_anim.get("template_map") is not None:
 
             template_map = oni_anim["template_map"].to_dict()
             for sbone in template_map:
@@ -19961,7 +19946,7 @@ class OnigiriMatchPose(bpy.types.Operator):
                     continue
                 if sbone not in obj[sarm].data.bones:
                     continue
-                if oni_anim.match_pose_selected == True:
+                if oni_anim.match_pose_selected:
                     if tbone in selected_pose_bones:
                         bone_map[sbone] = tbone
                 else:
@@ -19970,7 +19955,7 @@ class OnigiriMatchPose(bpy.types.Operator):
 
             for boneObj in obj[tarm].data.bones:
                 if boneObj.name in obj[sarm].data.bones:
-                    if oni_anim.match_pose_selected == True:
+                    if oni_anim.match_pose_selected:
                         if boneObj.name in selected_pose_bones:
                             bone_map[boneObj.name] = boneObj.name
                     else:
@@ -19984,7 +19969,7 @@ class OnigiriMatchPose(bpy.types.Operator):
 
         for sbone in bone_map:
 
-            if oni_anim.match_root_bones == False:
+            if not oni_anim.match_root_bones:
                 if sbone in roots:
                     continue
             tbone = bone_map[sbone]
@@ -19997,11 +19982,11 @@ class OnigiriMatchPose(bpy.types.Operator):
             bc["Copy Rotation"].target_space = "WORLD"
             bc["Copy Rotation"].owner_space = "WORLD"
             bc["Copy Rotation"].influence = 1
-            if oni_anim.match_x_axis == False:
+            if not oni_anim.match_x_axis:
                 bc["Copy Rotation"].use_x = False
-            if oni_anim.match_y_axis == False:
+            if not oni_anim.match_y_axis:
                 bc["Copy Rotation"].use_y = False
-            if oni_anim.match_z_axis == False:
+            if not oni_anim.match_z_axis:
                 bc["Copy Rotation"].use_z = False
             bc["Copy Rotation"].name = "ONI Copy Rot"
 
@@ -20021,7 +20006,7 @@ class OnigiriMatchPose(bpy.types.Operator):
 
         for sbone in bone_map:
 
-            if oni_anim.match_root_bones == False:
+            if not oni_anim.match_root_bones:
                 if sbone in roots:
                     continue
             tbone = bone_map[sbone]
@@ -20051,9 +20036,9 @@ class OnigiriMatchPoseReset(bpy.types.Operator):
         onip.property_unset("lock_source_armature")
         onip.property_unset("lock_target_armature")
 
-        if onip.get("source_armature") != None:
+        if onip.get("source_armature") is not None:
             del onip["source_armature"]
-        if onip.get("target_armature") != None:
+        if onip.get("target_armature") is not None:
             del onip["target_armature"]
         if onip.get("tempmlate_map"):
             del onip["template_map"]
@@ -20075,12 +20060,12 @@ class OnigiriCreateReferencePoseOperator(bpy.types.Operator):
         if o.type != "ARMATURE":
             return False
 
-        if o.animation_data == None:
+        if o.animation_data is None:
             return True
-        if o.animation_data.action == None:
+        if o.animation_data.action is None:
             return True
 
-        if o.get("reference") != None:
+        if o.get("reference") is not None:
             return False
         return True
 
@@ -20088,7 +20073,7 @@ class OnigiriCreateReferencePoseOperator(bpy.types.Operator):
         oni_anim = bpy.context.scene.oni_anim_props
         armObj = bpy.context.selected_objects[0]
 
-        if armObj.get("reference") != None:
+        if armObj.get("reference") is not None:
             print(
                 "A reference pose has already been set, use (restore) before trying again"
             )
@@ -20134,20 +20119,20 @@ class OnigiriCreateReferencePoseOperator(bpy.types.Operator):
             )
             print("Create reference frame picks up start frame as", start_frame)
 
-        if armObj.animation_data != None:
+        if armObj.animation_data is not None:
 
             anim = armObj.animation_data
 
             move_to = start_frame + 1
 
-            if anim.action != None:
+            if anim.action is not None:
                 print("moving animation")
                 for fcurve in anim.action.fcurves:
                     for point in fcurve.keyframe_points:
 
                         point.co.x += 1
 
-        if oni_anim.reference_from_pose == True:
+        if oni_anim.reference_from_pose:
 
             print("from current pose")
 
@@ -20165,7 +20150,7 @@ class OnigiriCreateReferencePoseOperator(bpy.types.Operator):
 
             print("from custom pose properties")
 
-            if oni_anim.pose_clear_location == True:
+            if oni_anim.pose_clear_location:
                 for boneObj in armObj.data.bones:
                     if boneObj.parent:
                         boneObj.select = True
@@ -20173,7 +20158,7 @@ class OnigiriCreateReferencePoseOperator(bpy.types.Operator):
                         boneObj.select = False
                 bpy.ops.pose.loc_clear()
 
-            if oni_anim.pose_clear_location_root == True:
+            if oni_anim.pose_clear_location_root:
                 for boneObj in armObj.data.bones:
                     if boneObj.parent:
                         boneObj.select = False
@@ -20186,7 +20171,7 @@ class OnigiriCreateReferencePoseOperator(bpy.types.Operator):
 
         for boneObj in armObj.pose.bones:
             if 1 == 0:
-                if armObj.animation_data != None:
+                if armObj.animation_data is not None:
                     print("MARK: Animation should have been moved at this point")
                     boneObj.keyframe_insert(
                         data_path="rotation_quaternion", frame=start_frame
@@ -20242,7 +20227,7 @@ class OnigiriRestoreReferencePoseOperator(bpy.types.Operator):
             return False
         if bpy.context.selected_objects[0].type != "ARMATURE":
             return False
-        if bpy.context.selected_objects[0].get("reference") == None:
+        if bpy.context.selected_objects[0].get("reference") is None:
             return False
         return True
 
@@ -20250,7 +20235,7 @@ class OnigiriRestoreReferencePoseOperator(bpy.types.Operator):
         oni_anim = bpy.context.scene.oni_anim_props
         armObj = bpy.context.selected_objects[0]
 
-        if armObj.get("reference") == None:
+        if armObj.get("reference") is None:
             print("A reference pose has not been set so cannot be restored")
             popup(
                 "A reference pose has not been set, so cannot be restored",
@@ -20259,7 +20244,7 @@ class OnigiriRestoreReferencePoseOperator(bpy.types.Operator):
             )
             return {"FINISHED"}
 
-        if armObj.animation_data == None:
+        if armObj.animation_data is None:
             print(
                 "There is animation data associated with the chosen object, so nothing to do"
             )
@@ -20268,7 +20253,7 @@ class OnigiriRestoreReferencePoseOperator(bpy.types.Operator):
                 "A reference pose is an animation but there is no animation on the object"
             )
             return {"FINISHED"}
-        if armObj.animation_data.action == None:
+        if armObj.animation_data.action is None:
             print("There is acton associated with the chosen object, so nothing to do")
             armObj.pop("reference", "")
             popup(
@@ -20291,7 +20276,7 @@ class OnigiriRestoreReferencePoseOperator(bpy.types.Operator):
 
         start_frame, stop_frame = armObj.animation_data.action.frame_range
 
-        if start_frame == None:
+        if start_frame is None:
             start_frame = 1
         bpy.context.scene.frame_set(start_frame)
 
@@ -20299,7 +20284,7 @@ class OnigiriRestoreReferencePoseOperator(bpy.types.Operator):
 
         selected_pose_bones = [a.name for a in bpy.context.selected_pose_bones]
 
-        if armObj.get("oni_reference_frame") != None:
+        if armObj.get("oni_reference_frame") is not None:
             start_frame = armObj["oni_reference_frame"]
 
         for boneObj in armObj.pose.bones:
@@ -20327,11 +20312,11 @@ class OnigiriRestoreReferencePoseOperator(bpy.types.Operator):
 
         has_curves = False
         anim = armObj.animation_data
-        if anim != None:
-            if anim.action != None:
+        if anim is not None:
+            if anim.action is not None:
                 if anim.action.fcurves:
                     has_curves = True
-        if has_curves == True:
+        if has_curves:
             move_to = start_frame - 1
             print("moving animation back")
             for fcurve in anim.action.fcurves:
@@ -20368,7 +20353,7 @@ class OnigiriCopykeyFrame(bpy.types.Operator):
     def poll(cls, context):
 
         active = bpy.context.active_object
-        if active == None:
+        if active is None:
             return False
         if active.type != "ARMATURE":
             return False
@@ -20408,7 +20393,7 @@ class OnigiriScaleAnimationOperator(bpy.types.Operator):
     def poll(cls, context):
 
         active = bpy.context.active_object
-        if active == None:
+        if active is None:
             return False
         if active.type != "ARMATURE":
             return False
@@ -20524,7 +20509,7 @@ class OnigiriAnimationProperties(bpy.types.PropertyGroup):
 
     def update_lock_source_armature(self, context):
         onip = bpy.context.scene.oni_anim_props
-        if onip.lock_source_armature == True:
+        if onip.lock_source_armature:
             if (
                 len(bpy.context.selected_objects) == 0
                 or len(bpy.context.selected_objects) > 1
@@ -20545,13 +20530,13 @@ class OnigiriAnimationProperties(bpy.types.PropertyGroup):
             onip["source_armature"] = bpy.context.selected_objects[0].name
             print("Source Locked!", onip["source_armature"])
         else:
-            if onip.get("source_armature") != None:
+            if onip.get("source_armature") is not None:
                 print("Un-Locked!", onip["source_armature"])
                 del onip["source_armature"]
 
     def update_lock_target_armature(self, context):
         onip = bpy.context.scene.oni_anim_props
-        if onip.lock_target_armature == True:
+        if onip.lock_target_armature:
             if (
                 len(bpy.context.selected_objects) == 0
                 or len(bpy.context.selected_objects) > 1
@@ -20571,7 +20556,7 @@ class OnigiriAnimationProperties(bpy.types.PropertyGroup):
             onip["target_armature"] = bpy.context.selected_objects[0].name
             print("Target Locked!", onip["target_armature"])
         else:
-            if onip.get("target_armature") != None:
+            if onip.get("target_armature") is not None:
                 print("Un-Locked!", onip["target_armature"])
                 del onip["target_armature"]
 
@@ -20787,7 +20772,7 @@ class OnigiriRunProperties(bpy.types.PropertyGroup):
 
     def trigger_update(self, context):
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_settings["terminate"] = True
@@ -20797,7 +20782,7 @@ class OnigiriRunProperties(bpy.types.PropertyGroup):
     def trigger_get(self):
         print("Triggered get")
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return True
         bpy.context.scene.oni_run.running = False
@@ -20805,7 +20790,7 @@ class OnigiriRunProperties(bpy.types.PropertyGroup):
 
     def trigger_set(self, value):
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_settings["terminate"] = True
@@ -20848,7 +20833,7 @@ class OnigiriArmatureProperties(bpy.types.PropertyGroup):
 
     def rp_use_connect_all(self, context):
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
 
@@ -20863,9 +20848,9 @@ class OnigiriArmatureProperties(bpy.types.PropertyGroup):
 
         bpy.ops.object.mode_set(mode="EDIT")
 
-        if getattr(oni, "use_connect_all", None) == True:
+        if getattr(oni, "use_connect_all", None):
 
-            if getattr(obj, "oni_bone_props", None) == None:
+            if getattr(obj, "oni_bone_props", None) is None:
                 print("Missing property oni_bone_props on True")
                 popup(
                     "Missing essential property (oni_bone_props) on True, this is a bug",
@@ -20887,7 +20872,7 @@ class OnigiriArmatureProperties(bpy.types.PropertyGroup):
                 bone.use_connect = False
         else:
 
-            if getattr(obj, "oni_bone_props", None) == None:
+            if getattr(obj, "oni_bone_props", None) is None:
                 print("Missing property oni_bone_props on False")
                 popup(
                     "Missing essential property (oni_bone_props) on False, this is a bug",
@@ -21081,7 +21066,7 @@ class OnigiriMiscProperties(bpy.types.PropertyGroup):
 
     def update_select_bone_shape(self, context):
         oni_misc = bpy.context.window_manager.oni_misc
-        if oni_misc.select_bone_shape == True:
+        if oni_misc.select_bone_shape:
             if len(bpy.context.selected_objects) > 1:
                 oni_misc["select_bone_shape"] = False
                 return
@@ -21174,7 +21159,7 @@ class OnigiriMiscProperties(bpy.types.PropertyGroup):
 
     def update_info_onigiri_bind_info(self, context):
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
 
@@ -21215,12 +21200,12 @@ class OnigiriMiscProperties(bpy.types.PropertyGroup):
     )
 
     def update_rig_class_to_default(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onim = bpy.context.window_manager.oni_misc
 
-        if onim.rig_class_to_default == False:
+        if not onim.rig_class_to_default:
 
             oni_settings["terminate"] = True
             onim.rig_class_to_default = True
@@ -21242,12 +21227,12 @@ class OnigiriMiscProperties(bpy.types.PropertyGroup):
         return
 
     def update_rig_class_to_neutral(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onim = bpy.context.window_manager.oni_misc
 
-        if onim.rig_class_to_neutral == False:
+        if not onim.rig_class_to_neutral:
 
             oni_settings["terminate"] = True
             onim.rig_class_to_neutral = True
@@ -21269,12 +21254,12 @@ class OnigiriMiscProperties(bpy.types.PropertyGroup):
         return
 
     def update_rig_class_to_pivot(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onim = bpy.context.window_manager.oni_misc
 
-        if onim.rig_class_to_pivot == False:
+        if not onim.rig_class_to_pivot:
 
             oni_settings["terminate"] = True
             onim.rig_class_to_pivot = True
@@ -21295,12 +21280,12 @@ class OnigiriMiscProperties(bpy.types.PropertyGroup):
         return
 
     def update_rig_class_to_pos(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onim = bpy.context.window_manager.oni_misc
 
-        if onim.rig_class_to_pos == False:
+        if not onim.rig_class_to_pos:
 
             oni_settings["terminate"] = True
             onim.rig_class_to_pos = True
@@ -21363,125 +21348,125 @@ class OnigiriMiscProperties(bpy.types.PropertyGroup):
 
     def update_enable_base_bones(self, context):
         armObj = rigutils.is_armature()
-        if armObj == False:
+        if not armObj:
             print("armature is False")
             self["enable_base_bones"] = False
             return
         state = self.enable_base_bones
         group = "base"
         rigutils.show_bones(armature=armObj, group=group, state=state)
-        if armObj.get("oni_bone_groups") != None:
+        if armObj.get("oni_bone_groups") is not None:
             armObj["oni_bone_groups"][group] = state
 
     def update_enable_volume_bones(self, context):
         armObj = rigutils.is_armature()
-        if armObj == False:
+        if not armObj:
             self["enable_volume_bones"] = False
             return
         state = self.enable_volume_bones
         group = "volume"
         rigutils.show_bones(armature=armObj, group=group, state=state)
-        if armObj.get("oni_bone_groups") != None:
+        if armObj.get("oni_bone_groups") is not None:
             armObj["oni_bone_groups"][group] = state
 
     def update_enable_attach_bones(self, context):
         armObj = rigutils.is_armature()
-        if armObj == False:
+        if not armObj:
             self["enable_attach_bones"] = False
             return
         state = self.enable_attach_bones
         group = "attach"
         rigutils.show_bones(armature=armObj, group=group, state=state)
-        if armObj.get("oni_bone_groups") != None:
+        if armObj.get("oni_bone_groups") is not None:
             armObj["oni_bone_groups"][group] = state
 
     def update_enable_attach2_bones(self, context):
         armObj = rigutils.is_armature()
-        if armObj == False:
+        if not armObj:
             self["enable_attach2_bones"] = False
             return
         state = self.enable_attach2_bones
         group = "attach2"
         rigutils.show_bones(armature=armObj, group=group, state=state)
-        if armObj.get("oni_bone_groups") != None:
+        if armObj.get("oni_bone_groups") is not None:
             armObj["oni_bone_groups"][group] = state
 
     def update_enable_hind_bones(self, context):
         armObj = rigutils.is_armature()
-        if armObj == False:
+        if not armObj:
             self["enable_hind_bones"] = False
             return
         state = self.enable_hind_bones
         group = "hind"
         rigutils.show_bones(armature=armObj, group=group, state=state)
-        if armObj.get("oni_bone_groups") != None:
+        if armObj.get("oni_bone_groups") is not None:
             armObj["oni_bone_groups"][group] = state
 
     def update_enable_face_bones(self, context):
         armObj = rigutils.is_armature()
-        if armObj == False:
+        if not armObj:
             self["enable_face_bones"] = False
             return
         state = self.enable_face_bones
         group = "face"
         rigutils.show_bones(armature=armObj, group=group, state=state)
-        if armObj.get("oni_bone_groups") != None:
+        if armObj.get("oni_bone_groups") is not None:
             armObj["oni_bone_groups"][group] = state
 
     def update_enable_wing_bones(self, context):
         armObj = rigutils.is_armature()
-        if armObj == False:
+        if not armObj:
             self["enable_wing_bones"] = False
             return
         state = self.enable_wing_bones
         group = "wing"
         rigutils.show_bones(armature=armObj, group=group, state=state)
-        if armObj.get("oni_bone_groups") != None:
+        if armObj.get("oni_bone_groups") is not None:
             armObj["oni_bone_groups"][group] = state
 
     def update_enable_tail_bones(self, context):
         armObj = rigutils.is_armature()
-        if armObj == False:
+        if not armObj:
             self["enable_tail_bones"] = False
             return
         state = self.enable_tail_bones
         group = "tail"
         rigutils.show_bones(armature=armObj, group=group, state=state)
-        if armObj.get("oni_bone_groups") != None:
+        if armObj.get("oni_bone_groups") is not None:
             armObj["oni_bone_groups"][group] = state
 
     def update_enable_hand_bones(self, context):
         armObj = rigutils.is_armature()
-        if armObj == False:
+        if not armObj:
             self["enable_hand_bones"] = False
             return
         state = self.enable_hand_bones
         group = "hand"
         rigutils.show_bones(armature=armObj, group=group, state=state)
-        if armObj.get("oni_bone_groups") != None:
+        if armObj.get("oni_bone_groups") is not None:
             armObj["oni_bone_groups"][group] = state
 
     def update_enable_spine_bones(self, context):
         armObj = rigutils.is_armature()
-        if armObj == False:
+        if not armObj:
             self["enable_spine_bones"] = False
             return
         state = self.enable_spine_bones
         group = "spine"
         rigutils.show_bones(armature=armObj, group=group, state=state)
-        if armObj.get("oni_bone_groups") != None:
+        if armObj.get("oni_bone_groups") is not None:
             armObj["oni_bone_groups"][group] = state
 
     def poll_enable_bones(self):
 
         armObj = rigutils.is_armature()
-        if armObj == False:
+        if not armObj:
             for group in visible.layers:
                 prop = "enable_" + group + "_bones"
                 self[prop] = False
             return False
 
-        if armObj.get("oni_bone_groups") == None:
+        if armObj.get("oni_bone_groups") is None:
             bone_groups = {}
 
             for group in visible.layers:
@@ -21568,12 +21553,12 @@ class OnigiriMiscProperties(bpy.types.PropertyGroup):
     limit_weights_message: bpy.props.StringProperty(default="[look here]")
 
     def update_refit_lock_garment_source(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         obj = bpy.data.objects
         onim = bpy.context.window_manager.oni_misc
-        if onim.refit_lock_garment_source == True:
+        if onim.refit_lock_garment_source:
             if len(bpy.context.selected_objects) == 0:
                 oni_settings["terminate"] = True
                 onim.refit_lock_garment_source = False
@@ -21606,12 +21591,12 @@ class OnigiriMiscProperties(bpy.types.PropertyGroup):
         return
 
     def update_refit_lock_avatar_source(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         obj = bpy.data.objects
         onim = bpy.context.window_manager.oni_misc
-        if onim.refit_lock_avatar_source == True:
+        if onim.refit_lock_avatar_source:
             if len(bpy.context.selected_objects) == 0:
                 oni_settings["terminate"] = True
                 onim.refit_lock_avatar_source = False
@@ -21652,13 +21637,13 @@ class OnigiriMiscProperties(bpy.types.PropertyGroup):
         return
 
     def update_refit_lock_avatar_targets(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
 
         obj = bpy.data.objects
         onim = bpy.context.window_manager.oni_misc
-        if onim.refit_lock_avatar_targets == True:
+        if onim.refit_lock_avatar_targets:
             if len(bpy.context.selected_objects) == 0:
 
                 txt = "Error: select one or more objects"
@@ -21708,7 +21693,7 @@ class OnigiriMiscProperties(bpy.types.PropertyGroup):
             return
         else:
 
-            if onim.get("refit_targets") != None:
+            if onim.get("refit_targets") is not None:
                 del onim["refit_targets"]
             onim.refit_avatar_target_name = ""
             onim.refit_message = "[Look here for messages]"
@@ -21779,56 +21764,56 @@ class OnigiriMiscProperties(bpy.types.PropertyGroup):
     refit_message: bpy.props.StringProperty(default="[Look here for messages]")
 
     def update_test_angle_pos_x(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onim = bpy.context.window_manager.oni_misc
-        if onim.test_angle_pos_x == True:
+        if onim.test_angle_pos_x:
             oni_settings["terminate"] = True
             onim.test_angle_neg_x = False
 
     def update_test_angle_pos_y(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onim = bpy.context.window_manager.oni_misc
-        if onim.test_angle_pos_y == True:
+        if onim.test_angle_pos_y:
             oni_settings["terminate"] = True
             onim.test_angle_neg_y = False
 
     def update_test_angle_pos_z(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onim = bpy.context.window_manager.oni_misc
-        if onim.test_angle_pos_z == True:
+        if onim.test_angle_pos_z:
             oni_settings["terminate"] = True
             onim.test_angle_neg_z = False
 
     def update_test_angle_neg_x(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onim = bpy.context.window_manager.oni_misc
-        if onim.test_angle_neg_x == True:
+        if onim.test_angle_neg_x:
             oni_settings["terminate"] = True
             onim.test_angle_pos_x = False
 
     def update_test_angle_neg_y(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onim = bpy.context.window_manager.oni_misc
-        if onim.test_angle_neg_y == True:
+        if onim.test_angle_neg_y:
             oni_settings["terminate"] = True
             onim.test_angle_pos_y = False
 
     def update_test_angle_neg_z(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onim = bpy.context.window_manager.oni_misc
-        if onim.test_angle_neg_z == True:
+        if onim.test_angle_neg_z:
             oni_settings["terminate"] = True
             onim.test_angle_pos_z = False
 
@@ -21877,7 +21862,7 @@ class OnigiriMiscProperties(bpy.types.PropertyGroup):
 class OnigiriProperties(bpy.types.PropertyGroup):
 
     def update_blank(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni = bpy.context.scene.onigiri
@@ -21900,11 +21885,11 @@ class OnigiriProperties(bpy.types.PropertyGroup):
     def set_map_type_mbones(self, value):
         oni = bpy.context.scene.onigiri
         global oni_settings
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
 
-        if getattr(oni, "map_to_mbones") == True:
+        if getattr(oni, "map_to_mbones"):
 
             oni_settings["terminate"] = True
             setattr(oni, "map_to_template", False)
@@ -21918,11 +21903,11 @@ class OnigiriProperties(bpy.types.PropertyGroup):
     def set_map_type_template(self, value):
         oni = bpy.context.scene.onigiri
         global oni_settings
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
 
-        if getattr(oni, "map_to_template") == True:
+        if getattr(oni, "map_to_template"):
 
             oni_settings["terminate"] = True
             setattr(oni, "map_to_mbones", False)
@@ -22070,10 +22055,10 @@ class OnigiriProperties(bpy.types.PropertyGroup):
     def add_selected_reference_rig(self, value):
         oni = bpy.context.scene.onigiri
         global oni_settings
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
-        if getattr(oni, "selected_reference") == True:
+        if getattr(oni, "selected_reference"):
 
             oni_settings["terminate"] = True
             setattr(oni, "neutral_reference", False)
@@ -22082,10 +22067,10 @@ class OnigiriProperties(bpy.types.PropertyGroup):
     def add_neutral_reference_rig(self, value):
         oni = bpy.context.scene.onigiri
         global oni_settings
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
-        if getattr(oni, "neutral_reference") == True:
+        if getattr(oni, "neutral_reference"):
 
             oni_settings["terminate"] = True
             setattr(oni, "selected_reference", False)
@@ -22246,12 +22231,12 @@ class OnigiriProperties(bpy.types.PropertyGroup):
 class OnigiriRetargetProps(bpy.types.PropertyGroup):
 
     def update_retarget_enabled(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         obj = bpy.data.objects
         onir = bpy.context.window_manager.oni_retarget
-        if onir.retarget_enabled == True:
+        if onir.retarget_enabled:
             print("adding retarget_mode handler")
             onir.retarget_text = "Select a source bone"
 
@@ -22266,13 +22251,13 @@ class OnigiriRetargetProps(bpy.types.PropertyGroup):
 
     def update_retarget_set_source(self, context):
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         obj = bpy.data.objects
         onir = bpy.context.window_manager.oni_retarget
 
-        if onir.retarget_set_source == False:
+        if not onir.retarget_set_source:
             onir.retarget_source_name = ""
             return
 
@@ -22294,13 +22279,13 @@ class OnigiriRetargetProps(bpy.types.PropertyGroup):
 
     def update_retarget_set_target(self, context):
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         obj = bpy.data.objects
         onir = bpy.context.window_manager.oni_retarget
 
-        if onir.retarget_set_target == False:
+        if not onir.retarget_set_target:
             onir.retarget_target_name = ""
             return
 
@@ -22340,15 +22325,15 @@ class OnigiriRetargetProps(bpy.types.PropertyGroup):
     )
 
     def update_retarget_suspend(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         obj = bpy.data.objects
         onir = bpy.context.window_manager.oni_retarget
 
-        if onir.retarget_enabled == True:
+        if onir.retarget_enabled:
 
-            if onir.retarget_suspend == True:
+            if onir.retarget_suspend:
 
                 bpy.ops.object.mode_set(mode="OBJECT")
                 return
@@ -22386,7 +22371,7 @@ class OnigiriRetargetProps(bpy.types.PropertyGroup):
     def update_retarget_reset(self, context):
         obj = bpy.data.objects
         onir = bpy.context.window_manager.oni_retarget
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
 
@@ -22408,7 +22393,7 @@ class OnigiriRetargetProps(bpy.types.PropertyGroup):
     def update_retarget_check(self, context):
         if oni_flags["debug"] == 1:
             print("onir - update_retarget_check - triggered")
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
 
@@ -22417,13 +22402,13 @@ class OnigiriRetargetProps(bpy.types.PropertyGroup):
 
         if (
             onir.retarget_source_name == "" or onir.retarget_target_name == ""
-        ) and onir.retarget_enabled == False:
+        ) and not onir.retarget_enabled:
 
             return
 
         elif (
             onir.retarget_source_name == "" or onir.retarget_target_name == ""
-        ) and onir.retarget_enabled == True:
+        ) and onir.retarget_enabled:
 
             print("disabling animation mapper")
             animation_retarget()
@@ -22477,9 +22462,9 @@ class OnigiriRetargetApply(bpy.types.Operator):
     def poll(cls, context):
         obj = bpy.data.objects
         onir = bpy.context.window_manager.oni_retarget
-        if onir.retarget_set_source == False:
+        if not onir.retarget_set_source:
             return False
-        if onir.retarget_set_target == False:
+        if not onir.retarget_set_target:
             return False
         if len(obj[onir.retarget_source_name]["bone_map"]) == 0:
             return False
@@ -22567,9 +22552,9 @@ class OnigiriRetargetRestore(bpy.types.Operator):
     def poll(cls, context):
         obj = bpy.data.objects
         onir = bpy.context.window_manager.oni_retarget
-        if onir.retarget_set_source == False:
+        if not onir.retarget_set_source:
             return False
-        if onir.retarget_set_target == False:
+        if not onir.retarget_set_target:
             return False
         if len(obj[onir.retarget_source_name]["bone_map"]) == 0:
             return False
@@ -22605,7 +22590,7 @@ class OnigiriRetargetSave(bpy.types.Operator, ExportHelper):
         obj = bpy.data.objects
         onir = bpy.context.window_manager.oni_retarget
 
-        if onir.retarget_enabled == False:
+        if not onir.retarget_enabled:
             return False
 
         if len(obj[onir.retarget_source_name]["bone_map"]) == 0:
@@ -22651,9 +22636,9 @@ class OnigiriRetargetBake(bpy.types.Operator):
         obj = bpy.data.objects
         onir = bpy.context.window_manager.oni_retarget
 
-        if onir.retarget_set_source == False:
+        if not onir.retarget_set_source:
             return False
-        if onir.retarget_set_target == False:
+        if not onir.retarget_set_target:
             return False
         if bpy.context.mode != "POSE":
             return False
@@ -22706,7 +22691,7 @@ class OnigiriRetargetLoad(bpy.types.Operator, ImportHelper):
     def poll(cls, context):
         obj = bpy.data.objects
         onir = bpy.context.window_manager.oni_retarget
-        if onir.retarget_enabled == False:
+        if not onir.retarget_enabled:
             return False
 
         return True
@@ -22828,7 +22813,7 @@ class OnigiriRetargetRemoveMap(bpy.types.Operator):
         if bpy.context.mode != "POSE":
             return False
 
-        if onir.retarget_suspend == True:
+        if onir.retarget_suspend:
             return False
 
         return True
@@ -22891,11 +22876,11 @@ class OnigiriRigProperties(bpy.types.PropertyGroup):
 
     def update_lock_selected(self, context):
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_rig = bpy.context.window_manager.oni_rig
-        if oni_rig.lock_selected == False:
+        if not oni_rig.lock_selected:
             oni_rig.lock_engaged = False
             oni_rig.rig_selected = ""
             oni_rig.bone_selected = ""
@@ -22908,7 +22893,7 @@ class OnigiriRigProperties(bpy.types.PropertyGroup):
                     oni_rig.rig_selected = pBone.id_data.name
                     oni_rig.lock_engaged = True
 
-            if oni_rig.lock_engaged == False:
+            if not oni_rig.lock_engaged:
                 oni_rig.property_unset("lock_selected")
                 oni_rig.rig_selected = ""
                 oni_rig.bone_selected = ""
@@ -22989,7 +22974,7 @@ class OnigiriAddRig(bpy.types.Operator):
             print(txt)
             return {"FINISHED"}
 
-        if brp.rigs_create == True:
+        if brp.rigs_create:
             print("Creating fresh rig from mapper")
 
             armObj = create_onigiri_rig()
@@ -23011,7 +22996,7 @@ class OnigiriAddRig(bpy.types.Operator):
             directory = full_path + "/Object/"
             filename = object
 
-            if os.path.exists(full_path) == False:
+            if not os.path.exists(full_path):
                 print("OnigiriAddRig reports: missing data", full_path)
                 popup(
                     "External rig data is missing, your installation might be damaged"
@@ -23043,7 +23028,7 @@ def scoobiedoo_create_onigiri_rig():
 
     oni = bpy.context.scene.onigiri
 
-    if getattr(bpy.context.scene.onigiri, "pos_rig") == True:
+    if getattr(bpy.context.scene.onigiri, "pos_rig"):
         oni_rig = create_rig(skel_type="pos", add_control_rig=oni.add_control_rig)
     else:
         oni_rig = create_rig(skel_type="pivot", add_control_rig=oni.add_control_rig)
@@ -23106,12 +23091,12 @@ class OnigiriMapperProps(bpy.types.PropertyGroup):
     )
 
     def update_mapper_lock_source(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         obj = bpy.data.objects
         bmp = bpy.context.window_manager.oni_mapper
-        if bmp.mapper_lock_source == True:
+        if bmp.mapper_lock_source:
 
             if len(bpy.context.selected_objects) == 0:
                 popup("Choose a source rig")
@@ -23150,14 +23135,14 @@ class OnigiriMapperProps(bpy.types.PropertyGroup):
             bmp.mapper_source_name_backup = armObj.name
 
             for bone in armObj.pose.bones:
-                if bone.parent == None:
+                if bone.parent is None:
                     bmp.mapper_anchor_source_name = bone.name
 
             print("update_mapper_lock_source completed")
 
-        elif bmp.mapper_lock_source == False:
+        elif not bmp.mapper_lock_source:
 
-            if bmp.mapper_enabled == True:
+            if bmp.mapper_enabled:
                 return
             else:
                 print("Mind changer! Source cleared...")
@@ -23167,12 +23152,12 @@ class OnigiriMapperProps(bpy.types.PropertyGroup):
         return
 
     def update_mapper_lock_target(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         obj = bpy.data.objects
         bmp = bpy.context.window_manager.oni_mapper
-        if bmp.mapper_lock_target == True:
+        if bmp.mapper_lock_target:
             if len(bpy.context.selected_objects) == 0:
                 popup("Select 1 or more targets")
                 bmp.mapper_message = "Select target rigs"
@@ -23198,7 +23183,7 @@ class OnigiriMapperProps(bpy.types.PropertyGroup):
                 obj[bmp.mapper_source_name].select_set(False)
                 print("removed source from selection")
 
-            if bmp.get("targets") == None:
+            if bmp.get("targets") is None:
                 bmp["targets"] = dict()
             for o in bpy.context.selected_objects:
                 if o.type != "ARMATURE":
@@ -23215,9 +23200,9 @@ class OnigiriMapperProps(bpy.types.PropertyGroup):
 
             bmp.mapper_target_name = "TRIGGERED!"
 
-        elif bmp.mapper_lock_target == False:
+        elif not bmp.mapper_lock_target:
 
-            if bmp.mapper_enabled == True:
+            if bmp.mapper_enabled:
                 return
             else:
                 print("Mind changer! Target cleared...")
@@ -23258,7 +23243,7 @@ class OnigiriMapperProps(bpy.types.PropertyGroup):
     )
 
     def update_mapper_check(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         obj = bpy.data.objects
@@ -23307,20 +23292,20 @@ class OnigiriMapperProps(bpy.types.PropertyGroup):
     )
 
     def update_mapper_allow_all_bones(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         bmp = bpy.context.window_manager.oni_mapper
-        if bmp.mapper_allow_all_bones == True:
+        if bmp.mapper_allow_all_bones:
             oni_settings["terminate"] = True
             bmp.mapper_safe_bones = False
 
     def update_mapper_safe_bones(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         bmp = bpy.context.window_manager.oni_mapper
-        if bmp.mapper_safe_bones == True:
+        if bmp.mapper_safe_bones:
             oni_settings["terminate"] = True
             bmp.mapper_allow_all_bones = False
 
@@ -23391,7 +23376,7 @@ class OnigiriMapperProps(bpy.types.PropertyGroup):
                 target
             ].animation_data.action.frame_range
 
-            if last_start == None:
+            if last_start is None:
                 last_start = this_start
 
             elif this_start < last_start:
@@ -23466,16 +23451,16 @@ class OnigiriMapperProps(bpy.types.PropertyGroup):
     )
 
     def update_mapper_anchor_enabled(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         obj = bpy.data.objects
         bmp = bpy.context.window_manager.oni_mapper
 
-        if bmp.get("transient") == None:
+        if bmp.get("transient") is None:
             print("transient missing, returning")
             return
-        if bmp["transient"].get("sticky") == None:
+        if bmp["transient"].get("sticky") is None:
             print("sticky not active, returning")
             return
         sticky = bmp["transient"]["sticky"]
@@ -23578,7 +23563,7 @@ class OnigiriMapperProps(bpy.types.PropertyGroup):
 
     def update_mapper_pack_bones(self, context):
         bmp = bpy.context.window_manager.oni_mapper
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_settings["terminate"] = True
@@ -23587,14 +23572,14 @@ class OnigiriMapperProps(bpy.types.PropertyGroup):
     def update_mapper_custom_stabilizer(self, context):
         bmp = bpy.context.window_manager.oni_mapper
 
-        if bmp.mapper_custom_stabilizer == False:
+        if not bmp.mapper_custom_stabilizer:
             return
         bmp.mapper_custom_stabilizer = False
 
     def update_mapper_visual_stabilizer(self, context):
         bmp = bpy.context.window_manager.oni_mapper
 
-        if bmp.mapper_visual_stabilizer == False:
+        if not bmp.mapper_visual_stabilizer:
             return
         bmp.mapper_visual_stabilizer = False
 
@@ -23682,7 +23667,7 @@ class OnigiriMapperProps(bpy.types.PropertyGroup):
     )
 
     def update_gap(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         bmp = bpy.context.window_manager.oni_mapper
@@ -23695,7 +23680,7 @@ class OnigiriMapperProps(bpy.types.PropertyGroup):
             bmp.mapper_pack_bones_spacing_z = 0
 
     def update_spacing(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         bmp = bpy.context.window_manager.oni_mapper
@@ -23863,7 +23848,7 @@ class OnigiriMapperReset(bpy.types.Operator):
         )
         print(" - source lock would reset the character template mapper")
 
-        if bmp.mapper_enabled == True:
+        if bmp.mapper_enabled:
             print("Character Mapper was enabled removing handler")
 
             print("OnigiriMapperReset reports: calling operator mapper_restore")
@@ -23885,58 +23870,58 @@ class OnigiriMapperReset(bpy.types.Operator):
 
             obj[bmp.mapper_source_name].data.display_type = "OCTAHEDRAL"
 
-            if obj[bmp.mapper_source_name].get("location") != None:
+            if obj[bmp.mapper_source_name].get("location") is not None:
                 del obj[bmp.mapper_source_name]["location"]
-            if obj[bmp.mapper_source_name].get("fly_paper") != None:
+            if obj[bmp.mapper_source_name].get("fly_paper") is not None:
                 del obj[bmp.mapper_source_name]["fly_paper"]
 
-            if bmp.get("locked") != None:
+            if bmp.get("locked") is not None:
                 del obj[bmp.mapper_source_name]["locked"]
-            if obj[bmp.mapper_source_name].get("mapped") != None:
+            if obj[bmp.mapper_source_name].get("mapped") is not None:
                 del obj[bmp.mapper_source_name]["mapped"]
-            if obj[bmp.mapper_source_name].get("packed") != None:
+            if obj[bmp.mapper_source_name].get("packed") is not None:
                 del obj[bmp.mapper_source_name]["packed"]
 
             if bmp.mapper_source_name in obj.keys():
-                if obj[bmp.mapper_source_name].get("bone_map") != None:
+                if obj[bmp.mapper_source_name].get("bone_map") is not None:
                     del obj[bmp.mapper_source_name]["bone_map"]
-                if obj[bmp.mapper_source_name].get("bone_data") != None:
+                if obj[bmp.mapper_source_name].get("bone_data") is not None:
                     del obj[bmp.mapper_source_name]["bone_data"]
 
-                if obj[bmp.mapper_source_name].get("targets") != None:
+                if obj[bmp.mapper_source_name].get("targets") is not None:
                     del obj[bmp.mapper_source_name]["targets"]
-                if obj[bmp.mapper_source_name].get("name") != None:
+                if obj[bmp.mapper_source_name].get("name") is not None:
                     del obj[bmp.mapper_source_name]["name"]
-                if obj[bmp.mapper_source_name].get("role") != None:
+                if obj[bmp.mapper_source_name].get("role") is not None:
                     del obj[bmp.mapper_source_name]["role"]
-                if obj[bmp.mapper_source_name].get("detached") != None:
+                if obj[bmp.mapper_source_name].get("detached") is not None:
                     del obj[bmp.mapper_source_name]["detached"]
 
-        if bmp.get("targets") != None:
+        if bmp.get("targets") is not None:
 
             shifter.morph_reset(bmp["targets"])
 
-            if bmp.mapper_restore_pose == True:
+            if bmp.mapper_restore_pose:
                 bpy.context.scene.frame_set(bpy.context.scene.frame_start)
 
             for tarm in bmp["targets"]:
                 if tarm in obj.keys():
 
-                    if obj[tarm].get("bone_data") != None:
+                    if obj[tarm].get("bone_data") is not None:
 
-                        if bmp.mapper_enabled == True:
+                        if bmp.mapper_enabled:
 
-                            if obj[tarm].get("pose_matrix") != None:
+                            if obj[tarm].get("pose_matrix") is not None:
 
                                 del obj[tarm]["pose_matrix"]
 
                         del obj[tarm]["bone_data"]
 
-                    if obj[tarm].get("bone_map") != None:
+                    if obj[tarm].get("bone_map") is not None:
                         del obj[tarm]["bone_map"]
-                    if obj[tarm].get("name") != None:
+                    if obj[tarm].get("name") is not None:
                         del obj[tarm]["name"]
-                    if obj[tarm].get("role") != None:
+                    if obj[tarm].get("role") is not None:
                         del obj[tarm]["role"]
             del bmp["targets"]
 
@@ -23975,7 +23960,7 @@ class OnigiriMapperReset(bpy.types.Operator):
         ]
 
         for rp in remove_properties:
-            if bmp.get(rp) != None:
+            if bmp.get(rp) is not None:
                 del bmp[rp]
 
         bmp.mapper_enabled = False
@@ -24022,21 +24007,21 @@ class OnigiriMapperRestore(bpy.types.Operator):
 
             return {"FINISHED"}
 
-        if obj[bmp.mapper_source_name].get("mapped") != None:
+        if obj[bmp.mapper_source_name].get("mapped") is not None:
             del obj[bmp.mapper_source_name]["mapped"]
 
         restore_rig(armature=bmp.mapper_source_name, type="edit", roll=True, data="all")
 
-        if obj[bmp.mapper_source_name].get("collection") != None:
+        if obj[bmp.mapper_source_name].get("collection") is not None:
             remove_collection(name=obj[bmp.mapper_source_name]["collection"])
             del obj[bmp.mapper_source_name]["collection"]
 
-        if obj[source].get("targets") != None:
+        if obj[source].get("targets") is not None:
             shifter.morph_reset(obj[source]["targets"])
 
         bpy.data.objects[bmp.mapper_source_name].data.display_type = "OCTAHEDRAL"
 
-        if obj[source].get("fly_paper") == None:
+        if obj[source].get("fly_paper") is None:
             print("Fly paper property missing from source")
             return {"FINISHED"}
         else:
@@ -24069,7 +24054,7 @@ class OnigiriMapperDetach(bpy.types.Operator):
         obj = bpy.data.objects
         bmp = bpy.context.window_manager.oni_mapper
 
-        if bmp.mapper_enabled == True:
+        if bmp.mapper_enabled:
             print("Character Mapper was enabled removing handler")
             try:
                 bpy.app.handlers.depsgraph_update_post.remove(mapper_handler)
@@ -24080,53 +24065,53 @@ class OnigiriMapperDetach(bpy.types.Operator):
 
             obj[bmp.mapper_source_name]["detached"] = 1
 
-            if obj[bmp.mapper_source_name].get("locked") != None:
+            if obj[bmp.mapper_source_name].get("locked") is not None:
                 del obj[bmp.mapper_source_name]["locked"]
 
-            if obj[bmp.mapper_source_name].get("location") != None:
+            if obj[bmp.mapper_source_name].get("location") is not None:
                 del obj[bmp.mapper_source_name]["location"]
-            if bmp.get("locked") != None:
+            if bmp.get("locked") is not None:
                 del obj[bmp.mapper_source_name]["locked"]
 
-            if obj[bmp.mapper_source_name].get("packed") != None:
+            if obj[bmp.mapper_source_name].get("packed") is not None:
                 del obj[bmp.mapper_source_name]["packed"]
 
-            if bmp.get("template") != None:
+            if bmp.get("template") is not None:
                 del bmp["template"]
-            if bmp.get("targets_waiting") != None:
+            if bmp.get("targets_waiting") is not None:
                 del bmp["targets_waiting"]
 
             if bmp.mapper_source_name in obj.keys():
-                if obj[bmp.mapper_source_name].get("bone_map") != None:
+                if obj[bmp.mapper_source_name].get("bone_map") is not None:
                     del obj[bmp.mapper_source_name]["bone_map"]
-                if obj[bmp.mapper_source_name].get("bone_data") != None:
+                if obj[bmp.mapper_source_name].get("bone_data") is not None:
                     del obj[bmp.mapper_source_name]["bone_data"]
 
-                if obj[bmp.mapper_source_name].get("targets") != None:
+                if obj[bmp.mapper_source_name].get("targets") is not None:
                     del obj[bmp.mapper_source_name]["targets"]
-                if obj[bmp.mapper_source_name].get("name") != None:
+                if obj[bmp.mapper_source_name].get("name") is not None:
                     del obj[bmp.mapper_source_name]["name"]
-                if obj[bmp.mapper_source_name].get("role") != None:
+                if obj[bmp.mapper_source_name].get("role") is not None:
                     del obj[bmp.mapper_source_name]["role"]
 
-        if bmp.get("targets") != None:
+        if bmp.get("targets") is not None:
             for tarm in bmp["targets"]:
                 if tarm in obj.keys():
 
                     obj[tarm]["detached"] = 1
 
-                    if obj[tarm].get("bone_data") != None:
+                    if obj[tarm].get("bone_data") is not None:
                         del obj[tarm]["bone_data"]
 
-                    if obj[tarm].get("bone_map") != None:
+                    if obj[tarm].get("bone_map") is not None:
                         del obj[tarm]["bone_map"]
-                    if obj[tarm].get("name") != None:
+                    if obj[tarm].get("name") is not None:
                         del obj[tarm]["name"]
-                    if obj[tarm].get("role") != None:
+                    if obj[tarm].get("role") is not None:
                         del obj[tarm]["role"]
             del bmp["targets"]
 
-        if bmp.get("transient") != None:
+        if bmp.get("transient") is not None:
             del bmp["transient"]
 
         bmp.mapper_enabled = False
@@ -24158,7 +24143,7 @@ class OnigiriMapperSaveTargets(bpy.types.Operator, ExportHelper):
     def poll(cls, context):
         obj = bpy.data.objects
         bmp = bpy.context.window_manager.oni_mapper
-        if bmp.mapper_template_ready == False:
+        if not bmp.mapper_template_ready:
             return False
         return True
 
@@ -24212,7 +24197,7 @@ class OnigiriMapperRemoveRetargetLink(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         bmp = bpy.context.window_manager.oni_mapper
-        if bmp.mapper_template_ready == False:
+        if not bmp.mapper_template_ready:
             return False
         return True
 
@@ -24325,7 +24310,7 @@ class OnigiriMapperTarget(bpy.types.Operator):
             popup(txt, "Circular dependency", "ERROR")
             return {"FINISHED"}
 
-        if bmp.get("targets") != None:
+        if bmp.get("targets") is not None:
             if armObj.name in bmp["targets"].keys():
                 txt = "Error: already chosen as target"
                 popup(txt, "Duplicate Target", "ERROR")
@@ -24346,7 +24331,7 @@ class OnigiriMapperTarget(bpy.types.Operator):
         else:
             bmp.mapper_message = "Choose another target if needed"
 
-        if obj[bmp.mapper_source_name].get("bone_map") == None:
+        if obj[bmp.mapper_source_name].get("bone_map") is None:
             obj[bmp.mapper_source_name]["bone_map"] = dict()
 
         arm = armObj.name
@@ -24386,7 +24371,7 @@ class OnigiriMapperAuto(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if bpy.context.window_manager.oni_mapper.get("template") != None:
+        if bpy.context.window_manager.oni_mapper.get("template") is not None:
             return False
         return True
 
@@ -24394,7 +24379,7 @@ class OnigiriMapperAuto(bpy.types.Operator):
         obj = bpy.data.objects
         bmp = bpy.context.window_manager.oni_mapper
 
-        if bmp.mapper_enabled == False:
+        if not bmp.mapper_enabled:
             txt = "The mapper is not ready yet, have you filled in all the data?"
             print(txt)
             popup(txt, "Mapper Disabled", "ERROR")
@@ -24406,21 +24391,21 @@ class OnigiriMapperAuto(bpy.types.Operator):
             popup(txt, "Mapped", "ERROR")
             return {"FINISHED"}
 
-        if bmp.mapper_retarget_only == True:
+        if bmp.mapper_retarget_only:
             txt = "Auto Map needs location data to be useful, disable the (Retarget Only) button in order to use this feature."
             print(txt)
             popup(txt, "Location Data Required", "ERROR")
             return {"FINISHED"}
 
-        if obj[bmp.mapper_source_name].get("onigiri") != None:
+        if obj[bmp.mapper_source_name].get("onigiri") is not None:
 
-            if bmp.mapper_allow_all_bones == True:
+            if bmp.mapper_allow_all_bones:
                 print(
                     "using all bones, this includes all mbones but not vbones unless specified"
                 )
                 bone_list = mbones_only.copy()
 
-            elif bmp.mapper_safe_bones == True:
+            elif bmp.mapper_safe_bones:
                 print("using safe bones")
                 bone_list = safe_bones.copy()
 
@@ -24439,8 +24424,8 @@ class OnigiriMapperAuto(bpy.types.Operator):
                 for bone in match_list:
                     bone_list.append(bone)
 
-            if bmp.mapper_allow_volume_bones == True:
-                if bmp.mapper_allow_all_bones == True or bmp.mapper_safe_bones == True:
+            if bmp.mapper_allow_volume_bones:
+                if bmp.mapper_allow_all_bones or bmp.mapper_safe_bones:
                     print("adding vbones to the map")
                     bone_list.extend(vbones_only.copy())
 
@@ -24451,7 +24436,7 @@ class OnigiriMapperAuto(bpy.types.Operator):
             bone_list = list()
             for boneObj in obj[bmp.mapper_source_name].data.bones:
 
-                if boneObj.use_deform == True:
+                if boneObj.use_deform:
                     bone_list.append(boneObj.name)
                     source_bone_count += 1
 
@@ -24459,7 +24444,7 @@ class OnigiriMapperAuto(bpy.types.Operator):
         for arm in bmp["targets"]:
             for boneObj in obj[arm].data.bones:
 
-                if boneObj.use_deform == True:
+                if boneObj.use_deform:
                     target_bone_count += 1
 
         if target_bone_count > source_bone_count:
@@ -24475,7 +24460,7 @@ class OnigiriMapperAuto(bpy.types.Operator):
         for tarm in targets:
             obj[tarm]["bone_map"] = dict()
 
-        if bmp.mapper_force_pelvis_map == True:
+        if bmp.mapper_force_pelvis_map:
             bone_list.insert(0, "mPelvis")
 
         count = min(source_bone_count, target_bone_count)
@@ -24487,7 +24472,7 @@ class OnigiriMapperAuto(bpy.types.Operator):
                 if c == count:
                     break
 
-                if tBone.use_deform == True:
+                if tBone.use_deform:
                     store_bone_map(
                         source=bmp.mapper_source_name,
                         sbone=bone_list[c],
@@ -24496,7 +24481,7 @@ class OnigiriMapperAuto(bpy.types.Operator):
                     )
                     c += 1
 
-        if bpy.context.active_object != None:
+        if bpy.context.active_object is not None:
             bpy.ops.object.mode_set(mode="OBJECT")
         bpy.ops.object.select_all(action="DESELECT")
         bpy.data.objects[bmp.mapper_source_name].select_set(True)
@@ -24522,7 +24507,7 @@ class OnigiriMapperMatch(bpy.types.Operator):
     def poll(cls, context):
         bmp = bpy.context.window_manager.oni_mapper
 
-        if bmp.mapper_enabled == False:
+        if not bmp.mapper_enabled:
             return False
         return True
 
@@ -24567,7 +24552,7 @@ class OnigiriMapperMatch(bpy.types.Operator):
 
             if sboneObj.name not in obj[target].data.bones:
 
-                if bmp.mapper_auto_fix_bvh == True:
+                if bmp.mapper_auto_fix_bvh:
                     if sboneObj.name not in bvh_names:
                         continue
 
@@ -24595,7 +24580,7 @@ class OnigiriMapperMatch(bpy.types.Operator):
         bpy.data.objects[bmp.mapper_source_name].select_set(True)
         bpy.context.view_layer.objects.active = bpy.data.objects[bmp.mapper_source_name]
 
-        if bmp.mapper_retarget_only == True:
+        if bmp.mapper_retarget_only:
             bpy.data.objects[source].data.display_type = "OCTAHEDRAL"
         else:
             bpy.data.objects[source].data.display_type = "STICK"
@@ -24626,7 +24611,7 @@ class OnigiriMapperTemplate(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         bmp = bpy.context.window_manager.oni_mapper
-        if bmp.mapper_template_ready == False:
+        if not bmp.mapper_template_ready:
             return False
         return True
 
@@ -24635,7 +24620,7 @@ class OnigiriMapperTemplate(bpy.types.Operator):
         bmp = bpy.context.window_manager.oni_mapper
         source = bmp.mapper_source_name
 
-        if bmp.mapper_retarget_only == True:
+        if bmp.mapper_retarget_only:
             if bmp.mapper_anchor_source_name != "":
                 if bmp.mapper_anchor_source_name not in obj[source].data.bones:
                     print(
@@ -24659,7 +24644,7 @@ class OnigiriMapperTemplate(bpy.types.Operator):
                 )
                 return {"FINISHED"}
 
-            if obj[source]["bone_map"].get(bmp.mapper_anchor_source_name) == None:
+            if obj[source]["bone_map"].get(bmp.mapper_anchor_source_name) is None:
                 print("The indicated anchor is not in the map file that was loaded")
                 popup(
                     "Map your anchor before retargeting, there's no other way to do this",
@@ -24744,7 +24729,7 @@ class OnigiriMapperTemplate(bpy.types.Operator):
         bpy.data.objects[bmp.mapper_source_name].select_set(True)
         bpy.context.view_layer.objects.active = bpy.data.objects[bmp.mapper_source_name]
 
-        if bmp.mapper_retarget_only != True:
+        if not bmp.mapper_retarget_only:
             bpy.data.objects[bmp.mapper_source_name].data.display_type = "STICK"
 
         bpy.data.objects[bmp.mapper_source_name].show_in_front = True
@@ -24763,7 +24748,7 @@ class OnigiriMapperAttachTEST(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         bmp = bpy.context.window_manager.oni_mapper
-        if bmp.mapper_enabled == False:
+        if not bmp.mapper_enabled:
             return False
         return True
 
@@ -24818,17 +24803,17 @@ class OnigiriMapperAttachTEST(bpy.types.Operator):
 
         bone_map = obj[source]["bone_map"]
 
-        if bmp.mapper_retarget_only == True:
+        if bmp.mapper_retarget_only:
 
             print("Proxy objects are forced with (Retarget Only) enabled")
             bmp.mapper_proxy_objects = True
-            if bmp.mapper_proxy_objects == True:
+            if bmp.mapper_proxy_objects:
 
                 cursor_location = bpy.context.scene.cursor.location.copy()
                 bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
 
                 ONI_col = create_collection(name="ONI_Controllers")
-                if ONI_col == False:
+                if not ONI_col:
                     txt = (
                         "I couldn't create a collection for some reason, it might be stated here: "
                         + ONI_col
@@ -24957,7 +24942,7 @@ class OnigiriMapperAttachTEST(bpy.types.Operator):
                     utils.set_inverse(context_py, "ONI Child Of")
 
                     slave_constraint = False
-                    if slave_constraint == True:
+                    if slave_constraint:
 
                         oMaster.select_set(False)
                         bpy.context.view_layer.objects.active = oSlave
@@ -24970,7 +24955,7 @@ class OnigiriMapperAttachTEST(bpy.types.Operator):
                         bc["Copy Rotation"].name = "ONI Copy Rot"
 
                         sticky_proxies = False
-                        if sticky_proxies == True:
+                        if sticky_proxies:
 
                             bc.new("COPY_LOCATION")
                             bc["Copy Location"].target = obj[source]
@@ -25002,7 +24987,7 @@ class OnigiriMapperAttachTEST(bpy.types.Operator):
                             ].transform_space = "WORLD_SPACE"
 
                         sticky_proxies = False
-                        if sticky_proxies == True:
+                        if sticky_proxies:
                             loc_axis = ["LOC_X", "LOC_Y", "LOC_Z"]
                             sticky_driver = oSlave.driver_add("location")
                             for axis in range(3):
@@ -25109,7 +25094,7 @@ class OnigiriMapperAttachTEST(bpy.types.Operator):
 
                     bmp["transient"]["sticky"] = bmp.constraint_name_anchor
 
-                    if bmp.mapper_anchor_enabled == False:
+                    if not bmp.mapper_anchor_enabled:
                         bpy.context.object.constraints[
                             "ONI Child Of - sticky rig"
                         ].mute = True
@@ -25184,7 +25169,7 @@ class OnigiriMapperAttach(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         bmp = bpy.context.window_manager.oni_mapper
-        if bmp.mapper_enabled == False:
+        if not bmp.mapper_enabled:
             return False
         source = bmp.mapper_source_name
         if source != "":
@@ -25229,11 +25214,11 @@ class OnigiriMapperAttach(bpy.types.Operator):
         bpy.context.view_layer.update()
         frame_current = bpy.context.scene.frame_current
 
-        if bmp.mapper_attach_from_start == True:
+        if bmp.mapper_attach_from_start:
             frame_start = bpy.context.scene.frame_start
             bpy.context.scene.frame_set(frame_start)
 
-        if bmp.mapper_morph_pose == True and bmp.mapper_retarget_only == False:
+        if bmp.mapper_morph_pose and not bmp.mapper_retarget_only:
             print("morph pose requested, setting up additional frames...")
 
             state = shifter.snap(
@@ -25241,7 +25226,7 @@ class OnigiriMapperAttach(bpy.types.Operator):
                 tarms=obj[bmp.mapper_source_name]["targets"],
                 type="map",
             )
-            if state == False:
+            if not state:
 
                 print(
                     "shifter::snap returned False, resetting your mapper is probably a good idea"
@@ -25267,25 +25252,25 @@ class OnigiriMapperAttach(bpy.types.Operator):
 
             obj[source]["onigiri_control_rig"] = 0
 
-        if bmp.mapper_stabilize == True:
+        if bmp.mapper_stabilize:
             fly_paper(armature=source)
 
         bone_map = obj[source]["bone_map"]
 
-        if bmp.mapper_retarget_only == True:
+        if bmp.mapper_retarget_only:
 
             print(
                 "OnigiriMapperAttach reports: Proxy Objects are forced with (Retarget Only) enabled"
             )
             bmp.mapper_proxy_objects = True
 
-            if bmp.mapper_proxy_objects == True:
+            if bmp.mapper_proxy_objects:
 
                 cursor_location = bpy.context.scene.cursor.location.copy()
                 bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
 
                 ONI_col = create_collection(name="ONI_Controllers")
-                if ONI_col == False:
+                if not ONI_col:
                     txt = (
                         "I couldn't create a collection for some reason, it might be stated here: "
                         + ONI_col
@@ -25414,7 +25399,7 @@ class OnigiriMapperAttach(bpy.types.Operator):
                     utils.set_inverse(context_py, "ONI Child Of")
 
                     slave_constraint = False
-                    if slave_constraint == True:
+                    if slave_constraint:
 
                         oMaster.select_set(False)
                         bpy.context.view_layer.objects.active = oSlave
@@ -25427,7 +25412,7 @@ class OnigiriMapperAttach(bpy.types.Operator):
                         bc["Copy Rotation"].name = "ONI Copy Rot"
 
                         sticky_proxies = False
-                        if sticky_proxies == True:
+                        if sticky_proxies:
 
                             bc.new("COPY_LOCATION")
                             bc["Copy Location"].target = obj[source]
@@ -25459,7 +25444,7 @@ class OnigiriMapperAttach(bpy.types.Operator):
                             ].transform_space = "WORLD_SPACE"
 
                         sticky_proxies = False
-                        if sticky_proxies == True:
+                        if sticky_proxies:
                             loc_axis = ["LOC_X", "LOC_Y", "LOC_Z"]
                             sticky_driver = oSlave.driver_add("location")
                             for axis in range(3):
@@ -25562,7 +25547,7 @@ class OnigiriMapperAttach(bpy.types.Operator):
 
                     bmp["transient"]["sticky"] = bmp.constraint_name_anchor
 
-                    if bmp.mapper_anchor_enabled == False:
+                    if not bmp.mapper_anchor_enabled:
                         bpy.context.object.constraints[
                             "ONI Child Of - sticky rig"
                         ].mute = True
@@ -25601,7 +25586,7 @@ class OnigiriMapperAttach(bpy.types.Operator):
                         type="COPY_ROTATION",
                     )
 
-            if bpy.data.collections.get(cname) != None:
+            if bpy.data.collections.get(cname) is not None:
                 bpy.data.collections[cname].hide_viewport = True
 
         else:
@@ -25864,7 +25849,7 @@ class OnigiriMapperPackBones(bpy.types.Operator):
     def execute(self, context):
 
         armObj = utils.has_armature()
-        if armObj == False:
+        if not armObj:
             print("The selection does not contain a qualified armature")
             popup("The selection does not contain a qualified armature")
             return {"FINISHED"}
@@ -25881,7 +25866,7 @@ class OnigiriMapperPackBones(bpy.types.Operator):
         state = utils.get_state()
 
         mesh_list = rigutils.get_associated_mesh(armObj, report=True)
-        if mesh_list == False:
+        if not mesh_list:
             print(
                 "The rig does not contain any qualified mesh so there's nothing to generate or upload"
             )
@@ -25904,7 +25889,7 @@ class OnigiriMapperPackBones(bpy.types.Operator):
                 print("SL rebuild_rig disabled, incompatible bone found:", boneObj.name)
                 break
 
-        if bmp.mapper_rebuild_rig == True:
+        if bmp.mapper_rebuild_rig:
             bpy.ops.object.mode_set(mode="EDIT")
             for bone in skel.avatar_skeleton:
 
@@ -25912,12 +25897,12 @@ class OnigiriMapperPackBones(bpy.types.Operator):
                     continue
                 if (
                     skel.avatar_skeleton[bone]["type"] == "collision"
-                    and bmp.mapper_rebuild_rig_volume == False
+                    and not bmp.mapper_rebuild_rig_volume
                 ):
                     continue
                 if (
                     skel.avatar_skeleton[bone]["type"] == "attachment"
-                    and bmp.mapper_rebuild_rig_attachment == False
+                    and not bmp.mapper_rebuild_rig_attachment
                 ):
                     continue
 
@@ -25940,7 +25925,7 @@ class OnigiriMapperPackBones(bpy.types.Operator):
         for boneObj in armObj.data.bones:
             bone = boneObj.name
             if bone not in groups:
-                if bone == "mPelvis" and bmp.mapper_pack_pelvis == False:
+                if bone == "mPelvis" and not bmp.mapper_pack_pelvis:
                     continue
                 qualified_bones.add(bone)
         if len(qualified_bones) == 0:
@@ -25959,7 +25944,7 @@ class OnigiriMapperPackBones(bpy.types.Operator):
             if boneObj.name in qualified_bones:
                 bone_order[boneObj.name] = ""
 
-        if bmp.mapper_pack_compress == True:
+        if bmp.mapper_pack_compress:
 
             target_location = mathutils.Vector((0, 0, 0))
             if bmp.mapper_pack_selected:
@@ -25970,16 +25955,16 @@ class OnigiriMapperPackBones(bpy.types.Operator):
                     for o in selected:
                         if o.type == "MESH":
                             for v in o.data.vertices:
-                                if v.select == True:
+                                if v.select:
                                     vertex_selected = v
                                     break
 
-                            if vertex_selected != None:
+                            if vertex_selected is not None:
                                 break
 
-                        if vertex_selected != None:
+                        if vertex_selected is not None:
                             break
-                    if vertex_selected != None:
+                    if vertex_selected is not None:
                         loc = mathutils.Matrix.Translation(v.co)
                         target_location = (o.matrix_world @ loc).to_translation()
                     else:
@@ -25989,7 +25974,7 @@ class OnigiriMapperPackBones(bpy.types.Operator):
                 elif mode == "EDIT_ARMATURE" or mode == "POSE":
                     print("Using selected pose bone location as target")
                     for boneObj in armObj.data.bones:
-                        if boneObj.select == True:
+                        if boneObj.select:
 
                             target_location = (
                                 armObj.matrix_world
@@ -26122,7 +26107,7 @@ class OnigiriMapperCustomStabilizer(bpy.types.Operator):
 
     def execute(self, context):
         armObj = utils.has_armature()
-        if armObj == False:
+        if not armObj:
             print("The selection does not contain a qualified armature")
             popup("The selection does not contain a qualified armature")
             return {"FINISHED"}
@@ -26133,7 +26118,7 @@ class OnigiriMapperCustomStabilizer(bpy.types.Operator):
         state = utils.get_state()
 
         mesh_list = rigutils.get_associated_mesh(armObj, report=True)
-        if mesh_list == False:
+        if not mesh_list:
             print(
                 "The rig does not contain any qualified mesh so there's nothing to generate or upload"
             )
@@ -26150,7 +26135,7 @@ class OnigiriMapperCustomStabilizer(bpy.types.Operator):
         for boneObj in armObj.data.bones:
             bone = boneObj.name
             if bone not in groups:
-                if bone == "mPelvis" and bmp.mapper_pack_pelvis == False:
+                if bone == "mPelvis" and not bmp.mapper_pack_pelvis:
                     continue
                 qualified_bones.add(bone)
         if len(qualified_bones) == 0:
@@ -26363,7 +26348,7 @@ class OnigiriMapperVisualStabilizer(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         bmp = bpy.context.window_manager.oni_mapper
-        if bmp.mapper_enabled == False:
+        if not bmp.mapper_enabled:
             return False
         return True
 
@@ -26384,7 +26369,7 @@ class OnigiriAlignBonesProperties(bpy.types.PropertyGroup):
     blank: bpy.props.BoolProperty(name="", description="", default=False, update=blank)
 
     def update_first(self, context):
-        if self.first == False:
+        if not self.first:
             self["last"] = False
             return
         if bpy.context.mode != "POSE":
@@ -26399,13 +26384,13 @@ class OnigiriAlignBonesProperties(bpy.types.PropertyGroup):
 
         boneObj = bpy.context.selected_pose_bones[0]
         globals.align_bones["first"] = boneObj
-        if self.last == True:
+        if self.last:
             if boneObj == globals.align_bones["last"]:
                 globals.align_bones["last"] = None
                 self["last"] = False
 
     def update_last(self, context):
-        if self.last == False:
+        if not self.last:
             self["first"] = False
             globals.align_bones["last"] = boneObj
             return
@@ -26421,7 +26406,7 @@ class OnigiriAlignBonesProperties(bpy.types.PropertyGroup):
 
         boneObj = bpy.context.selected_pose_bones[0]
         globals.align_bones["last"] = boneObj
-        if self.first == True:
+        if self.first:
             if boneObj == globals.align_bones["first"]:
                 globals.align_bones["first"] = None
                 self["first"] = False
@@ -26519,7 +26504,7 @@ class OnigiriAlignBones(bpy.types.Operator):
         if bpy.context.mode != "POSE":
             return False
         oni_ab = bpy.context.window_manager.oni_align_bones
-        if oni_ab.first == False or oni_ab.last == False:
+        if not oni_ab.first or not oni_ab.last:
             return False
 
         return True
@@ -26568,7 +26553,7 @@ class OnigiriAlignBones(bpy.types.Operator):
                 found_first = True
                 break
 
-        if found_first == False:
+        if not found_first:
             bone_path = []
             boneObj = lastBone
 
@@ -26582,7 +26567,7 @@ class OnigiriAlignBones(bpy.types.Operator):
                     found_first = True
                     break
 
-        if found_first == False:
+        if not found_first:
             txt = "The path search failed.  This can happen if a root bone is in the way.\n"
             txt += "For instance, if you chose a wrist bone on each arm then mPelvis would\n"
             txt += (
@@ -26606,15 +26591,15 @@ class OnigiriAlignBones(bpy.types.Operator):
 
         armObj["oni_align_data"] = align_data
 
-        if oni_align_bones.animate == True:
+        if oni_align_bones.animate:
 
             armObj.animation_data_create()
 
             has_action = False
             action = armObj.get("oni_align_action")
-            if action != None:
+            if action is not None:
                 actionObj = bpy.data.actions.get(action)
-                if actionObj != None:
+                if actionObj is not None:
                     print("Found action:", actionObj.name)
                     has_action = True
                     armObj.animation_data.action = actionObj
@@ -26623,7 +26608,7 @@ class OnigiriAlignBones(bpy.types.Operator):
                     for fc in fcurves:
                         actionObj.fcurves.remove(fc)
 
-            if has_action == False:
+            if not has_action:
                 actionObj = bpy.data.actions.new("ONI_Align")
                 armObj.animation_data.action = actionObj
                 action = actionObj.name
@@ -26634,7 +26619,7 @@ class OnigiriAlignBones(bpy.types.Operator):
                 if armObj.animation_data:
                     armObj.animation_data_clear()
                 action = armObj.get("oni_align_action")
-                if action != None:
+                if action is not None:
                     if action in bpy.data.actions:
                         actionObj = bpy.data.actions[action]
                         bpy.data.actions.remove(actionObj)
@@ -26646,7 +26631,7 @@ class OnigiriAlignBones(bpy.types.Operator):
                 boneObj.matrix_basis = M
             utils.update()
 
-        if oni_align_bones.animate == True:
+        if oni_align_bones.animate:
 
             bpy.context.scene.frame_set(1)
             M = mathutils.Matrix()
@@ -26674,7 +26659,7 @@ class OnigiriAlignBones(bpy.types.Operator):
 
             s = pBone.matrix.to_scale()
 
-            if oni_align_bones.move == True:
+            if oni_align_bones.move:
 
                 l = pBone.parent.tail.copy()
 
@@ -26718,7 +26703,7 @@ class OnigiriAlignBones(bpy.types.Operator):
                     armObj.data.bones.active = boneObj
                     bpy.ops.transform.translate(value=(x, 0, z), orient_type="LOCAL")
 
-        if oni_align_bones.animate == True:
+        if oni_align_bones.animate:
 
             for boneObj in armObj.pose.bones:
                 boneObj.keyframe_insert(data_path="location", frame=2)
@@ -26864,7 +26849,7 @@ class OnigiriCreateDeformer(bpy.types.Operator):
             print("The following bones would not match the Second Life skeleton")
             print(no_match)
             match_error = True
-        if match_error == True:
+        if match_error:
             popup("There were bone match errors, check console", "Error", "ERROR")
         if len(yes_match) == 0:
             print("There were no matching bones that could be mapped")
@@ -26922,7 +26907,7 @@ class OnigiriCreateDeformer(bpy.types.Operator):
                 sarm
             ].data.bones[sbone]
 
-            if onid.deformer_transform_location == True:
+            if onid.deformer_transform_location:
                 bc = bpy.data.objects[sarm].pose.bones[sbone].constraints
                 bc.new("COPY_LOCATION")
                 bc["Copy Location"].target = bpy.data.objects[glue]
@@ -26932,7 +26917,7 @@ class OnigiriCreateDeformer(bpy.types.Operator):
                 bc["Copy Location"].influence = 1
                 bc["Copy Location"].name = "ONI Copy Loc"
 
-            if onid.deformer_transform_rotation == True:
+            if onid.deformer_transform_rotation:
                 bc = bpy.data.objects[sarm].pose.bones[sbone].constraints
                 bc.new("COPY_ROTATION")
                 bc["Copy Rotation"].target = bpy.data.objects[glue]
@@ -26965,7 +26950,7 @@ class OnigiriCreateDeformer(bpy.types.Operator):
                 glue
             ].data.bones[gbone]
 
-            if onid.deformer_transform_location == True:
+            if onid.deformer_transform_location:
                 bc = bpy.data.objects[glue].pose.bones[gbone].constraints
                 bc.new("COPY_LOCATION")
                 bc["Copy Location"].target = bpy.data.objects[tarm]
@@ -26975,7 +26960,7 @@ class OnigiriCreateDeformer(bpy.types.Operator):
                 bc["Copy Location"].influence = 1
                 bc["Copy Location"].name = "ONI Copy Loc"
 
-            if onid.deformer_transform_rotation == True:
+            if onid.deformer_transform_rotation:
                 bc = bpy.data.objects[glue].pose.bones[gbone].constraints
                 bc.new("COPY_ROTATION")
                 bc["Copy Rotation"].target = bpy.data.objects[tarm]
@@ -27009,10 +26994,10 @@ class OnigiriCreateDeformer(bpy.types.Operator):
             if bone not in glueObj.data.bones:
                 continue
             glueObj.data.bones[bone].select = True
-            if onid.deformer_transform_location == True:
+            if onid.deformer_transform_location:
                 glueObj.pose.bones[bone].keyframe_insert(data_path="location", frame=2)
                 glueObj.pose.bones[bone].keyframe_insert(data_path="location", frame=3)
-            if onid.deformer_transform_rotation == True:
+            if onid.deformer_transform_rotation:
                 glueObj.pose.bones[bone].keyframe_insert(
                     data_path="rotation_quaternion", frame=2
                 )
@@ -27027,7 +27012,7 @@ class OnigiriCreateDeformer(bpy.types.Operator):
                 )
             glueObj.data.bones[bone].select = False
 
-        if onid.deformer_acquire_animation_details == True:
+        if onid.deformer_acquire_animation_details:
 
             start_frame, end_frame = obj[glue].animation_data.action.frame_range
             oni.animation_start_frame = start_frame
@@ -27070,7 +27055,7 @@ class OnigiriCreateDeformerMapped(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.get("bone_map") == None:
+        if o.get("bone_map") is None:
             return False
         return True
 
@@ -27169,7 +27154,7 @@ class OnigiriCreateDeformerMapped(bpy.types.Operator):
             bpy.data.objects[sarm].data.bones.active = bpy.data.objects[
                 sarm
             ].data.bones[sbone]
-            if onid.deformer_transform_location == True:
+            if onid.deformer_transform_location:
                 bc = bpy.data.objects[sarm].pose.bones[sbone].constraints
                 bc.new("COPY_LOCATION")
                 bc["Copy Location"].target = bpy.data.objects[glue]
@@ -27178,7 +27163,7 @@ class OnigiriCreateDeformerMapped(bpy.types.Operator):
                 bc["Copy Location"].owner_space = "WORLD"
                 bc["Copy Location"].influence = 1
                 bc["Copy Location"].name = "ONI Copy Loc"
-            if onid.deformer_transform_rotation == True:
+            if onid.deformer_transform_rotation:
                 bc = bpy.data.objects[sarm].pose.bones[sbone].constraints
                 bc.new("COPY_ROTATION")
                 bc["Copy Rotation"].target = bpy.data.objects[glue]
@@ -27205,7 +27190,7 @@ class OnigiriCreateDeformerMapped(bpy.types.Operator):
             bpy.data.objects[glue].data.bones.active = bpy.data.objects[
                 glue
             ].data.bones[sbone]
-            if onid.deformer_transform_location == True:
+            if onid.deformer_transform_location:
                 bc = bpy.data.objects[glue].pose.bones[sbone].constraints
                 bc.new("COPY_LOCATION")
                 bc["Copy Location"].target = bpy.data.objects[tarm]
@@ -27214,7 +27199,7 @@ class OnigiriCreateDeformerMapped(bpy.types.Operator):
                 bc["Copy Location"].owner_space = "WORLD"
                 bc["Copy Location"].influence = 1
                 bc["Copy Location"].name = "ONI Copy Loc"
-            if onid.deformer_transform_rotation == True:
+            if onid.deformer_transform_rotation:
                 bc = bpy.data.objects[glue].pose.bones[sbone].constraints
                 bc.new("COPY_ROTATION")
                 bc["Copy Rotation"].target = bpy.data.objects[tarm]
@@ -27243,10 +27228,10 @@ class OnigiriCreateDeformerMapped(bpy.types.Operator):
 
         for sbone in bone_map:
             glueObj.data.bones[sbone].select = True
-            if onid.deformer_transform_location == True:
+            if onid.deformer_transform_location:
                 glueObj.pose.bones[sbone].keyframe_insert(data_path="location", frame=2)
                 glueObj.pose.bones[sbone].keyframe_insert(data_path="location", frame=3)
-            if onid.deformer_transform_rotation == True:
+            if onid.deformer_transform_rotation:
                 glueObj.pose.bones[sbone].keyframe_insert(
                     data_path="rotation_quaternion", frame=2
                 )
@@ -27261,7 +27246,7 @@ class OnigiriCreateDeformerMapped(bpy.types.Operator):
                 )
             glueObj.data.bones[sbone].select = False
 
-        if onid.deformer_acquire_animation_details == True:
+        if onid.deformer_acquire_animation_details:
             bpy.ops.onigiri.acquire_animation_details()
             bpy.context.scene.oni_anim.anim_base_priority = 3
             bpy.context.scene.oni_anim.anim_base_name = "deformer"
@@ -27293,10 +27278,10 @@ class OnigiriShapeShifterProperties(bpy.types.PropertyGroup):
         print("=====================================")
         ss = bpy.context.scene.oni_shifter
 
-        if ss.shifter_terminate == True:
+        if ss.shifter_terminate:
             ss.shifter_terminate = False
             return
-        if ss.shifter_morph_source_locked == False:
+        if not ss.shifter_morph_source_locked:
             bpy.ops.onigiri.shifter_morph(action="source_false")
         return
 
@@ -27306,10 +27291,10 @@ class OnigiriShapeShifterProperties(bpy.types.PropertyGroup):
         print("=====================================")
         ss = bpy.context.scene.oni_shifter
 
-        if ss.shifter_terminate == True:
+        if ss.shifter_terminate:
             ss.shifter_terminate = False
             return
-        if ss.shifter_morph_target_locked == False:
+        if not ss.shifter_morph_target_locked:
             bpy.ops.onigiri.shifter_morph(action="target_false")
         return
 
@@ -27507,7 +27492,7 @@ class OnigiriShapeShifterProperties(bpy.types.PropertyGroup):
 
     def update_shifter_build_link(self, context):
         oni_shifter = bpy.context.scene.oni_shifter
-        if oni_shifter.shifter_build_link == False:
+        if not oni_shifter.shifter_build_link:
             bpy.ops.onigiri.shifter_build_attach()
 
     shifter_build_link: bpy.props.BoolProperty(
@@ -27532,7 +27517,7 @@ class OnigiriShapeShifterBuildAttach(bpy.types.Operator):
         frozenObj = bpy.context.selected_objects[0]
 
         glueObj = frozenObj.get("oni_glue")
-        if glueObj == None:
+        if glueObj is None:
             print("The companion armature is missing")
 
             return {"FINISHED"}
@@ -27571,7 +27556,7 @@ class OnigiriShapeShifterBuildAttach(bpy.types.Operator):
         shifter.props["frozen_rig"] = ""
         shifter.props["frozen_bones"] = []
 
-        if connected == True:
+        if connected:
 
             frozenObj.data.bones[frozen_child].select = False
             glueObj.data.bones[frozen_parent].select = True
@@ -27597,7 +27582,7 @@ class OnigiriShapeShifterBuildLink(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.get("oni_glue") == None:
+        if o.get("oni_glue") is None:
             return False
         return True
 
@@ -27633,7 +27618,7 @@ class OnigiriShapeShifterBuildUnlink(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.get("oni_glue") == None:
+        if o.get("oni_glue") is None:
             return False
         return True
 
@@ -27672,7 +27657,7 @@ class OnigiriShapeShifterBuildSelect(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.get("oni_glue") == None:
+        if o.get("oni_glue") is None:
             return False
         return True
 
@@ -27723,7 +27708,7 @@ class OnigiriShapeShifterBuildSnap(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.get("oni_glue") == None:
+        if o.get("oni_glue") is None:
             return False
         return True
 
@@ -27747,7 +27732,7 @@ class OnigiriShapeShifterBuildSnap(bpy.types.Operator):
 
         childBone = selected[0]
         parentBone = childBone.parent
-        if parentBone == None:
+        if parentBone is None:
             print("No parent to snap to")
             return {"FINISHED"}
 
@@ -27784,7 +27769,7 @@ class OnigiriShapeShifterBuildConnect(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.get("oni_glue") == None:
+        if o.get("oni_glue") is None:
             return False
         return True
 
@@ -27794,7 +27779,7 @@ class OnigiriShapeShifterBuildConnect(bpy.types.Operator):
         frozenObj = bpy.context.selected_objects[0]
 
         glueObj = frozenObj.get("oni_glue")
-        if glueObj == None:
+        if glueObj is None:
             print("The companion armature is missing")
             popup("The companion armature is missing", "Error", "ERROR")
             return {"FINISHED"}
@@ -27902,7 +27887,7 @@ class OnigiriShapeShifterFreezeRig(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.get("oni_glue") != None:
+        if o.get("oni_glue") is not None:
             return False
 
         return True
@@ -27912,7 +27897,7 @@ class OnigiriShapeShifterFreezeRig(bpy.types.Operator):
         sarmObj = bpy.context.object
         sarm = sarmObj.name
         tarm = shifter.freeze(sarm)
-        if tarm == False:
+        if not tarm:
             print("There was a problem freezing the rig:", sarm)
         else:
             print("Rig frozen:", sarm)
@@ -27976,7 +27961,7 @@ class OnigiriShapeShifterPoseRig(bpy.types.Operator):
             start=start,
             frame_range=frame_range,
         )
-        if state == False:
+        if not state:
             print("There was a problem posing the rig:", sarm)
         else:
             print("Rig frozen:", sarm)
@@ -28009,9 +27994,9 @@ class OnigiriShapeShifterMorph(bpy.types.Operator):
             if source in obj:
                 if obj[source].get("bone_map"):
                     del obj[source]["bone_map"]
-                if ss.get("morph_targets") != None:
+                if ss.get("morph_targets") is not None:
                     del ss["morph_targets"]
-                if ss.get("template_map") != None:
+                if ss.get("template_map") is not None:
                     del ss["template_map"]
                 ss.property_unset("shifter_morph_target_locked")
 
@@ -28020,7 +28005,7 @@ class OnigiriShapeShifterMorph(bpy.types.Operator):
                     for b in obj[source].pose.bones:
                         for c in b.constraints:
                             b.constraints.remove(c)
-                    if obj[source].get("morph") != None:
+                    if obj[source].get("morph") is not None:
                         glue = obj[source]["morph"]["name"]
                         del obj[source]["morph"]
 
@@ -28052,14 +28037,14 @@ class OnigiriShapeShifterMorph(bpy.types.Operator):
                     if name in obj:
                         obj[name].select_set(True)
                 bpy.ops.object.delete()
-            if ss.get("morp_clean") != None:
+            if ss.get("morp_clean") is not None:
                 for name in ss["morph_clean"]:
                     if obj[name].type == "ARMATURE":
                         for b in obj[name].pose.bones:
                             for c in b.constraints:
                                 b.constraints.remove(c)
 
-            if full == True:
+            if full:
                 for p in bpy.context.scene["oni_shifter"]:
                     if p == "shifter_morph_menu_enabled":
                         continue
@@ -28096,7 +28081,7 @@ class OnigiriShapeShifterMorph(bpy.types.Operator):
                 print("You need to select a source armature")
                 popup("Select a source armature", "No rig selected", "INFO")
                 return {"FINISHED"}
-            if ss.get("morph_targets") != None:
+            if ss.get("morph_targets") is not None:
                 if o.name in ss["morph_targets"]:
                     print(
                         "Can't have your source the same as one of your morph targets:",
@@ -28111,7 +28096,7 @@ class OnigiriShapeShifterMorph(bpy.types.Operator):
             ss.shifter_morph_source_name = o.name
             ss.shifter_morph_source_locked = True
 
-            if o.get("bone_map") != None:
+            if o.get("bone_map") is not None:
                 del o["bone_map"]
 
             print("-----------------------------------")
@@ -28119,7 +28104,7 @@ class OnigiriShapeShifterMorph(bpy.types.Operator):
             print("-----------------------------------")
 
         elif self.action == "target":
-            if ss.shifter_morph_source_locked == False:
+            if not ss.shifter_morph_source_locked:
                 print(
                     "The bone map is stored in the source armature object which means"
                 )
@@ -28207,8 +28192,8 @@ class OnigiriShapeShifterMorph(bpy.types.Operator):
             source = ss.shifter_morph_source_name
 
             if (
-                ss.shifter_morph_source_locked == False
-                or ss.shifter_morph_target_locked == False
+                 notss.shifter_morph_source_locked
+                or not ss.shifter_morph_target_locked
             ):
                 print(
                     "both the source and targets have to be chosen before you can use this feature"
@@ -28230,7 +28215,7 @@ class OnigiriShapeShifterMorph(bpy.types.Operator):
                     print("A target armature is missing", "Missing Target", "ERROR")
                     return {"FINISHED"}
 
-            if ss.shifter_morph_match == True:
+            if ss.shifter_morph_match:
                 if len(ss["morph_targets"]) != 1:
                     print(
                         "Match type morphing can only be performed on a single target, reset your mapper and try again."
@@ -28256,7 +28241,7 @@ class OnigiriShapeShifterMorph(bpy.types.Operator):
                     return {"FINISHED"}
                 obj[source]["bone_map"] = bone_map
 
-            if obj[source].get("morph") != None:
+            if obj[source].get("morph") is not None:
                 print(
                     "The morpher has already been engaged, reset the interface before starting a new one"
                 )
@@ -28303,7 +28288,7 @@ class OnigiriShapeShifterTransform(bpy.types.Operator):
             print("Source missing from scene")
             return {"FINISHED"}
 
-        if obj[source].get("morph") == None:
+        if obj[source].get("morph") is None:
             print(
                 "Morpher has not been engaged so active constraint alteration is disabled"
             )
@@ -28371,7 +28356,7 @@ class OnigiriShapeShifterTarget(bpy.types.Operator):
         tarmObj = bpy.context.selected_objects[0]
         tarm = tarmObj.name
 
-        if ss.shifter_morph_source_locked == False:
+        if not ss.shifter_morph_source_locked:
             print("The bone map is stored in the source armature object which means")
             print("that it has to be locked before any targets can be assigned.")
             popup("Chose the source first", "Requires Source", "INFO")
@@ -28475,7 +28460,7 @@ class OnigiriShapeShifterLoad(bpy.types.Operator, ImportHelper):
     @classmethod
     def poll(cls, context):
         ss = bpy.context.scene.oni_shifter
-        if ss.get("template_map") == None and ss.shifter_morph_match != True:
+        if ss.get("template_map") is None and not ss.shifter_morph_match:
             return True
         return False
 
@@ -28492,11 +28477,11 @@ class OnigiriShapeShifterLoad(bpy.types.Operator, ImportHelper):
             return {"FINISHED"}
 
         template_map = {}
-        if namespace.get("template_map") != None:
+        if namespace.get("template_map") is not None:
             print("Found template map")
             template_map.update(namespace["template_map"])
         rename_map = {}
-        if namespace.get("rename_map") != None:
+        if namespace.get("rename_map") is not None:
             print("Found rename map")
             template_map.update(namespace["rename_map"])
 
@@ -28511,7 +28496,7 @@ class OnigiriShapeShifterLoad(bpy.types.Operator, ImportHelper):
         del template_map
         del targets_waiting
 
-        if ss.get("morph_targets") != None:
+        if ss.get("morph_targets") is not None:
             del ss["morph_targets"]
 
         ss.property_unset("shifter_morph_target_locked")
@@ -28563,7 +28548,7 @@ class OnigiriAnimImport(bpy.types.Operator, ImportHelper):
 
 def basic_bvh_exporter(path="", start=1, end=250, armature=""):
 
-    if bpy.context.active_object != None:
+    if bpy.context.active_object is not None:
         bpy.ops.object.mode_set(mode="OBJECT")
 
     for o in bpy.context.selected_objects:
@@ -28575,10 +28560,10 @@ def basic_bvh_exporter(path="", start=1, end=250, armature=""):
     bpy.context.view_layer.objects.active = obj[arm]
 
     oni = bpy.context.scene.onigiri
-    if bpy.context.scene.onigiri.bvh_to_sl == True:
+    if bpy.context.scene.onigiri.bvh_to_sl:
         set_bvh_names(arm)
 
-    if oni.bake_animation == True:
+    if oni.bake_animation:
         bpy.ops.object.mode_set(mode="POSE")
         print("Baking animation")
         bpy.ops.nla.bake(
@@ -28626,12 +28611,12 @@ class OnigiriJointDataProps(bpy.types.PropertyGroup):
     )
 
     def update_loc_axis_inverted_x(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         sp = selected_pose_bones()
         bjd = bpy.context.window_manager.oni_joint_data
-        if sp == False or sp > 1:
+        if not sp or sp > 1:
             oni_settings["terminate"] = True
             bjd.loc_axis_inverted_x = False
             return
@@ -28640,23 +28625,23 @@ class OnigiriJointDataProps(bpy.types.PropertyGroup):
         arm = bpy.context.selected_objects[0].name
         bone = bpy.context.selected_pose_bones[0].name
 
-        if jd.joint_data[bone]["locked"] == True:
+        if jd.joint_data[bone]["locked"]:
             oni_settings["terminate"] = True
             bjd.loc_axis_inverted_x = False
             return
 
-        if bjd.loc_axis_inverted_x == True:
+        if bjd.loc_axis_inverted_x:
             jd.joint_data[bone]["loc_axis_inverted"][0] = "-"
         else:
             jd.joint_data[bone]["loc_axis_inverted"][0] = ""
 
     def update_loc_axis_inverted_y(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         sp = selected_pose_bones()
         bjd = bpy.context.window_manager.oni_joint_data
-        if sp == False or sp > 1:
+        if not sp or sp > 1:
             oni_settings["terminate"] = True
             bjd.loc_axis_inverted_y = False
             return
@@ -28664,22 +28649,22 @@ class OnigiriJointDataProps(bpy.types.PropertyGroup):
         obj = bpy.data.objects
         arm = bpy.context.selected_objects[0].name
         bone = bpy.context.selected_pose_bones[0].name
-        if jd.joint_data[bone]["locked"] == True:
+        if jd.joint_data[bone]["locked"]:
             oni_settings["terminate"] = True
             bjd.loc_axis_inverted_y = False
             return
-        if bjd.loc_axis_inverted_y == True:
+        if bjd.loc_axis_inverted_y:
             jd.joint_data[bone]["loc_axis_inverted"][1] = "-"
         else:
             jd.joint_data[bone]["loc_axis_inverted"][1] = ""
 
     def update_loc_axis_inverted_z(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         sp = selected_pose_bones()
         bjd = bpy.context.window_manager.oni_joint_data
-        if sp == False or sp > 1:
+        if not sp or sp > 1:
             oni_settings["terminate"] = True
             bjd.loc_axis_inverted_z = False
             return
@@ -28687,22 +28672,22 @@ class OnigiriJointDataProps(bpy.types.PropertyGroup):
         obj = bpy.data.objects
         arm = bpy.context.selected_objects[0].name
         bone = bpy.context.selected_pose_bones[0].name
-        if jd.joint_data[bone]["locked"] == True:
+        if jd.joint_data[bone]["locked"]:
             oni_settings["terminate"] = True
             bjd.loc_axis_inverted_z = False
             return
-        if bjd.loc_axis_inverted_z == True:
+        if bjd.loc_axis_inverted_z:
             jd.joint_data[bone]["loc_axis_inverted"][2] = "-"
         else:
             jd.joint_data[bone]["loc_axis_inverted"][2] = ""
 
     def update_loc_offset_inverted_x(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         sp = selected_pose_bones()
         bjd = bpy.context.window_manager.oni_joint_data
-        if sp == False or sp > 1:
+        if not sp or sp > 1:
             oni_settings["terminate"] = True
             bjd.loc_offset_inverted_x = False
             return
@@ -28710,22 +28695,22 @@ class OnigiriJointDataProps(bpy.types.PropertyGroup):
         obj = bpy.data.objects
         arm = bpy.context.selected_objects[0].name
         bone = bpy.context.selected_pose_bones[0].name
-        if jd.joint_data[bone]["locked"] == True:
+        if jd.joint_data[bone]["locked"]:
             oni_settings["terminate"] = True
             bjd.loc_offset_inverted_x = False
             return
-        if bjd.loc_offset_inverted_x == True:
+        if bjd.loc_offset_inverted_x:
             jd.joint_data[bone]["loc_offset_inverted"][0] = "-"
         else:
             jd.joint_data[bone]["loc_offset_inverted"][0] = ""
 
     def update_loc_offset_inverted_y(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         sp = selected_pose_bones()
         bjd = bpy.context.window_manager.oni_joint_data
-        if sp == False or sp > 1:
+        if not sp or sp > 1:
             oni_settings["terminate"] = True
             bjd.loc_offset_inverted_y = False
             return
@@ -28733,22 +28718,22 @@ class OnigiriJointDataProps(bpy.types.PropertyGroup):
         obj = bpy.data.objects
         arm = bpy.context.selected_objects[0].name
         bone = bpy.context.selected_pose_bones[0].name
-        if jd.joint_data[bone]["locked"] == True:
+        if jd.joint_data[bone]["locked"]:
             oni_settings["terminate"] = True
             bjd.loc_offset_inverted_y = False
             return
-        if bjd.loc_offset_inverted_y == True:
+        if bjd.loc_offset_inverted_y:
             jd.joint_data[bone]["loc_offset_inverted"][1] = "-"
         else:
             jd.joint_data[bone]["loc_offset_inverted"][1] = ""
 
     def update_loc_offset_inverted_z(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         sp = selected_pose_bones()
         bjd = bpy.context.window_manager.oni_joint_data
-        if sp == False or sp > 1:
+        if not sp or sp > 1:
             oni_settings["terminate"] = True
             bjd.loc_offset_inverted_z = False
             return
@@ -28756,22 +28741,22 @@ class OnigiriJointDataProps(bpy.types.PropertyGroup):
         obj = bpy.data.objects
         arm = bpy.context.selected_objects[0].name
         bone = bpy.context.selected_pose_bones[0].name
-        if jd.joint_data[bone]["locked"] == True:
+        if jd.joint_data[bone]["locked"]:
             oni_settings["terminate"] = True
             bjd.loc_offset_inverted_z = False
             return
-        if bjd.loc_offset_inverted_z == True:
+        if bjd.loc_offset_inverted_z:
             jd.joint_data[bone]["loc_offset_inverted"][2] = "-"
         else:
             jd.joint_data[bone]["loc_offset_inverted"][2] = ""
 
     def update_rot_axis_inverted_x(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         sp = selected_pose_bones()
         bjd = bpy.context.window_manager.oni_joint_data
-        if sp == False or sp > 1:
+        if not sp or sp > 1:
             oni_settings["terminate"] = True
             bjd.rot_axis_inverted_x = False
             return
@@ -28779,22 +28764,22 @@ class OnigiriJointDataProps(bpy.types.PropertyGroup):
         obj = bpy.data.objects
         arm = bpy.context.selected_objects[0].name
         bone = bpy.context.selected_pose_bones[0].name
-        if jd.joint_data[bone]["locked"] == True:
+        if jd.joint_data[bone]["locked"]:
             oni_settings["terminate"] = True
             bjd.rot_axis_inverted_x = False
             return
-        if bjd.rot_axis_inverted_x == True:
+        if bjd.rot_axis_inverted_x:
             jd.joint_data[bone]["rot_axis_inverted"][0] = "-"
         else:
             jd.joint_data[bone]["rot_axis_inverted"][0] = ""
 
     def update_rot_axis_inverted_y(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         sp = selected_pose_bones()
         bjd = bpy.context.window_manager.oni_joint_data
-        if sp == False or sp > 1:
+        if not sp or sp > 1:
             oni_settings["terminate"] = True
             bjd.rot_axis_inverted_y = False
             return
@@ -28802,22 +28787,22 @@ class OnigiriJointDataProps(bpy.types.PropertyGroup):
         obj = bpy.data.objects
         arm = bpy.context.selected_objects[0].name
         bone = bpy.context.selected_pose_bones[0].name
-        if jd.joint_data[bone]["locked"] == True:
+        if jd.joint_data[bone]["locked"]:
             oni_settings["terminate"] = True
             bjd.rot_axis_inverted_y = False
             return
-        if bjd.rot_axis_inverted_y == True:
+        if bjd.rot_axis_inverted_y:
             jd.joint_data[bone]["rot_axis_inverted"][1] = "-"
         else:
             jd.joint_data[bone]["rot_axis_inverted"][1] = ""
 
     def update_rot_axis_inverted_z(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         sp = selected_pose_bones()
         bjd = bpy.context.window_manager.oni_joint_data
-        if sp == False or sp > 1:
+        if not sp or sp > 1:
             oni_settings["terminate"] = True
             bjd.rot_axis_inverted_z = False
             return
@@ -28825,11 +28810,11 @@ class OnigiriJointDataProps(bpy.types.PropertyGroup):
         obj = bpy.data.objects
         arm = bpy.context.selected_objects[0].name
         bone = bpy.context.selected_pose_bones[0].name
-        if jd.joint_data[bone]["locked"] == True:
+        if jd.joint_data[bone]["locked"]:
             oni_settings["terminate"] = True
             bjd.rot_axis_inverted_z = False
             return
-        if bjd.rot_axis_inverted_z == True:
+        if bjd.rot_axis_inverted_z:
             jd.joint_data[bone]["rot_axis_inverted"][2] = "-"
         else:
             jd.joint_data[bone]["rot_axis_inverted"][2] = ""
@@ -28878,12 +28863,12 @@ class OnigiriJointDataProps(bpy.types.PropertyGroup):
     )
 
     def update_joint_locked(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         sp = selected_pose_bones()
         bjd = bpy.context.window_manager.oni_joint_data
-        if sp == False or sp > 1:
+        if not sp or sp > 1:
             oni_settings["terminate"] = True
             bjd.joint_locked = False
             return
@@ -28891,9 +28876,9 @@ class OnigiriJointDataProps(bpy.types.PropertyGroup):
         obj = bpy.data.objects
         arm = bpy.context.selected_objects[0].name
         bone = bpy.context.selected_pose_bones[0].name
-        if bjd.joint_locked == True:
+        if bjd.joint_locked:
             jd.joint_data[bone]["locked"] = True
-        if bjd.joint_locked == False:
+        if not bjd.joint_locked:
             jd.joint_data[bone]["locked"] = False
         return
 
@@ -29024,7 +29009,7 @@ class OnigiriSetJointData(bpy.types.Operator):
         if len(bpy.context.selected_pose_bones) != 1:
             return False
         bjd = bpy.context.window_manager.oni_joint_data
-        if bjd.joint_locked == True:
+        if bjd.joint_locked:
             return False
 
         return True
@@ -29080,7 +29065,7 @@ class OnigiriCopyJointData(bpy.types.Operator):
         if len(bpy.context.selected_pose_bones) != 1:
             return False
         bjd = bpy.context.window_manager.oni_joint_data
-        if bjd.joint_locked == True:
+        if bjd.joint_locked:
             return False
 
         return True
@@ -29204,7 +29189,7 @@ class OnigiriPasteJointBuffer(bpy.types.Operator):
         if len(bpy.context.selected_pose_bones) != 1:
             return False
         bjd = bpy.context.window_manager.oni_joint_data
-        if bjd.joint_locked == True:
+        if bjd.joint_locked:
             return False
 
         return True
@@ -29366,7 +29351,7 @@ class OnigiriSelectDifficultBones(bpy.types.Operator):
         obj = bpy.data.objects
         if len(bpy.context.selected_objects) == 0:
             return False
-        if bpy.context.active_object == None:
+        if bpy.context.active_object is None:
             return False
         o = bpy.context.active_object
         if o.type == "ARMATURE":
@@ -29532,7 +29517,7 @@ class OnigiriMatchBoneOrientation(bpy.types.Operator):
         for o in bpy.context.selected_objects:
             if o.type != "ARMATURE":
                 return False
-        if bpy.context.active_object == None:
+        if bpy.context.active_object is None:
             return False
         return True
 
@@ -29596,7 +29581,7 @@ class OnigiriRigToXML(bpy.types.Operator, ExportHelper):
         anim_end_frame = oni.animation_end_frame
         armObj = bpy.context.selected_objects[0]
 
-        if onia.bvh_type_other == True:
+        if onia.bvh_type_other:
             print("Writing XML formatted BVH file for: Other platforms besides SL / OS")
 
             rigutils.set_angle(armature=armObj.name, angle=[-90, 0, 0])
@@ -29625,7 +29610,7 @@ class OnigiriRigToXML(bpy.types.Operator, ExportHelper):
                 print("Caught error writing file")
                 print(txt)
 
-        elif onia.bvh_type_sl_os == True:
+        elif onia.bvh_type_sl_os:
             print("Writing XML formatted BVH file for: SL/OS")
             print("skipping (fix_rig_orientation) for now")
             bpy.ops.object.transform_apply(rotation=True, location=False, scale=False)
@@ -30103,7 +30088,7 @@ class OnigiriRefreshBlenderFile(bpy.types.Operator):
             popup("Fatal error, see console", "Error", "ERROR")
             return {"FINISHED"}
 
-        if arguments["status"] == False:
+        if not arguments["status"]:
             print("The return value from the process is False, please report this bug")
             popup("Fatal error returned by process, see console", "Error", "ERROR")
             return {"FINISHED"}
@@ -30343,7 +30328,7 @@ class OnigiriAnimProperties(bpy.types.PropertyGroup):
 
         anim = bpy.context.scene.oni_anim
         oni = bpy.context.scene.onigiri
-        if anim.anim_loop_advanced == True:
+        if anim.anim_loop_advanced:
 
             start_dif = anim.anim_loop_in_frame - oni.animation_start_frame + 1
             print("start_dif:", start_dif)
@@ -30363,7 +30348,7 @@ class OnigiriAnimProperties(bpy.types.PropertyGroup):
             anim.anim_loop_out_frame = int(round(anim.anim_loop_out_time))
 
     def update_anim_loop_in_frame(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         anim = bpy.context.scene.oni_anim
@@ -30373,7 +30358,7 @@ class OnigiriAnimProperties(bpy.types.PropertyGroup):
         anim.anim_loop_in_time = float(anim.anim_loop_in_frame)
 
     def update_anim_loop_out_frame(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         anim = bpy.context.scene.oni_anim
@@ -30382,7 +30367,7 @@ class OnigiriAnimProperties(bpy.types.PropertyGroup):
         anim.anim_loop_out_time = float(anim.anim_loop_out_frame)
 
     def update_anim_loop_in_time(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         anim = bpy.context.scene.oni_anim
@@ -30391,7 +30376,7 @@ class OnigiriAnimProperties(bpy.types.PropertyGroup):
         anim.anim_loop_in_frame = int(round(anim.anim_loop_in_time))
 
     def update_anim_loop_out_time(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         anim = bpy.context.scene.oni_anim
@@ -30549,11 +30534,11 @@ class OnigiriAnimProperties(bpy.types.PropertyGroup):
     )
 
     def update_export_sl_anim(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         anim = bpy.context.scene.oni_anim
-        if anim.export_sl_anim == True:
+        if anim.export_sl_anim:
             export_sl_anim_label = "Please Wait..."
 
             try:
@@ -30582,17 +30567,17 @@ class OnigiriAnimProperties(bpy.types.PropertyGroup):
     )
 
     def update_anim_show_actions(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
 
         anim = bpy.context.scene.oni_anim
         obj = bpy.data.objects
-        if anim.anim_show_actions == True:
+        if anim.anim_show_actions:
 
             bpy.app.handlers.depsgraph_update_post.append(anim_sanity_check)
             print("anim_sanity_check handler enabled")
-            if anim.get("actions") != None:
+            if anim.get("actions") is not None:
                 actions = anim["actions"].to_dict()
                 for a in actions:
                     if a not in bpy.data.actions:
@@ -30634,31 +30619,31 @@ class OnigiriAnimProperties(bpy.types.PropertyGroup):
     )
 
     def update_anim_linear(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_anim = bpy.context.scene.oni_anim
-        if oni_anim.anim_linear == True:
+        if oni_anim.anim_linear:
             oni_anim["anim_high_fidelity"] = False
         else:
             oni_anim["anim_high_fidelity"] = True
 
     def update_anim_high_fidelity(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_anim = bpy.context.scene.oni_anim
-        if oni_anim.anim_high_fidelity == True:
+        if oni_anim.anim_high_fidelity:
             oni_anim["anim_linear"] = False
         else:
             oni_anim["anim_linear"] = True
 
     def update_anim_deviation_detection(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_anim = bpy.context.scene.oni_anim
-        if oni_anim.anim_deviation_detection == True:
+        if oni_anim.anim_deviation_detection:
             bpy.context.scene.oni_anim.property_unset("anim_linear")
             bpy.context.scene.oni_anim.property_unset("anim_high_fidelity")
         else:
@@ -30725,16 +30710,16 @@ class OnigiriAnimProperties(bpy.types.PropertyGroup):
 
     def update_anim_use_keys_smooth(self, context):
         oni_anim = bpy.context.scene.oni_anim
-        if oni_anim.anim_use_keys_smooth == True:
+        if oni_anim.anim_use_keys_smooth:
             oni_anim["anim_use_keys_linear"] = False
-        if oni_anim.anim_use_keys_smooth == False:
+        if not oni_anim.anim_use_keys_smooth:
             oni_anim["anim_use_keys_linear"] = True
 
     def update_anim_use_keys_linear(self, context):
         oni_anim = bpy.context.scene.oni_anim
-        if oni_anim.anim_use_keys_linear == True:
+        if oni_anim.anim_use_keys_linear:
             oni_anim["anim_use_keys_smooth"] = False
-        if oni_anim.anim_use_keys_linear == False:
+        if not oni_anim.anim_use_keys_linear:
             oni_anim["anim_use_keys_smooth"] = True
 
     anim_use_keys_smooth: bpy.props.BoolProperty(
@@ -30888,12 +30873,12 @@ class OnigiriAnimProperties(bpy.types.PropertyGroup):
     )
 
     def update_anim_resample_auto(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_anim = bpy.context.scene.oni_anim
         oni = bpy.context.scene.onigiri
-        if oni_anim.anim_resample_auto == True:
+        if oni_anim.anim_resample_auto:
             frame_start = oni.animation_start_frame
             frame_end = oni.animation_end_frame
             frame_range = abs(frame_start - frame_end + 1)
@@ -30931,7 +30916,7 @@ class OnigiriAnimProperties(bpy.types.PropertyGroup):
     )
 
     def bvh_type_sl_os_update(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onia = bpy.context.scene.oni_anim
@@ -30940,7 +30925,7 @@ class OnigiriAnimProperties(bpy.types.PropertyGroup):
         return
 
     def bvh_type_other_update(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onia = bpy.context.scene.oni_anim
@@ -30993,7 +30978,7 @@ class OnigiriSetInterpolation(bpy.types.Operator):
     def poll(cls, context):
         if bpy.context.mode != "POSE":
             return False
-        if bpy.context.active_object == None:
+        if bpy.context.active_object is None:
             return False
         if len(bpy.context.selected_objects) == 0:
             return False
@@ -31002,9 +30987,9 @@ class OnigiriSetInterpolation(bpy.types.Operator):
             return False
         if len(bpy.context.selected_pose_bones) == 0:
             return False
-        if o.animation_data == None:
+        if o.animation_data is None:
             return False
-        if o.animation_data.action == None:
+        if o.animation_data.action is None:
             return False
         return True
 
@@ -31022,7 +31007,7 @@ class OnigiriSetInterpolation(bpy.types.Operator):
 
         pose_paths = {}
 
-        if oni_anim.anim_interpolate_bone == True:
+        if oni_anim.anim_interpolate_bone:
             print("Interpolate bone")
             for boneObj in bpy.context.selected_pose_bones:
                 path_key = 'pose.bones["' + boneObj.name + '"]'
@@ -31058,7 +31043,7 @@ class OnigiriAnimEnableJointPriority(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if selected_pose_bones() == False:
+        if not selected_pose_bones():
             return False
         return True
 
@@ -31075,7 +31060,7 @@ class OnigiriAnimDisableJointPriority(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if selected_pose_bones() == False:
+        if not selected_pose_bones():
             return False
         return True
 
@@ -31094,7 +31079,7 @@ class OnigiriAnimApplyJointPriority(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if selected_pose_bones() == False:
+        if not selected_pose_bones():
             return False
         return True
 
@@ -31114,7 +31099,7 @@ class OnigiriAnimSelectPriority(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if bpy.context.active_object == None:
+        if bpy.context.active_object is None:
             return False
         if len(bpy.context.selected_objects) == 0:
             return False
@@ -31164,9 +31149,9 @@ class OnigiriAcquireAnimationDetails(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.animation_data == None:
+        if o.animation_data is None:
             return False
-        if o.animation_data.action == None:
+        if o.animation_data.action is None:
             return False
         return True
 
@@ -31184,13 +31169,13 @@ class OnigiriAcquireAnimationDetails(bpy.types.Operator):
         oni.animation_start_frame = start_frame
         oni.animation_end_frame = end_frame
 
-        if armObj.get("reference") != None:
+        if armObj.get("reference") is not None:
             if (end_frame - start_frame) > 1:
                 onia.anim_loop_in_frame = start_frame + 1
             else:
                 onia.anim_loop_in_frame = start_frame
 
-            if armObj.get("oni_reference_frame") != None:
+            if armObj.get("oni_reference_frame") is not None:
                 onia.anim_loop_in_frame = armObj["oni_reference_frame"]
 
         else:
@@ -31321,7 +31306,7 @@ class OnigiriSplitAnimProperties(bpy.types.PropertyGroup):
         if channel.startswith("-"):
             sign = channel[:1]
             channel = channel[1:]
-        if channel.isdecimal() == False:
+        if not channel.isdecimal():
             txt = (
                 "The IntProperty in Blender cannot represent the numeric value appropriate for this content so "
                 + "a string value is used and converted, unfortunately your string value contains something other than numbers and the (-) sign.  "
@@ -31467,7 +31452,7 @@ class OnigiriSaveAnimationScript(bpy.types.Operator, ExportHelper):
             fill_fps=frame_fps,
             fill_time=split_time,
         )
-        if actions == False:
+        if not actions:
             print("Couldn't get action segments")
             return {"FINISHED"}
 
@@ -31500,7 +31485,7 @@ class OnigiriSaveAnimationScript(bpy.types.Operator, ExportHelper):
                 prefix=file_prefix,
                 fps=oni.animation_fps,
             )
-            if result == False:
+            if not result:
                 print("Result from writing scripts for Animesh was False")
                 popup("Script write failure", "Error", "ERROR")
 
@@ -31515,7 +31500,7 @@ class OnigiriSaveAnimationScript(bpy.types.Operator, ExportHelper):
                 prefix=file_prefix,
                 fps=oni.animation_fps,
             )
-            if result == False:
+            if not result:
                 print("Result from writing scripts for Avatar was False")
                 popup("Script write failure", "Error", "ERROR")
         else:
@@ -31573,7 +31558,7 @@ class OnigiriExportSLAnim(bpy.types.Operator, ExportHelper):
 
         bpy.app.timers.register(cleanup)
 
-        if oni_split.split_enabled == True:
+        if oni_split.split_enabled:
             print("Splitting animation...")
 
             oni_anim = bpy.context.scene.oni_anim
@@ -31589,7 +31574,7 @@ class OnigiriExportSLAnim(bpy.types.Operator, ExportHelper):
                 fill_fps=frame_fps,
                 fill_time=split_time,
             )
-            if actions == False:
+            if not actions:
                 print("Couldn't get action segments")
                 return {"FINISHED"}
 
@@ -31639,7 +31624,7 @@ class OnigiriExportSLAnim(bpy.types.Operator, ExportHelper):
                 oni.animation_end_frame = frame_end
 
                 result = animutils.export_sl_anim(armature=armObj.name, path=filepath)
-                if result == False:
+                if not result:
                     txt = "The split feature is enabled and the export returned an error so in order to save you \n"
                     txt += "some time the operation was canceled after the first write.  This file will not upload \n"
                     txt += "to Second Life.  Reduce the frames per slice in order to continue.  The total file size \n"
@@ -31682,7 +31667,7 @@ class OnigiriExportSLAnim(bpy.types.Operator, ExportHelper):
                 prefix=file_prefix,
                 fps=oni.animation_fps,
             )
-            if result == False:
+            if not result:
                 print("Result from writing scripts for Animesh was False")
                 popup("Script write failure", "Error", "ERROR")
 
@@ -31697,7 +31682,7 @@ class OnigiriExportSLAnim(bpy.types.Operator, ExportHelper):
                 prefix=file_prefix,
                 fps=oni.animation_fps,
             )
-            if result == False:
+            if not result:
                 print("Result from writing scripts for Avatar was False")
                 popup("Script write failure", "Error", "ERROR")
 
@@ -31769,7 +31754,7 @@ class OnigiriBakeProxy(bpy.types.Operator):
         proxyObj.location.y = 0.6
 
         result = animutils.bake_motion(sarm=arm, tarm=proxyObj)
-        if result == False:
+        if not result:
             print("Couldn't bake")
 
         else:
@@ -31830,8 +31815,8 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
 
         bpy.app.timers.register(cleanup)
 
-        if oni.export_onigiri_disabled != True:
-            if armObj.get("onigiri") == None:
+        if not oni.export_onigiri_disabled:
+            if armObj.get("onigiri") is None:
                 print(
                     "1 Onigiri rig check is enabled but the rig is not Onigiri.  Disable the check in (Extended Options) to override."
                 )
@@ -31850,7 +31835,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
                 utils.popup(txt, "Info", "INFO")
                 return {"FINISHED"}
 
-        if oni.export_sl_limitations_check_disabled != True:
+        if not oni.export_sl_limitations_check_disabled:
 
             print("skipping time check")
 
@@ -31867,21 +31852,21 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
         bpy.ops.wm.redraw_timer(type="DRAW_WIN_SWAP", iterations=1)
 
         inherit_motion = False
-        if armObj.animation_data == None:
+        if armObj.animation_data is None:
             inherit_motion = True
             record_motion = False
             print(
                 "No animation data, attempting to inherit motion, (Keys Only) cannot be used."
             )
 
-        if getattr(armObj.animation_data, "action", None) == None:
+        if getattr(armObj.animation_data, "action", None) is None:
             inherit_motion = True
             record_motion = False
             print(
                 "No action associated with the armature, attempting to inherit motion, (Keys Only) will be turned off."
             )
 
-        if inherit_motion == True:
+        if inherit_motion:
 
             real_start_frame, real_end_frame = (
                 oni.animation_start_frame,
@@ -31906,7 +31891,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
         total_time = round(total_steps / anim_fps, 6)
         time_per_frame = round(total_time / total_steps, 6)
 
-        if anim.anim_loop_advanced == True:
+        if anim.anim_loop_advanced:
 
             anim_loop_in_point = round(anim.anim_loop_in_time, 6)
             anim_loop_out_point = round(anim.anim_loop_out_time, 6)
@@ -31970,7 +31955,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
             rig_class = "neutral"
 
         print("==============================================")
-        if rig_class != None:
+        if rig_class is not None:
             print("rig_class:", rig_class)
         print("anim_file_name:", anim.anim_base_name)
         print("base_priority:", anim.anim_base_priority)
@@ -32020,14 +32005,14 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
             "f", anim.anim_ease_out_duration
         )
 
-        if anim.anim_hand_pose_enabled == True:
+        if anim.anim_hand_pose_enabled:
 
             hp = int(anim.anim_hand_pose)
             file_content["header"]["hand_pose"] = struct.pack("i", hp)
         else:
             file_content["header"]["hand_pose"] = (0).to_bytes(4, byteorder="little")
 
-        if inherit_motion == False:
+        if not inherit_motion:
             print("get_compatible_bone_list disabled")
             if 1 == 0:
                 bone_names = anim.get_compatible_bone_list(armature=armObj.name)
@@ -32040,13 +32025,13 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
         bpy.ops.object.transform_apply(scale=False, rotation=True, location=False)
 
         if 1 == 1:
-            if armObj.get("fly_paper") != None and armObj.get("fly_paper") != "":
+            if armObj.get("fly_paper") is not None and armObj.get("fly_paper") != "":
                 print(".anim exporter detected mapped rig, applying new pose")
                 bpy.ops.object.mode_set(mode="POSE")
                 bpy.ops.pose.armature_apply()
                 bpy.ops.object.mode_set(mode="OBJECT")
 
-        if old_mode != None:
+        if old_mode is not None:
             bpy.ops.object.mode_set(mode=old_mode)
 
         print("saving raw animation data...")
@@ -32074,7 +32059,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
 
         tree = bvht.to_xml(buf=bvh_buf, return_type="object")
 
-        if oni.export_volume_motion == True:
+        if oni.export_volume_motion:
             print("will export volumes")
 
         print("processing animation buffer...")
@@ -32092,15 +32077,15 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
 
         bone_names = list()
         for bone in motion["joints"]:
-            if anim.mark_tol == True:
+            if anim.mark_tol:
                 if motion["joints"][bone]["animated"]:
                     bone_names.append(bone)
 
             else:
                 bone_names.append(bone)
 
-        if armObj.animation_data != None:
-            if armObj.animation_data.action != None:
+        if armObj.animation_data is not None:
+            if armObj.animation_data.action is not None:
                 print("gathering interpolation data...")
                 frame_data = curves.get_fcurve_data(armObj.name)
             else:
@@ -32127,7 +32112,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
                 if bone in bone_names:
                     motion["joints"][bone]["animated"] = True
 
-                    if real_keys[bone].get("rot") == None:
+                    if real_keys[bone].get("rot") is None:
                         motion["joints"][bone]["tol"]["rot_count"] = 0
                     else:
                         motion["joints"][bone]["tol"]["rot_count"] = len(
@@ -32141,7 +32126,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
                             quats.append(motion["joints"][bone]["quats"][f - 1])
                         motion["joints"][bone]["quats"] = quats
 
-                    if real_keys[bone].get("loc") == None:
+                    if real_keys[bone].get("loc") is None:
                         motion["joints"][bone]["tol"]["loc_count"] = 0
                     else:
 
@@ -32152,7 +32137,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
                             True for l in real_keys[bone]["loc"]["frames"]
                         ]
 
-                        if motion["joints"][bone].get("loc_pose") == None:
+                        if motion["joints"][bone].get("loc_pose") is None:
 
                             print("got none from loc_pose for bone:", bone)
 
@@ -32185,12 +32170,12 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
 
             priority = anim.anim_base_priority
             if armObj.pose.bones[bone].get("priority_enabled") == 1:
-                if armObj.pose.bones[bone].get("priority") != None:
+                if armObj.pose.bones[bone].get("priority") is not None:
                     priority = armObj.pose.bones[bone]["priority"]
 
             file_content["joints"][bone]["priority"] = struct.pack("i", priority)
 
-            if anim.mark_tol == True:
+            if anim.mark_tol:
                 file_rot_count = motion["joints"][bone]["tol"]["rot_count"]
             else:
                 file_rot_count = len(motion["joints"][bone]["rot"])
@@ -32203,7 +32188,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
             current_time = 0
 
             time_after = True
-            if time_after == True:
+            if time_after:
 
                 last_time = 0
 
@@ -32216,7 +32201,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
 
                 for r in motion["joints"][bone]["quats"]:
 
-                    if time_after == True:
+                    if time_after:
 
                         last_time = this_time
                         this_time = next_time
@@ -32226,8 +32211,8 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
                     else:
                         current_time = time_per_frame * (count - anim_start_frame)
 
-                    if anim.mark_tol == True:
-                        if motion["joints"][bone]["tol"]["rot"][count] == False:
+                    if anim.mark_tol:
+                        if not motion["joints"][bone]["tol"]["rot"][count]:
                             count += 1
                             continue
 
@@ -32240,7 +32225,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
                     rot_time = F32_to_U16(float(current_time), 0, total_time)
                     time_data = struct.pack("H", rot_time)
 
-                    if preserve_interpolation == True:
+                    if preserve_interpolation:
 
                         if bone in frame_data:
                             if (count + 1) in frame_data[bone]["rot"]:
@@ -32255,7 +32240,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
                                     )
                                     time_data = struct.pack("H", rot_time)
 
-                    if testing == True:
+                    if testing:
                         if bone == "mHipRight":
                             print("Bone:", bone)
                             print("count/f:", count)
@@ -32275,7 +32260,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
 
                     count += 1
 
-            if anim.mark_tol == True:
+            if anim.mark_tol:
                 file_loc_count = motion["joints"][bone]["tol"]["loc_count"]
             else:
                 file_loc_count = len(motion["joints"][bone]["loc"])
@@ -32288,7 +32273,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
             current_time = 0
 
             time_after = True
-            if time_after == True:
+            if time_after:
 
                 last_time = 0
 
@@ -32301,7 +32286,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
 
                 for l in motion["joints"][bone]["loc_pose"]:
 
-                    if time_after == True:
+                    if time_after:
 
                         last_time = this_time
                         this_time = next_time
@@ -32311,9 +32296,9 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
                     else:
                         current_time = time_per_frame * (count - anim_start_frame)
 
-                    if anim.mark_tol == True:
+                    if anim.mark_tol:
 
-                        if motion["joints"][bone]["tol"]["loc"][count] == False:
+                        if not motion["joints"][bone]["tol"]["loc"][count]:
                             count += 1
                             continue
 
@@ -32326,7 +32311,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
                     loc_time = F32_to_U16(float(current_time), 0, total_time)
                     time_data = struct.pack("H", loc_time)
 
-                    if preserve_interpolation == True:
+                    if preserve_interpolation:
 
                         if bone in frame_data:
                             if (count + 1) in frame_data[bone]["loc"]:
@@ -32340,7 +32325,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
                                     )
                                     time_data = struct.pack("H", loc_time)
 
-                    if testing == True:
+                    if testing:
                         if bone == "mHipRight":
                             print("Bone:", bone)
                             print("count/f:", count)
@@ -32372,10 +32357,10 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
             file_data.extend(file_content["joints"][bone]["name"])
             file_data.extend(file_content["joints"][bone]["priority"])
             file_data.extend(file_content["joints"][bone]["rot_count"])
-            if file_content["joints"][bone].get("rot_data") != None:
+            if file_content["joints"][bone].get("rot_data") is not None:
                 file_data.extend(file_content["joints"][bone]["rot_data"])
             file_data.extend(file_content["joints"][bone]["loc_count"])
-            if file_content["joints"][bone].get("loc_data") != None:
+            if file_content["joints"][bone].get("loc_data") is not None:
                 file_data.extend(file_content["joints"][bone]["loc_data"])
 
         file_data.extend(file_content["constraints"]["count"])
@@ -32493,7 +32478,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
                     ),
                 )
 
-                if file_content["joints"][name].get("rot_data") != None:
+                if file_content["joints"][name].get("rot_data") is not None:
                     print("           keys -")
                     rots = file_content["joints"][name]["rot_data"]
                     for c in range(0, len(rots), 8):
@@ -32531,7 +32516,7 @@ class OnigiriExportSLAnimOld(bpy.types.Operator, ExportHelper):
                     ),
                 )
 
-                if file_content["joints"][name].get("loc_data") != None:
+                if file_content["joints"][name].get("loc_data") is not None:
                     print("           keys -")
                     locs = file_content["joints"][name]["loc_data"]
                     for c in range(len(locs)):
@@ -32649,10 +32634,10 @@ class OnigiriExportSLPose(bpy.types.Operator, ExportHelper):
             bpy.data.actions.remove(scratchpad)
         scratchpad = bpy.data.actions.new("scratchpad")
         has_anim = False
-        if proxyObj.animation_data != None:
-            if proxyObj.animation_data.action != None:
+        if proxyObj.animation_data is not None:
+            if proxyObj.animation_data.action is not None:
                 has_anim = True
-        if has_anim == False:
+        if not has_anim:
             proxyObj.animation_data_create()
 
         proxyObj.animation_data.action = scratchpad
@@ -32676,7 +32661,7 @@ class OnigiriExportSLPose(bpy.types.Operator, ExportHelper):
         frame_now = frame_current - 1
         bpy.context.scene.frame_set(frame_now)
 
-        if oni.export_attachment_motion == False:
+        if not oni.export_attachment_motion:
             bpy.ops.object.mode_set(mode="EDIT")
             for boneObj in proxyObj.data.edit_bones:
                 bone = boneObj.name
@@ -32832,7 +32817,7 @@ class OnigiriMapperExport(bpy.types.Operator, ExportHelper):
         mesh_rigs = {}
         for m in mesh:
             arm = get_mesh_armature(mesh=m)
-            if arm == False:
+            if not arm:
                 print("get_mesh_armature returned False:", m)
                 return {"FINISHED"}
 
@@ -32889,7 +32874,7 @@ class OnigiriMapperExport(bpy.types.Operator, ExportHelper):
         mesh_rigs = {}
         for m in mesh:
             arm = get_mesh_armature(mesh=m)
-            if arm == False:
+            if not arm:
                 print("get_mesh_armature returned False:", m)
                 return {"FINISHED"}
 
@@ -32914,7 +32899,7 @@ class OnigiriMapperExport(bpy.types.Operator, ExportHelper):
             apply_transforms(object=mesh, rotation=True, scale=True, location=True)
             print("applied transforms to mesh:", mesh)
 
-        if oni_mesh.remove_empty_groups == True:
+        if oni_mesh.remove_empty_groups:
             for m in mesh_rigs:
                 obj[m].select_set(True)
             print("Removing empty vertex groups")
@@ -33010,7 +32995,7 @@ class OnigiriMapperExport(bpy.types.Operator, ExportHelper):
         delete_files = list()
         delete_files.append(file_out_temp)
 
-        if oni_mesh.remove_empty_groups == True:
+        if oni_mesh.remove_empty_groups:
             print("Removing empty vertex groups")
             bpy.ops.onigiri.remove_unused_groups(method="best")
 
@@ -33039,7 +33024,7 @@ class OnigiriMapperExport(bpy.types.Operator, ExportHelper):
 
         print("Phase 1 finished!")
 
-        if bmp.mapper_fitted == True:
+        if bmp.mapper_fitted:
             if 1 == 1:
                 print("ONI adjusting matrices...")
                 ET.register_namespace(
@@ -33112,7 +33097,7 @@ class OnigiriForceRigToClass(bpy.types.Operator):
         if len(bpy.context.selected_objects) == 1:
             o = bpy.context.selected_objects[0]
             if o.type == "ARMATURE":
-                if o.get("rig_class") == None:
+                if o.get("rig_class") is None:
                     return True
         return False
 
@@ -33136,7 +33121,7 @@ class OnigiriCreateAnimationRig(bpy.types.Operator):
 
         if 1 == 0:
             armObj = rigutils.create_animation_rig(target="default", type="pos")
-            if armObj == False:
+            if not armObj:
                 print("something bad happened")
             else:
                 armObj["onigiri"] = bl_info["version"]
@@ -33151,7 +33136,7 @@ class OnigiriCreateAnimationRig(bpy.types.Operator):
             has_collision = True
 
             name1 = get_unique_name_short(prefix=object)
-            if name1 == False:
+            if not name1:
                 print(
                     "An attempt to generate a unique name for a Blender object failed, this could very well be a bug"
                 )
@@ -33179,7 +33164,7 @@ class OnigiriCreateAnimationRig(bpy.types.Operator):
         directory = full_path + "/Object/"
         filename = object
 
-        if os.path.exists(full_path) == False:
+        if not os.path.exists(full_path):
             print("OnigiriCreateAnimationRig reports: missing data", full_path)
             popup("External rig data is missing, your installation might be damaged")
             return {"FINISHED"}
@@ -33194,7 +33179,7 @@ class OnigiriCreateAnimationRig(bpy.types.Operator):
         bpy.context.view_layer.objects.active = oniRig
         print("Loaded animation rig:", oniRig.name)
 
-        if has_collision == True:
+        if has_collision:
             print("Name collision, new name is:", name1)
             oniRig.name = name1
             obj[name2].name = object
@@ -33215,7 +33200,7 @@ class OnigiriCreateOldRig(bpy.types.Operator):
         oni = bpy.context.scene.onigiri
 
         armObj = rigutils.create_rig(target="basic")
-        if armObj == False:
+        if not armObj:
             print("something bad happened")
         else:
             armObj["onigiri"] = bl_info["version"]
@@ -33256,8 +33241,8 @@ class OnigiriAttachProxyRig(bpy.types.Operator):
 
             try:
                 if proxyObj.name in obj:
-                    if proxyObj.animation_data != None:
-                        if proxyObj.animation_data.action != None:
+                    if proxyObj.animation_data is not None:
+                        if proxyObj.animation_data.action is not None:
                             animObj = proxyObj.animation_data.action
 
                     sarmObj.select_set(False)
@@ -33273,7 +33258,7 @@ class OnigiriAttachProxyRig(bpy.types.Operator):
 
         tarm = rigutils.attach_proxy_rig(armature=sarm, clean=oni_rig.rig_clean)
 
-        if tarm == False:
+        if not tarm:
             print("There was a problem adding the control rig:", sarm)
         else:
             print("Controller attached:", sarm)
@@ -33327,7 +33312,7 @@ class OnigiriCreateSLRig(bpy.types.Operator):
 
         armObj = rigutils.build_rig(rig_class=self.rig_class, rotate=rotate)
 
-        if armObj == False:
+        if not armObj:
             print("Couldn't build a", self.rig_class, "rig")
         else:
             print("Rig created:", armObj.name, "of class", self.rig_class)
@@ -33348,7 +33333,7 @@ class OnigiriCreateSLPosRig(bpy.types.Operator):
         rotate = oni_rig.rig_rotate
 
         armObj = rigutils.build_rig(rig_class="pos", rotate=rotate, connect=False)
-        if armObj == False:
+        if not armObj:
             print("Couldn't build a pos rig")
         else:
             print("Rig created:", armObj.name, "of class pos")
@@ -33366,7 +33351,7 @@ class OnigiriCreateSLPivotRig(bpy.types.Operator):
         oni_rig = bpy.context.window_manager.oni_rig
         rotate = oni_rig.rig_rotate
         armObj = rigutils.build_rig(rig_class="pivot", rotate=rotate)
-        if armObj == False:
+        if not armObj:
             print("Couldn't build a pivot rig")
         else:
             print("Rig created:", armObj.name, "of class pivot")
@@ -33384,7 +33369,7 @@ class OnigiriCreateDefaultRig(bpy.types.Operator):
         oni = bpy.context.scene.onigiri
 
         armObj = rigutils.create_rig(target="default")
-        if armObj == False:
+        if not armObj:
             print("something bad happened")
         else:
             armObj["onigiri"] = bl_info["version"]
@@ -33405,7 +33390,7 @@ class OnigiriCreateNeutralRig(bpy.types.Operator):
     def execute(self, context):
 
         armObj = rigutils.create_rig(target="neutral")
-        if armObj == False:
+        if not armObj:
             print("something bad happened")
         else:
             armObj["onigiri"] = bl_info["version"]
@@ -33441,7 +33426,7 @@ class OnigiriCreateMaleRig(bpy.types.Operator):
         oni = bpy.context.scene.onigiri
 
         armObj = rigutils.create_rig(target=self.rig_class)
-        if armObj == False:
+        if not armObj:
             print("something bad happened")
         else:
             armObj["onigiri"] = bl_info["version"]
@@ -33464,7 +33449,7 @@ class OnigiriCreateRig(bpy.types.Operator):
         for flag in oni_flags:
             oni_flags[flag] = getattr(bpy.context.scene.onigiri, flag)
 
-        if getattr(bpy.context.scene.onigiri, "pos_rig") == True:
+        if getattr(bpy.context.scene.onigiri, "pos_rig"):
             oni_rig = create_rig(skel_type="pos", add_control_rig=oni.add_control_rig)
         else:
             oni_rig = create_rig(skel_type="pivot", add_control_rig=oni.add_control_rig)
@@ -33486,7 +33471,7 @@ class OnigiriReferenceRig(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if getattr(context.scene.onigiri, "selected_reference") == True:
+        if getattr(context.scene.onigiri, "selected_reference"):
             if context.scene.bone_source == "":
                 return False
         return True
@@ -33497,7 +33482,7 @@ class OnigiriReferenceRig(bpy.types.Operator):
         for flag in oni_flags:
             oni_flags[flag] = getattr(bpy.context.scene.onigiri, flag)
 
-        if getattr(context.scene.onigiri, "selected_reference") == True:
+        if getattr(context.scene.onigiri, "selected_reference"):
             ref_arm = getattr(context.scene, "bone_source")
             if ref_arm == "":
                 popup(
@@ -33530,7 +33515,7 @@ class OnigiriReferenceRig(bpy.types.Operator):
             bpy.data.objects[oni_rig.name]["onigiri"] = bl_info["version"]
             setattr(context.scene, "bone_source", oni_rig.name)
 
-        elif getattr(context.scene.onigiri, "neutral_reference") == True:
+        elif getattr(context.scene.onigiri, "neutral_reference"):
             print("SECOND IF ELIF")
             oni_rig = create_neutral_reference_rig("OnigiriRef", oni.add_control_rig)
             bpy.data.objects[oni_rig.name]["onigiri"] = bl_info["version"]
@@ -33652,7 +33637,7 @@ class OnigiriChangeBonePrefix(bpy.types.Operator):
 
                 brp.bone_prefix_last_armature = arm
 
-                if brp.get("rig_data") == None:
+                if brp.get("rig_data") is None:
 
                     brp["rig_data"] = {}
 
@@ -33940,7 +33925,7 @@ class OnigiriConvertAvastarRig(bpy.types.Operator):
 
         avaRig = bpy.context.selected_objects[0]
 
-        if avaRig.get("avastar") == None:
+        if avaRig.get("avastar") is None:
             print("Not an avastar rig")
             popup(
                 "This does not appear to be an Avastar rig",
@@ -33948,7 +33933,7 @@ class OnigiriConvertAvastarRig(bpy.types.Operator):
                 "ERROR",
             )
             return {"FINISHED"}
-        if avaRig.get("avastar") != None and avaRig.get("onigiri") != None:
+        if avaRig.get("avastar") is not None and avaRig.get("onigiri") is not None:
             print("This appears to already be converted")
             popup(
                 "It appears as though this rig has already been converted",
@@ -34013,15 +33998,15 @@ class OnigiriConvertAvastarRig(bpy.types.Operator):
             "scale0",
         ]
         for p in object_data:
-            if avaRig.get(p) != None:
+            if avaRig.get(p) is not None:
                 oniRig.data[p] = avaRig.data[p]
         for boneObj in oniRig.data.bones:
             if boneObj.name in avaRig.data.bones:
                 for p in bone_props:
-                    if avaRig.data.bones[boneObj.name].get(p) != None:
+                    if avaRig.data.bones[boneObj.name].get(p) is not None:
                         boneObj[p] = avaRig.data.bones[boneObj.name][p]
 
-        if avaRig.get("avastar") != None:
+        if avaRig.get("avastar") is not None:
             oniRig["avastar"] = avaRig["avastar"]
 
         bpy.ops.object.mode_set(mode="EDIT")
@@ -34054,7 +34039,7 @@ class OnigiriConvertAvastarRig(bpy.types.Operator):
                 oniRig.data.edit_bones[bone].head = edit_bones[bone]["head"]
                 oniRig.data.edit_bones[bone].tail = edit_bones[bone]["tail"]
 
-                if oni_misc.use_old_rig == True:
+                if oni_misc.use_old_rig:
                     roll = 0.0
 
                     if bone == "mPelvis":
@@ -34071,7 +34056,7 @@ class OnigiriConvertAvastarRig(bpy.types.Operator):
 
                 if 1 == 0:
                     if bone == "mPelvis":
-                        if oni_misc.use_old_rig == True:
+                        if oni_misc.use_old_rig:
                             parent = edit_bones[bone]["parent"]
                             if parent:
                                 oniRig.data.edit_bones[bone].parent = (
@@ -34143,7 +34128,7 @@ class OnigiriConvertFromAvastar(bpy.types.Operator):
 
         avaRig = bpy.context.selected_objects[0]
 
-        if avaRig.get("avastar") == None:
+        if avaRig.get("avastar") is None:
             print("Not an avastar rig")
             popup(
                 "This does not appear to be an Avastar rig",
@@ -34151,7 +34136,7 @@ class OnigiriConvertFromAvastar(bpy.types.Operator):
                 "ERROR",
             )
             return {"FINISHED"}
-        if avaRig.get("avastar") != None and avaRig.get("onigiri") != None:
+        if avaRig.get("avastar") is not None and avaRig.get("onigiri") is not None:
             print("This appears to already be converted")
             popup(
                 "It appears as though this rig has already been converted",
@@ -34350,7 +34335,7 @@ class OnigiriConvertFromAvastar(bpy.types.Operator):
         bpy.ops.object.mode_set(mode=old_mode)
 
         bone_groups = oniRig.get("oni_bone_groups")
-        if bone_groups == None:
+        if bone_groups is None:
             print("No bone groups were found in order to set the UI")
         else:
             print("- Processing bone_groups to sync up toggles -")
@@ -34541,7 +34526,7 @@ class OnigiriConvertToFullRig(bpy.types.Operator):
             if bone in armObj.data.bones:
                 got_dumbed = True
                 break
-        if got_dumbed == True:
+        if got_dumbed:
             armObj.select_set(True)
             utils.activate(armObj)
             bpy.ops.onigiri.convert_from_avastar()
@@ -34572,7 +34557,7 @@ class OnigiriConvertToFullRig(bpy.types.Operator):
                 match=match,
             )
 
-        if result == False:
+        if not result:
             print("Rig update failed")
             popup("Rig conversion failed", "Error", "ERROR")
 
@@ -34594,7 +34579,7 @@ class OnigiriRemoveRigData(bpy.types.Operator):
         if len(bpy.context.selected_objects) != 1:
             return False
         if bpy.context.selected_objects[0].type == "ARMATURE":
-            if bpy.context.selected_objects[0].get("rig_data") == None:
+            if bpy.context.selected_objects[0].get("rig_data") is None:
                 return False
         return True
 
@@ -34602,7 +34587,7 @@ class OnigiriRemoveRigData(bpy.types.Operator):
         armObj = bpy.context.selected_objects[0]
         oni_misc = bpy.context.window_manager.oni_misc
 
-        if armObj.get("rig_data") != None:
+        if armObj.get("rig_data") is not None:
             rb = armObj["rig_data"].to_dict()
             armObj["rig_data_backup"] = rb
             del armObj["rig_data"]
@@ -34637,25 +34622,25 @@ class OnigiriManageRigData(bpy.types.Operator):
         oni_misc = bpy.context.window_manager.oni_misc
 
         if self.action == "restore":
-            if armObj.get("rig_data_backup") == None:
+            if armObj.get("rig_data_backup") is None:
                 popup("No rig data to restore", "Missing rig data", "ERROR")
             else:
                 armObj["rig_data"] = armObj["rig_data_backup"]
                 popup("Rig data restored", "Restored", "INFO")
             return {"FINISHED"}
         elif self.action == "store":
-            if armObj.get("rig_data") != None:
+            if armObj.get("rig_data") is not None:
 
                 if (
-                    armObj.get("rig_data_backup") == None
-                    or oni_misc.overwrite_rig_data_backup == True
+                    armObj.get("rig_data_backup") is None
+                    or oni_misc.overwrite_rig_data_backup
                 ):
                     rb = armObj["rig_data"].to_dict()
                     armObj["rig_data_backup"] = rb
                     del rb
             rigutils.save_rig(armature=armObj.name, force=True)
 
-            if armObj.get("rig_data_backup") == None:
+            if armObj.get("rig_data_backup") is None:
                 rb = armObj["rig_data"].to_dict()
                 armObj["rig_data_backup"] = rb
                 del rb
@@ -34722,7 +34707,7 @@ class OnigiriTransferObjectProperties(bpy.types.Operator):
             ready = False
 
         if self.action == "copy":
-            if ready == False:
+            if not ready:
                 print(
                     "No qualified object was selected for copying or too many objects"
                 )
@@ -34747,13 +34732,13 @@ class OnigiriTransferObjectProperties(bpy.types.Operator):
             oni_misc["prop_buffer"] = buf
             print("props copied to buffer")
         elif self.action == "paste":
-            if ready == False:
+            if not ready:
                 print(
                     "No qualified object was selected for pasting, or too many objects"
                 )
                 popup("Select a single mesh or rig", "Error", "ERROR")
                 return {"FINISHED"}
-            if oni_misc.get("prop_buffer") == None:
+            if oni_misc.get("prop_buffer") is None:
                 print("No properties appear to have been saved")
                 popup("Buffer is empty, use copy first", "Info", "INFO")
                 return {"FINISHED"}
@@ -34774,12 +34759,12 @@ class OnigiriTransferObjectProperties(bpy.types.Operator):
                         ]
             print("props pasted")
         elif self.action == "clear":
-            if oni_misc.get("prop_buffer") == None:
+            if oni_misc.get("prop_buffer") is None:
                 print("transfer buffer was empty")
             else:
                 del oni_misc["prop_buffer"]
         elif self.action == "print":
-            if oni_misc.get("prop_buffer") == None:
+            if oni_misc.get("prop_buffer") is None:
                 print("transfer buffer was empty")
                 popup("Buffer is empty, nothing to print", "Info", "INFO")
                 return {"FINISHED"}
@@ -35011,7 +34996,7 @@ class OnigiriBindInformation(bpy.types.Operator):
 
         if self.action == "set_0":
             for boneObj in armObj.data.edit_bones:
-                if boneObj.get("bind_mat") == None:
+                if boneObj.get("bind_mat") is None:
                     continue
                 boneObj["bind_mat"][0] = 0.0
                 boneObj["bind_mat"][5] = 0.0
@@ -35019,7 +35004,7 @@ class OnigiriBindInformation(bpy.types.Operator):
             bpy.ops.object.mode_set(mode="OBJECT")
         elif self.action == "set_1":
             for boneObj in armObj.data.edit_bones:
-                if boneObj.get("bind_mat") == None:
+                if boneObj.get("bind_mat") is None:
                     continue
                 boneObj["bind_mat"][0] = 1.0
                 boneObj["bind_mat"][5] = 1.0
@@ -35152,7 +35137,7 @@ class OnigiriBindInformation(bpy.types.Operator):
         elif self.action == "copy":
             onim["bind_info"] = dict()
             for boneObj in armObj.data.edit_bones:
-                if boneObj.get("bind_mat") == None:
+                if boneObj.get("bind_mat") is None:
                     print(boneObj.name, "copy - missing bind_mat, moving on ...")
                     continue
                 onim["bind_info"][boneObj.name] = dict()
@@ -35162,7 +35147,7 @@ class OnigiriBindInformation(bpy.types.Operator):
             print("Copy bind info complete")
 
         elif self.action == "paste":
-            if onim.get("bind_info") == None:
+            if onim.get("bind_info") is None:
                 print("no bind info available yet, use copy first")
                 popup("No bind info available yet, use copy first.", "Error", "ERROR")
                 bpy.ops.object.mode_set(mode="OBJECT")
@@ -35749,7 +35734,7 @@ class OnigiriAutoKey(bpy.types.Operator):
         frame_end = oni_autokey.autokey_bake_end
 
         if self.action == "acquire":
-            if armObj.animation_data == None:
+            if armObj.animation_data is None:
                 print("no animation data")
                 popup(
                     "no animation is present from which to sample the frame range",
@@ -35757,7 +35742,7 @@ class OnigiriAutoKey(bpy.types.Operator):
                     "INFO",
                 )
                 return {"FINISHED"}
-            if armObj.animation_data.action == None:
+            if armObj.animation_data.action is None:
                 print("no action data")
                 popup(
                     "no action is present from which to sample the frame range",
@@ -35773,12 +35758,12 @@ class OnigiriAutoKey(bpy.types.Operator):
 
         if self.action == "copy":
             ani = bpy.data.actions.get("scratchpad")
-            if ani == None:
+            if ani is None:
                 print("Created disposable action")
                 ani = bpy.data.actions.new("scratchpad")
             old_ani = None
-            if armObj.animation_data != None:
-                if armObj.animation_data.action != None:
+            if armObj.animation_data is not None:
+                if armObj.animation_data.action is not None:
                     old_ani = armObj.animation_data.action
             else:
                 armObj.animation_data_create()
@@ -35813,7 +35798,7 @@ class OnigiriAutoKey(bpy.types.Operator):
             bpy.ops.pose.select_all(action="DESELECT")
             bpy.ops.object.mode_set(mode=old_mode)
 
-            if old_ani != None:
+            if old_ani is not None:
                 armObj.animation_data.action = old_ani
 
         if self.action == "key":
@@ -35823,7 +35808,7 @@ class OnigiriAutoKey(bpy.types.Operator):
             for pBone in armObj.pose.bones:
                 pose[pBone.name] = armObj.pose.bones[pBone.name].matrix.copy()
 
-            if armObj.get("oni_motion") == None:
+            if armObj.get("oni_motion") is None:
 
                 armObj["oni_autokey_reference_frame"] = frame_current
 
@@ -35882,7 +35867,7 @@ class OnigiriAutoKey(bpy.types.Operator):
 
                 armObj["oni_motion"] = motion
                 frame = frame_current
-                if oni_autokey.autokey_steps_disabled == False:
+                if not oni_autokey.autokey_steps_disabled:
                     frame += oni_autokey.autokey_steps
                 bpy.context.scene.frame_set(frame)
                 self.action = ""
@@ -35891,7 +35876,7 @@ class OnigiriAutoKey(bpy.types.Operator):
             motion = armObj["oni_motion"]
 
             frame_old = frame_current
-            if oni_autokey.autokey_steps_disabled == False:
+            if not oni_autokey.autokey_steps_disabled:
                 if oni_autokey.autokey_steps < 0:
                     frame_old = frame_current + 1
                 else:
@@ -35923,7 +35908,7 @@ class OnigiriAutoKey(bpy.types.Operator):
 
             f = str(frame_current)
 
-            if motion.get(f) != None:
+            if motion.get(f) is not None:
                 print("Unpredicted frame in motion:", f)
             else:
                 motion[f] = {}
@@ -35944,11 +35929,11 @@ class OnigiriAutoKey(bpy.types.Operator):
                 rmatch = False
                 lmatch = False
                 for r in range(3):
-                    if animutils.close_enough(rot[r], last_rot[r], tol=rtol) == True:
+                    if animutils.close_enough(rot[r], last_rot[r], tol=rtol):
                         rmatch = True
                         break
                 for l in range(3):
-                    if animutils.close_enough(loc[l], last_loc[l], tol=ltol) == True:
+                    if animutils.close_enough(loc[l], last_loc[l], tol=ltol):
                         lmatch = True
                         break
                 if rmatch:
@@ -35963,8 +35948,8 @@ class OnigiriAutoKey(bpy.types.Operator):
             rots = 0
             locs = 0
             for bone in motion[f]:
-                if motion[f][bone]["rot"] == True:
-                    if oni_autokey.autokey_bake_rotation_disabled == False:
+                if motion[f][bone]["rot"]:
+                    if not oni_autokey.autokey_bake_rotation_disabled:
                         rots += 1
                         rotation_mode = armObj.pose.bones[bone].rotation_mode
                         if rotation_mode == "QUATERNION":
@@ -35974,8 +35959,8 @@ class OnigiriAutoKey(bpy.types.Operator):
                         armObj.pose.bones[bone].keyframe_insert(
                             data_path=rmode, frame=frame_current
                         )
-                if motion[f][bone]["loc"] == True:
-                    if oni_autokey.autokey_bake_location_disabled == False:
+                if motion[f][bone]["loc"]:
+                    if not oni_autokey.autokey_bake_location_disabled:
                         locs += 1
                         armObj.pose.bones[bone].keyframe_insert(
                             data_path="location", frame=frame_current
@@ -35983,7 +35968,7 @@ class OnigiriAutoKey(bpy.types.Operator):
             print("keyed", rots, "rotations and", locs, "locations")
 
             frame = frame_current
-            if oni_autokey.autokey_steps_disabled == False:
+            if not oni_autokey.autokey_steps_disabled:
                 frame += oni_autokey.autokey_steps
             bpy.context.scene.frame_set(frame)
 
@@ -36007,9 +35992,9 @@ class OnigiriAutoKeyStore(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.animation_data == None:
+        if o.animation_data is None:
             return False
-        if o.animation_data.action == None:
+        if o.animation_data.action is None:
             return False
         return True
 
@@ -36087,7 +36072,7 @@ class OnigiriAutoKeyStore(bpy.types.Operator):
                 if frame > frame_end:
                     continue
                 f = str(frame)
-                if motion.get(f) == None:
+                if motion.get(f) is None:
                     motion[f] = {}
 
                 motion[f][bone] = {}
@@ -36162,7 +36147,7 @@ class OnigiriAutoKeyReference(bpy.types.Operator):
             print("Current pose saved as reference")
         if self.action == "restore":
 
-            if armObj.get("oni_reference") == None:
+            if armObj.get("oni_reference") is None:
                 print("No reference saved")
                 popup("No reference saved", "Info", "INFO")
                 return {"FINISHED"}
@@ -36202,7 +36187,7 @@ class OnigiriAutoKeyInsert(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.get("oni_motion") == None:
+        if o.get("oni_motion") is None:
             return False
         return True
 
@@ -36231,7 +36216,7 @@ class OnigiriAutoKeyInsert(bpy.types.Operator):
         return {"FINISHED"}
 
         frame = frame_current
-        if oni_autokey.autokey_steps_disabled == False:
+        if not oni_autokey.autokey_steps_disabled:
             frame += oni_autokey.autokey_steps
         bpy.context.scene.frame_set(frame)
         self.action = ""
@@ -36254,7 +36239,7 @@ class OnigiriAutoKeyBakeStored(bpy.types.Operator):
         if len(bpy.context.selected_objects) != 1:
             return False
         o = bpy.context.selected_objects[0]
-        if o.get("oni_motion") == None:
+        if o.get("oni_motion") is None:
             return False
         if o.type == "ARMATURE":
             return True
@@ -36282,7 +36267,7 @@ class OnigiriAutoKeyBakeStored(bpy.types.Operator):
         for f in frames_str:
 
             progress_enabled = True
-            if oni_autokey.autokey_bake_progress_show == True:
+            if oni_autokey.autokey_bake_progress_show:
                 count += 1
                 percentage = int((count / real_range) * 100)
                 oni_autokey.autokey_bake_progress = str(percentage) + "%"
@@ -36299,7 +36284,7 @@ class OnigiriAutoKeyBakeStored(bpy.types.Operator):
                 if bone in armObj.pose.bones:
                     rot = motion[f][bone]["rot"]
                     loc = motion[f][bone]["loc"]
-                    if rot == True or loc == True:
+                    if rot or loc:
                         mat = mathutils.Matrix(motion[f][bone]["matrix"])
                         armObj.pose.bones[bone].matrix_basis = mat
 
@@ -36309,8 +36294,8 @@ class OnigiriAutoKeyBakeStored(bpy.types.Operator):
                     print("Missing bone:", bone)
                     continue
 
-                if rot == True:
-                    if oni_autokey.autokey_bake_rotation_disabled == False:
+                if rot:
+                    if not oni_autokey.autokey_bake_rotation_disabled:
                         rotation_mode = armObj.pose.bones[bone].rotation_mode
                         if rotation_mode == "QUATERNION":
                             rmode = "rotation_quaternion"
@@ -36319,8 +36304,8 @@ class OnigiriAutoKeyBakeStored(bpy.types.Operator):
                         armObj.pose.bones[bone].keyframe_insert(
                             data_path=rmode, frame=frame
                         )
-                if loc == True:
-                    if oni_autokey.autokey_bake_location_disabled == False:
+                if loc:
+                    if not oni_autokey.autokey_bake_location_disabled:
                         armObj.pose.bones[bone].keyframe_insert(
                             data_path="location", frame=frame
                         )
@@ -36361,7 +36346,7 @@ class OnigiriAutoKeyBakeRange(bpy.types.Operator):
         obj = bpy.data.objects
         armObj = bpy.context.object
 
-        if oni_autokey.autokey_steps_disabled == True:
+        if oni_autokey.autokey_steps_disabled:
             print("Step must be enabled and steps must be a non-zero value")
             popup("Steps must be enabled or bake makes no sense", "Error", "ERROR")
             return {"FINISHED"}
@@ -36378,7 +36363,7 @@ class OnigiriAutoKeyBakeRange(bpy.types.Operator):
         frame_start = int(oni_autokey.autokey_bake_start)
         frame_end = int(oni_autokey.autokey_bake_end)
 
-        if armObj.get("oni_motion") != None:
+        if armObj.get("oni_motion") is not None:
             txt = "------------------------\n"
             txt += "There's saved keys on the rig.  This protection is for your good, you may not want to overwrite this data.  "
             txt += "You can save it to the library and then remove it with the red X on the (Auto Key) button or just remove it "
@@ -36441,7 +36426,7 @@ class OnigiriAutoKeyBakeRange(bpy.types.Operator):
             for boneObj in armObj.pose.bones:
                 bone = boneObj.name
 
-                if last_mats[bone]["moved"] == True:
+                if last_mats[bone]["moved"]:
                     last_mats[bone]["moved"] = False
                     lmat = last_mats[bone]["real_matrix"]
                     last_rot = lmat.to_euler()
@@ -36454,11 +36439,11 @@ class OnigiriAutoKeyBakeRange(bpy.types.Operator):
                 rmatch = False
                 lmatch = False
                 for r in range(3):
-                    if animutils.close_enough(rot[r], last_rot[r], tol=rtol) == True:
+                    if animutils.close_enough(rot[r], last_rot[r], tol=rtol):
                         rmatch = True
                         break
                 for l in range(3):
-                    if animutils.close_enough(loc[l], last_loc[l], tol=ltol) == True:
+                    if animutils.close_enough(loc[l], last_loc[l], tol=ltol):
                         lmatch = True
                         break
 
@@ -36485,8 +36470,8 @@ class OnigiriAutoKeyBakeRange(bpy.types.Operator):
                 pmat = armObj.pose.bones[bone].matrix.copy()
                 armObj.pose.bones[bone].matrix = pmat
 
-                if motion[f][bone]["rot"] == True:
-                    if oni_autokey.autokey_bake_rotation_disabled == False:
+                if motion[f][bone]["rot"]:
+                    if not oni_autokey.autokey_bake_rotation_disabled:
                         rotation_mode = armObj.pose.bones[bone].rotation_mode
                         if rotation_mode == "QUATERNION":
                             rmode = "rotation_quaternion"
@@ -36495,8 +36480,8 @@ class OnigiriAutoKeyBakeRange(bpy.types.Operator):
                         armObj.pose.bones[bone].keyframe_insert(
                             data_path=rmode, frame=frame
                         )
-                if motion[f][bone]["loc"] == True:
-                    if oni_autokey.autokey_bake_location_disabled == False:
+                if motion[f][bone]["loc"]:
+                    if not oni_autokey.autokey_bake_location_disabled:
                         armObj.pose.bones[bone].keyframe_insert(
                             data_path="location", frame=frame
                         )
@@ -36538,7 +36523,7 @@ class OnigiriAutoKeyReset(bpy.types.Operator):
         if len(bpy.context.selected_objects) != 1:
             return False
         o = bpy.context.selected_objects[0]
-        if o.get("oni_motion") == None:
+        if o.get("oni_motion") is None:
             return False
         if o.type == "ARMATURE":
             return True
@@ -36554,11 +36539,11 @@ class OnigiriAutoKeyReset(bpy.types.Operator):
         armObj.pop("oni_motion", {})
 
         frame = 1
-        if armObj.animation_data != None:
-            if armObj.animation_data.action != None:
+        if armObj.animation_data is not None:
+            if armObj.animation_data.action is not None:
                 frame_start, frame_end = armObj.animation_data.action.frame_range
 
-                if oni_autokey.autokey_steps_disabled == False:
+                if not oni_autokey.autokey_steps_disabled:
                     if oni_autokey.autokey_steps < 0:
                         frame = int(frame_end)
                     else:
@@ -36614,7 +36599,7 @@ class OnigiriAutoKeyPastePose(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         oni_autokey = bpy.context.scene.oni_autokey
-        if oni_autokey.get("pose") == None:
+        if oni_autokey.get("pose") is None:
             return False
         if len(bpy.context.selected_objects) == 0:
             return False
@@ -36647,11 +36632,11 @@ class OnigiriAutoKeyPastePose(bpy.types.Operator):
 
         to_selected = False
 
-        if oni_autokey.autokey_paste_to_selected == True:
+        if oni_autokey.autokey_paste_to_selected:
             if bpy.context.mode == "POSE":
                 to_selected = True
 
-        if to_selected == True:
+        if to_selected:
             selected_bones = [b for b in bpy.context.selected_pose_bones]
             for boneObj in selected_bones:
                 arm = boneObj.id_data.name
@@ -36687,7 +36672,7 @@ class OnigiriAnimationLibraryProperties(bpy.types.PropertyGroup):
 
     def update_alib_anim_name_new(self, context):
         oni_alib = bpy.context.scene.oni_alib
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         new_name = oni_alib.alib_anim_name_new
@@ -36799,11 +36784,11 @@ class OnigiriAnimationLibraryProperties(bpy.types.PropertyGroup):
     )
 
     def update_export_mapped_animation(self, context):
-        if self["alib_action_export_mapped_animation"] == True:
+        if self["alib_action_export_mapped_animation"]:
             self["alib_action_export_retargeted_animation"] = False
 
     def update_export_retargeted_animation(self, context):
-        if self["alib_action_export_retargeted_animation"] == True:
+        if self["alib_action_export_retargeted_animation"]:
             self["alib_action_export_mapped_animation"] = False
 
     alib_action_export_mapped_animation: bpy.props.BoolProperty(
@@ -36854,7 +36839,7 @@ class OnigiriAnimationLibraryProperties(bpy.types.PropertyGroup):
     )
 
     def update_alib_ranges_all_enabled(self, context):
-        if self.alib_ranges_all_enabled == True:
+        if self.alib_ranges_all_enabled:
             for actionObj in bpy.data.actions:
                 actionObj["frame_range"] = True
         else:
@@ -36862,7 +36847,7 @@ class OnigiriAnimationLibraryProperties(bpy.types.PropertyGroup):
                 actionObj["frame_range"] = False
 
     def update_alib_loops_all_enabled(self, context):
-        if self.alib_loops_all_enabled == True:
+        if self.alib_loops_all_enabled:
             for actionObj in bpy.data.actions:
                 actionObj["loop_range"] = True
         else:
@@ -36883,7 +36868,7 @@ class OnigiriAnimationLibraryProperties(bpy.types.PropertyGroup):
     )
 
     def update_alib_ease_all_enabled(self, context):
-        if self.alib_ease_all_enabled == True:
+        if self.alib_ease_all_enabled:
             for actionObj in bpy.data.actions:
                 actionObj["ease"] = True
         else:
@@ -36991,7 +36976,7 @@ class OnigiriAnimationLibraryProperties(bpy.types.PropertyGroup):
     )
 
     def update_alib_action_rename_new(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_alib = bpy.context.scene.oni_alib
@@ -37153,7 +37138,7 @@ class OnigiriAnimationLibraryProperties(bpy.types.PropertyGroup):
         if channel.startswith("-"):
             sign = channel[:1]
             channel = channel[1:]
-        if channel.isdecimal() == False:
+        if not channel.isdecimal():
             txt = (
                 "The IntProperty in Blender cannot represent the numeric value appropriate for this content so "
                 + "a string value is used and converted, unfortunately your string value contains something other than numbers and the (-) sign.  "
@@ -37356,7 +37341,7 @@ class OnigiriAnimationLibraryAdd(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.get("oni_motion") == None:
+        if o.get("oni_motion") is None:
             return False
         return True
 
@@ -37366,7 +37351,7 @@ class OnigiriAnimationLibraryAdd(bpy.types.Operator):
 
         armObj = bpy.context.object
 
-        if oni_alib.get("motion") == None:
+        if oni_alib.get("motion") is None:
             oni_alib["motion"] = {}
 
         name = oni_alib.alib_anim_name
@@ -37415,7 +37400,7 @@ class OnigiriAnimationLibraryDelete(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         oni_alib = bpy.context.scene.oni_alib
-        if oni_alib.get("motion") == None:
+        if oni_alib.get("motion") is None:
             return False
         return True
 
@@ -37457,7 +37442,7 @@ class OnigiriAnimationLibraryRename(bpy.types.Operator):
 
         if self.name != "":
 
-            if oni_alib.alib_anim_name_edit == True:
+            if oni_alib.alib_anim_name_edit:
                 oni_alib.alib_anim_name_edit = False
                 oni_settings["terminate"] = True
                 oni_alib.alib_anim_name_new = ""
@@ -37582,7 +37567,7 @@ class OnigiriAnimationActionApply(bpy.types.Operator):
 
         actionObj = bpy.data.actions[self.name]
         for o in selected:
-            if o.animation_data == None:
+            if o.animation_data is None:
                 o.animation_data_create()
             o.animation_data.action = actionObj
         return {"FINISHED"}
@@ -37592,9 +37577,9 @@ class OnigiriAnimationActionApply(bpy.types.Operator):
             if o.type == "ARMATURE":
                 qualified.append(o)
         for armObj in qualified:
-            if armObj.animation_data == None:
+            if armObj.animation_data is None:
                 armObj.animation_data_create()
-            elif armObj.animation_data.action == None:
+            elif armObj.animation_data.action is None:
                 armObj.animation_data_create()
             actionObj = bpy.data.actions[self.name]
             armObj.animation_data.action = actionObj
@@ -37675,23 +37660,23 @@ class OnigiriAnimationActionRangeSet(bpy.types.Operator):
 
         actionObj = bpy.data.actions[self.action]
 
-        if actionObj.get("frame_start") == None:
+        if actionObj.get("frame_start") is None:
             actionObj["frame_start"] = oni_frame_start
-        if actionObj.get("frame_end") == None:
+        if actionObj.get("frame_end") is None:
             actionObj["frame_end"] = oni_frame_end
-        if actionObj.get("loop_start") == None:
+        if actionObj.get("loop_start") is None:
             actionObj["loop_start"] = oni_loop_start
-        if actionObj.get("loop_end") == None:
+        if actionObj.get("loop_end") is None:
             actionObj["loop_end"] = oni_loop_end
-        if actionObj.get("frame_range") == None:
+        if actionObj.get("frame_range") is None:
             actionObj["frame_range"] = False
-        if actionObj.get("loop_range") == None:
+        if actionObj.get("loop_range") is None:
             actionObj["loop_range"] = False
-        if actionObj.get("priority") == None:
+        if actionObj.get("priority") is None:
             actionObj["priority"] = oni_anim.anim_base_priority
-        if actionObj.get("ease_in") == None:
+        if actionObj.get("ease_in") is None:
             actionObj["ease_in"] = oni_ease_in
-        if actionObj.get("ease_out") == None:
+        if actionObj.get("ease_out") is None:
             actionObj["ease_out"] = oni_ease_out
 
         action_frame_start = actionObj["frame_start"]
@@ -37757,7 +37742,7 @@ class OnigiriAnimationActionRange(bpy.types.Operator):
 
     def execute(self, context):
         oni_alib = bpy.context.scene.oni_alib
-        if bpy.data.actions[self.action].get("frame_range") == None:
+        if bpy.data.actions[self.action].get("frame_range") is None:
             bpy.data.actions[self.action]["frame_range"] = False
 
         state = bpy.data.actions[self.action]["frame_range"]
@@ -37777,7 +37762,7 @@ class OnigiriAnimationActionLoop(bpy.types.Operator):
 
     def execute(self, context):
         oni_alib = bpy.context.scene.oni_alib
-        if bpy.data.actions[self.action].get("loop_range") == None:
+        if bpy.data.actions[self.action].get("loop_range") is None:
             bpy.data.actions[self.action]["loop_range"] = False
 
         state = bpy.data.actions[self.action]["loop_range"]
@@ -37797,7 +37782,7 @@ class OnigiriAnimationActionEase(bpy.types.Operator):
 
     def execute(self, context):
         oni_alib = bpy.context.scene.oni_alib
-        if bpy.data.actions[self.action].get("ease") == None:
+        if bpy.data.actions[self.action].get("ease") is None:
             bpy.data.actions[self.action]["ease"] = False
 
         state = bpy.data.actions[self.action]["ease"]
@@ -37824,7 +37809,7 @@ class OnigiriAnimationActionDelete(bpy.types.Operator):
         action_name = a.name
         bpy.data.actions.remove(a)
 
-        if oni_alib.get("action") == None:
+        if oni_alib.get("action") is None:
             print("No stored action flags")
         else:
 
@@ -37849,9 +37834,9 @@ class OnigiriAnimationActionCopy(bpy.types.Operator):
         if len(bpy.context.selected_objects) != 1:
             return {"FINISHED"}
         animObj = bpy.context.selected_objects[0]
-        if animObj.animation_data == None:
+        if animObj.animation_data is None:
             return {"FINISHED"}
-        if animObj.animation_data.action == None:
+        if animObj.animation_data.action is None:
             return {"FINISHED"}
 
         actionObj = bpy.data.actions[self.name]
@@ -37956,7 +37941,7 @@ class OnigiriAnimationActionConvert(bpy.types.Operator):
         obj = bpy.data.objects
         oni_alib = bpy.context.scene.oni_alib
 
-        if oni_alib.get("actions") == None:
+        if oni_alib.get("actions") is None:
             print(
                 "There are no actions or the existing actions have not been flagged yet"
             )
@@ -37976,11 +37961,11 @@ class OnigiriAnimationActionConvert(bpy.types.Operator):
         candidates = []
         for o in obj:
             if o.type == "ARMATURE":
-                if o.get("avastar", None) != None:
+                if o.get("avastar", None) is not None:
                     candidates.append(o.name)
         for rig in candidates:
             result = rigutils.clean_controllers(armature=rig)
-            if result == False:
+            if not result:
                 print(
                     "I couldn't clean the Avastar rigs, unknown error, maybe try (Remove Unusable Controllers) in (Rig Tools)"
                 )
@@ -37997,7 +37982,7 @@ class OnigiriAnimationActionConvert(bpy.types.Operator):
                 )
                 continue
 
-            if oni_alib["actions"][aname]["flagged"] == True:
+            if oni_alib["actions"][aname]["flagged"]:
                 qualified.append(aname)
         if len(qualified) == 0:
             print(
@@ -38011,12 +37996,12 @@ class OnigiriAnimationActionConvert(bpy.types.Operator):
             return {"FINISHED"}
 
         has_animation_data = False
-        if armObj.animation_data != None:
+        if armObj.animation_data is not None:
             has_animation_data = True
 
         has_action = False
-        if has_animation_data == True:
-            if armObj.animation_data.action != None:
+        if has_animation_data:
+            if armObj.animation_data.action is not None:
                 has_action = True
                 oldAction = armObj.animation_data.action
                 armObj.animation_data.action = None
@@ -38024,11 +38009,11 @@ class OnigiriAnimationActionConvert(bpy.types.Operator):
         bpy.ops.object.duplicate()
         avaObj = bpy.context.object
 
-        if has_animation_data == False:
+        if not has_animation_data:
             avaObj.animation_data_create()
 
         slaveObj = rigutils.attach_slave_rig(armature=avaObj.name)
-        if slaveObj == False:
+        if not slaveObj:
             print("The process (attach_slave_rig) failed, not sure why")
             popup("A process failed, see System Console", "Error", "ERROR")
             return {"FINISHED"}
@@ -38118,7 +38103,7 @@ class OnigiriAnimationActionExport(bpy.types.Operator, ExportHelper):
     @classmethod
     def poll(cls, context):
         oni_alib = bpy.context.scene.oni_alib
-        if oni_alib.get("actions") == None:
+        if oni_alib.get("actions") is None:
             return False
         return True
 
@@ -38137,7 +38122,7 @@ class OnigiriAnimationActionExport(bpy.types.Operator, ExportHelper):
             "use_selected_rig has been disabled, which also means generated rigs are disabled as well as the Avastar animation converter"
         )
         if 1 == 0:
-            if oni_alib.alib_action_use_selected_rig == True:
+            if oni_alib.alib_action_use_selected_rig:
                 armatures = []
                 for o in bpy.context.selected_objects:
                     if o.type == "ARMATURE":
@@ -38178,7 +38163,7 @@ class OnigiriAnimationActionExport(bpy.types.Operator, ExportHelper):
                     sourceObj = o
 
                     targetObj = sourceObj.get("controller_target")
-            if targetObj != None:
+            if targetObj is not None:
                 print("armature has a controller target")
 
                 try:
@@ -38203,7 +38188,7 @@ class OnigiriAnimationActionExport(bpy.types.Operator, ExportHelper):
             state = utils.get_state()
 
             if oni_alib.alib_action_use_selected_rig:
-                if targetObj != None:
+                if targetObj is not None:
                     armObj = targetObj
                 else:
                     print(
@@ -38230,7 +38215,7 @@ class OnigiriAnimationActionExport(bpy.types.Operator, ExportHelper):
             print("Too many rigs selected.  Choose your animation rig and try again")
             return False
 
-        if oni_alib.alib_action_export_retargeted_animation == True:
+        if oni_alib.alib_action_export_retargeted_animation:
             print("Retargeted animation export requested...")
 
             retarget_set = False
@@ -38239,11 +38224,11 @@ class OnigiriAnimationActionExport(bpy.types.Operator, ExportHelper):
                 retarget_set = True
                 print("Found director:", inRig.name)
                 outRig = inRig.get("oni_motion_actor")
-                if outRig == None:
+                if outRig is None:
                     retarget_set = False
                 else:
                     print("Found actor:", outRig.name)
-            if retarget_set == False:
+            if not retarget_set:
                 print(
                     "Unable to acquire both the actor and director for a retargeting set, moving on..."
                 )
@@ -38256,7 +38241,7 @@ class OnigiriAnimationActionExport(bpy.types.Operator, ExportHelper):
         for aname in oni_alib["actions"].keys():
             if aname not in actions:
                 continue
-            if oni_alib["actions"][aname]["flagged"] == True:
+            if oni_alib["actions"][aname]["flagged"]:
                 qualified.append(aname)
         if len(qualified) == 0:
             print("There were no qualified actions to export")
@@ -38324,7 +38309,7 @@ class OnigiriAnimationActionExport(bpy.types.Operator, ExportHelper):
                 anim_name = file_prefix + "_" + zf + ".anim"
                 file_names.append(anim_name)
 
-        if oni_alib.alib_action_overwrite == False:
+        if not oni_alib.alib_action_overwrite:
             for name in file_names:
                 if os.path.isfile(full_path + name):
                     print("name collision with", name, ", exiting")
@@ -38383,7 +38368,7 @@ class OnigiriAnimationActionExport(bpy.types.Operator, ExportHelper):
             actionObj = bpy.data.actions[action]
 
             rotation_fix = False
-            if oni_alib.alib_action_rotation_fix == True:
+            if oni_alib.alib_action_rotation_fix:
                 fcurve_paths = {}
                 for boneObj in armObj.data.bones:
                     path_key = 'pose.bones["' + boneObj.name + '"]'
@@ -38407,7 +38392,7 @@ class OnigiriAnimationActionExport(bpy.types.Operator, ExportHelper):
                         rotation_fix = True
                         armObj.pose.bones[real_bone].rotation_mode = "XYZ"
 
-                if rotation_fix == True:
+                if rotation_fix:
                     rotation_fix = False
                     print(
                         "rotation_fix applied to proxy rig when examining the action",
@@ -38420,16 +38405,16 @@ class OnigiriAnimationActionExport(bpy.types.Operator, ExportHelper):
             loop_start = oni_anim.anim_loop_in_frame
             loop_end = oni_anim.anim_loop_out_frame
 
-            if actionObj.get("frame_range", False) == True:
+            if actionObj.get("frame_range", False):
                 frame_start = actionObj.get("frame_start", frame_start)
                 frame_end = actionObj.get("frame_end", frame_end)
 
-            if actionObj.get("loop_range", False) == True:
+            if actionObj.get("loop_range", False):
                 loop_start = actionObj.get("loop_start", loop_start)
                 loop_end = actionObj.get("loop_end", loop_end)
                 anim_loop = True
 
-            if actionObj.get("priority") != None:
+            if actionObj.get("priority") is not None:
                 oni_anim.anim_base_priority = actionObj["priority"]
 
             oni.animation_fps = oni_alib.action_fill_fps
@@ -38437,13 +38422,13 @@ class OnigiriAnimationActionExport(bpy.types.Operator, ExportHelper):
             oni_anim.anim_ease_in_duration = oni_alib.action_fill_ease_in
             oni_anim.anim_ease_out_duration = oni_alib.action_fill_ease_out
 
-            if actionObj.get("ease", False) == True:
+            if actionObj.get("ease", False):
                 print("Custom easing is True")
                 ease_in = actionObj.get("ease_in")
-                if ease_in != None:
+                if ease_in is not None:
                     oni_anim.anim_ease_in_duration = ease_in
                 ease_out = actionObj.get("ease_out")
-                if ease_out != None:
+                if ease_out is not None:
                     oni_anim.anim_ease_out_duration = ease_out
             else:
                 print("Custom easing is False")
@@ -38455,7 +38440,7 @@ class OnigiriAnimationActionExport(bpy.types.Operator, ExportHelper):
             oni_anim.anim_loop = anim_loop
 
             if 1 == 0:
-                if targetObj == None:
+                if targetObj is None:
                     armObj.animation_data.action = actionObj
                     animutils.export_sl_anim(armature=armObj.name, path=filepath)
                 else:
@@ -38463,13 +38448,13 @@ class OnigiriAnimationActionExport(bpy.types.Operator, ExportHelper):
                     animutils.export_sl_anim(armature=sourceObj.name, path=filepath)
 
             if (
-                oni_alib.alib_action_export_retargeted_animation == True
-                and retarget_set == True
+                oni_alib.alib_action_export_retargeted_animation
+                and retarget_set
             ):
                 inRig.animation_data.action = actionObj
                 result = animutils.export_sl_anim(armature=outRig.name, path=filepath)
-                if result == False:
-                    if animutils.props["FATAL"] == True:
+                if not result:
+                    if animutils.props["FATAL"]:
                         txt = "retargeted export - fatal error returned from animutils.  Check console for details."
                         print(txt)
                         popup(txt, "Error", "ERROR")
@@ -38478,8 +38463,8 @@ class OnigiriAnimationActionExport(bpy.types.Operator, ExportHelper):
             else:
                 armObj.animation_data.action = actionObj
                 result = animutils.export_sl_anim(armature=armObj.name, path=filepath)
-                if result == False:
-                    if animutils.props["FATAL"] == True:
+                if not result:
+                    if animutils.props["FATAL"]:
                         txt = "direct export - fatal error returned from animutils.  Check console for details."
                         print(txt)
                         popup(txt, "Error", "ERROR")
@@ -38513,14 +38498,14 @@ class OnigiriAnimationActionExport(bpy.types.Operator, ExportHelper):
         oni_anim.export_mapped_animation = export_mapped_animation
         oni_anim.export_retargeted_animation = export_retargeted_animation
 
-        if oni_alib.alib_action_use_selected_rig == False:
+        if not oni_alib.alib_action_use_selected_rig:
             bpy.ops.object.delete()
 
         if 1 == 0:
 
             for o in selected:
                 o.select_set(True)
-            if active != None:
+            if active is not None:
                 bpy.context.view_layer.objects.active = active
             if old_mode != "OBJECT":
                 bpy.ops.object.mode_set(mode=old_mode)
@@ -38566,7 +38551,7 @@ class OnigiriActionFillScript(bpy.types.Operator, ExportHelper):
     @classmethod
     def poll(cls, context):
         oni_alib = bpy.context.scene.oni_alib
-        if oni_alib.get("actions") == None:
+        if oni_alib.get("actions") is None:
             return False
         return True
 
@@ -38596,7 +38581,7 @@ class OnigiriActionFillScript(bpy.types.Operator, ExportHelper):
         for actionObj in actions:
             action = actionObj.name
             if action in oni_alib["actions"]:
-                if oni_alib["actions"][action]["flagged"] == True:
+                if oni_alib["actions"][action]["flagged"]:
                     qualified.append(actionObj)
 
         if len(qualified) == 0:
@@ -38624,14 +38609,14 @@ class OnigiriActionFillScript(bpy.types.Operator, ExportHelper):
 
         for actionObj in qualified:
             action_frame_start = actionObj.get("frame_start")
-            if action_frame_start == None:
+            if action_frame_start is None:
                 print(
                     "INIT: Bug catch, this should not happen, actioObj has no property 'frame_start' !!!"
                 )
                 popup("FATAL ERROR! No frame_start, see console!", "Error", "ERROR")
                 return {"FINISHED"}
             action_frame_end = actionObj.get("frame_end")
-            if action_frame_end == None:
+            if action_frame_end is None:
                 print(
                     "INIT: Bug catch, this should not happen, actioObj has no property 'frame_end' !!!"
                 )
@@ -38705,12 +38690,12 @@ class OnigiriActionFillAdd(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         oni_alib = bpy.context.scene.oni_alib
-        if oni_alib.get("actions") == None:
+        if oni_alib.get("actions") is None:
             return False
 
         flags = 0
         for action in oni_alib["actions"].keys():
-            if oni_alib["actions"][action]["flagged"] == True:
+            if oni_alib["actions"][action]["flagged"]:
                 flags += 1
         if flags != 1:
             return False
@@ -38721,12 +38706,12 @@ class OnigiriActionFillAdd(bpy.types.Operator):
 
         actionObj = None
         for action in oni_alib["actions"].keys():
-            if oni_alib["actions"][action]["flagged"] == True:
+            if oni_alib["actions"][action]["flagged"]:
                 actionObj = bpy.data.actions[action]
                 print("found flagged action:", action)
                 break
 
-        if actionObj == None:
+        if actionObj is None:
             print(
                 "Something strange happened when attempting to find a single flagged action"
             )
@@ -38820,9 +38805,9 @@ class OnigiriActionFillDel(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         oni_alib = bpy.context.scene.oni_alib
-        if oni_alib.get("actions") == None:
+        if oni_alib.get("actions") is None:
             return False
-        if oni_alib.get("fill_actions") == None:
+        if oni_alib.get("fill_actions") is None:
             return False
         return True
 
@@ -38837,7 +38822,7 @@ class OnigiriActionFillDel(bpy.types.Operator):
                 bpy.data.actions.remove(actionObj)
 
         action = oni_alib.pop("fill_flag", None)
-        if action != None:
+        if action is not None:
             if action in bpy.data.actions:
 
                 if action not in oni_alib["actions"]:
@@ -38853,7 +38838,7 @@ class OnigiriActionFillDel(bpy.types.Operator):
 class OnigiriPoseLibraryProperties(bpy.types.PropertyGroup):
 
     def update_pose_library_rename_new(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_pose = bpy.context.scene.oni_pose
@@ -38946,7 +38931,7 @@ class OnigiriPoseLibraryAdd(bpy.types.Operator):
         if name == name_base:
             name = name_base + "_" + utils.get_temp_name()
 
-        if oni_pose.get("poses") == None:
+        if oni_pose.get("poses") is None:
             oni_pose["poses"] = {}
 
         if name in oni_pose["poses"]:
@@ -38992,10 +38977,10 @@ class OnigiriPoseLibraryAdd(bpy.types.Operator):
                 bpy.data.actions.remove(scratchpad)
             scratchpad = bpy.data.actions.new("scratchpad")
             has_anim = False
-            if proxyObj.animation_data != None:
-                if proxyObj.animation_data.action != None:
+            if proxyObj.animation_data is not None:
+                if proxyObj.animation_data.action is not None:
                     has_anim = True
-            if has_anim == False:
+            if not has_anim:
                 proxyObj.animation_data_create()
 
             proxyObj.animation_data.action = scratchpad
@@ -39283,7 +39268,7 @@ class OnigiriPoseLibraryMerge(bpy.types.Operator, ImportHelper):
             popup("No pose library found", "Library Error", "ERROR")
             return {"FINISHED"}
 
-        if oni_pose.get("poses") == None:
+        if oni_pose.get("poses") is None:
             oni_pose["poses"] = {}
 
         new_poses = oni_pose["poses"].to_dict()
@@ -39347,7 +39332,7 @@ class OnigiriPoseLibraryFlag(bpy.types.Operator):
     def execute(self, context):
         oni_pose = bpy.context.scene.oni_pose
 
-        if oni_pose.get("poses") == None:
+        if oni_pose.get("poses") is None:
             oni_pose["poses"] = {}
 
         if self.action == "all":
@@ -39388,7 +39373,7 @@ class OnigiriPoseLibraryExport(bpy.types.Operator, ExportHelper):
     @classmethod
     def poll(cls, context):
         oni_pose = bpy.context.scene.oni_pose
-        if oni_pose.get("poses") == None:
+        if oni_pose.get("poses") is None:
             return False
         return True
 
@@ -39413,7 +39398,7 @@ class OnigiriPoseLibraryExport(bpy.types.Operator, ExportHelper):
 
         pose_names = []
         for pose in poses:
-            if oni_pose["poses"][pose].get("flagged") == True:
+            if oni_pose["poses"][pose].get("flagged"):
                 pose_names.append(pose)
         if len(pose_names) == 0:
             print(
@@ -39450,7 +39435,7 @@ class OnigiriPoseLibraryExport(bpy.types.Operator, ExportHelper):
             pose_name = file_prefix + "_" + zf + ".anim"
             file_names.append(pose_name)
 
-        if oni_pose.pose_library_overwrite == False:
+        if not oni_pose.pose_library_overwrite:
             for name in file_names:
                 if os.path.isfile(full_path + name):
                     print(
@@ -39506,10 +39491,10 @@ class OnigiriPoseLibraryExport(bpy.types.Operator, ExportHelper):
             bpy.data.actions.remove(scratchpad)
 
         has_anim = False
-        if proxyObj.animation_data != None:
-            if proxyObj.animation_data.action != None:
+        if proxyObj.animation_data is not None:
+            if proxyObj.animation_data.action is not None:
                 has_anim = True
-        if has_anim == False:
+        if not has_anim:
             proxyObj.animation_data_create()
 
         frame_start, frame_end = frame_current - 2, frame_current
@@ -39723,8 +39708,8 @@ class OnigiriPoseLibraryApplyToSelected(bpy.types.Operator):
 class OnigiriMotionMixerProperties(bpy.types.PropertyGroup):
 
     def update_mixer_cleanup(self, context):
-        if oni_settings["terminate"] == True:
-            oni_settings["terminate"] == False
+        if oni_settings["terminate"]:
+            oni_settings["terminate"] = False
             return
         oni_mixer = bpy.context.window_manager.oni_mixer
         oni_settings["terminate"] = True
@@ -39770,11 +39755,11 @@ class OnigiriMotionMixerProperties(bpy.types.PropertyGroup):
         return
 
     def update_mixer_target_locked(self, context):
-        if oni_settings["terminate"] == True:
-            oni_settings["terminate"] == False
+        if oni_settings["terminate"]:
+            oni_settings["terminate"] = False
             return
         oni_mixer = bpy.context.window_manager.oni_mixer
-        if oni_mixer.mixer_target_locked == True:
+        if oni_mixer.mixer_target_locked:
             print("Mixer target:", bpy.context.selected_objects[0].name)
         else:
 
@@ -39838,7 +39823,7 @@ class OnigiriMotionMixerProperties(bpy.types.PropertyGroup):
     def update_mixer_anchor(self, context):
         oni_mixer = bpy.context.window_manager.oni_mixer
 
-        if oni_mixer.mixer_anchor == False:
+        if not oni_mixer.mixer_anchor:
             obj = bpy.data.objects
             source = oni_mixer.mixer_anchor_name
             oni_mixer.mixer_anchor_name = ""
@@ -39887,7 +39872,7 @@ class OnigiriMotionMixerProperties(bpy.types.PropertyGroup):
     def update_mixer_ready(self, context):
 
         oni_mixer = bpy.context.window_manager.oni_mixer
-        if oni_mixer.mixer_ready == True:
+        if oni_mixer.mixer_ready:
             return
         old_mode = bpy.context.mode
         if old_mode != "OBJECT":
@@ -39906,7 +39891,7 @@ class OnigiriMotionMixerProperties(bpy.types.PropertyGroup):
     def update_mixer_location_set(self, context):
 
         oni_mixer = bpy.context.window_manager.oni_mixer
-        if oni_mixer.mixer_location_set == False:
+        if not oni_mixer.mixer_location_set:
             bone = globals.oni_mixer["bone_location_set"]
             globals.oni_mixer["constraints"][bone]["location"].influence = 0
             oni_mixer.property_unset("mixer_location_set")
@@ -39920,7 +39905,7 @@ class OnigiriMotionMixerProperties(bpy.types.PropertyGroup):
 
     def update_mixer_rotation_set(self, context):
         oni_mixer = bpy.context.window_manager.oni_mixer
-        if oni_mixer.mixer_rotation_set == False:
+        if not oni_mixer.mixer_rotation_set:
             bone = globals.oni_mixer["bone_rotation_set"]
             globals.oni_mixer["constraints"][bone]["rotation"].influence = 0
             oni_mixer.property_unset("mixer_rotation_set")
@@ -39930,7 +39915,7 @@ class OnigiriMotionMixerProperties(bpy.types.PropertyGroup):
 
     def update_mixer_scale_set(self, context):
         oni_mixer = bpy.context.window_manager.oni_mixer
-        if oni_mixer.mixer_scale_set == False:
+        if not oni_mixer.mixer_scale_set:
             bone = globals.oni_mixer["bone_scale_set"]
             globals.oni_mixer["constraints"][bone]["scale"].influence = 0
             oni_mixer.property_unset("mixer_scale_set")
@@ -39975,7 +39960,7 @@ class OnigiriMotionMixerLockTarget(bpy.types.Operator):
     def poll(cls, context):
         if len(bpy.context.selected_objects) == 1:
             if bpy.context.selected_objects[0].type == "ARMATURE":
-                if bpy.context.selected_objects[0].get("onigiri") != None:
+                if bpy.context.selected_objects[0].get("onigiri") is not None:
                     return True
         return False
 
@@ -40082,7 +40067,7 @@ class OnigiriMotionMixerAddSource(bpy.types.Operator):
     def poll(cls, context):
         oni_mixer = bpy.context.window_manager.oni_mixer
 
-        if oni_mixer.mixer_ready == True:
+        if oni_mixer.mixer_ready:
             return False
 
         if len(bpy.context.selected_objects) == 0:
@@ -40090,7 +40075,7 @@ class OnigiriMotionMixerAddSource(bpy.types.Operator):
 
         for o in bpy.context.selected_objects:
             if o.type == "ARMATURE":
-                if o.get("onigiri") != None:
+                if o.get("onigiri") is not None:
 
                     if oni_mixer.get("target") != o:
                         return True
@@ -40113,7 +40098,7 @@ class OnigiriMotionMixerAddSource(bpy.types.Operator):
         candidates = []
         for o in selected:
             if o.type == "ARMATURE":
-                if o.get("onigiri") != None:
+                if o.get("onigiri") is not None:
                     if oni_mixer["target"] != o:
                         candidates.append(o)
                     else:
@@ -40170,7 +40155,7 @@ class OnigiriMotionMixerRemoveSource(bpy.types.Operator):
     def poll(cls, context):
         oni_mixer = bpy.context.window_manager.oni_mixer
 
-        if oni_mixer.mixer_ready == True:
+        if oni_mixer.mixer_ready:
             return False
 
         return True
@@ -40182,9 +40167,9 @@ class OnigiriMotionMixerRemoveSource(bpy.types.Operator):
         if self.name not in obj:
             print("Something strange happened, the object is not in the scene.")
 
-        if oni_mixer.get("maps") == None:
+        if oni_mixer.get("maps") is None:
             oni_mixer["maps"] = {}
-        if oni_mixer["maps"].get("sources") == None:
+        if oni_mixer["maps"].get("sources") is None:
             oni_mixer["maps"]["sources"] = {}
 
         sources = []
@@ -40252,7 +40237,7 @@ class OnigiriMotionMixerReady(bpy.types.Operator):
     def poll(cls, context):
         oni_mixer = bpy.context.window_manager.oni_mixer
 
-        if oni_mixer.get("target") == None:
+        if oni_mixer.get("target") is None:
             return False
         sources = oni_mixer.get("sources", [])
         if len(sources) == 0:
@@ -40298,7 +40283,7 @@ class OnigiriMotionMixerActiveRigName(bpy.types.Operator):
     def poll(cls, context):
         oni_mixer = bpy.context.window_manager.oni_mixer
 
-        if oni_mixer.mixer_ready == False:
+        if not oni_mixer.mixer_ready:
             return False
 
         return True
@@ -40307,9 +40292,9 @@ class OnigiriMotionMixerActiveRigName(bpy.types.Operator):
         obj = bpy.data.objects
         oni_mixer = bpy.context.window_manager.oni_mixer
 
-        if oni_mixer.get("maps") == None:
+        if oni_mixer.get("maps") is None:
             oni_mixer["maps"] = {}
-        if oni_mixer["maps"].get("sources") == None:
+        if oni_mixer["maps"].get("sources") is None:
             oni_mixer["maps"]["sources"] = {}
 
         oni_mixer.mixer_active_rig_name = self.name
@@ -40331,7 +40316,7 @@ class OnigiriMotionMixerSetAnchor(bpy.types.Operator):
     def poll(cls, context):
         oni_mixer = bpy.context.window_manager.oni_mixer
 
-        if oni_mixer.mixer_ready == False:
+        if not oni_mixer.mixer_ready:
             return False
 
         return True
@@ -40342,9 +40327,9 @@ class OnigiriMotionMixerSetAnchor(bpy.types.Operator):
 
         bone = "mPelvis"
 
-        if oni_mixer.get("maps") == None:
+        if oni_mixer.get("maps") is None:
             oni_mixer["maps"] = {}
-        if oni_mixer["maps"].get("sources") == None:
+        if oni_mixer["maps"].get("sources") is None:
             oni_mixer["maps"]["sources"] = {}
 
         for sourceObj in oni_mixer["sources"]:            
@@ -40356,7 +40341,7 @@ class OnigiriMotionMixerSetAnchor(bpy.types.Operator):
 
         rotation = 1
         scale = 0
-        if bone_dict != None:
+        if bone_dict is not None:
             rotation = bone_dict["transforms"]["rotation"]
             scale = bone_dict["transforms"]["scale"]
 
@@ -40435,7 +40420,7 @@ class OnigiriMotionMixerMode(bpy.types.Operator):
     def poll(cls, context):
         oni_mixer = bpy.context.window_manager.oni_mixer
 
-        if oni_mixer.mixer_ready == False:
+        if not oni_mixer.mixer_ready:
             return False
 
         return True
@@ -40477,7 +40462,7 @@ class OnigiriMotionMixerSpace(bpy.types.Operator):
     def poll(cls, context):
         oni_mixer = bpy.context.window_manager.oni_mixer
 
-        if oni_mixer.mixer_ready == False:
+        if not oni_mixer.mixer_ready:
             return False
 
         return True
@@ -40526,7 +40511,7 @@ class OnigiriMotionMixerInherit(bpy.types.Operator):
     def poll(cls, context):
         oni_mixer = bpy.context.window_manager.oni_mixer
 
-        if oni_mixer.mixer_ready == False:
+        if not oni_mixer.mixer_ready:
             return False
 
         return True
@@ -40572,9 +40557,9 @@ class OnigiriMotionMixerAddBones(bpy.types.Operator):
         oni_mixer = bpy.context.window_manager.oni_mixer
         bones = [o for o in bpy.context.selected_pose_bones]
 
-        if oni_mixer.get("maps") == None:
+        if oni_mixer.get("maps") is None:
             oni_mixer["maps"] = {}
-        if oni_mixer["maps"].get("sources") == None:
+        if oni_mixer["maps"].get("sources") is None:
             oni_mixer["maps"]["sources"] = {}
 
         targetObj = oni_mixer["target"]
@@ -40689,9 +40674,9 @@ class OnigiriMotionMixerRemoveBones(bpy.types.Operator):
             armObj = bpy.context.active_object
             armObj.data.bones[self.name].select = True
 
-        if oni_mixer.get("maps") == None:
+        if oni_mixer.get("maps") is None:
             oni_mixer["maps"] = {}
-        if oni_mixer["maps"].get("sources") == None:
+        if oni_mixer["maps"].get("sources") is None:
             oni_mixer["maps"]["sources"] = {}
 
         bones = [o for o in bpy.context.selected_pose_bones]
@@ -40824,7 +40809,7 @@ class OnigiriMotionSpliceProperties(bpy.types.PropertyGroup):
     def update_splice_target_locked(self, context):
 
         oni_splice = self
-        if oni_splice.splice_target_locked == True:
+        if oni_splice.splice_target_locked:
             if len(bpy.context.selected_objects) != 1:
                 oni_splice["splice_target_locked"] = False
                 oni_splice.splice_message = "Splice target needs a single rig"
@@ -40836,8 +40821,8 @@ class OnigiriMotionSpliceProperties(bpy.types.PropertyGroup):
             if armObj.type != "ARMATURE":
                 oni_splice["splice_target_locked"] = False
                 return
-            if oni_splice.splice_disable_onigiri_check == False:
-                if armObj.get("onigiri") == None:
+            if not oni_splice.splice_disable_onigiri_check:
+                if armObj.get("onigiri") is None:
                     print(
                         "Onigiri check disallows foreign rigs from being used in this fashion."
                     )
@@ -40880,7 +40865,7 @@ class OnigiriMotionSpliceProperties(bpy.types.PropertyGroup):
     )
 
     def update_splice_type(self, context):
-        if self.splice_keys == False and self.splice_motion == False:
+        if not self.splice_keys and not self.splice_motion:
             self["splice_motion"] = True
 
     splice_keys: bpy.props.BoolProperty(
@@ -40961,9 +40946,9 @@ class OnigiriMotionSpliceSync(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.animation_data == None:
+        if o.animation_data is None:
             return False
-        if o.animation_data.action == None:
+        if o.animation_data.action is None:
             return False
         return True
 
@@ -41088,13 +41073,13 @@ class OnigiriCleanControllers(bpy.types.Operator):
         candidates = []
         for o in obj:
             if o.type == "ARMATURE":
-                if o.get("avastar", None) != None:
+                if o.get("avastar", None) is not None:
                     candidates.append(o.name)
         rigs_good = []
         rigs_bad = []
         for rig in candidates:
             result = rigutils.clean_controllers(armature=rig)
-            if result == False:
+            if not result:
                 rig_bad.append(rig)
             else:
                 rigs_good.append(rig)
@@ -41247,7 +41232,7 @@ class OnigiriExportAnimationMapped(bpy.types.Operator, ExportHelper):
         else:
             print("No control rig")
 
-        if bpy.data.objects[animation_arm].get("fly_paper") != None:
+        if bpy.data.objects[animation_arm].get("fly_paper") is not None:
             if bpy.data.objects[animation_arm].get("fly_paper") != "":
                 fly_paper = bpy.data.objects[animation_arm]["fly_paper"]
 
@@ -41255,7 +41240,7 @@ class OnigiriExportAnimationMapped(bpy.types.Operator, ExportHelper):
                     bpy.data.objects[fly_paper].hide_set(False)
                     bpy.data.objects[fly_paper].hide_select = False
 
-        if oni.bake_animation == True:
+        if oni.bake_animation:
             print(
                 "Bake is true but armature has not been prepared yet!  THIS WILL NOT WORK!"
             )
@@ -41310,7 +41295,7 @@ class OnigiriExportAnimationMapped(bpy.types.Operator, ExportHelper):
             del bpy.data.objects[animation_arm]["onigiri_control_rig"]
             print("Removed control rig from:", bpy.context.active_object.name)
 
-        if bpy.context.scene.onigiri.bvh_to_sl == True:
+        if bpy.context.scene.onigiri.bvh_to_sl:
             set_bvh_names(animation_arm)
 
         bpy.ops.object.mode_set(mode="POSE")
@@ -41330,7 +41315,7 @@ class OnigiriExportAnimationMapped(bpy.types.Operator, ExportHelper):
 
         bpy.ops.object.select_all(action="DESELECT")
 
-        if bpy.data.objects[animation_arm].get("fly_paper") != None:
+        if bpy.data.objects[animation_arm].get("fly_paper") is not None:
             if bpy.data.objects[animation_arm].get("fly_paper") != "":
                 fly_paper = bpy.data.objects[animation_arm]["fly_paper"]
 
@@ -41460,7 +41445,7 @@ class OnigiriExportAnimation(bpy.types.Operator, ExportHelper):
         else:
             print("No control rig")
 
-        if bpy.data.objects[animation_arm].get("fly_paper") != None:
+        if bpy.data.objects[animation_arm].get("fly_paper") is not None:
             if bpy.data.objects[animation_arm].get("fly_paper") != "":
                 fly_paper = bpy.data.objects[animation_arm]["fly_paper"]
 
@@ -41468,7 +41453,7 @@ class OnigiriExportAnimation(bpy.types.Operator, ExportHelper):
                     bpy.data.objects[fly_paper].hide_set(False)
                     bpy.data.objects[fly_paper].hide_select = False
 
-        if oni.bake_animation == True:
+        if oni.bake_animation:
             print(
                 "Bake is true but armature has not been prepared yet!  THIS WILL NOT WORK!"
             )
@@ -41523,7 +41508,7 @@ class OnigiriExportAnimation(bpy.types.Operator, ExportHelper):
             del bpy.data.objects[animation_arm]["onigiri_control_rig"]
             print("Removed control rig from:", bpy.context.active_object.name)
 
-        if bpy.context.scene.onigiri.bvh_to_sl == True:
+        if bpy.context.scene.onigiri.bvh_to_sl:
             set_bvh_names(animation_arm)
 
         bpy.ops.object.mode_set(mode="POSE")
@@ -41543,7 +41528,7 @@ class OnigiriExportAnimation(bpy.types.Operator, ExportHelper):
 
         bpy.ops.object.select_all(action="DESELECT")
 
-        if bpy.data.objects[animation_arm].get("fly_paper") != None:
+        if bpy.data.objects[animation_arm].get("fly_paper") is not None:
             if bpy.data.objects[animation_arm].get("fly_paper") != "":
                 fly_paper = bpy.data.objects[animation_arm]["fly_paper"]
 
@@ -41657,8 +41642,8 @@ class OnigiriExportBVHSL(bpy.types.Operator, ExportHelper):
         onia = bpy.context.scene.oni_anim_props
         armObj = bpy.context.selected_objects[0]
 
-        if oni.export_onigiri_disabled != True:
-            if armObj.get("onigiri") == None:
+        if not oni.export_onigiri_disabled:
+            if armObj.get("onigiri") is None:
                 print(
                     "2 Onigiri rig check is enabled but the rig is not Onigiri.  Disable the check in (Extended Options) to override."
                 )
@@ -41678,7 +41663,7 @@ class OnigiriExportBVHSL(bpy.types.Operator, ExportHelper):
 
                 return {"FINISHED"}
 
-        if oni.export_sl_limitations_check_disabled != True:
+        if not oni.export_sl_limitations_check_disabled:
             if oni.animation_time > 60.0:
                 print("Skipping animation time check")
 
@@ -41718,7 +41703,7 @@ class OnigiriExportBVHSL(bpy.types.Operator, ExportHelper):
             armObj.data.edit_bones.remove(boneObj)
         bpy.ops.object.mode_set(mode="OBJECT")
 
-        if armObj.get("fly_paper") != None and armObj.get("fly_paper") != "":
+        if armObj.get("fly_paper") is not None and armObj.get("fly_paper") != "":
             rotate_these = list()
 
             rotate_these.append(armObj.name)
@@ -41779,7 +41764,7 @@ class OnigiriExportBVHSL(bpy.types.Operator, ExportHelper):
         onia.property_unset("export_sl_bvh_label_short")
         onia.export_sl_bvh_alert = False
 
-        if status == True:
+        if status:
             print("BVH export finished")
         else:
             print("BVH export appears to have failed")
@@ -41791,7 +41776,7 @@ class OnigiriExportBVHSL(bpy.types.Operator, ExportHelper):
         bad_bones = list()
         print("Examining deformable joint names...")
         for boneObj in armObj.data.bones:
-            if boneObj.use_deform == True:
+            if boneObj.use_deform:
                 if boneObj.name not in skel.avatar_skeleton:
                     bad_bones.append(boneObj.name)
         if len(bad_bones) > 0:
@@ -41886,7 +41871,7 @@ class OnigiriExportBVHSL(bpy.types.Operator, ExportHelper):
         armObj.matrix_world = mat
         bpy.ops.object.transform_apply(rotation=True, location=False, scale=False)
 
-        if buffer == True:
+        if buffer:
             bvh_out = bvht.merge(
                 vbones=vbones_buf,
                 mbones=mbones_buf,
@@ -41923,7 +41908,7 @@ class OnigiriExportBVHSL(bpy.types.Operator, ExportHelper):
         else:
             print("nothing to alter for now, parser is turned off")
 
-        if buffer != True:
+        if not buffer:
             try:
                 os.remove(bvh_temp_name)
                 print("ONI BVH Cleanup...")
@@ -42053,13 +42038,13 @@ class OnigiriExportRetargetedAnimation(bpy.types.Operator, ExportHelper):
             delete_me.append(arm.name)
 
         print("Got these armatures for animation:", delete_me)
-        if armObj.get("fly_paper") == None:
+        if armObj.get("fly_paper") is None:
             print("Rotate toggle on:", animation_arm)
             rotate_toggle(animation_arm)
 
         bpy.ops.object.select_all(action="DESELECT")
 
-        if bpy.data.objects[animation_arm].get("fly_paper") != None:
+        if bpy.data.objects[animation_arm].get("fly_paper") is not None:
             if bpy.data.objects[animation_arm].get("fly_paper") != "":
                 fly_paper = bpy.data.objects[animation_arm]["fly_paper"]
 
@@ -42067,7 +42052,7 @@ class OnigiriExportRetargetedAnimation(bpy.types.Operator, ExportHelper):
                     bpy.data.objects[fly_paper].hide_set(False)
                     bpy.data.objects[fly_paper].hide_select = False
 
-        if oni.bake_animation == True:
+        if oni.bake_animation:
             bpy.data.objects[animation_arm].select_set(True)
             bpy.context.view_layer.objects.active = bpy.data.objects[animation_arm]
             bpy.ops.object.mode_set(mode="POSE")
@@ -42114,7 +42099,7 @@ class OnigiriExportRetargetedAnimation(bpy.types.Operator, ExportHelper):
         bpy.data.objects[animation_arm].select_set(True)
         bpy.context.view_layer.objects.active = bpy.data.objects[animation_arm]
 
-        if bpy.context.scene.onigiri.bvh_to_sl == True:
+        if bpy.context.scene.onigiri.bvh_to_sl:
             set_bvh_names(animation_arm)
 
         bpy.ops.object.mode_set(mode="POSE")
@@ -42134,7 +42119,7 @@ class OnigiriExportRetargetedAnimation(bpy.types.Operator, ExportHelper):
 
         bpy.ops.object.select_all(action="DESELECT")
 
-        if bpy.data.objects[animation_arm].get("fly_paper") != None:
+        if bpy.data.objects[animation_arm].get("fly_paper") is not None:
             if bpy.data.objects[animation_arm].get("fly_paper") != "":
                 fly_paper = bpy.data.objects[animation_arm]["fly_paper"]
 
@@ -42198,14 +42183,14 @@ class OnigiriAnimKeepBoneTransforms(bpy.types.Operator):
         armObj = bpy.context.object
 
         for dBone in selected:
-            if dBone.get("cleaner") == None:
+            if dBone.get("cleaner") is None:
                 dBone["cleaner"] = {}
-            if dBone["cleaner"].get("bone") == None:
+            if dBone["cleaner"].get("bone") is None:
                 dBone["cleaner"]["bone"] = {}
-            if dBone["cleaner"]["bone"].get("rot") == None:
+            if dBone["cleaner"]["bone"].get("rot") is None:
                 dBone["cleaner"]["bone"]["rot"] = False
                 dBone["cleaner"]["bone"]["rot_text"] = "False"
-            if dBone["cleaner"]["bone"].get("loc") == None:
+            if dBone["cleaner"]["bone"].get("loc") is None:
                 dBone["cleaner"]["bone"]["loc"] = False
                 dBone["cleaner"]["bone"]["loc_text"] = "False"
 
@@ -42303,16 +42288,16 @@ class OnigiriAnimKeepKeyTransforms(bpy.types.Operator):
         action = self.action
 
         for dBone in selected:
-            if dBone.get("cleaner") == None:
+            if dBone.get("cleaner") is None:
                 dBone["cleaner"] = {}
-            if dBone["cleaner"].get("frames") == None:
+            if dBone["cleaner"].get("frames") is None:
                 dBone["cleaner"]["frames"] = {}
-            if dBone["cleaner"]["frames"].get(frame_current) == None:
+            if dBone["cleaner"]["frames"].get(frame_current) is None:
                 dBone["cleaner"]["frames"][frame_current] = {}
-            if dBone["cleaner"]["frames"][frame_current].get("rot") == None:
+            if dBone["cleaner"]["frames"][frame_current].get("rot") is None:
                 dBone["cleaner"]["frames"][frame_current]["rot"] = False
                 dBone["cleaner"]["frames"][frame_current]["rot_text"] = "False"
-            if dBone["cleaner"]["frames"][frame_current].get("loc") == None:
+            if dBone["cleaner"]["frames"][frame_current].get("loc") is None:
                 dBone["cleaner"]["frames"][frame_current]["loc"] = False
                 dBone["cleaner"]["frames"][frame_current]["loc_text"] = "False"
 
@@ -42569,7 +42554,7 @@ class OnigiriExportAnimesh(bpy.types.Operator, ExportHelper):
                 "ERROR",
             )
             return {"FINISHED"}
-        if bpy.data.objects[arm_src].hide_viewport == True:
+        if bpy.data.objects[arm_src].hide_viewport:
             print(
                 "Your object is hidden from the view so it is not usable as a bone source"
             )
@@ -42760,7 +42745,7 @@ class OnigiriDeleteEmptyGroups(bpy.types.Operator):
                     )
                     return {"FINISHED"}
 
-        if issue == True:
+        if issue:
             popup("At least one group needed to be removed", "Info", "INFO")
 
         utils.set_state(state)
@@ -42801,7 +42786,7 @@ class OnigiriMoveWeights(bpy.types.Operator):
 
             if o.type == "MESH":
                 arm = meshutils.get_mesh_armature(o.name)
-                if arm == False:
+                if not arm:
                     print("skipping mesh without rig target:", o.name)
                     continue
                 mesh_rigs[o.name] = arm
@@ -42822,12 +42807,12 @@ class OnigiriMoveWeights(bpy.types.Operator):
 
             for g in groups:
                 if g.name not in armObj.data.bones:
-                    if unknown.get(arm) == None:
+                    if unknown.get(arm) is None:
                         unknown[arm] = list()
                     unknown[arm].append(g.name)
 
                 else:
-                    if mesh_group_names.get(mesh) == None:
+                    if mesh_group_names.get(mesh) is None:
                         mesh_group_names[mesh] = list()
                     mesh_group_names[mesh].append(g.name)
 
@@ -42855,7 +42840,7 @@ class OnigiriMoveWeights(bpy.types.Operator):
                     print("Found an unusual bone association in vertex groups:", gname)
 
                 else:
-                    if good_groups.get(mesh) == None:
+                    if good_groups.get(mesh) is None:
                         good_groups[mesh] = list()
                     good_groups[mesh].append(gname)
 
@@ -42900,7 +42885,7 @@ class OnigiriMoveWeights(bpy.types.Operator):
 
         print("restore_state disabled")
 
-        if old_mode != None:
+        if old_mode is not None:
             for o in selected:
                 o.select_set(True)
                 bpy.ops.object.mode_set(mode=old_mode)
@@ -42937,7 +42922,7 @@ class OnigiriConvertToFitmesh(bpy.types.Operator):
         for o in bpy.context.selected_objects:
             if o.type == "MESH":
                 arm = meshutils.get_mesh_armature(o.name)
-                if arm == False:
+                if not arm:
                     print("skipping mesh without rig target:", o.name)
                     continue
                 mesh_rigs[o.name] = arm
@@ -42954,11 +42939,11 @@ class OnigiriConvertToFitmesh(bpy.types.Operator):
 
             for g in groups:
                 if g.name not in armObj.data.bones:
-                    if unknown.get(arm) == None:
+                    if unknown.get(arm) is None:
                         unknown[arm] = list()
                     unknown[arm].append(g.name)
                 else:
-                    if mesh_group_names.get(mesh) == None:
+                    if mesh_group_names.get(mesh) is None:
                         mesh_group_names[mesh] = list()
                     mesh_group_names[mesh].append(g.name)
 
@@ -43016,14 +43001,14 @@ class OnigiriConvertToFitmesh(bpy.types.Operator):
             for o in bpy.context.selected_objects:
                 o.select_set(False)
 
-            if oni_misc.to_full_rig == True:
+            if oni_misc.to_full_rig:
                 for arm in arms:
                     obj[arm].select_set(True)
                     bpy.context.view_layer.objects.active = obj[arm]
 
                     bpy.ops.onigiri.convert_to_full_rig()
 
-        if oni_misc.to_full_rig == False:
+        if not oni_misc.to_full_rig:
             for o in selected:
                 o.select_set(True)
             bpy.context.view_layer.objects.active = active
@@ -43241,7 +43226,7 @@ class OnigiriSkinAttachmentBones(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         armObj = rigutils.is_armature()
-        if armObj == False:
+        if not armObj:
             return False
         return True
 
@@ -43298,7 +43283,7 @@ class OnigiriSkinSmoothEnable(bpy.types.Operator):
         qualified = False
         if len(meshObj.vertex_groups) > 0:
             qualified = True
-        if qualified == False:
+        if not qualified:
             print("Enable says: No vertex groups on the object", meshObj.name)
             popup("There are no vertex groups to apply smooth to", "Error", "ERROR")
             return {"FINISHED"}
@@ -43412,7 +43397,7 @@ class OnigiriSkinSmoothUpdate(bpy.types.Operator):
             print("Skin smooth disabled")
             return {"FINISHED"}
 
-        if meshObj.get("skin_smooth_enabled") != None:
+        if meshObj.get("skin_smooth_enabled") is not None:
 
             smooth_groups = meshObj["skin_smooth_groups"]
             smooth_weights = meshObj["skin_smooth_weights"].to_list()
@@ -43446,7 +43431,7 @@ class OnigiriSkinSmoothUpdate(bpy.types.Operator):
         bpy.ops.object.mode_set(mode="WEIGHT_PAINT")
 
         group_select_mode = "ALL"
-        if smooth_selected_group == True:
+        if smooth_selected_group:
             group_select_mode = "ACTIVE"
 
         bpy.ops.object.vertex_group_smooth(
@@ -43481,7 +43466,7 @@ class OnigiriSkinSmoothManualUpdate(bpy.types.Operator):
             if o.type != "MESH":
                 return False
 
-        if o.get("skin_smooth_enabled") == None:
+        if o.get("skin_smooth_enabled") is None:
             return False
         return True
 
@@ -43495,7 +43480,7 @@ class OnigiriSkinSmoothManualUpdate(bpy.types.Operator):
         qualified = False
         if len(meshObj.vertex_groups) > 0:
             qualified = True
-        if qualified == False:
+        if not qualified:
             print("Undo says: No vertex groups on the object", meshObj.name)
             popup("There are no vertex groups to apply smooth to", "Error", "ERROR")
             return {"FINISHED"}
@@ -43521,7 +43506,7 @@ class OnigiriSkinSmoothUndo(bpy.types.Operator):
             if o.type != "MESH":
                 return False
 
-        if o.get("skin_smooth_enabled") == None:
+        if o.get("skin_smooth_enabled") is None:
             return False
         return True
 
@@ -43535,12 +43520,12 @@ class OnigiriSkinSmoothUndo(bpy.types.Operator):
         qualified = False
         if len(meshObj.vertex_groups) > 0:
             qualified = True
-        if qualified == False:
+        if not qualified:
             print("Undo says: No vertex groups on the object", meshObj.name)
             popup("There are no vertex groups to apply smooth to", "Error", "ERROR")
             return {"FINISHED"}
 
-        if meshObj.get("skin_smooth_enabled") != None:
+        if meshObj.get("skin_smooth_enabled") is not None:
             print("skin data exists, recovering...")
             smooth_groups = meshObj["skin_smooth_groups"]
             smooth_weights = meshObj["skin_smooth_weights"].to_list()
@@ -43622,7 +43607,7 @@ class OnigiriMeshSmoothNormals(bpy.types.Operator):
             if o.type == "MESH":
                 mesh_objects.append(o)
 
-        if oni_mesh.smooth_normals_simple == True:
+        if oni_mesh.smooth_normals_simple:
             for o in mesh_objects:
                 o.select_set(True)
                 bpy.context.view_layer.objects.active = o
@@ -43631,7 +43616,7 @@ class OnigiriMeshSmoothNormals(bpy.types.Operator):
                 bpy.ops.object.mode_set(mode="OBJECT")
                 o.select_set(False)
 
-        elif oni_mesh.smooth_normals_advanced == True:
+        elif oni_mesh.smooth_normals_advanced:
             prec = oni_mesh.smooth_normals_precision
 
             obj_id = {}
@@ -43640,7 +43625,7 @@ class OnigiriMeshSmoothNormals(bpy.types.Operator):
 
                 verts_selected[o.name] = set()
                 for v in o.data.vertices:
-                    if v.select == True:
+                    if v.select:
                         verts_selected[o.name].add(v.index)
 
                 mesh_name = o.data.id_data.name
@@ -43700,7 +43685,7 @@ class OnigiriMeshSmoothNormals(bpy.types.Operator):
 
                     i = v.index
 
-                    if oni_mesh.smooth_normals_selected == True:
+                    if oni_mesh.smooth_normals_selected:
                         if i not in verts_selected[o_name]:
                             continue
 
@@ -43845,7 +43830,7 @@ class OnigiriMeshEdit(bpy.types.Operator):
             popup("There are no qualifying mesh in your selection for this operation")
             for o in selected:
                 o.select_set(True)
-            if active != None:
+            if active is not None:
                 bpy.context.view_layer.objects.active = active
             bpy.ops.object.mode_set(mode=old_mode)
             return {"FINISHED"}
@@ -43975,7 +43960,7 @@ class OnigiriSkinProperties(bpy.types.PropertyGroup):
 
     def update_skin_smooth(self, context):
         print("skin_smooth_enabled toggled:", self.skin_smooth_enabled)
-        if self.skin_smooth_enabled == False:
+        if not self.skin_smooth_enabled:
             oni_skin = bpy.context.window_manager.oni_skin
             oni_skin.property_unset("skin_smooth_enabled")
             bpy.ops.onigiri.skin_smooth_update(action="disable")
@@ -44041,11 +44026,11 @@ class OnigiriSkinProperties(bpy.types.PropertyGroup):
     )
 
     def update_skin_pose_legs_axis_x(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_skin = bpy.context.window_manager.oni_skin
-        if oni_skin.skin_pose_legs_axis_x == True:
+        if oni_skin.skin_pose_legs_axis_x:
             oni_skin.skin_pose_legs_axis = "X"
             oni_settings["terminate"] = True
             oni_skin.skin_pose_legs_axis_y = False
@@ -44060,11 +44045,11 @@ class OnigiriSkinProperties(bpy.types.PropertyGroup):
             oni_skin.skin_pose_legs_axis = "Z"
 
     def update_skin_pose_legs_axis_y(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_skin = bpy.context.window_manager.oni_skin
-        if oni_skin.skin_pose_legs_axis_y == True:
+        if oni_skin.skin_pose_legs_axis_y:
             oni_skin.skin_pose_legs_axis = "Y"
             oni_settings["terminate"] = True
             oni_skin.skin_pose_legs_axis_x = False
@@ -44077,11 +44062,11 @@ class OnigiriSkinProperties(bpy.types.PropertyGroup):
             oni_skin.skin_pose_legs_axis = "Z"
 
     def update_skin_pose_legs_axis_z(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_skin = bpy.context.window_manager.oni_skin
-        if oni_skin.skin_pose_legs_axis_z == True:
+        if oni_skin.skin_pose_legs_axis_z:
             oni_skin.skin_pose_legs_axis = "Z"
             oni_settings["terminate"] = True
             oni_skin.skin_pose_legs_axis_x = False
@@ -44094,11 +44079,11 @@ class OnigiriSkinProperties(bpy.types.PropertyGroup):
             oni_skin.skin_pose_legs_axis = "Z"
 
     def update_skin_pose_arms_axis_x(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_skin = bpy.context.window_manager.oni_skin
-        if oni_skin.skin_pose_arms_axis_x == True:
+        if oni_skin.skin_pose_arms_axis_x:
             oni_skin.skin_pose_arms_axis = "X"
             oni_settings["terminate"] = True
             oni_skin.skin_pose_arms_axis_y = False
@@ -44113,11 +44098,11 @@ class OnigiriSkinProperties(bpy.types.PropertyGroup):
             oni_skin.skin_pose_arms_axis = "X"
 
     def update_skin_pose_arms_axis_y(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_skin = bpy.context.window_manager.oni_skin
-        if oni_skin.skin_pose_arms_axis_y == True:
+        if oni_skin.skin_pose_arms_axis_y:
             oni_skin.skin_pose_arms_axis = "Y"
             oni_settings["terminate"] = True
             oni_skin.skin_pose_arms_axis_x = False
@@ -44130,11 +44115,11 @@ class OnigiriSkinProperties(bpy.types.PropertyGroup):
             oni_skin.skin_pose_arms_axis = "X"
 
     def update_skin_pose_arms_axis_z(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_skin = bpy.context.window_manager.oni_skin
-        if oni_skin.skin_pose_arms_axis_z == True:
+        if oni_skin.skin_pose_arms_axis_z:
             oni_skin.skin_pose_arms_axis = "Z"
             oni_settings["terminate"] = True
             oni_skin.skin_pose_arms_axis_x = False
@@ -44147,11 +44132,11 @@ class OnigiriSkinProperties(bpy.types.PropertyGroup):
             oni_skin.skin_pose_arms_axis = "X"
 
     def update_skin_correction_source(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         oni_skin = bpy.context.window_manager.oni_skin
-        if oni_skin.skin_correction_source == False:
+        if not oni_skin.skin_correction_source:
             bpy.ops.onigiri.skin_correction_source(action="disable")
 
     skin_correction_source: bpy.props.BoolProperty(
@@ -44166,12 +44151,12 @@ class OnigiriSkinProperties(bpy.types.PropertyGroup):
 
     def update_skin_pose_lock_sources(self, context):
         oni_skin = bpy.context.window_manager.oni_skin
-        if oni_skin.skin_pose_lock_sources == False:
+        if not oni_skin.skin_pose_lock_sources:
             bpy.ops.onigiri.skin_pose_clean(action="sources")
 
     def update_skin_pose_lock_targets(self, context):
         oni_skin = bpy.context.window_manager.oni_skin
-        if oni_skin.skin_pose_lock_targets == False:
+        if not oni_skin.skin_pose_lock_targets:
             bpy.ops.onigiri.skin_pose_clean(action="targets")
 
     skin_pose_export_wait: bpy.props.BoolProperty(default=False)
@@ -44253,11 +44238,11 @@ class OnigiriSkinProperties(bpy.types.PropertyGroup):
     )
 
     def update_skin_lock_garment(s, c):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         onis = bpy.context.window_manager.oni_skin
-        if onis.skin_lock_garment == True:
+        if onis.skin_lock_garment:
 
             if len(bpy.context.selected_objects) == 0:
                 onis.skin_message = "Must have at least 1 mesh selected"
@@ -44285,7 +44270,7 @@ class OnigiriSkinProperties(bpy.types.PropertyGroup):
 
             onis["skin_targets"] = skin_targets
         else:
-            if onis.get("skin_targets") != None:
+            if onis.get("skin_targets") is not None:
                 del onis["skin_targets"]
             onis.skin_count = 0
             onis.skin_message = "[Look here for messages]"
@@ -44294,12 +44279,12 @@ class OnigiriSkinProperties(bpy.types.PropertyGroup):
         return
 
     def update_skin_lock_avatar(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         obj = bpy.data.objects
         onis = bpy.context.window_manager.oni_skin
-        if onis.skin_lock_avatar == True:
+        if onis.skin_lock_avatar:
             if len(bpy.context.selected_objects) == 0:
                 onis.skin_message = "Must have at least 1 mesh selected"
                 oni_settings["terminate"] = True
@@ -44314,7 +44299,7 @@ class OnigiriSkinProperties(bpy.types.PropertyGroup):
                     for mesh in onis["skin_targets"]:
                         if mesh in obj:
                             obj[mesh].select_set(True)
-                            if onis.skin_reskin == True:
+                            if onis.skin_reskin:
                                 for g in obj[mesh].vertex_groups:
                                     obj[mesh].vertex_groups.remove(g)
                             for m in obj[mesh].modifiers:
@@ -44362,7 +44347,7 @@ class OnigiriSkinProperties(bpy.types.PropertyGroup):
                 return
 
             arm, skin_sources = meshutils.get_one_armature(objects=selected)
-            if arm == False:
+            if not arm:
                 oni_settings["terminate"] = True
                 onis.skin_lock_avatar = False
                 onis.skin_message = "Error: See console"
@@ -44506,7 +44491,7 @@ class OnigiriTransferWeights(bpy.types.Operator):
     def poll(cls, context):
         obj = bpy.data.objects
         onis = bpy.context.window_manager.oni_skin
-        if onis.skin_lock_garment == True and onis.skin_lock_avatar == True:
+        if onis.skin_lock_garment and onis.skin_lock_avatar:
             return True
         return False
 
@@ -44515,7 +44500,7 @@ class OnigiriTransferWeights(bpy.types.Operator):
         obj = bpy.data.objects
         onis = bpy.context.window_manager.oni_skin
 
-        if onis.get("skin_sources") == None:
+        if onis.get("skin_sources") is None:
             txt = "Skin sources are mesh, if you used a rig instead\n"
             txt += "then your mesh is already skinned to that rig"
             print(txt)
@@ -44546,12 +44531,12 @@ class OnigiriTransferWeights(bpy.types.Operator):
         arm = onis["skin_rig"]
 
         for st in onis["skin_targets"]:
-            if utils.can_select(object=st) == False:
+            if not utils.can_select(object=st):
                 print("An object in your set is not accessible:", st)
                 print("All objects must be accessible in order to perform this task.")
                 popup("Inaccessible object, see system console", "Error", "ERROR")
                 return {"FINISHED"}
-        if utils.can_select(object=arm) == False:
+        if not utils.can_select(object=arm):
             print("The armature is not accessible:", arm)
             print("All objects must be accessible in order to perform this task.")
             popup("Inaccessible armature, see system console", "Error", "ERROR")
@@ -44577,7 +44562,7 @@ class OnigiriTransferWeights(bpy.types.Operator):
 
         elif self.action == "transfer":
 
-            if onis.skin_reskin == True:
+            if onis.skin_reskin:
                 for st in onis["skin_targets"]:
                     for vg in obj[st].vertex_groups:
                         obj[st].vertex_groups.remove(vg)
@@ -44606,7 +44591,7 @@ class OnigiriTransferWeights(bpy.types.Operator):
 
             bpy.context.view_layer.update()
 
-            if onis.skin_use_skin_pose == True:
+            if onis.skin_use_skin_pose:
                 armObj = obj[arm]
                 targets = []
                 for n in onis["skin_targets"]:
@@ -44636,7 +44621,7 @@ class OnigiriTransferWeights(bpy.types.Operator):
                 print("--------------------------------------------------")
 
                 result = rigutils.rebind(proxyObj, report=True)
-                if result == False:
+                if not result:
                     print("Could not rebind armature")
                     popup(
                         "Rebind failure, your mesh did not process!  See system console"
@@ -44702,7 +44687,7 @@ class OnigiriTransferWeights(bpy.types.Operator):
                 vert_mapping=vert_mapping,
             )
 
-            if onis.skin_use_skin_pose == True:
+            if onis.skin_use_skin_pose:
 
                 for boneObj in proxyObj.pose.bones:
                     bone = boneObj.name
@@ -44710,7 +44695,7 @@ class OnigiriTransferWeights(bpy.types.Operator):
                     utils.update()
 
                 result = rigutils.rebind(proxyObj, report=True)
-                if result == False:
+                if not result:
                     print("Could not rebind armature after transfer")
                     popup(
                         "Rebind failure, your mesh did not process!  See system console"
@@ -44735,7 +44720,7 @@ class OnigiriTransferWeights(bpy.types.Operator):
             for o in bpy.context.selected_objects:
                 o.select_set(False)
 
-            if onis.skin_keep_proxy == True:
+            if onis.skin_keep_proxy:
                 skinObj.name = "weight_proxy_" + get_unique_name_short()
             else:
                 skinObj.select_set(True)
@@ -44743,7 +44728,7 @@ class OnigiriTransferWeights(bpy.types.Operator):
                 bpy.ops.object.delete()
 
             if 1 == 0:
-                if onis.skin_remove_empty_groups == True:
+                if onis.skin_remove_empty_groups:
                     issue = False
                     rm_state = False
 
@@ -44762,12 +44747,12 @@ class OnigiriTransferWeights(bpy.types.Operator):
         else:
             print("Unknown action:", self.action)
 
-        if onis.skin_pose_mode == True:
+        if onis.skin_pose_mode:
             bpy.ops.object.mode_set(mode="OBJECT")
             for o in bpy.context.selected_objects:
                 o.select_set(False)
             obj[arm].select_set(True)
-            if obj[arm].select_get() == False:
+            if not obj[arm].select_get():
                 print("Rig is not in view for pose mode when attempting to select it")
                 popup(
                     "Rig is not selecable or not in view or both, check console",
@@ -44838,11 +44823,11 @@ class OnigiriSkinPoseLockSources(bpy.types.Operator):
         obj = bpy.data.objects
         sources = []
 
-        if oni_skin.get("skin_pose") == None:
+        if oni_skin.get("skin_pose") is None:
             oni_skin["skin_pose"] = {}
-        if oni_skin["skin_pose"].get("sources") == None:
+        if oni_skin["skin_pose"].get("sources") is None:
             oni_skin["skin_pose"]["sources"] = []
-        if oni_skin["skin_pose"].get("targets") == None:
+        if oni_skin["skin_pose"].get("targets") is None:
             oni_skin["skin_pose"]["targets"] = []
 
         source_rigs = {}
@@ -44853,7 +44838,7 @@ class OnigiriSkinPoseLockSources(bpy.types.Operator):
                     continue
 
                 arm = get_mesh_armature(mesh=o.name)
-                if arm == False:
+                if not arm:
                     continue
                 print("Found skin source:", o.name)
 
@@ -44948,11 +44933,11 @@ class OnigiriSkinPoseLockTargets(bpy.types.Operator):
         obj = bpy.data.objects
         targets = []
 
-        if oni_skin.get("skin_pose") == None:
+        if oni_skin.get("skin_pose") is None:
             oni_skin["skin_pose"] = {}
-        if oni_skin["skin_pose"].get("sources") == None:
+        if oni_skin["skin_pose"].get("sources") is None:
             oni_skin["skin_pose"]["sources"] = []
-        if oni_skin["skin_pose"].get("targets") == None:
+        if oni_skin["skin_pose"].get("targets") is None:
             oni_skin["skin_pose"]["targets"] = []
 
         for o in bpy.context.selected_objects:
@@ -44986,9 +44971,9 @@ class OnigiriSkinPoseTransfer(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         oni_skin = bpy.context.window_manager.oni_skin
-        if oni_skin.skin_pose_lock_sources == False:
+        if not oni_skin.skin_pose_lock_sources:
             return False
-        if oni_skin.skin_pose_lock_targets == False:
+        if not oni_skin.skin_pose_lock_targets:
             return False
         return True
 
@@ -45008,7 +44993,7 @@ class OnigiriSkinPoseTransfer(bpy.types.Operator):
 
         for skin in sources:
             arm = get_mesh_armature(mesh=skin)
-            if arm == False:
+            if not arm:
                 print(
                     "A redundant check failed when processing",
                     skin,
@@ -45067,9 +45052,9 @@ class OnigiriSkinPoseTransfer(bpy.types.Operator):
         bpy.ops.onigiri.skin_pose_restore()
 
         for mesh in targets:
-            if obj[mesh].get("skin_pose") == None:
+            if obj[mesh].get("skin_pose") is None:
                 obj[mesh]["skin_pose"] = {}
-            if obj[mesh]["skin_pose"].get("shape") == None:
+            if obj[mesh]["skin_pose"].get("shape") is None:
                 shape = [v.co for v in obj[mesh].data.vertices]
                 obj[mesh]["skin_pose"] = {}
                 obj[mesh]["skin_pose"]["shape"] = shape
@@ -45096,7 +45081,7 @@ class OnigiriSkinPoseTransfer(bpy.types.Operator):
 
         bpy.context.view_layer.update()
 
-        if oni_skin.skin_pose_clean_proxy == True:
+        if oni_skin.skin_pose_clean_proxy:
             print("Mesh cleanup before binding for:", proxy)
             print(proxy + " : transforms apply, excluding location data...")
             bpy.ops.object.transform_apply(scale=True, rotation=True, location=False)
@@ -45174,7 +45159,7 @@ class OnigiriSkinPoseTransfer(bpy.types.Operator):
 
             bpy.ops.object.surfacedeform_bind(modifier=mod_name)
 
-            if obj[mesh].modifiers[mod_name].is_bound == False:
+            if not obj[mesh].modifiers[mod_name].is_bound:
 
                 print(
                     "The process failed.  Please restore your mesh and try without (clean proxy)",
@@ -45254,10 +45239,10 @@ class OnigiriSkinPoseRestore(bpy.types.Operator):
         oni_skin = bpy.context.window_manager.oni_skin
         obj = bpy.data.objects
 
-        if oni_skin.get("skin_pose") == None:
+        if oni_skin.get("skin_pose") is None:
             print("No skin_pose property")
             return {"FINISHED"}
-        if oni_skin["skin_pose"].get("targets") == None:
+        if oni_skin["skin_pose"].get("targets") is None:
             print("No shape property")
             return {"FINISHED"}
 
@@ -45278,10 +45263,10 @@ class OnigiriSkinPoseRestore(bpy.types.Operator):
             obj[mesh].parent = None
 
         for mesh in targets:
-            if obj[mesh].get("skin_pose") == None:
+            if obj[mesh].get("skin_pose") is None:
                 print("Missing property skin_pose", mesh)
             else:
-                if obj[mesh]["skin_pose"].get("shape") == None:
+                if obj[mesh]["skin_pose"].get("shape") is None:
                     print("Missing property shape", mesh)
                 else:
                     shape = obj[mesh]["skin_pose"]["shape"]
@@ -45322,7 +45307,7 @@ class OnigiriSkinPoseClean(bpy.types.Operator):
             o.select_set(False)
 
         proxy = oni_skin["skin_pose"].get("proxy")
-        if proxy != None:
+        if proxy is not None:
             if proxy in obj:
                 obj[proxy].select_set(True)
                 bpy.context.view_layer.objects.active = obj[proxy]
@@ -45350,7 +45335,7 @@ class OnigiriSkinPoseExport(bpy.types.Operator, ExportHelper):
     filter_glob: bpy.props.StringProperty(default="*.obj", options={"HIDDEN"})
 
     def invoke(self, context, event):
-        if bpy.context.window_manager.oni_skin.get("obj_export_folder") != None:
+        if bpy.context.window_manager.oni_skin.get("obj_export_folder") is not None:
             save_path = bpy.context.window_manager.oni_skin["obj_export_folder"]
         else:
             save_path = bpy.path.abspath("//")
@@ -45360,7 +45345,7 @@ class OnigiriSkinPoseExport(bpy.types.Operator, ExportHelper):
 
     @classmethod
     def poll(cls, context):
-        if bpy.context.window_manager.oni_skin.skin_pose_lock_sources == False:
+        if not bpy.context.window_manager.oni_skin.skin_pose_lock_sources:
             return False
         return True
 
@@ -45371,7 +45356,7 @@ class OnigiriSkinPoseExport(bpy.types.Operator, ExportHelper):
 
         sources = oni_skin["skin_pose"]["sources"]
 
-        if bpy.context.active_object == None:
+        if bpy.context.active_object is None:
             bpy.context.view_layer.objects.active = sources[0]
 
         selected = [o for o in bpy.context.selected_objects]
@@ -45417,7 +45402,7 @@ class OnigiriSkinPoseExport(bpy.types.Operator, ExportHelper):
         rig_pose = {}
         for mesh in new_mesh:
             arm = mod_functions.get_mesh_armature(mesh=mesh)
-            if arm == False:
+            if not arm:
                 continue
             rig_pose[arm] = {}
         if len(rig_pose) > 0:
@@ -45494,7 +45479,7 @@ class OnigiriSkinPoseImport(bpy.types.Operator, ImportHelper):
     filter_glob: bpy.props.StringProperty(default="*.obj", options={"HIDDEN"})
 
     def invoke(self, context, event):
-        if bpy.context.window_manager.oni_skin.get("obj_export_folder") != None:
+        if bpy.context.window_manager.oni_skin.get("obj_export_folder") is not None:
             load_path = bpy.context.window_manager.oni_skin["obj_export_folder"]
         else:
             load_path = bpy.path.abspath("//")
@@ -45561,7 +45546,7 @@ class OnigiriSkinCorrectionSource(bpy.types.Operator):
                 if o.type == "MESH":
 
                     arm = get_mesh_armature(mesh=o.name)
-                    if arm == False:
+                    if not arm:
                         continue
                     print("Found skin source:", o.name)
                     skins.append(o.name)
@@ -45613,7 +45598,7 @@ class OnigiriSkinCorrectionSetup(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if bpy.context.window_manager.oni_skin.skin_correction_source == False:
+        if not bpy.context.window_manager.oni_skin.skin_correction_source:
             return False
         if len(bpy.context.selected_objects) != 1:
             return False
@@ -45629,7 +45614,7 @@ class OnigiriSkinCorrectionSetup(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         bpy.context.view_layer.objects.active = o
 
-        if oni_skin.get("skin_correction") == None:
+        if oni_skin.get("skin_correction") is None:
             print("Something went wrong, base data missing.")
             popup(
                 "Internal Error, missing base data, see System Console",
@@ -45637,7 +45622,7 @@ class OnigiriSkinCorrectionSetup(bpy.types.Operator):
                 "ERROR",
             )
             return {"FINISHED"}
-        if oni_skin["skin_correction"].get("sources") == None:
+        if oni_skin["skin_correction"].get("sources") is None:
             print("Skin source missing, this should not happen.")
             popup(
                 "Internal Error, missing skin source, see System Console",
@@ -45667,18 +45652,18 @@ class OnigiriSkinCorrectionSetup(bpy.types.Operator):
                 return {"FINISHED"}
 
         arm = mod_functions.get_mesh_armature(mesh=o.name)
-        if arm == False:
+        if not arm:
             print("get_mesh_armature returns False")
             popup("Armature error, see System Console", "Error", "ERROR")
             return {"FINISHED"}
 
         mod = mod_functions.get_mesh_armature_modifier(mesh=o.name)
 
-        if mod == False:
+        if not mod:
             print("programmers dum detected dumbness, no modifer name was returned")
             return {"FINISHED"}
 
-        if o.get("skin_correction") != None:
+        if o.get("skin_correction") is not None:
             print(
                 "Skinning correction tool is already engaged on this object, click (Finish) to reset it"
             )
@@ -45781,7 +45766,7 @@ class OnigiriSkinCorrectionFinish(bpy.types.Operator):
 
         for o in obj:
             if o.type == "MESH":
-                if o.get("skin_correction") != None:
+                if o.get("skin_correction") is not None:
 
                     frame_current = o["skin_correction"]["frame_current"]
                     bpy.context.scene.frame_set(frame_current)
@@ -45802,14 +45787,14 @@ class OnigiriSkinCorrectionFinish(bpy.types.Operator):
                         ]
 
                     shape = o["skin_correction"].get("shape")
-                    if shape != None:
+                    if shape is not None:
 
                         if len(o.data.vertices) == len(shape):
                             for v in range(len(shape)):
                                 o.data.vertices[v].co = shape[v]
 
                     del o["skin_correction"]
-        if oni_skin.get("skin_correction") != None:
+        if oni_skin.get("skin_correction") is not None:
             del oni_skin["skin_correction"]
 
         oni_skin.property_unset("skin_correction_source")
@@ -45838,9 +45823,9 @@ class OnigiriSkinCorrection(bpy.types.Operator):
             return False
 
         oni_skin = bpy.context.window_manager.oni_skin
-        if oni_skin.get("skin_correction") == None:
+        if oni_skin.get("skin_correction") is None:
             return False
-        if oni_skin["skin_correction"].get("sources") == None:
+        if oni_skin["skin_correction"].get("sources") is None:
             return False
 
         return True
@@ -45981,12 +45966,12 @@ class OnigiriSkinPose(bpy.types.Operator):
             if o.type == "ARMATURE":
                 arm = o.name
                 print("Found an armature selection:", arm)
-        if arm == None:
+        if arm is None:
             for o in bpy.context.selected_objects:
                 if o.type == "MESH":
 
                     arm = mod_functions.get_mesh_armature(mesh=o.name)
-                    if arm == False:
+                    if not arm:
                         print("get_mesh_armature returns False")
                         popup("Armature error, see System Console", "Error", "ERROR")
                         return {"FINISHED"}
@@ -46076,13 +46061,13 @@ class OnigiriPaintProperties(bpy.types.PropertyGroup):
     def update_paint_active(self, context):
 
         print("paint_active toggled:", self.paint_active)
-        if self.paint_active == False:
+        if not self.paint_active:
             bpy.ops.onigiri.paint_enable(state=False)
 
     def update_paint_back_face(self, context):
         oni_paint = bpy.context.scene.oni_paint
         print("paint_back_face toggled:", self.paint_back_face)
-        if self.paint_back_face == False:
+        if not self.paint_back_face:
             bpy.ops.onigiri.paint_back_face(state=self.paint_back_face)
 
     paint_active: bpy.props.BoolProperty(
@@ -46125,7 +46110,7 @@ class OnigiriPaintEnabled(bpy.types.Operator):
 
         utils.cleanup()
 
-        if self.state == True:
+        if self.state:
 
             selected = bpy.context.selected_objects
 
@@ -46143,7 +46128,7 @@ class OnigiriPaintEnabled(bpy.types.Operator):
             for o in active_mesh:
                 for modObj in o.modifiers:
                     if modObj.type == "ARMATURE":
-                        if modObj.object != None:
+                        if modObj.object is not None:
                             arm_targets.add(modObj.object)
 
             if len(arm_targets) > 1:
@@ -46199,7 +46184,7 @@ class OnigiriPaintEnabled(bpy.types.Operator):
                     armMod.object = active_arms[0]
                     o.parent = active_arms[0]
                     result = utils.move_to_top(object=o.name, modifier=armMod.name)
-                    if result == False:
+                    if not result:
                         utils.set_state(state)
                         print(
                             "0: Something strange happened when reorganizing the armature modifier and I can't continue."
@@ -46234,7 +46219,7 @@ class OnigiriPaintEnabled(bpy.types.Operator):
                     armMod.object = armObj
                     o.parent = armObj
                     result = utils.move_to_top(object=o.name, modifier=armMod.name)
-                    if result == False:
+                    if not result:
                         utils.set_state(state)
                         print(
                             "1: Something strange happened when reorganizing the armature modifier and I can't continue."
@@ -46471,7 +46456,7 @@ class OnigiriPaintBackFace(bpy.types.Operator):
         obj = bpy.data.objects
         oni_paint = bpy.context.scene.oni_paint
 
-        if self.state == True:
+        if self.state:
             oni_paint.paint_back_face = True
             bpy.data.brushes["Draw"].falloff_shape = "PROJECTED"
             bpy.data.brushes["Draw"].use_frontface = False
@@ -46667,7 +46652,7 @@ class OnigiriCreateMeshDeformer(bpy.types.Operator, ExportHelper):
 
         armObj.select_set(True)
         bpy.context.view_layer.objects.active = armObj
-        if old_mode != None:
+        if old_mode is not None:
             bpy.ops.object.mode_set(mode=old_mode)
 
         return {"FINISHED"}
@@ -46703,9 +46688,9 @@ class OnigiriCreateMeshFromBones(bpy.types.Operator):
         mesh_to_middle = oni_misc.mesh_to_middle
 
         pose_bones = [b.name for b in bpy.context.selected_pose_bones]
-        if mesh_from_mapped_bones == True:
+        if mesh_from_mapped_bones:
             print("The feature (mesh_from_mapped_bones) was enabled")
-            if armObj.get("oni_onemap_rename") != None:
+            if armObj.get("oni_onemap_rename") is not None:
                 print("Found a map on the rig, collecting...")
                 rename_map = armObj["oni_onemap_rename"].to_dict()
 
@@ -46769,7 +46754,7 @@ class OnigiriCreateMeshFromBones(bpy.types.Operator):
                     if modObj.type == "ARMATURE":
                         modObj.object = armObj
 
-            if split_mash_for_sl == True:
+            if split_mash_for_sl:
                 bpy.ops.onigiri.split_mesh()
 
             bpy.ops.onigiri.remove_unused_groups(method="best")
@@ -46826,7 +46811,7 @@ class OnigiriCreateMeshDeformer_DISABLED(bpy.types.Operator):
                 armObj = bpy.context.selected_objects[0]
 
                 proxyObj = rigutils.build_rig(rig_class="pos", rotate=True)
-                if proxyObj == False:
+                if not proxyObj:
                     print(
                         "An error occurred when generating a proxy rig for this purpose"
                     )
@@ -46886,7 +46871,7 @@ class OnigiriCreateMeshDeformer_DISABLED(bpy.types.Operator):
 
                 else:
 
-                    if mesh_deformer_separate == False:
+                    if not mesh_deformer_separate:
 
                         mesh = deformer[0]
                         s = meshutils.split_mesh(mesh=mesh, group_limit=110)
@@ -46964,7 +46949,7 @@ class OnigiriCreateMeshDeformer_DISABLED(bpy.types.Operator):
         print("==========================================================")
 
         result = meshutils.get_exportable_mesh(objects=selected, report=True)
-        if result == False:
+        if not result:
             print("get_exportable_mesh returned False, this is an error")
             return {"FINISHED"}
         arm = result["armature"]
@@ -47032,7 +47017,7 @@ class OnigiriCreateMeshDeformer_DISABLED(bpy.types.Operator):
             armature=sourceObj.name, target=None, separate=mesh_deformer_separate
         )
 
-        if deformer == False:
+        if not deformer:
             print("the utility bones_to_mesh returned False, this is a failure")
             popup(
                 "An error occurred when attempting to produce a new mesh, see Console.",
@@ -47079,7 +47064,7 @@ class OnigiriMeshFromArmature(bpy.types.Operator):
         bpy.context.view_layer.objects.active = armObj
         oni_misc = bpy.context.window_manager.oni_misc
 
-        if oni_misc.mesh_from_attachment_bones == True:
+        if oni_misc.mesh_from_attachment_bones:
             deform_states = {}
             for boneObj in armObj.data.bones:
                 bone = boneObj.name
@@ -47089,8 +47074,8 @@ class OnigiriMeshFromArmature(bpy.types.Operator):
                         boneObj.use_deform = True
 
         if (
-            oni_misc.mesh_from_mapped_bones == True
-            and armObj.get("oni_onemap_rename") != None
+            oni_misc.mesh_from_mapped_bones
+            and armObj.get("oni_onemap_rename") is not None
         ):
             rename_map = armObj["oni_onemap_rename"].to_dict()
             utils.activate(armObj)
@@ -47132,7 +47117,7 @@ class OnigiriMeshFromArmature(bpy.types.Operator):
 
             print("got mesh:", mesh)
 
-            if oni_misc.split_mesh_for_sl == True:
+            if oni_misc.split_mesh_for_sl:
                 bpy.ops.onigiri.split_mesh()
 
         else:
@@ -47142,7 +47127,7 @@ class OnigiriMeshFromArmature(bpy.types.Operator):
             )
             popup("Mesh creation error", mesh, "ERROR")
 
-        if oni_misc.mesh_from_attachment_bones == True:
+        if oni_misc.mesh_from_attachment_bones:
             for bone in deform_states:
                 armObj.data.bones[bone].use_deform = deform_states[bone]
 
@@ -47198,7 +47183,7 @@ class OnigiriMeshIntegrityCheck(bpy.types.Operator):
         for mesh in [o.name for o in selected]:
 
             status = get_mesh_armature(mesh=mesh)
-            if status == False:
+            if not status:
                 print("Mesh did not pass armature validation test:", mesh)
             if status not in arms:
                 arms.append(status)
@@ -47313,7 +47298,7 @@ class OnigiriSplitMesh(bpy.types.Operator):
         mesh_names = list()
         for o in selected:
             if o.type == "MESH":
-                if o.get("onigiri_mesh_rig") == None:
+                if o.get("onigiri_mesh_rig") is None:
                     print("Skipping foreign mesh, not a mesh from rig:", o.name)
                 else:
                     mesh_names.append(o.name)
@@ -47328,7 +47313,7 @@ class OnigiriSplitMesh(bpy.types.Operator):
         for mesh in mesh_names:
 
             status = get_mesh_armature(mesh=mesh)
-            if status == False:
+            if not status:
                 print("A qualified mesh for splitting failed the armature test")
                 popup(
                     "There was a problem with at least one of your mesh, see console for details.",
@@ -47373,7 +47358,7 @@ class OnigiriSplitMesh(bpy.types.Operator):
                     "while the existing total is",
                     total_groups,
                 )
-                if oni_mesh.remove_empty_groups == True:
+                if oni_mesh.remove_empty_groups:
                     print("Removing empty groups for mesh:", mesh)
                     obj[mesh].select_set(True)
                     bpy.context.view_layer.objects.active = bpy.data.objects[mesh]
@@ -47472,7 +47457,7 @@ class OnigiriSplitMesh(bpy.types.Operator):
         for o in bpy.context.selected_objects:
             o.select_set(False)
 
-        if onim.split_mesh_keep_originals == False:
+        if not onim.split_mesh_keep_originals:
             for mesh in bad_mesh:
                 obj[mesh].select_set(True)
             bpy.context.view_layer.objects.active = bpy.context.selected_objects[0]
@@ -47525,7 +47510,7 @@ class OnigiriRefitDuplicate(bpy.types.Operator):
         garment = onim.refit_garment_source_name
         avatar = onim.refit_avatar_source_name
 
-        if bpy.context.active_object != None:
+        if bpy.context.active_object is not None:
             bpy.ops.object.mode_set(mode="OBJECT")
         bpy.ops.object.select_all(action="DESELECT")
 
@@ -47534,14 +47519,14 @@ class OnigiriRefitDuplicate(bpy.types.Operator):
 
         for target in onim["refit_targets"]:
 
-            if obj[garment].parent != None:
+            if obj[garment].parent is not None:
                 gp = obj[garment].parent
                 gp_hide_select = gp.hide_select
                 gp_hide_set = gp.hide_get()
                 gp.hide_select = False
                 gp.hide_set(False)
                 gp.select_set(True)
-            if obj[avatar].parent != None:
+            if obj[avatar].parent is not None:
                 ap = obj[avatar].parent
                 ap_hide_select = ap.hide_select
                 ap_hide_set = ap.hide_get()
@@ -47554,15 +47539,15 @@ class OnigiriRefitDuplicate(bpy.types.Operator):
             bpy.context.view_layer.objects.active = bpy.data.objects[garment]
             bpy.ops.object.duplicate()
 
-            if obj[garment].parent != None:
+            if obj[garment].parent is not None:
                 gp.hide_select = gp_hide_select
                 gp.hide_set(gp_hide_set)
-            if obj[avatar].parent != None:
+            if obj[avatar].parent is not None:
                 ap.hide_select = ap_hide_select
                 ap.hide_set(ap_hide_set)
 
             for o in bpy.context.selected_objects:
-                if o.get("refit_name") == None:
+                if o.get("refit_name") is None:
                     print("skipping object, no refit_name:", o.name)
                     continue
                 if o["refit_name"] == garment:
@@ -47574,7 +47559,7 @@ class OnigiriRefitDuplicate(bpy.types.Operator):
             for o in bpy.context.selected_objects:
                 o.select_set(False)
 
-            if obj[garment_new].parent != None:
+            if obj[garment_new].parent is not None:
                 p = obj[garment_new].parent
                 p.select_set(True)
                 bpy.context.view_layer.objects.active = p
@@ -47588,7 +47573,7 @@ class OnigiriRefitDuplicate(bpy.types.Operator):
                 p.select_set(True)
 
                 bpy.ops.object.delete()
-            if obj[avatar_new].parent != None:
+            if obj[avatar_new].parent is not None:
                 p = obj[avatar_new].parent
                 p.select_set(True)
                 bpy.context.view_layer.objects.active = p
@@ -47703,7 +47688,7 @@ class OnigiriRefitDuplicate(bpy.types.Operator):
 
             bpy.ops.object.mode_set(mode="OBJECT")
 
-            if onim.refit_assume_pose == True:
+            if onim.refit_assume_pose:
 
                 source_arm_mod = get_mesh_armature_modifier(mesh=avatar_new)
                 target_arm_mod = get_mesh_armature_modifier(mesh=target)
@@ -47794,7 +47779,7 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
 
         devkit_poll_state = oni_devkit.devkit_poll
 
-        if oni_devkit.export_menu_enabled == True:
+        if oni_devkit.export_menu_enabled:
             export_menu_enabled_icon = "menu_opened"
         else:
             export_menu_enabled_icon = "menu_closed"
@@ -47815,7 +47800,7 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
             icon_value=ico.custom_icons[export_menu_enabled_icon].icon_id,
         )
 
-        if oni_devkit.export_menu_enabled == True:
+        if oni_devkit.export_menu_enabled:
 
             layout = self.layout
             box = layout.box()
@@ -47859,10 +47844,10 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
             armObj = utils.has_armature()
             if armObj != False:
                 devkit_state = armObj.get("oni_collada_unsaved")
-                if devkit_state != None:
+                if devkit_state is not None:
                     devkit_state_text = "Unsaved Devkit!"
                     devkit_state_icon = "code"
-                elif armObj.get("oni_collada_matrices") != None:
+                elif armObj.get("oni_collada_matrices") is not None:
                     devkit_state_text = "Preset Ready!"
                     devkit_state_icon = "code"
             row = col.row(align=True)
@@ -48016,16 +48001,16 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                 )
                 unsupported_enabled_icon = "blank"
                 if (
-                    oni_devkit.process_attachment_bones == True
-                    and oni_devkit.process_unsupported_bones == True
+                    oni_devkit.process_attachment_bones
+                    and oni_devkit.process_unsupported_bones
                 ):
                     unsupported_enabled_icon = "dot_green"
                 elif (
-                    oni_devkit.process_attachment_bones == True
-                    and oni_devkit.process_unsupported_bones == False
+                    oni_devkit.process_attachment_bones
+                    and not oni_devkit.process_unsupported_bones
                 ):
                     unsupported_enabled_icon = "dot_yellow"
-                elif oni_devkit.process_attachment_bones == False:
+                elif not oni_devkit.process_attachment_bones:
                     unsupported_enabled_icon = "dot_red"
                 row.prop(
                     oni_devkit,
@@ -48176,7 +48161,7 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                 text="Neutral (M)",
             )
 
-            if oni_devkit.export_advanced == True:
+            if oni_devkit.export_advanced:
                 export_advanced_icon = "menu_opened"
             else:
                 export_advanced_icon = "menu_closed"
@@ -48194,7 +48179,7 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                 icon_value=ico.custom_icons["reset"].icon_id,
             )
 
-            if oni_devkit.export_advanced == True:
+            if oni_devkit.export_advanced:
                 for export_option in oni_settings["dae_export_options"]:
 
                     row = self.layout.row(align=True)
@@ -48233,7 +48218,7 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                 if snap_selected.type == "MESH":
                     snap_has_armature = utils.has_armature(object=snap_selected)
                     if snap_has_armature != False:
-                        if snap_has_armature.get("oni_onemap_rename") != None:
+                        if snap_has_armature.get("oni_onemap_rename") is not None:
                             snap_has_map_text = "Associated rig has a map"
                             snap_has_map_icon = "bone_black_red"
                             break
@@ -48457,7 +48442,7 @@ class OnigiriPanelMeshTools(bpy.types.Panel):
 
         row = self.layout.row(align=True)
         edit_mesh_menu_enabled_icon = "menu_closed"
-        if oni_mesh.edit_mesh_menu_enabled == True:
+        if oni_mesh.edit_mesh_menu_enabled:
             edit_mesh_menu_enabled_icon = "menu_opened"
         row.prop(
             oni_mesh,
@@ -48465,7 +48450,7 @@ class OnigiriPanelMeshTools(bpy.types.Panel):
             text="Edit Mesh",
             icon_value=ico.custom_icons[edit_mesh_menu_enabled_icon].icon_id,
         )
-        if oni_mesh.edit_mesh_menu_enabled == True:
+        if oni_mesh.edit_mesh_menu_enabled:
             layout = self.layout
             box = layout.box()
             col = box.column(align=True)
@@ -48555,7 +48540,7 @@ class OnigiriPanelMeshTools(bpy.types.Panel):
             icon_value=ico.custom_icons["reshape"].icon_id,
         )
 
-        if onim.refit_enabled == True:
+        if onim.refit_enabled:
             layout = self.layout
             box = layout.box()
             col = box.column(align=True)
@@ -48582,7 +48567,7 @@ class OnigiriPanelMeshTools(bpy.types.Panel):
                 text="",
                 icon_value=ico.custom_icons["dot_white"].icon_id,
             )
-            if onim.refit_lock_garment_source == True:
+            if onim.refit_lock_garment_source:
                 row = col.row(align=True)
                 row.prop(
                     onim,
@@ -48597,7 +48582,7 @@ class OnigiriPanelMeshTools(bpy.types.Panel):
                     icon_value=ico.custom_icons["dot_yellow"].icon_id,
                 )
             row = col.row(align=True)
-            if onim.refit_lock_avatar_source == True:
+            if onim.refit_lock_avatar_source:
                 row.prop(
                     onim,
                     "refit_lock_avatar_targets",
@@ -48605,7 +48590,7 @@ class OnigiriPanelMeshTools(bpy.types.Panel):
                     toggle=True,
                 )
 
-                if onim.get("refit_targets") == None or onim.get("refit_targets") == 0:
+                if onim.get("refit_targets") is None or onim.get("refit_targets") == 0:
                     row.prop(onim, "refit_avatar_target_name", text="")
                     for m in bpy.context.selected_objects:
                         if m.type == "MESH":
@@ -48682,7 +48667,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
         armObj = rigutils.is_armature()
         if armObj != False:
             skin_attachment_bones = armObj.get("oni_skin_attachments", False)
-            if skin_attachment_bones == True:
+            if skin_attachment_bones:
                 skin_attachment_bones_icon = "dot_green"
         row.operator(
             "onigiri.skin_attachment_bones",
@@ -48814,7 +48799,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
 
         row = self.layout.row(align=True)
         skin_pose_menu_enabled_icon = "menu_closed"
-        if oni_skin.skin_pose_menu_enabled == True:
+        if oni_skin.skin_pose_menu_enabled:
             skin_pose_menu_enabled_icon = "menu_opened"
         row.prop(
             oni_skin,
@@ -48824,7 +48809,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
             icon_value=ico.custom_icons[skin_pose_menu_enabled_icon].icon_id,
         )
 
-        if oni_skin.skin_pose_menu_enabled == True:
+        if oni_skin.skin_pose_menu_enabled:
             oni_skin = bpy.context.window_manager.oni_skin
             layout = self.layout
             box = layout.box()
@@ -48832,14 +48817,14 @@ class OnigiriSkinningPanel(bpy.types.Panel):
 
             skin_pose_export_text = "Export"
             skin_pose_import_text = "Import"
-            if oni_skin.skin_pose_export_wait == True:
+            if oni_skin.skin_pose_export_wait:
                 skin_pose_export_text = "Exporting ..."
-            if oni_skin.skin_pose_import_wait == True:
+            if oni_skin.skin_pose_import_wait:
                 skin_pose_import_text = "Importing ..."
 
             row = col.row(align=True)
 
-            if oni_skin.skin_pose_lock_sources == False:
+            if not oni_skin.skin_pose_lock_sources:
                 row.operator(
                     "onigiri.skin_pose_lock_sources",
                     text="Record Weight Sources",
@@ -48851,7 +48836,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
                     text="Sources Recorded",
                     toggle=True,
                 )
-            if oni_skin.skin_pose_lock_targets == False:
+            if not oni_skin.skin_pose_lock_targets:
                 row.operator(
                     "onigiri.skin_pose_lock_targets",
                     text="Record Target Garments",
@@ -48942,7 +48927,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
                     text="Skin Correction:",
                 )
                 row = col.row(align=True)
-                if oni_skin.skin_correction_source == True:
+                if oni_skin.skin_correction_source:
                     row.prop(
                         oni_skin,
                         "skin_correction_source",
@@ -48992,7 +48977,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
                 text="Paint Weights:",
             )
             row = col.row(align=True)
-            if oni_paint.paint_active == False:
+            if not oni_paint.paint_active:
                 row.operator(
                     "onigiri.paint_enable",
                     text="Enable Weight Painting",
@@ -49007,10 +48992,10 @@ class OnigiriSkinningPanel(bpy.types.Panel):
                 )
 
             paint_back_face_icon = "back_face_disabled"
-            if oni_paint.paint_back_face == True:
+            if oni_paint.paint_back_face:
                 paint_back_face_icon = "back_face_enabled"
 
-            if oni_paint.paint_back_face == False:
+            if not oni_paint.paint_back_face:
                 row.operator(
                     "onigiri.paint_back_face",
                     text="",
@@ -49140,7 +49125,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
                 if bpy.context.selected_objects[0].type == "MESH":
                     if bpy.context.selected_objects[0].get("skin_smooth_enabled"):
                         skin_smooth_enabled = True
-            if skin_smooth_enabled == True:
+            if skin_smooth_enabled:
                 row.prop(
                     oni_skin,
                     "skin_smooth_enabled",
@@ -49160,7 +49145,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
                 text="Undo",
                 icon_value=ico.custom_icons["reset"].icon_id,
             )
-            if skin_smooth_enabled == True:
+            if skin_smooth_enabled:
                 row = col.row(align=True)
                 row.prop(
                     oni_skin,
@@ -49242,7 +49227,7 @@ class OnigiriRigCreationPanel(bpy.types.Panel):
             toggle=True,
             text="Enable additional choices",
         )
-        if brp.rigs_enabled == True:
+        if brp.rigs_enabled:
             row = self.layout.row(align=True)
             row.operator(
                 "onigiri.attach_proxy_rig",
@@ -49320,7 +49305,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
 
         row = self.layout.row(align=True)
 
-        if bmp.mapper_menu_enabled == True:
+        if bmp.mapper_menu_enabled:
             mapper_menu_enabled_icon = "menu_opened"
         else:
             mapper_menu_enabled_icon = "menu_closed"
@@ -49333,7 +49318,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
             icon_value=ico.custom_icons[mapper_menu_enabled_icon].icon_id,
         )
 
-        if bmp.mapper_menu_enabled == True:
+        if bmp.mapper_menu_enabled:
 
             row = self.layout.row(align=True)
             row.prop(
@@ -49370,7 +49355,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
 
             else:
                 row = self.layout.row(align=True)
-                if bmp.mapper_lock_source == False:
+                if not bmp.mapper_lock_source:
                     row.label(
                         text="Armatures found in template: (Lock source first!)",
                     )
@@ -49381,7 +49366,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                     )
                 else:
                     if (
-                        bmp.get("targets_waiting") != None
+                        bmp.get("targets_waiting") is not None
                         and len(bmp["targets_waiting"]) > 0
                     ):
                         row.label(
@@ -49442,7 +49427,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
             row.label(text=bmp.mapper_message, icon="INFO")
 
             if 1 == 0:
-                if bmp.get("targets_waiting") != None:
+                if bmp.get("targets_waiting") is not None:
                     for tarm in bmp["targets_waiting"]:
                         row = self.layout.row(align=True)
                         row.operator(
@@ -49465,7 +49450,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
             )
 
             row = self.layout.row(align=True)
-            if bmp.mapper_retarget_only == True:
+            if bmp.mapper_retarget_only:
                 row.prop(
                     bmp,
                     "mapper_anchor_enabled",
@@ -49486,7 +49471,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                         and obj[bmp.mapper_source_name].get("locked") == 1
                     ):
                         retargetter_ready = True
-                if retargetter_ready == True:
+                if retargetter_ready:
 
                     row = self.layout.row(align=True)
                     row.prop(
@@ -49545,7 +49530,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                     icon_value=ico.custom_icons["edit"].icon_id,
                 )
                 row = self.layout.row(align=True)
-                if bmp.mapper_edit_targets == True:
+                if bmp.mapper_edit_targets:
                     row.label(
                         text="Remove From Animation:",
                     )
@@ -49556,7 +49541,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                         icon_value=ico.custom_icons["save"].icon_id,
                     )
                     row = self.layout.row(align=True)
-                    if bmp.mapper_template_ready == True:
+                    if bmp.mapper_template_ready:
                         for boneObj in bpy.data.objects[
                             bmp.mapper_source_name
                         ].pose.bones:
@@ -49722,7 +49707,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
             )
 
             if 1 == 0:
-                if bmp.mapper_enabled == True:
+                if bmp.mapper_enabled:
                     col.separator()
                     row = col.row(align=True)
                     row.operator(
@@ -49777,7 +49762,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                 "onigiri.mapper_pack_bones",
                 text="Pack Bones",
             )
-            if bmp.mapper_pack_bones == True:
+            if bmp.mapper_pack_bones:
                 layout = self.layout
                 box = layout.box()
                 col = box.column(align=True)
@@ -49865,7 +49850,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
         layout = self.layout
         row = self.layout.row(align=True)
 
-        if ani.animesh_menu_enabled == True:
+        if ani.animesh_menu_enabled:
             animesh_menu_enabled_icon = "menu_opened"
         else:
             animesh_menu_enabled_icon = "menu_closed"
@@ -49878,7 +49863,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
             icon_value=ico.custom_icons[animesh_menu_enabled_icon].icon_id,
         )
 
-        if ani.animesh_menu_enabled == True:
+        if ani.animesh_menu_enabled:
             row = self.layout.row(align=True)
             row.operator(
                 "onigiri.animesh_get_current",
@@ -49943,7 +49928,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
 
                 row.prop(ani, "animesh_target_name", text="")
 
-            if ani.animesh_mapper_enabled == True:
+            if ani.animesh_mapper_enabled:
 
                 col = box.column(align=True)
                 row = col.row(align=True)
@@ -49954,7 +49939,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                     text="Reset",
                 )
 
-            if ani.get("targets_waiting") != None:
+            if ani.get("targets_waiting") is not None:
                 for tarm in ani["targets_waiting"]:
 
                     row = col.row(align=True)
@@ -49973,7 +49958,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
             row = col.row(align=False)
             row.label(text=ani.animesh_message)
 
-            if ani.animesh_mapper_enabled == True:
+            if ani.animesh_mapper_enabled:
                 row = col.row(align=False)
                 row.operator(
                     "onigiri.animesh_remove_selected_bones",
@@ -50016,7 +50001,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
 
         row = self.layout.row(align=True)
         oni_inherit = bpy.context.window_manager.oni_inherit
-        if oni_inherit.inherit_menu_enabled == True:
+        if oni_inherit.inherit_menu_enabled:
             inherit_menu_enabled_icon = "menu_opened"
         else:
             inherit_menu_enabled_icon = "menu_closed"
@@ -50029,7 +50014,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             icon_value=ico.custom_icons[inherit_menu_enabled_icon].icon_id,
         )
 
-        if oni_inherit.inherit_menu_enabled == True:
+        if oni_inherit.inherit_menu_enabled:
             layout = self.layout
             box = layout.box()
             col = box.column(align=True)
@@ -50071,7 +50056,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 if o.type == "ARMATURE":
                     arms.append(o)
             if len(arms) == 1:
-                if arms[0].get("oni_onemap_rename") != None:
+                if arms[0].get("oni_onemap_rename") is not None:
                     inherit_map_text = "This rig contains a map!"
                     inherit_map_icon = "bone_black_red"
 
@@ -50130,7 +50115,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 text="View Map",
                 icon_value=ico.custom_icons["blank"].icon_id,
             )
-            if oni_inherit.inherit_view_map == True:
+            if oni_inherit.inherit_view_map:
                 row = col.row(align=True)
 
                 if len(inherit_rename_map) > 0:
@@ -50164,7 +50149,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
 
         row = self.layout.row(align=True)
         oni_motion = bpy.context.window_manager.oni_motion
-        if oni_motion.motion_menu_enabled == True:
+        if oni_motion.motion_menu_enabled:
             motion_menu_enabled_icon = "menu_opened"
         else:
             motion_menu_enabled_icon = "menu_closed"
@@ -50176,7 +50161,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             text="Retarget Motion",
             icon_value=ico.custom_icons[motion_menu_enabled_icon].icon_id,
         )
-        if oni_motion.motion_menu_enabled == True:
+        if oni_motion.motion_menu_enabled:
             layout = self.layout
             box = layout.box()
             col = box.column(align=True)
@@ -50244,7 +50229,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                     arms.append(o)
             if len(arms) == 1:
 
-                if arms[0].get("oni_onemap_rename") != None:
+                if arms[0].get("oni_onemap_rename") is not None:
                     oni_motion_rename_text = "Director contains a map!"
                     oni_motion_rename_icon = "bone_black_red"
 
@@ -50434,7 +50419,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             row = col.row(align=True)
 
             motion_interactive_menu_enabled_icon = "menu_closed"
-            if oni_motion.motion_interactive_menu_enabled == True:
+            if oni_motion.motion_interactive_menu_enabled:
                 motion_interactive_menu_enabled_icon = "menu_opened"
 
             row.prop(
@@ -50446,7 +50431,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                     motion_interactive_menu_enabled_icon
                 ].icon_id,
             )
-            if oni_motion.motion_interactive_menu_enabled == True:
+            if oni_motion.motion_interactive_menu_enabled:
                 row = col.row(align=True)
                 if len(bpy.context.selected_objects) == 0:
                     return None
@@ -50454,7 +50439,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                     return None
 
                 inRig = motion.get_director(bpy.context.active_object.name)
-                if inRig == False:
+                if not inRig:
                     return None
                 outRig = inRig["oni_motion_actor"]
 
@@ -50556,7 +50541,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 col = box.column(align=True)
                 row = col.row(align=True)
                 motion_view_map_menu_enabled_icon = "menu_closed"
-                if oni_motion.motion_view_map_menu_enabled == True:
+                if oni_motion.motion_view_map_menu_enabled:
                     motion_view_map_menu_enabled_icon = "menu_opened"
                 row.prop(
                     oni_motion,
@@ -50567,9 +50552,9 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                         motion_view_map_menu_enabled_icon
                     ].icon_id,
                 )
-                if oni_motion.motion_view_map_menu_enabled == True:
+                if oni_motion.motion_view_map_menu_enabled:
                     motion_rename_map = inRig.get("oni_onemap_rename")
-                    if motion_rename_map == None:
+                    if motion_rename_map is None:
                         return None
 
                     for in_bone in motion_rename_map:
@@ -50588,7 +50573,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
 
         oni_mapper = bpy.context.window_manager.oni_mapper
 
-        if oni_mapper.bone_control_menu_enabled == True:
+        if oni_mapper.bone_control_menu_enabled:
             bone_control_menu_enabled_icon = "menu_opened"
         else:
             bone_control_menu_enabled_icon = "menu_closed"
@@ -50602,7 +50587,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             text="Bone Control",
             icon_value=ico.custom_icons[bone_control_menu_enabled_icon].icon_id,
         )
-        if oni_mapper.bone_control_menu_enabled == True:
+        if oni_mapper.bone_control_menu_enabled:
             layout = self.layout
 
             box = layout.box()
@@ -50644,7 +50629,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 icon_value=ico.custom_icons["joint"].icon_id,
             )
 
-            if oni_joints.joints_show == True:
+            if oni_joints.joints_show:
                 row = col.row(align=True)
                 for bone in joints_selected_list:
                     row.prop(
@@ -50691,7 +50676,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 toggle=True,
             )
 
-            if oni_mapper.mapper_rebuild_rig == True:
+            if oni_mapper.mapper_rebuild_rig:
                 row = col.row(align=True)
                 row.prop(
                     oni_mapper,
@@ -50712,7 +50697,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                     toggle=True,
                 )
 
-            if oni_mapper.mapper_pack_bones == True:
+            if oni_mapper.mapper_pack_bones:
 
                 col = box.column(align=True)
                 row = col.row(align=True)
@@ -50808,20 +50793,20 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             align_last_text = "Last"
 
             if bpy.context.mode == "POSE":
-                if oni_align_bones.first != True:
+                if not oni_align_bones.first:
                     if len(bpy.context.selected_pose_bones) == 1:
                         align_first_icon = "dot_red"
                 else:
                     align_first_text = globals.align_bones["first"].name
-                if oni_align_bones.last != True:
+                if not oni_align_bones.last:
                     if len(bpy.context.selected_pose_bones) == 1:
                         align_last_icon = "dot_red"
                 else:
                     align_last_text = globals.align_bones["last"].name
 
-            if oni_align_bones.first == True:
+            if oni_align_bones.first:
                 align_first_icon = "dot_green"
-            if oni_align_bones.last == True:
+            if oni_align_bones.last:
                 align_last_icon = "dot_green"
             col = box.column(align=True)
 
@@ -50898,7 +50883,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 )
 
         oni_motion = bpy.context.window_manager.oni_motion
-        if oni_motion.clean_motion_menu_enabled == True:
+        if oni_motion.clean_motion_menu_enabled:
             clean_motion_menu_enabled_icon = "menu_opened"
         else:
             clean_motion_menu_enabled_icon = "menu_closed"
@@ -50911,7 +50896,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             text="Clean Motion",
             icon_value=ico.custom_icons[clean_motion_menu_enabled_icon].icon_id,
         )
-        if oni_motion.clean_motion_menu_enabled == True:
+        if oni_motion.clean_motion_menu_enabled:
             layout = self.layout
             box = layout.box()
             col = box.column(align=True)
@@ -51023,7 +51008,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
 
         oni_shape = bpy.context.window_manager.oni_shape
         oni = bpy.context.scene.onigiri
-        if oni_shape.shape_menu_enabled == True:
+        if oni_shape.shape_menu_enabled:
             shape_menu_enabled_icon = "menu_opened"
         else:
             shape_menu_enabled_icon = "menu_closed"
@@ -51037,7 +51022,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 text="Shape Configuration",
                 icon_value=ico.custom_icons[shape_menu_enabled_icon].icon_id,
             )
-            if oni_shape.shape_menu_enabled == True:
+            if oni_shape.shape_menu_enabled:
 
                 layout = self.layout
                 box = layout.box()
@@ -51088,7 +51073,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                     selected = bpy.context.selected_objects
                     if len(selected) == 1:
                         if selected[0].type == "ARMATURE":
-                            if selected[0].get("oni_shape_data") != None:
+                            if selected[0].get("oni_shape_data") is not None:
                                 rig_has_shape_data = True
 
                     if rig_has_shape_data:
@@ -51167,7 +51152,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
 
             oni_sliders = bpy.context.scene.oni_sliders
             sliders_menu_enabled_icon = "menu_closed"
-            if oni_sliders.sliders_menu_enabled == True:
+            if oni_sliders.sliders_menu_enabled:
                 sliders_menu_enabled_icon = "menu_opened"
 
             row.prop(
@@ -51178,7 +51163,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 icon_value=ico.custom_icons[sliders_menu_enabled_icon].icon_id,
             )
 
-            if oni_sliders.sliders_menu_enabled == True:
+            if oni_sliders.sliders_menu_enabled:
 
                 box = layout.box()
                 col = box.column(align=True)
@@ -51236,7 +51221,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                         rig_is_selected = True
                         sliders_rig = bpy.context.selected_objects[0]
                 if rig_is_selected:
-                    if oni_sliders.sliders_show_all == True:
+                    if oni_sliders.sliders_show_all:
                         for boneObj in sliders_rig.pose.bones:
                             sliders_bones.append(boneObj)
                     else:
@@ -51312,7 +51297,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                         icon_value=ico.custom_icons[slider_bone_icon].icon_id,
                     )
                     row = col.row(align=True)
-                    if oni_sliders.sliders_location == True:
+                    if oni_sliders.sliders_location:
                         row = col.row(align=True)
                         row.prop(
                             data=oni_sliders,
@@ -51355,7 +51340,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                             slider=True,
                             text="",
                         )
-                    elif oni_sliders.sliders_scale == True:
+                    elif oni_sliders.sliders_scale:
                         row = col.row(align=True)
                         row.scale_x = slider_size
                         row.scale_y = slider_size
@@ -51441,7 +51426,7 @@ class OnigiriInheritProperties(bpy.types.PropertyGroup):
     )
 
     def update_inherit_target_lock(self, context):
-        if self.inherit_target_lock == True:
+        if self.inherit_target_lock:
             selected = bpy.context.selected_objects
             if len(selected) != 1:
                 print("Total selected objects must be 1")
@@ -51489,7 +51474,7 @@ class OnigiriInheritAnimation(bpy.types.Operator):
     def poll(cls, context):
         oni_inherit = bpy.context.window_manager.oni_inherit
 
-        if oni_inherit.get("target") == None:
+        if oni_inherit.get("target") is None:
             return False
         name = oni_inherit["target"].name
         if name not in bpy.context.scene.objects:
@@ -51504,11 +51489,11 @@ class OnigiriInheritAnimation(bpy.types.Operator):
             return False
         if o.type != "ARMATURE":
             return False
-        if o.animation_data == None:
+        if o.animation_data is None:
             return False
-        if o.animation_data.action == None:
+        if o.animation_data.action is None:
             return False
-        if o.get("oni_onemap_rename") == None:
+        if o.get("oni_onemap_rename") is None:
             return False
         return True
 
@@ -51573,7 +51558,7 @@ class OnigiriInheritAnimation(bpy.types.Operator):
         result = animutils.bake_motion(
             sarm=parmObj, tarm=tarmObj, frame_start=sframe_start, frame_end=sframe_end
         )
-        if result == False:
+        if not result:
             print("The transfer failed")
 
         for o in bpy.context.selected_objects:
@@ -51626,7 +51611,7 @@ class OnigiriInheritReverseMap(bpy.types.Operator):
         if len(bpy.context.selected_objects) != 1:
             return False
         o = bpy.context.selected_objects[0]
-        if o.get("oni_onemap_rename") == None:
+        if o.get("oni_onemap_rename") is None:
             return False
         return True
 
@@ -51724,14 +51709,14 @@ class OnigiriMotionProperties(bpy.types.PropertyGroup):
             self["motion_interactive_menu_enabled"] = False
             return
 
-        if self.motion_interactive_menu_enabled == True:
+        if self.motion_interactive_menu_enabled:
             inRig = motion.get_director(selected[0])
-            if inRig == False:
+            if not inRig:
                 print("No director")
                 self["motion_interactive_menu_enabled"] = False
                 return
             outRig = inRig.get("oni_motion_actor")
-            if outRig == None:
+            if outRig is None:
                 print("No actor")
                 self["motion_interactive_menu_enabled"] = False
                 return
@@ -51752,7 +51737,7 @@ class OnigiriMotionProperties(bpy.types.PropertyGroup):
             utils.get_state()
             if inRig != False:
                 outRig = inRig.get("oni_motion_actor")
-                if outRig != None:
+                if outRig is not None:
                     outRig.select_set(True)
                     utils.activate(outRig)
 
@@ -51821,7 +51806,7 @@ class OnigiriMotionProperties(bpy.types.PropertyGroup):
             self["motion_constrain_location"] = False
             return
         inRig = motion.get_director(selected[0])
-        if inRig == False:
+        if not inRig:
             print("No director")
             self["motion_constrain_location"] = False
             return
@@ -51866,7 +51851,7 @@ class OnigiriMotionProperties(bpy.types.PropertyGroup):
             return
         armObj = bpy.context.selected_objects[0]
         inRig = motion.get_director(armObj)
-        if inRig == False:
+        if not inRig:
             self["motion_use_shapes"] = False
             return
         outRig = inRig["oni_motion_actor"]
@@ -51896,9 +51881,9 @@ class OnigiriMotionRemoveObjectAnimation(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.animation_data == None:
+        if o.animation_data is None:
             return False
-        if o.animation_data.action == None:
+        if o.animation_data.action is None:
             return False
         return True
 
@@ -51938,9 +51923,9 @@ class OnigiriMotionApplyTransforms(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.animation_data == None:
+        if o.animation_data is None:
             return False
-        if o.animation_data.action == None:
+        if o.animation_data.action is None:
             return False
         return True
 
@@ -51952,7 +51937,7 @@ class OnigiriMotionApplyTransforms(bpy.types.Operator):
 
         result = animutils.apply_transforms(tarmObj, report=True)
 
-        if result == False:
+        if not result:
             print("The call to animutils::apply_transforms seems to have failed")
             popup("Motion transfer failed", "Error", "ERROR")
             return {"FINISHED"}
@@ -51975,9 +51960,9 @@ class OnigiriMotionRemoveTransforms(bpy.types.Operator):
             return False
         o = bpy.context.selected_objects[0]
 
-        if o.animation_data == None:
+        if o.animation_data is None:
             return False
-        if o.animation_data.action == None:
+        if o.animation_data.action is None:
             return False
         return True
 
@@ -52028,9 +52013,9 @@ class OnigiriMotionCycleRig(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.animation_data == None:
+        if o.animation_data is None:
             return False
-        if o.animation_data.action == None:
+        if o.animation_data.action is None:
             return False
         return True
 
@@ -52041,7 +52026,7 @@ class OnigiriMotionCycleRig(bpy.types.Operator):
         armObj = bpy.context.selected_objects[0]
 
         newObj = rigutils.cycle_rig(armObj)
-        if newObj == False:
+        if not newObj:
             print("Couldn't recycle rig")
             popup("Cycle failed", "Error", "ERROR")
 
@@ -52063,11 +52048,11 @@ class OnigiriMotionHipCorrectionStart(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.animation_data == None:
+        if o.animation_data is None:
             return False
-        if o.animation_data.action == None:
+        if o.animation_data.action is None:
             return False
-        if motion.props["hip_start"] != None:
+        if motion.props["hip_start"] is not None:
             return False
 
         if motion.props["hip_rig"] == o:
@@ -52101,11 +52086,11 @@ class OnigiriMotionHipCorrectionEnd(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.animation_data == None:
+        if o.animation_data is None:
             return False
-        if o.animation_data.action == None:
+        if o.animation_data.action is None:
             return False
-        if motion.props["hip_start"] == None:
+        if motion.props["hip_start"] is None:
             return False
         return True
 
@@ -52219,7 +52204,7 @@ class OnigiriMotionMapLoad(bpy.types.Operator, ImportHelper):
                 bone_map[tbone] = sbone
             armObj["oni_onemap_rename"] = bone_map
 
-        if template.get("lock") != None:
+        if template.get("lock") is not None:
             lock_map = template["lock"]
             armObj["oni_onemap_lock"] = lock_map
             print("Lock map loaded!")
@@ -52271,9 +52256,9 @@ class OnigiriMotionMapSave(bpy.types.Operator, ExportHelper):
         if o.type != "ARMATURE":
             return False
         inRig = motion.get_director(o)
-        if inRig == False:
+        if not inRig:
             return False
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             return False
         return True
 
@@ -52282,7 +52267,7 @@ class OnigiriMotionMapSave(bpy.types.Operator, ExportHelper):
         inRig = bpy.context.selected_objects[0]
 
         armObj = motion.get_director(inRig)
-        if armObj == False:
+        if not armObj:
             print("No director found for saving the map from")
             popup("No director found", "Error", "ERROR")
             return {"FINISHED"}
@@ -52293,7 +52278,7 @@ class OnigiriMotionMapSave(bpy.types.Operator, ExportHelper):
         ext = name.split(".")[-1]
 
         result = snap.save_map(input=armObj, file=self.filepath)
-        if result == False:
+        if not result:
             print("Something weird happened when saving the map")
             popup("Something strange happened when saving", "Error", "ERROR")
 
@@ -52350,7 +52335,7 @@ class OnigiriMotionMapClean(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        if o.get("oni_onemap_rename") == None:
+        if o.get("oni_onemap_rename") is None:
             return False
         return True
 
@@ -52398,7 +52383,7 @@ class OnigiriMotionReset(bpy.types.Operator):
 
             inRig.show_in_front = inRig.pop("oni_show_in_front", True)
 
-            if proxyRig != None:
+            if proxyRig is not None:
                 if proxyRig.name in bpy.context.scene.objects:
 
                     print("Proxy rig found", proxyRig.name, "marking for deletion")
@@ -52413,7 +52398,7 @@ class OnigiriMotionReset(bpy.types.Operator):
 
             stickyRig = inRig.get("oni_motion_stabilizer")
             inRig.pop("oni_motion_stabilizer", "")
-            if stickyRig != None:
+            if stickyRig is not None:
                 if stickyRig.name in bpy.context.scene.objects:
                     print("Sticky rig found", stickyRig.name, "marking for deletion")
                     stickyRig.hide_set(False)
@@ -52490,7 +52475,7 @@ class OnigiriMotionAction(bpy.types.Operator):
         if o.type != "ARMATURE":
             return False
 
-        if o.get("oni_motion_actor") != None or o.get("oni_motion_director") != None:
+        if o.get("oni_motion_actor") is not None or o.get("oni_motion_director") is not None:
             return False
         return True
 
@@ -52508,12 +52493,12 @@ class OnigiriMotionAction(bpy.types.Operator):
 
         rigutils.get_layer_state(inRig)
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = {}
 
-        if oni_motion.motion_glue == True:
+        if oni_motion.motion_glue:
             result = motion.retarget_hard(inRig)
-            if result == False:
+            if not result:
                 print("An error occurred when attempting to engage the retargeter")
                 popup("There was an error, see console", "Error", "ERROR")
                 return {"FINISHED"}
@@ -52521,7 +52506,7 @@ class OnigiriMotionAction(bpy.types.Operator):
             inRig["oni_motion_glue"] = True
         else:
             result = motion.retarget_soft(inRig)
-            if result == False:
+            if not result:
                 print("An error occurred when attempting to engage the retargeter")
                 popup("There was an error, see console", "Error", "ERROR")
                 return {"FINISHED"}
@@ -52530,16 +52515,16 @@ class OnigiriMotionAction(bpy.types.Operator):
             o.select_set(False)
         outRig = inRig["oni_motion_actor"]
 
-        if oni_motion.motion_to_animation == True:
+        if oni_motion.motion_to_animation:
             has_action = False
-            if inRig.animation_data != None:
-                if inRig.animation_data.action != None:
+            if inRig.animation_data is not None:
+                if inRig.animation_data.action is not None:
                     has_action = True
                     inRig.select_set(True)
                     utils.activate(inRig)
                     print("Running acquire_animation_details")
                     bpy.ops.onigiri.acquire_animation_details()
-            if has_action == False:
+            if not has_action:
                 print(
                     "No animation to transfer, you can still inherit motion but your time settings must be set manually"
                 )
@@ -52547,7 +52532,7 @@ class OnigiriMotionAction(bpy.types.Operator):
         motion.add_groups(inRig=inRig, outRig=outRig)
 
         result = motion.update_map(inRig=inRig)
-        if result == False:
+        if not result:
             print(
                 "motion update_map returned False, is this a Match Map and you forgot to tick Custom Target when not using an SL rig?"
             )
@@ -52568,7 +52553,7 @@ class OnigiriMotionAction(bpy.types.Operator):
             if tbone in outRig.data.bones:
                 outRig.data.bones[tbone].hide = False
 
-        if inRig.get("oni_onemap_lock") != None:
+        if inRig.get("oni_onemap_lock") is not None:
             lock_map = inRig["oni_onemap_lock"].to_dict()
             for bone in lock_map:
                 if bone not in outRig.data.bones:
@@ -52616,7 +52601,7 @@ class OnigiriMotionAction(bpy.types.Operator):
                 blender3 = True
                 boneObj.custom_shape_scale_xyz = (0.5, 0.5, 0.05)
 
-        if blender3 == True:
+        if blender3:
             print("Detected Blender 3 and adjusted property for custom shape scale")
 
         outRig.data.show_bone_custom_shapes = oni_motion.motion_use_shapes
@@ -52649,7 +52634,7 @@ class OnigiriMotionAnchor(bpy.types.Operator):
         oni_motion = bpy.context.window_manager.oni_motion
         armObj = bpy.context.selected_objects[0]
         inRig = motion.get_director(armObj)
-        if inRig == False:
+        if not inRig:
             print("Nothing to do without a set")
             return {"FINISHED"}
         outRig = inRig["oni_motion_actor"]
@@ -52734,7 +52719,7 @@ class OnigiriMotionViewBones(bpy.types.Operator):
     def execute(self, context):
         oni_motion = bpy.context.window_manager.oni_motion
         inRig = motion.get_director(bpy.context.selected_objects[0].name)
-        if inRig == False:
+        if not inRig:
             print("The Director rig is not available")
             return {"FINISHED"}
         outRig = inRig["oni_motion_actor"]
@@ -52747,7 +52732,7 @@ class OnigiriMotionViewBones(bpy.types.Operator):
             for boneObj in outRig.data.bones:
                 boneObj.hide = False
         else:
-            if rename_map == None:
+            if rename_map is None:
                 print("No map is available")
                 return {"FINISHED"}
 
@@ -52774,7 +52759,7 @@ class OnigiriMotionHideTarget(bpy.types.Operator):
     def execute(self, context):
         armObj = bpy.context.selected_objects[0]
         inRig = motion.get_director(armObj)
-        if inRig == False:
+        if not inRig:
             print("No director present")
             return {"FINISHED"}
         outRig = inRig["oni_motion_actor"]
@@ -52797,7 +52782,7 @@ class OnigiriMotionMapSelect(bpy.types.Operator):
     def execute(self, context):
         inRig = bpy.context.selected_objects[0]
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = {}
 
         rename_map = inRig["oni_onemap_rename"]
@@ -52825,7 +52810,7 @@ class OnigiriMotionMapAdd(bpy.types.Operator):
         if o.type != "ARMATURE":
             return False
         inRig = motion.get_director(o)
-        if inRig == False:
+        if not inRig:
             return False
         return True
 
@@ -52839,7 +52824,7 @@ class OnigiriMotionMapAdd(bpy.types.Operator):
 
         inRig = bpy.context.selected_objects[0]
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = {}
         outRig = inRig["oni_motion_actor"]
 
@@ -52886,14 +52871,14 @@ class OnigiriMotionMapRemove(bpy.types.Operator):
         if o.type != "ARMATURE":
             return False
         inRig = motion.get_director(o)
-        if inRig == False:
+        if not inRig:
             return False
         return True
 
     def execute(self, context):
         inRig = bpy.context.selected_objects[0]
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = {}
 
         rename_map = inRig["oni_onemap_rename"]
@@ -52952,7 +52937,7 @@ class OnigiriMotionMapSelect(bpy.types.Operator):
     def execute(self, context):
         inRig = bpy.context.selected_objects[0]
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = {}
 
         rename_map = inRig["oni_onemap_rename"]
@@ -52985,9 +52970,9 @@ class OnigiriMotionLockSelected(bpy.types.Operator):
         if o.type != "ARMATURE":
             return False
         inRig = motion.get_director(o)
-        if inRig == False:
+        if not inRig:
             return False
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             return False
         if len(bpy.context.selected_pose_bones) == 0:
             return False
@@ -53000,19 +52985,19 @@ class OnigiriMotionLockSelected(bpy.types.Operator):
         armObj = bpy.context.selected_objects[0]
         inRig = motion.get_director(armObj)
 
-        if inRig == False:
+        if not inRig:
             print("Couldn't find the director")
             popup("No actor/director association", "Error", "ERROR")
             return {"FINISHED"}
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             print(
                 "No map available, this tool needs a map in order to enable the transforms"
             )
             popup("No map avaialble, see console", "No map", "INFO")
             return {"FINISHED"}
 
-        if inRig.get("oni_onemap_rename") == None:
+        if inRig.get("oni_onemap_rename") is None:
             inRig["oni_onemap_rename"] = {}
         outRig = inRig["oni_motion_actor"]
         rename_map = inRig["oni_onemap_rename"]
@@ -53115,16 +53100,16 @@ class OnigiriMotionLockRemove(bpy.types.Operator):
         armObj = bpy.context.selected_objects[0]
         inRig = motion.get_director(armObj)
 
-        if inRig == False:
+        if not inRig:
             print("Couldn't find the director, will cleanup existing rig instead...")
-            if armObj.get("oni_onemap_lock") != None:
+            if armObj.get("oni_onemap_lock") is not None:
                 del armObj["oni_onemap_lock"]
                 print("Lock map removed from selected rig!")
             else:
                 print("No lock map found on the selected rig")
             return {"FINISHED"}
         else:
-            if inRig.get("oni_onemap_lock") == None:
+            if inRig.get("oni_onemap_lock") is None:
                 print("No lock map existed on the director")
             else:
                 inRig.pop("oni_onemap_lock")
@@ -53154,12 +53139,12 @@ class OnigiriMotionApplyScale(bpy.types.Operator):
         armObj = bpy.context.selected_objects[0]
         inRig = motion.get_director(armObj)
 
-        if inRig == False:
+        if not inRig:
             print("Couldn't find the director")
             popup("No director found", "Error", "ERROR")
             return {"FINISHED"}
 
-        if inRig.get("oni_motion_actor") == None:
+        if inRig.get("oni_motion_actor") is None:
             print("not an actor")
             popup("Not an actor", "Error", "ERROR")
             return {"FINISHED"}
@@ -53204,8 +53189,8 @@ class OnigiriAnimationPanel(bpy.types.Panel):
         if len(bpy.context.selected_objects) == 1:
             o = bpy.context.selected_objects[0]
             if o.type == "ARMATURE":
-                if o.animation_data != None:
-                    if o.animation_data.action != None:
+                if o.animation_data is not None:
+                    if o.animation_data.action is not None:
                         animation_start_frame, animation_end_frame = (
                             o.animation_data.action.frame_range
                         )
@@ -53252,7 +53237,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
         row = self.layout.row(align=True)
 
-        if anim.anim_menu_enabled == True:
+        if anim.anim_menu_enabled:
             menu_state = "menu_opened"
         else:
             menu_state = "menu_closed"
@@ -53263,7 +53248,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             text="Anim Export Features",
             icon_value=ico.custom_icons[menu_state].icon_id,
         )
-        if anim.anim_menu_enabled == True:
+        if anim.anim_menu_enabled:
 
             layout = self.layout
             box = layout.box()
@@ -53294,7 +53279,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 icon_value=ico.custom_icons["code"].icon_id,
             )
             row = col.row(align=True)
-            if anim.anim_details == True:
+            if anim.anim_details:
                 row.prop(
                     anim,
                     "anim_details_time",
@@ -53416,7 +53401,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 icon_value=ico.custom_icons["split"].icon_id,
             )
 
-            if oni_split.split_enabled == True:
+            if oni_split.split_enabled:
                 row = col.row(align=True)
                 row.prop(
                     oni_split,
@@ -53570,7 +53555,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
             row.alert = anim.export_sl_anim_alert
             export_sl_anim_label = "Export Animation"
-            if anim.export_sl_anim_alert == True:
+            if anim.export_sl_anim_alert:
                 export_sl_anim_label = "Exporting, please wait..."
             row.scale_y = 1.4
             row.operator(
@@ -53619,7 +53604,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 icon_value=ico.custom_icons["linear"].icon_id,
             )
 
-            if anim.anim_high_fidelity == True:
+            if anim.anim_high_fidelity:
                 row = col.row(align=True)
                 row.enabled = anim.anim_high_fidelity
                 row.prop(
@@ -53711,7 +53696,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 icon_value=ico.custom_icons["blank"].icon_id,
             )
 
-            if onia.disable_location_offsets == True:
+            if onia.disable_location_offsets:
                 disable_location_offsets_icon = "check_red"
             else:
                 disable_location_offsets_icon = "check_black"
@@ -53731,7 +53716,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 icon_value=ico.custom_icons["anchor"].icon_id,
             )
 
-            if oni.export_onigiri_disabled == True:
+            if oni.export_onigiri_disabled:
                 export_onigiri_disabled_icon = "check_red"
             else:
                 export_onigiri_disabled_icon = "check_black"
@@ -53745,7 +53730,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
             row = col.row(align=True)
 
-            if oni.export_avastar_disabled == True:
+            if oni.export_avastar_disabled:
                 export_avastar_disabled_icon = "check_red"
             else:
                 export_avastar_disabled_icon = "check_black"
@@ -53756,7 +53741,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 icon_value=ico.custom_icons[export_avastar_disabled_icon].icon_id,
             )
 
-            if oni.export_avastar_deform_bones == True:
+            if oni.export_avastar_deform_bones:
                 export_avastar_deform_bones_icon = "check_red"
             else:
                 export_avastar_deform_bones_icon = "check_black"
@@ -53769,7 +53754,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             )
 
             anim_unfold_menu_enabled_icon = "menu_closed"
-            if anim.anim_unfold_menu_enabled == True:
+            if anim.anim_unfold_menu_enabled:
                 anim_unfold_menu_enabled_icon = "menu_opened"
             col = box.column(align=True)
             row = col.row(align=True)
@@ -53781,7 +53766,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 icon_value=ico.custom_icons[anim_unfold_menu_enabled_icon].icon_id,
             )
 
-            if anim.anim_unfold_menu_enabled == True:
+            if anim.anim_unfold_menu_enabled:
 
                 col = box.column(align=True)
 
@@ -53821,7 +53806,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     row = col.row(align=True)
 
                 native_features_menu_enabled_icon = "menu_closed"
-                if anim.native_features_menu_enabled == True:
+                if anim.native_features_menu_enabled:
                     native_features_menu_enabled_icon = "menu_opened"
 
                 col = box.column(align=True)
@@ -53836,11 +53821,11 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     ].icon_id,
                 )
 
-                if anim.native_features_menu_enabled == True:
+                if anim.native_features_menu_enabled:
 
                     row = col.row(align=True)
 
-                    if anim.mark_tol_options == True:
+                    if anim.mark_tol_options:
                         mark_tol_options_icon = "menu_opened"
                     else:
                         mark_tol_options_icon = "menu_closed"
@@ -53850,7 +53835,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
                     row.alert = anim.export_sl_anim_old_alert
                     export_sl_anim_old_label = "Use old exporter"
-                    if anim.export_sl_anim_old_alert == True:
+                    if anim.export_sl_anim_old_alert:
                         export_sl_anim_old_label = "Exporting, please wait..."
                     row.scale_y = 1.3
                     row.operator(
@@ -53879,7 +53864,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     )
 
                     row = col.row(align=True)
-                    if anim.mark_tol_options == True:
+                    if anim.mark_tol_options:
                         col = box.column(align=True)
                         row = col.row(align=True)
 
@@ -54045,8 +54030,8 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                                     dBone = pBone.bone
                                     selected_bone = dBone.name
                                     if (
-                                        dBone.get("cleaner") != None
-                                        and dBone["cleaner"].get("bone") != None
+                                        dBone.get("cleaner") is not None
+                                        and dBone["cleaner"].get("bone") is not None
                                     ):
                                         bone_rot_text = (
                                             "Rotation: "
@@ -54057,14 +54042,14 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                                             + dBone["cleaner"]["bone"]["loc_text"]
                                         )
                                     if (
-                                        dBone.get("cleaner") != None
-                                        and dBone["cleaner"].get("frames") != None
+                                        dBone.get("cleaner") is not None
+                                        and dBone["cleaner"].get("frames") is not None
                                     ):
                                         if (
                                             dBone["cleaner"]["frames"].get(
                                                 frame_current
                                             )
-                                            != None
+                                            is not None
                                         ):
                                             key_rot_text = (
                                                 "Rotation: "
@@ -54105,7 +54090,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                             row.label(text="    - " + key_loc_text)
 
                     anim_joint_priority_menu_enabled_icon = "menu_closed"
-                    if anim.anim_joint_priority_menu_enabled == True:
+                    if anim.anim_joint_priority_menu_enabled:
                         anim_joint_priority_menu_enabled_icon = "menu_opened"
 
                     col = box.column(align=True)
@@ -54122,7 +54107,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     )
                     row = col.row(align=True)
 
-                    if anim.anim_joint_priority_menu_enabled == True:
+                    if anim.anim_joint_priority_menu_enabled:
 
                         col = box.column(align=True)
                         row = col.row(align=True)
@@ -54170,11 +54155,11 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                             toggle=True,
                         )
 
-                        if anim.anim_joint_priority_view_enabled == True:
+                        if anim.anim_joint_priority_view_enabled:
                             if selected_pose_bones() != False:
                                 for boneObj in bpy.context.selected_pose_bones:
                                     priority = boneObj.get("priority")
-                                    if priority == None:
+                                    if priority is None:
                                         priority = anim.anim_base_priority
 
                                     enabled = "No "
@@ -54193,7 +54178,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     col = box.column(align=True)
                     row = col.row(align=True)
                     anim_interpolation_menu_enabled_icon = "menu_closed"
-                    if anim.anim_interpolation_menu_enabled == True:
+                    if anim.anim_interpolation_menu_enabled:
                         anim_interpolation_menu_enabled_icon = "menu_opened"
 
                     row.prop(
@@ -54205,7 +54190,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         ].icon_id,
                     )
 
-                    if anim.anim_interpolation_menu_enabled == True:
+                    if anim.anim_interpolation_menu_enabled:
 
                         row = col.row(align=True)
                         box.label(
@@ -54247,7 +54232,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                             ).mode = interp
 
                     anim_expression_menu_enabled_icon = "menu_closed"
-                    if anim.anim_expression_menu_enabled == True:
+                    if anim.anim_expression_menu_enabled:
                         anim_expression_menu_enabled_icon = "menu_opened"
 
                     col = box.column(align=True)
@@ -54261,7 +54246,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         ].icon_id,
                     )
 
-                    if anim.anim_expression_menu_enabled == True:
+                    if anim.anim_expression_menu_enabled:
                         row = col.row(align=True)
                         box.prop(
                             anim,
@@ -54279,7 +54264,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         col = box.column(align=True)
                         row = col.row(align=True)
                         anim_emote_menu_enabled_icon = "menu_closed"
-                        if anim.anim_emote_menu_enabled == True:
+                        if anim.anim_emote_menu_enabled:
                             anim_emote_menu_enabled_icon = "menu_opened"
                         row.prop(
                             anim,
@@ -54289,7 +54274,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                                 anim_emote_menu_enabled_icon
                             ].icon_id,
                         )
-                        if anim.anim_emote_menu_enabled == True:
+                        if anim.anim_emote_menu_enabled:
                             col = box.column(align=True)
                             row = col.row(align=True)
 
@@ -54315,12 +54300,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                                 else:
                                     chosen_icon = "blank"
                                 p = gestures.emote[emote].get("priority")
-                                if p != None:
+                                if p is not None:
                                     p = str(p)
                                 l = gestures.emote[emote].get("looped")
-                                if l == True:
+                                if l:
                                     l = "yes"
-                                elif l == False:
+                                elif not l:
                                     l = "no"
                                 else:
                                     l = "unknown"
@@ -54335,7 +54320,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                                     icon_value=ico.custom_icons[chosen_icon].icon_id,
                                 ).emote = emote
 
-                        if anim.anim_show_actions == True:
+                        if anim.anim_show_actions:
                             col = box.column(align=True)
                             row = col.row(align=True)
                             row.label(
@@ -54353,7 +54338,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                                 )
 
         row = self.layout.row(align=True)
-        if bpy.context.scene.onigiri.bvh_menu_enabled == False:
+        if not bpy.context.scene.onigiri.bvh_menu_enabled:
             menu_state = "menu_closed"
         else:
             menu_state = "menu_opened"
@@ -54366,12 +54351,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             icon_value=ico.custom_icons[menu_state].icon_id,
         )
 
-        if bpy.context.scene.onigiri.bvh_menu_enabled == True:
+        if bpy.context.scene.onigiri.bvh_menu_enabled:
             oni = bpy.context.scene.onigiri
             onia = bpy.context.scene.oni_anim_props
             oni_anim = bpy.context.scene.oni_anim
 
-            if oni.bvh_to_sl == True:
+            if oni.bvh_to_sl:
                 bvh_to_sl_icon = "check_green"
             else:
                 bvh_to_sl_icon = "check_black"
@@ -54401,7 +54386,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             row = col.row(align=True)
 
         extended_animation_options_icon = "menu_closed"
-        if oni.extended_animation_options == True:
+        if oni.extended_animation_options:
             extended_animation_options_icon = "menu_opened"
 
         row = self.layout.row(align=True)
@@ -54413,34 +54398,34 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             icon_value=ico.custom_icons[extended_animation_options_icon].icon_id,
         )
 
-        if oni.extended_animation_options == True:
+        if oni.extended_animation_options:
 
-            if oni.export_onigiri_disabled == True:
+            if oni.export_onigiri_disabled:
                 export_onigiri_disabled_icon = "check_red"
             else:
                 export_onigiri_disabled_icon = "check_black"
 
-            if oni.export_sl_limitations_check_disabled == True:
+            if oni.export_sl_limitations_check_disabled:
                 export_sl_limitations_check_disabled_icon = "check_red"
             else:
                 export_onigiri_disabled_icon = "check_black"
 
-            if oni.export_volume_motion == True:
+            if oni.export_volume_motion:
                 export_volume_motion_icon = "check_green"
             else:
                 export_volume_motion_icon = "check_black"
 
-            if oni.bake_animation == True:
+            if oni.bake_animation:
                 bake_animation_icon = "check_yellow"
             else:
                 bake_animation_icon = "check_black"
 
-            if onia.disable_location_offsets == True:
+            if onia.disable_location_offsets:
                 disable_location_offsets_icon = "check_red"
             else:
                 disable_location_offsets_icon = "check_black"
 
-            if oni.export_translations == True:
+            if oni.export_translations:
                 export_translations_icon = "check_red"
             else:
                 export_translations_icon = "check_black"
@@ -54505,7 +54490,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
         oni_deform = bpy.context.window_manager.oni_deform
         row = self.layout.row(align=True)
         deformer_menu_enabled_icon = "menu_closed"
-        if oni_deform.deformer_menu_enabled == True:
+        if oni_deform.deformer_menu_enabled:
             deformer_menu_enabled_icon = "menu_opened"
         row.prop(
             context.window_manager.oni_deform,
@@ -54513,7 +54498,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             text="Deformer",
             icon_value=ico.custom_icons[deformer_menu_enabled_icon].icon_id,
         )
-        if oni_deform.deformer_menu_enabled == True:
+        if oni_deform.deformer_menu_enabled:
             layout = self.layout
             box = layout.box()
             col = box.column(align=True)
@@ -54558,7 +54543,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 icon_value=ico.custom_icons["undeform"].icon_id,
             )
 
-        if context.scene.oni_anim_props.scale_animation_menu == True:
+        if context.scene.oni_anim_props.scale_animation_menu:
             scale_animation_menu_icon = "menu_opened"
         else:
             scale_animation_menu_icon = "menu_closed"
@@ -54569,7 +54554,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             text="Resize Animation ",
             icon_value=ico.custom_icons[scale_animation_menu_icon].icon_id,
         )
-        if context.scene.oni_anim_props.scale_animation_menu == True:
+        if context.scene.oni_anim_props.scale_animation_menu:
             layout = self.layout
             box = layout.box()
             col = box.column(align=True)
@@ -54594,7 +54579,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
         onia = bpy.context.scene.oni_anim_props
 
-        if onia.reference_pose_menu_enabled == True:
+        if onia.reference_pose_menu_enabled:
             reference_pose_menu_enabled_icon = "menu_opened"
         else:
             reference_pose_menu_enabled_icon = "menu_closed"
@@ -54607,7 +54592,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             icon_value=ico.custom_icons[reference_pose_menu_enabled_icon].icon_id,
         )
 
-        if onia.reference_pose_menu_enabled == True:
+        if onia.reference_pose_menu_enabled:
             layout = self.layout
             box = layout.box()
             col = box.column(align=True)
@@ -54725,7 +54710,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             )
 
         anim_misc_menu_enabled_icon = "menu_closed"
-        if oni_anim.anim_misc_menu_enabled == True:
+        if oni_anim.anim_misc_menu_enabled:
             anim_misc_menu_enabled_icon = "menu_opened"
 
         row = self.layout.row(align=True)
@@ -54736,7 +54721,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             icon_value=ico.custom_icons[anim_misc_menu_enabled_icon].icon_id,
         )
 
-        if oni_anim.anim_misc_menu_enabled == True:
+        if oni_anim.anim_misc_menu_enabled:
             layout = self.layout
             box = layout.box()
             col = box.column(align=True)
@@ -54792,7 +54777,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             text="Enable Posing Library",
             icon_value=ico.custom_icons["pose_library"].icon_id,
         )
-        if ccl.pose_enable_library == True:
+        if ccl.pose_enable_library:
 
             layout = self.layout
             box = layout.box()
@@ -54880,11 +54865,11 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             selected = bpy.context.selected_objects
             if len(selected) == 1:
                 if selected[0].type == "ARMATURE":
-                    if selected[0].get("oni_onemap_rename") != None:
+                    if selected[0].get("oni_onemap_rename") is not None:
                         if len(selected[0]["oni_onemap_rename"]) > 0:
                             pose_rename_map_text = "Conversion Map Present"
                             pose_rename_map_icon = "dot_red"
-                    if selected[0].get("oni_onemap_pose") != None:
+                    if selected[0].get("oni_onemap_pose") is not None:
                         if len(selected[0]["oni_onemap_pose"]) > 0:
                             pose_pose_map_text = "Pose Map Present"
                             pose_pose_map_icon = "dot_red"
@@ -54940,7 +54925,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         text=pose,
                     )
 
-                if ccl["poses_stored"][pose].get("pose_prefix") != None:
+                if ccl["poses_stored"][pose].get("pose_prefix") is not None:
                     if ccl["poses_stored"][pose]["pose_prefix"] != "":
                         row.operator(
                             "oni_converter.remove_pose_prefix",
@@ -54957,7 +54942,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
         oni = bpy.context.scene.onigiri
 
         autokey_menu_enabled_icon = "menu_closed"
-        if oni_autokey.autokey_menu_enabled == True:
+        if oni_autokey.autokey_menu_enabled:
             autokey_menu_enabled_icon = "menu_opened"
         row = self.layout.row(align=True)
         row.prop(
@@ -54966,7 +54951,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             text="Auto Key",
             icon_value=ico.custom_icons[autokey_menu_enabled_icon].icon_id,
         )
-        if oni_autokey.autokey_menu_enabled == True:
+        if oni_autokey.autokey_menu_enabled:
             layout = self.layout
             box = layout.box()
             col = box.column(align=True)
@@ -55138,7 +55123,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
         oni_alib = bpy.context.scene.oni_alib
 
         alib_motion_processing_menu_enabled_icon = "menu_closed"
-        if oni_alib.alib_motion_processing_menu_enabled == True:
+        if oni_alib.alib_motion_processing_menu_enabled:
             alib_motion_processing_menu_enabled_icon = "menu_opened"
 
         row.prop(
@@ -55150,14 +55135,14 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             ].icon_id,
         )
 
-        if oni_alib.alib_motion_processing_menu_enabled == True:
+        if oni_alib.alib_motion_processing_menu_enabled:
 
             box = layout.box()
             col = box.column(align=True)
             row = col.row(align=True)
 
             alib_anim_menu_enabled_icon = "menu_closed"
-            if oni_alib.alib_anim_menu_enabled == True:
+            if oni_alib.alib_anim_menu_enabled:
                 alib_anim_menu_enabled_icon = "menu_opened"
 
             row.prop(
@@ -55167,7 +55152,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 icon_value=ico.custom_icons[alib_anim_menu_enabled_icon].icon_id,
             )
 
-            if oni_alib.alib_anim_menu_enabled == True:
+            if oni_alib.alib_anim_menu_enabled:
 
                 row = col.row(align=True)
                 row.operator(
@@ -55246,7 +55231,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 row = col.row(align=True)
 
             alib_action_menu_enabled_icon = "menu_closed"
-            if oni_alib.alib_action_menu_enabled == True:
+            if oni_alib.alib_action_menu_enabled:
                 alib_action_menu_enabled_icon = "menu_opened"
 
             row = col.row(align=True)
@@ -55257,7 +55242,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 icon_value=ico.custom_icons[alib_action_menu_enabled_icon].icon_id,
             )
 
-            if oni_alib.alib_action_menu_enabled == True:
+            if oni_alib.alib_action_menu_enabled:
 
                 col = box.column(align=True)
                 row = col.row(align=True)
@@ -55270,7 +55255,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     icon_value=ico.custom_icons["code"].icon_id,
                 )
                 row = col.row(align=True)
-                if anim.anim_details == True:
+                if anim.anim_details:
                     row.prop(
                         anim,
                         "anim_details_time",
@@ -55325,7 +55310,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
                 fake_count = 0
                 for actionObj in bpy.data.actions:
-                    if actionObj.use_fake_user == True:
+                    if actionObj.use_fake_user:
                         fake_count += 1
                 row.operator(
                     "onigiri.alib_action_fake_user",
@@ -55407,9 +55392,9 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
                 alib_ranges_all_enabled_icon = "range"
                 alib_loops_all_enabled_icon = "loop"
-                if oni_alib.alib_ranges_all_enabled == True:
+                if oni_alib.alib_ranges_all_enabled:
                     alib_ranges_all_enabled_icon = "range_enabled"
-                if oni_alib.alib_loops_all_enabled == True:
+                if oni_alib.alib_loops_all_enabled:
                     alib_loops_all_enabled_icon = "loop_enabled"
 
                 if 1 == 0:
@@ -55444,7 +55429,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 )
 
                 alib_ease_all_enabled_icon = "ease"
-                if oni_alib.alib_ease_all_enabled == True:
+                if oni_alib.alib_ease_all_enabled:
                     alib_ease_all_enabled_icon = "ease_enabled"
                 row.prop(
                     oni_alib,
@@ -55507,9 +55492,9 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         icon_value=ico.custom_icons["running_guy"].icon_id,
                     ).name = actionObj.name
                     action_flag_icon = "flag"
-                    if oni_alib.get("actions") != None:
+                    if oni_alib.get("actions") is not None:
                         if actionObj.name in oni_alib["actions"]:
-                            if oni_alib["actions"][actionObj.name]["flagged"] == True:
+                            if oni_alib["actions"][actionObj.name]["flagged"]:
                                 action_flag_icon = "flag_on"
                     row.operator(
                         "onigiri.alib_action_flag",
@@ -55521,9 +55506,9 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     alib_action_loop_icon = "loop"
                     action_range = actionObj.get("frame_range", False)
                     action_loop = actionObj.get("loop_range", False)
-                    if action_range == True:
+                    if action_range:
                         alib_action_range_icon = "range_enabled"
-                    if action_loop == True:
+                    if action_loop:
                         alib_action_loop_icon = "loop_enabled"
 
                     row.operator(
@@ -55539,7 +55524,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
                     alib_action_ease_icon = "ease"
                     action_ease = actionObj.get("ease", False)
-                    if action_ease == True:
+                    if action_ease:
                         alib_action_ease_icon = "ease_enabled"
                     row.operator(
                         "onigiri.alib_action_ease",
@@ -55588,8 +55573,8 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         o = bpy.context.selected_objects[0]
 
                         if 1 == 1:
-                            if o.animation_data != None:
-                                if o.animation_data.action != None:
+                            if o.animation_data is not None:
+                                if o.animation_data.action is not None:
                                     alib_action_active_text = (
                                         o.animation_data.action.name
                                     )
@@ -55616,7 +55601,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
                 oni_anim = bpy.context.scene.oni_anim
                 alib_ranges_menu_enabled_icon = "menu_closed"
-                if oni_alib.alib_ranges_menu_enabled == True:
+                if oni_alib.alib_ranges_menu_enabled:
                     alib_ranges_menu_enabled_icon = "menu_opened"
                 row = col.row(align=True)
                 row.prop(
@@ -55626,7 +55611,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     toggle=True,
                     icon_value=ico.custom_icons[alib_ranges_menu_enabled_icon].icon_id,
                 )
-                if oni_alib.alib_ranges_menu_enabled == True:
+                if oni_alib.alib_ranges_menu_enabled:
 
                     col = box.column(align=True)
                     row = col.row(align=True)
@@ -55911,7 +55896,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
             oni_pose = bpy.context.scene.oni_pose
             pose_library_menu_enabled_icon = "menu_closed"
-            if oni_pose.pose_library_menu_enabled == True:
+            if oni_pose.pose_library_menu_enabled:
                 pose_library_menu_enabled_icon = "menu_opened"
             row = col.row(align=True)
             row.prop(
@@ -55920,7 +55905,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 text="Poses",
                 icon_value=ico.custom_icons[pose_library_menu_enabled_icon].icon_id,
             )
-            if oni_pose.pose_library_menu_enabled == True:
+            if oni_pose.pose_library_menu_enabled:
                 row = col.row(align=True)
                 row.operator(
                     "onigiri.pose_library_load",
@@ -56005,7 +55990,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         text="",
                         icon_value=ico.custom_icons[pose_flag_icon].icon_id,
                     ).name = oni_pose_name
-                    if oni_pose["poses"][oni_pose_name].get("prefix") == None:
+                    if oni_pose["poses"][oni_pose_name].get("prefix") is None:
 
                         row.operator(
                             "onigiri.pose_library_apply_to_selected",
@@ -56056,7 +56041,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             oni = bpy.context.scene.onigiri
 
             mixer_menu_enabled_icon = "menu_closed"
-            if oni_mixer.mixer_menu_enabled == True:
+            if oni_mixer.mixer_menu_enabled:
                 mixer_menu_enabled_icon = "menu_opened"
             row = col.row(align=True)
             row.prop(
@@ -56065,10 +56050,10 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 text="Motion Mixer",
                 icon_value=ico.custom_icons[mixer_menu_enabled_icon].icon_id,
             )
-            if oni_mixer.mixer_menu_enabled == True:
+            if oni_mixer.mixer_menu_enabled:
                 row = col.row(align=True)
 
-                if oni_mixer.mixer_target_locked == True:
+                if oni_mixer.mixer_target_locked:
                     row.prop(
                         oni_mixer,
                         "mixer_target_locked",
@@ -56085,14 +56070,14 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 mixer_target_name = " "
                 targetObj = oni_mixer.get("target")
 
-                if targetObj != None:
+                if targetObj is not None:
                     if targetObj.name not in bpy.context.scene.objects:
 
                         oni_mixer.mixer_target_locked = False
                     else:
                         mixer_target_name = targetObj.name
 
-                if oni_mixer.mixer_target_locked == True:
+                if oni_mixer.mixer_target_locked:
                     row.prop(
                         oni,
                         "blank",
@@ -56106,7 +56091,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         "mixer_target_name",
                     )
 
-                if oni_mixer.mixer_target_locked == True:
+                if oni_mixer.mixer_target_locked:
                     row = col.row(align=True)
                     row.operator(
                         "onigiri.mixer_add_source",
@@ -56114,7 +56099,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         icon_value=ico.custom_icons["add"].icon_id,
                     )
 
-                    if oni_mixer.mixer_ready == True:
+                    if oni_mixer.mixer_ready:
                         row.prop(
                             oni_mixer,
                             "mixer_ready",
@@ -56457,7 +56442,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
             oni_splice = bpy.context.scene.oni_splice
 
-            if splice.props["startup"] == True:
+            if splice.props["startup"]:
                 row.prop(
                     oni_splice,
                     "splice_blank",
@@ -56470,7 +56455,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 splice.props["startup"] = False
 
             splice_menu_enabled_icon = "menu_closed"
-            if oni_splice.splice_menu_enabled == True:
+            if oni_splice.splice_menu_enabled:
                 splice_menu_enabled_icon = "menu_opened"
 
             row = col.row(align=True)
@@ -56480,7 +56465,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 text="Motion Splicer",
                 icon_value=ico.custom_icons[splice_menu_enabled_icon].icon_id,
             )
-            if oni_splice.splice_menu_enabled == True:
+            if oni_splice.splice_menu_enabled:
                 row = col.row(align=True)
                 row.prop(
                     oni_splice,
@@ -56499,7 +56484,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 row = col.row(align=True)
 
                 target_locked_text = "Lock Target"
-                if oni_splice.splice_target_locked == True:
+                if oni_splice.splice_target_locked:
                     target_locked_text = "Target Locked"
                 row = col.row(align=True)
                 row.prop(
@@ -56514,7 +56499,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     icon_value=ico.custom_icons["reset"].icon_id,
                 )
 
-                if oni_splice.splice_target_locked == True:
+                if oni_splice.splice_target_locked:
                     row = col.row(align=True)
                     row.prop(
                         oni_splice,
@@ -56530,7 +56515,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     )
 
                     gap_insert_text = "Gap Append Mode - Enabled"
-                    if oni_splice.splice_gap_insert == True:
+                    if oni_splice.splice_gap_insert:
                         gap_insert_text = "Gap Insert Mode - Enabled"
                     row = col.row(align=True)
                     row.prop(
@@ -56589,7 +56574,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     row = col.row(align=True)
                     splice_capture_icon = "camera"
                     splice_capture_text = "Capture Segment"
-                    if splice.props["camera"] == True:
+                    if splice.props["camera"]:
                         splice_capture_icon = "camera_on"
                         splice_capture_text = "Capturing..."
                     row.operator(
@@ -56611,8 +56596,8 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     if oni_splice.splice_target_name in bpy.data.objects:
                         tarmObj = bpy.data.objects[oni_splice.splice_target_name]
 
-                        if tarmObj.animation_data != None:
-                            if tarmObj.animation_data.action != None:
+                        if tarmObj.animation_data is not None:
+                            if tarmObj.animation_data.action is not None:
                                 target_frame_start, target_frame_end = (
                                     tarmObj.animation_data.action.frame_range
                                 )
@@ -56677,7 +56662,7 @@ class OnigiriPanelRigTools(bpy.types.Panel):
             if selected_objects == 1:
                 o = bpy.context.selected_objects[0]
                 has_onigiri = o.get("onigiri", False)
-            if has_onigiri == False:
+            if not has_onigiri:
 
                 row.operator(
                     "onigiri.show_rig_config",
@@ -56701,7 +56686,7 @@ class OnigiriPanelRigTools(bpy.types.Panel):
             else:
                 rig_class = o.get("rig_class")
 
-                if rig_class == "default" and onim.rig_class_to_default == False:
+                if rig_class == "default" and not onim.rig_class_to_default:
                     oni_settings["terminate"] = True
                     onim.rig_class_to_default = True
                     oni_settings["terminate"] = True
@@ -56710,7 +56695,7 @@ class OnigiriPanelRigTools(bpy.types.Panel):
                     onim.rig_class_to_pos = False
                     oni_settings["terminate"] = True
                     onim.rig_class_to_pivot = False
-                if rig_class == "neutral" and onim.rig_class_to_neutral == False:
+                if rig_class == "neutral" and not onim.rig_class_to_neutral:
                     oni_settings["terminate"] = True
                     onim.rig_class_to_neutral = True
                     oni_settings["terminate"] = True
@@ -56719,7 +56704,7 @@ class OnigiriPanelRigTools(bpy.types.Panel):
                     onim.rig_class_to_pos = False
                     oni_settings["terminate"] = True
                     onim.rig_class_to_pivot = False
-                if rig_class == "pivot" and onim.rig_class_to_pivot == False:
+                if rig_class == "pivot" and not onim.rig_class_to_pivot:
                     oni_settings["terminate"] = True
                     onim.rig_class_to_pivot = True
                     oni_settings["terminate"] = True
@@ -56728,7 +56713,7 @@ class OnigiriPanelRigTools(bpy.types.Panel):
                     onim.rig_class_to_neutral = False
                     oni_settings["terminate"] = True
                     onim.rig_class_to_pos = False
-                if rig_class == "pos" and onim.rig_class_to_pos == False:
+                if rig_class == "pos" and not onim.rig_class_to_pos:
                     oni_settings["terminate"] = True
                     onim.rig_class_to_pos = True
                     oni_settings["terminate"] = True
@@ -56763,10 +56748,10 @@ class OnigiriPanelRigTools(bpy.types.Panel):
 
         is_qualified = False
 
-        if bpy.context.active_object != None:
+        if bpy.context.active_object is not None:
             o = bpy.context.active_object
             has_onigiri = o.get("onigiri")
-            if has_onigiri != None:
+            if has_onigiri is not None:
                 if o.type == "ARMATURE":
                     is_qualified = True
 
@@ -57305,11 +57290,11 @@ class OnigiriPanelRigTools(bpy.types.Panel):
         use_connect_icon = "unknown"
         selected = bpy.context.selected_objects
         if len(selected) == 1:
-            if selected[0].get("oni_bones_locked") == True:
+            if selected[0].get("oni_bones_locked"):
                 use_connect_text = "Unlock Bones"
                 use_connect_action = "unlock"
                 use_connect_icon = "key_green"
-            elif selected[0].get("oni_bones_locked") == False:
+            elif not selected[0].get("oni_bones_locked"):
                 use_connect_text = "Lock Bones"
                 use_connect_action = "lock"
                 use_connect_icon = "key_red"
@@ -57393,7 +57378,7 @@ class OnigiriPanelRigTools(bpy.types.Panel):
             icon_value=ico.custom_icons["lock_black"].icon_id,
         )
 
-        if oni_rig.lock_engaged == True:
+        if oni_rig.lock_engaged:
             obj = bpy.data.objects
 
             if oni_rig.rig_selected == "" or oni_rig.bone_selected == "":
@@ -57522,7 +57507,7 @@ class OnigiriPanelRigTools(bpy.types.Panel):
 class OnigiriHeadProperties(bpy.types.PropertyGroup):
 
     def update_bento_head_lock(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
 
@@ -57532,7 +57517,7 @@ class OnigiriHeadProperties(bpy.types.PropertyGroup):
         obj = bpy.data.objects
         selected = bpy.context.selected_objects
 
-        if onih.bento_head_lock == True:
+        if onih.bento_head_lock:
 
             if len(selected) == 0:
                 print("nothing selected")
@@ -57650,7 +57635,7 @@ class OnigiriHeadProperties(bpy.types.PropertyGroup):
 
     def update_object_outline(self, context):
         onih = bpy.context.window_manager.oni_head
-        if onih.bento_head_object_outline == True:
+        if onih.bento_head_object_outline:
             bpy.context.space_data.shading.show_object_outline = True
         else:
             bpy.context.space_data.shading.show_object_outline = False
@@ -57687,7 +57672,7 @@ class OnigiriHeadOperator(bpy.types.Operator):
         bpy.ops.object.mode_set(mode="OBJECT")
 
         error = apply_transform_chain(meshObj.name)
-        if error == False:
+        if not error:
             print(
                 "some error occurred when attempting to find an armature", meshObj.name
             )
@@ -57718,7 +57703,7 @@ class OnigiriHeadOperator(bpy.types.Operator):
         selected = bpy.context.selected_objects
         print("selected:", selected)
 
-        if onih.bento_head_fix_seam == True:
+        if onih.bento_head_fix_seam:
 
             bpy.context.object.data.use_auto_smooth = True
 
@@ -57790,11 +57775,11 @@ class OnigiriHeadOperator(bpy.types.Operator):
         arm = get_mesh_armature(mesh=mesh_head_name)
         obj[arm]["bento_head"] = True
 
-        if onih.bento_head_keep_original == False:
+        if not onih.bento_head_keep_original:
             obj[mesh_name].select_set(True)
             bpy.ops.object.delete()
 
-        if onih.bento_head_keep_body == False:
+        if not onih.bento_head_keep_body:
             obj[mesh_body_name].select_set(True)
             bpy.ops.object.delete()
 
@@ -57836,7 +57821,7 @@ class OnigiriHeadPanel(bpy.types.Panel):
         row.label(text=onih.bento_head_message)
         row = self.layout.row(align=True)
 
-        if onih.bento_head_enabled == True:
+        if onih.bento_head_enabled:
             row.label(
                 text="Cut Length:",
             )
@@ -57860,7 +57845,7 @@ class OnigiriHeadPanel(bpy.types.Panel):
                 text="Generate Bento Head",
             )
 
-        if onih.bento_head_tools_enabled == True:
+        if onih.bento_head_tools_enabled:
             row = self.layout.row(align=True)
             row.prop(
                 onih, "bento_head_object_outline", text="Object Outline", toggle=True
@@ -58098,7 +58083,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
 
         row = self.layout.row(align=True)
         shifter_morph_menu_enabled_icon = "menu_closed"
-        if ss.shifter_morph_menu_enabled == True:
+        if ss.shifter_morph_menu_enabled:
             shifter_morph_menu_enabled_icon = "menu_opened"
         row.prop(
             ss,
@@ -58107,14 +58092,14 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
             toggle=True,
             icon_value=ico.custom_icons[shifter_morph_menu_enabled_icon].icon_id,
         )
-        if ss.shifter_morph_menu_enabled == True:
+        if ss.shifter_morph_menu_enabled:
 
             layout = self.layout
             box = layout.box()
             col = box.column(align=True)
             row = col.row(align=True)
 
-            if ss.shifter_morph_source_locked == True:
+            if ss.shifter_morph_source_locked:
                 row.prop(
                     ss,
                     "shifter_morph_source_locked",
@@ -58138,7 +58123,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 )
 
             row = col.row(align=True)
-            if ss.shifter_morph_target_locked == True:
+            if ss.shifter_morph_target_locked:
                 row.prop(
                     ss,
                     "shifter_morph_target_locked",
@@ -58152,7 +58137,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
             else:
 
                 row.enabled = False
-                if ss.get("template_map") == None:
+                if ss.get("template_map") is None:
                     row.enabled = True
 
                 row.operator(
@@ -58202,8 +58187,8 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
             row = col.row(align=True)
             shifter_morph_icon = "shape_shifter"
             if (
-                ss.shifter_morph_source_locked == True
-                and ss.shifter_morph_target_locked == True
+                ss.shifter_morph_source_locked
+                and ss.shifter_morph_target_locked
             ):
                 shifter_morph_icon = "shape_shifter_navy"
             row.operator(
@@ -58286,7 +58271,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
 
         row = self.layout.row(align=True)
         shifter_freeform_menu_enabled_icon = "menu_closed"
-        if ss.shifter_freeform_menu_enabled == True:
+        if ss.shifter_freeform_menu_enabled:
             shifter_freeform_menu_enabled_icon = "menu_opened"
         row.prop(
             ss,
@@ -58295,7 +58280,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
             toggle=True,
             icon_value=ico.custom_icons[shifter_freeform_menu_enabled_icon].icon_id,
         )
-        if ss.shifter_freeform_menu_enabled == True:
+        if ss.shifter_freeform_menu_enabled:
 
             layout = self.layout
             box = layout.box()
@@ -58376,7 +58361,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
         oni_shifter = bpy.context.scene.oni_shifter
         row = self.layout.row(align=True)
         shifter_build_menu_enabled_icon = "menu_closed"
-        if oni_shifter.shifter_build_menu_enabled == True:
+        if oni_shifter.shifter_build_menu_enabled:
             shifter_build_menu_enabled_icon = "menu_opened"
         row.prop(
             oni_shifter,
@@ -58385,7 +58370,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
             toggle=True,
             icon_value=ico.custom_icons[shifter_build_menu_enabled_icon].icon_id,
         )
-        if oni_shifter.shifter_build_menu_enabled == True:
+        if oni_shifter.shifter_build_menu_enabled:
 
             layout = self.layout
             box = layout.box()
@@ -58403,7 +58388,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 if len(bpy.context.selected_pose_bones) == 1:
                     frozen_bone = bpy.context.selected_pose_bones[0].name
 
-            if oni_shifter.shifter_build_link == True:
+            if oni_shifter.shifter_build_link:
                 if bpy.context.mode == "POSE":
                     row.prop(
                         oni_shifter,
@@ -58485,7 +58470,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
             oni_latch = bpy.context.window_manager.oni_latch
             row = self.layout.row(align=True)
             latch_menu_enabled_icon = "menu_closed"
-            if oni_latch.latch_menu_enabled == True:
+            if oni_latch.latch_menu_enabled:
                 latch_menu_enabled_icon = "menu_opened"
             row.prop(
                 oni_latch,
@@ -58494,7 +58479,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 toggle=True,
                 icon_value=ico.custom_icons[latch_menu_enabled_icon].icon_id,
             )
-            if oni_latch.latch_menu_enabled == True:
+            if oni_latch.latch_menu_enabled:
                 layout = self.layout
                 box = layout.box()
                 col = box.column(align=True)
@@ -58518,10 +58503,10 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 oni_latch_rename_text = " "
                 oni_latch_rename_icon = "blank"
                 o = bpy.context.active_object
-                if o != None:
+                if o is not None:
                     if o.type == "ARMATURE":
                         oni_latch_rename = o.get("oni_onemap_rename")
-                        if oni_latch_rename != None:
+                        if oni_latch_rename is not None:
                             oni_latch_rename_text = "Rig contains a map"
                             oni_latch_rename_icon = "bone_black_red"
                 row.prop(
@@ -58535,7 +58520,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 row = col.row(align=True)
                 latch_actor_engaged = oni_latch.latch_actor_poll
                 latch_director_engaged = oni_latch.latch_director_poll
-                if latch_actor_engaged == True:
+                if latch_actor_engaged:
                     row.prop(
                         oni_latch,
                         "latch_actor",
@@ -58548,7 +58533,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                         text="Latch Actor",
                         icon_value=ico.custom_icons["dot_blue"].icon_id,
                     )
-                if latch_director_engaged == True:
+                if latch_director_engaged:
                     row.prop(
                         oni_latch,
                         "latch_director",
@@ -58584,7 +58569,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
             oni_sim = bpy.context.window_manager.oni_sim
             row = self.layout.row(align=True)
             sim_menu_enabled_icon = "menu_closed"
-            if oni_sim.sim_menu_enabled == True:
+            if oni_sim.sim_menu_enabled:
                 sim_menu_enabled_icon = "menu_opened"
             row.prop(
                 oni_sim,
@@ -58593,7 +58578,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 toggle=True,
                 icon_value=ico.custom_icons[sim_menu_enabled_icon].icon_id,
             )
-            if oni_sim.sim_menu_enabled == True:
+            if oni_sim.sim_menu_enabled:
                 layout = self.layout
                 box = layout.box()
                 col = box.column(align=True)
@@ -58749,7 +58734,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                     icon_value=ico.custom_icons["object"].icon_id,
                 )
                 row = col.row(align=True)
-                if oni_sim.sim_motion_dynamic == True:
+                if oni_sim.sim_motion_dynamic:
                     row.operator(
                         "onigiri.sim_action_dynamic",
                         text="Action!",
@@ -58770,7 +58755,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
 
                 row = col.row(align=True)
                 sim_rigid_copy_enabled = False
-                if oni_sim.sim_motion_object == True:
+                if oni_sim.sim_motion_object:
                     sim_rigid_copy_enabled = True
                 row.operator(
                     "onigiri.sim_copy_rigid",
@@ -58802,7 +58787,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 sim_path_text = "Enable Path"
                 sim_path_icon = "dot_red"
                 sim_path_enabled = oni_sim.sim_motion_dynamic
-                if oni_sim.sim_path == True:
+                if oni_sim.sim_path:
                     sim_path_text = "Disble Path"
                     sim_path_icon = "dot_green"
                 row.enabled = sim_path_enabled
@@ -58859,9 +58844,9 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
 
                 sim_custom_bones_icon = "bone_black"
                 sim_custom_mesh_icon = "object_black"
-                if sim.props.get("custom_bones") != None:
+                if sim.props.get("custom_bones") is not None:
                     sim_custom_bones_icon = "bone_red"
-                if sim.props.get("custom_mesh") != None:
+                if sim.props.get("custom_mesh") is not None:
                     sim_custom_mesh_icon = "object_red"
 
                 row = col.row(align=True)
@@ -58938,8 +58923,8 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
 
                 sim_transforms_row_enabled = False
                 if (
-                    sim.props.get("custom_mesh") != None
-                    and sim.props.get("custom_rig") != None
+                    sim.props.get("custom_mesh") is not None
+                    and sim.props.get("custom_rig") is not None
                 ):
                     sim_transforms_row_enabled = True
                 if 1 == 1:
@@ -58978,7 +58963,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 )
                 if 1 == 0:
                     sim_skin_enabled_icon = "paint_disabled"
-                    if oni_sim.sim_skin_enabled == True:
+                    if oni_sim.sim_skin_enabled:
                         sim_skin_enabled_icon = "paint_enabled"
                     row.prop(
                         oni_sim,
@@ -59011,7 +58996,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
             oni_puppet = bpy.context.window_manager.oni_puppet
             row = self.layout.row(align=True)
             puppet_menu_enabled_icon = "menu_closed"
-            if oni_puppet.puppet_menu_enabled == True:
+            if oni_puppet.puppet_menu_enabled:
                 puppet_menu_enabled_icon = "menu_opened"
             row.prop(
                 oni_puppet,
@@ -59020,7 +59005,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 toggle=True,
                 icon_value=ico.custom_icons[puppet_menu_enabled_icon].icon_id,
             )
-            if oni_puppet.puppet_menu_enabled == True:
+            if oni_puppet.puppet_menu_enabled:
                 layout = self.layout
                 box = layout.box()
                 col = box.column(align=True)
@@ -59077,7 +59062,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 selected = bpy.context.selected_objects
                 if len(selected) == 1:
                     if selected[0].type == "ARMATURE":
-                        if selected[0].get("oni_puppet_recover") != None:
+                        if selected[0].get("oni_puppet_recover") is not None:
                             puppet_recover_text = "Contains a recovery map"
                             puppet_recover_icon = "bone_black_red"
                 row.prop(
@@ -59110,7 +59095,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 puppet_master_text = ""
                 puppet_thumb_icon = "thumb_down"
                 puppetObj = puppet.props["master"]
-                if puppetObj != None:
+                if puppetObj is not None:
 
                     if utils.is_valid(puppetObj):
                         puppet_master_text = puppetObj.name
@@ -59163,7 +59148,7 @@ class OnigiriPuppetProperties(bpy.types.PropertyGroup):
     )
 
     def update_puppet_master_enabled(self, context):
-        if self.puppet_enabled == False:
+        if not self.puppet_enabled:
             puppet.props["master"] = None
         self["puppet_master_enabled"] = True
 
@@ -59214,7 +59199,7 @@ class OnigiriPuppetCompose(bpy.types.Operator):
                 qualified.append(o)
         for o in qualified:
 
-            if o.get("oni_puppet_recover") != None:
+            if o.get("oni_puppet_recover") is not None:
                 return False
         return True
 
@@ -59226,7 +59211,7 @@ class OnigiriPuppetCompose(bpy.types.Operator):
         armatures = []
         for o in selected:
             if o.type == "ARMATURE":
-                if o.get("oni_puppet_composed") != None:
+                if o.get("oni_puppet_composed") is not None:
                     print("Composed puppet found", o.name, "skipping")
                 else:
                     armatures.append(o)
@@ -59267,7 +59252,7 @@ class OnigiriPuppetCompose(bpy.types.Operator):
         composed_map = {}
         for armObj in armatures:
             rename_map = armObj.get("oni_onemap_rename")
-            if rename_map == None:
+            if rename_map is None:
                 continue
             for anchor in rename_map:
 
@@ -59312,7 +59297,7 @@ class OnigiriPuppetCompose(bpy.types.Operator):
             o["oni_puppet_name"] = o.name
             for boneObj in o.data.bones:
                 name = utils.get_safe_name(names=names, max=20)
-                if name == False:
+                if not name:
                     print("Max collisions exceeded when gathering recovery names")
                     popup(
                         "Fatal internal error, report this!  See system console for details.",
@@ -59394,7 +59379,7 @@ class OnigiriPuppetCompose(bpy.types.Operator):
                 lowest = start_frame
         bpy.context.scene.frame_set(lowest)
 
-        if oni_puppet.puppet_rebind == True:
+        if oni_puppet.puppet_rebind:
             for armObj in new_rigs:
 
                 print("Rebinding associated mesh for rig", armObj)
@@ -59408,7 +59393,7 @@ class OnigiriPuppetCompose(bpy.types.Operator):
             meshObj.select_set(True)
             utils.activate(meshObj)
 
-        if oni_puppet.puppet_apply_transforms == True:
+        if oni_puppet.puppet_apply_transforms:
             bpy.ops.object.parent_clear(type="CLEAR_KEEP_TRANSFORM")
             print("Apply transforms to mesh")
             bpy.ops.object.transform_apply()
@@ -59419,20 +59404,20 @@ class OnigiriPuppetCompose(bpy.types.Operator):
             o.select_set(True)
         utils.activate(o)
 
-        if oni_puppet.puppet_apply_transforms == True:
+        if oni_puppet.puppet_apply_transforms:
             print("Apply transforms to armatures")
             bpy.ops.object.transform_apply()
 
         actionable = []
 
         for o in new_rigs:
-            if rigutils.has_action(o) == True:
+            if rigutils.has_action(o):
                 actionable.append(o.animation_data.action.name)
 
         bpy.ops.object.join()
         masObj = bpy.context.object
 
-        if oni_puppet.puppet_merge_animations == True:
+        if oni_puppet.puppet_merge_animations:
             print("Merging animations...")
 
             actionObj = animutils.merge_actions(actions=actionable, armature=masObj)
@@ -59540,7 +59525,7 @@ class OnigiriPuppetDecompose(bpy.types.Operator):
         selected = bpy.context.selected_objects
         if len(selected) != 1:
             return False
-        if selected[0].get("oni_puppet_recover") == None:
+        if selected[0].get("oni_puppet_recover") is None:
             return False
         return True
 
@@ -59548,11 +59533,11 @@ class OnigiriPuppetDecompose(bpy.types.Operator):
         oni_puppet = bpy.context.window_manager.oni_puppet
         armObj = bpy.context.selected_objects[0]
 
-        if armObj.get("oni_onemap_rename") == None:
+        if armObj.get("oni_onemap_rename") is None:
             print("No rename map, I can't use this for anything")
             popup("No rename map available", "Error", "ERROR")
             return {"FINISHED"}
-        if armObj.get("oni_puppet_minions") == None:
+        if armObj.get("oni_puppet_minions") is None:
             print("No minions to process")
             popup("No minions, is this a Puppet Master?", "Error", "ERROR")
             return {"FINISHED"}
@@ -59566,7 +59551,7 @@ class OnigiriPuppetDecompose(bpy.types.Operator):
         new_mins = []
 
         for minObj in minions:
-            if utils.is_valid(minObj) == False:
+            if not utils.is_valid(minObj):
                 print(
                     "A minion that was stored for decomposition has become invalid",
                     minObj,
@@ -59587,7 +59572,7 @@ class OnigiriPuppetDecompose(bpy.types.Operator):
             if minObj.type == "ARMATURE":
                 min_match = True
                 break
-        if min_match == False:
+        if not min_match:
             print(
                 "The puppet master in your original minions collections is wrong for this rig",
                 "Error",
@@ -59641,7 +59626,7 @@ class OnigiriPuppetDecompose(bpy.types.Operator):
             if o.type == "ARMATURE":
                 utils.activate(o)
 
-        if merged_action != None:
+        if merged_action is not None:
             if merged_action in bpy.data.actions:
                 actionObj = bpy.data.actions[merged_action]
                 bpy.data.actions.remove(actionObj)
@@ -59660,11 +59645,11 @@ class OnigiriPuppetMaster(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
 
-        if puppet.props["master"] != None:
+        if puppet.props["master"] is not None:
             return False
 
         armObj = rigutils.is_armature()
-        if armObj == False:
+        if not armObj:
             return False
 
         if armObj.get("oni_puppet_master") or armObj.get("oni_puppet_minions"):
@@ -59691,7 +59676,7 @@ class OnigiriPuppetMinions(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
 
-        if puppet.props["master"] == None:
+        if puppet.props["master"] is None:
             return False
         selected = bpy.context.selected_objects
         if len(selected) == 0:
@@ -59708,7 +59693,7 @@ class OnigiriPuppetMinions(bpy.types.Operator):
 
         masterRig = puppet.props["master"]
 
-        if utils.is_valid(masterRig) == False:
+        if not utils.is_valid(masterRig):
             print(
                 "The master rig seems to have been removed or is just not in the scene or invalid for some other reason."
             )
@@ -59744,7 +59729,7 @@ class OnigiriPuppetReset(bpy.types.Operator):
         if len(bpy.context.selected_objects) != 0:
             armObj = bpy.context.selected_objects[0]
             masRig = puppet.get_master(armObj, report=True)
-            if masRig == False:
+            if not masRig:
                 print(
                     "This rig doesn't have a link to your puppet master but the master may have been recorded so that will be cleaned."
                 )
@@ -59783,7 +59768,7 @@ class OnigiriReactorPanel(bpy.types.Panel):
 
         if 1 == 0:
             reactor_menu_enabled_icon = "menu_closed"
-            if oni_reactor.reactor_menu_enabled == True:
+            if oni_reactor.reactor_menu_enabled:
                 reactor_menu_enabled_icon = "menu_opened"
             row.prop(
                 oni_reactor,
@@ -59792,7 +59777,7 @@ class OnigiriReactorPanel(bpy.types.Panel):
                 toggle=True,
                 icon_value=ico.custom_icons[reactor_menu_enabled_icon].icon_id,
             )
-            if oni_reactor.reactor_menu_enabled == True:
+            if oni_reactor.reactor_menu_enabled:
                 layout = self.layout
                 box = layout.box()
                 col = box.column(align=True)
@@ -59808,7 +59793,7 @@ class OnigiriReactorPanel(bpy.types.Panel):
                 )
 
         ragdoll_menu_enabled_icon = "menu_closed"
-        if oni_ragdoll.ragdoll_menu_enabled == True:
+        if oni_ragdoll.ragdoll_menu_enabled:
             ragdoll_menu_enabled_icon = "menu_opened"
 
         row.prop(
@@ -59818,7 +59803,7 @@ class OnigiriReactorPanel(bpy.types.Panel):
             toggle=True,
             icon_value=ico.custom_icons[ragdoll_menu_enabled_icon].icon_id,
         )
-        if oni_ragdoll.ragdoll_menu_enabled == True:
+        if oni_ragdoll.ragdoll_menu_enabled:
             layout = self.layout
             box = layout.box()
 
@@ -59852,7 +59837,7 @@ class OnigiriReactorPanel(bpy.types.Panel):
             col = box.column(align=True)
             row = col.row(align=True)
             ragdoll_mesh_name = "Lock Mesh"
-            if ragdoll.props["mesh"] != None:
+            if ragdoll.props["mesh"] is not None:
                 ragdoll_mesh_name = ragdoll.props["mesh"]
             else:
                 ragdoll_mesh_name = "Lock Mesh"
@@ -59864,7 +59849,7 @@ class OnigiriReactorPanel(bpy.types.Panel):
                 icon_value=ico.custom_icons["blank"].icon_id,
             )
 
-            if ragdoll.props["pool"] == None:
+            if ragdoll.props["pool"] is None:
                 ragdoll_pool_text = "Use Pool"
             else:
                 ragdoll_pool_text = "Pool Count: " + str(len(ragdoll.props["pool"]))
@@ -59985,7 +59970,7 @@ class OnigiriReactorProperties(bpy.types.PropertyGroup):
     )
 
     def reactor_menu_enabled(self, context):
-        if self.reactor_menu_enabled == True:
+        if self.reactor_menu_enabled:
             print("Reactor engaged")
             reactor.props["poll_enabled"] = True
             reactor.props["poll_time"] = 0.2
@@ -60030,7 +60015,7 @@ class OnigiriRagdollProperties(bpy.types.PropertyGroup):
 
     def update_ragdoll_use_mesh(self, context):
 
-        if self.ragdoll_use_mesh == False:
+        if not self.ragdoll_use_mesh:
             ragdoll.props["mesh"] = None
             print("Mesh unlocked")
             return
@@ -60065,13 +60050,13 @@ class OnigiriRagdollProperties(bpy.types.PropertyGroup):
 
     def update_ragdoll_use_pool(self, context):
 
-        if self.ragdoll_use_pool == False:
+        if not self.ragdoll_use_pool:
             ragdoll.props["pool"] = None
             print("Pool unlocked")
             return
 
-        self.ragdoll_use_mesh == False
-        self.ragdoll_use_pool == False
+        self.ragdoll_use_mesh = False
+        self.ragdoll_use_pool = False
         ragdoll.props["pool"] = None
         self["ragdoll_use_existing"] = False
         self["ragdoll_use_mesh"] = False
@@ -60106,7 +60091,7 @@ class OnigiriRagdollProperties(bpy.types.PropertyGroup):
     )
 
     def update_ragdoll_use_existing(self, context):
-        if self.ragdoll_use_existing == True:
+        if self.ragdoll_use_existing:
             self["ragdoll_use_mesh"] = False
             ragdoll.props["mesh"] = None
             self["ragdoll_use_pool"] = False
@@ -60131,14 +60116,14 @@ class OnigiriRagdollProperties(bpy.types.PropertyGroup):
 
     def update_ragdoll_type(self, context):
         armObj = ragdoll.get_actor()
-        if armObj == False:
+        if not armObj:
             return
         print("Got actor", armObj.name)
         empties = armObj.get("oni_ragdoll_empties")
-        if empties == None:
+        if empties is None:
             return
         for o in empties:
-            if o.rigid_body_constraint != None:
+            if o.rigid_body_constraint is not None:
                 o.rigid_body_constraint.type = self.ragdoll_type
         print("Set ragdoll to", self.ragdoll_type)
 
@@ -60161,14 +60146,14 @@ class OnigiriRagdollProperties(bpy.types.PropertyGroup):
 
     def update_ragdoll_disable_collisions(self, context):
         armObj = ragdoll.get_actor()
-        if armObj == False:
+        if not armObj:
             return
         print("Got actor", armObj.name)
         empties = armObj.get("oni_ragdoll_empties")
-        if empties == None:
+        if empties is None:
             return
         for o in empties:
-            if o.rigid_body_constraint != None:
+            if o.rigid_body_constraint is not None:
                 o.rigid_body_constraint.disable_collisions = (
                     self.ragdoll_disable_collisions
                 )
@@ -60180,14 +60165,14 @@ class OnigiriRagdollProperties(bpy.types.PropertyGroup):
 
     def update_ragdoll_use_breaking(self, context):
         armObj = ragdoll.get_actor()
-        if armObj == False:
+        if not armObj:
             return
         print("Got actor", armObj.name)
         empties = armObj.get("oni_ragdoll_empties")
-        if empties == None:
+        if empties is None:
             return
         for o in empties:
-            if o.rigid_body_constraint != None:
+            if o.rigid_body_constraint is not None:
                 o.rigid_body_constraint.use_breaking = self.ragdoll_use_breaking
         print("use breaking", self.ragdoll_use_breaking)
 
@@ -60197,14 +60182,14 @@ class OnigiriRagdollProperties(bpy.types.PropertyGroup):
 
     def update_ragdoll_breaking_threshold(self, context):
         armObj = ragdoll.get_actor()
-        if armObj == False:
+        if not armObj:
             return
         print("Got actor", armObj.name)
         empties = armObj.get("oni_ragdoll_empties")
-        if empties == None:
+        if empties is None:
             return
         for o in empties:
-            if o.rigid_body_constraint != None:
+            if o.rigid_body_constraint is not None:
                 o.rigid_body_constraint.breaking_threshold = (
                     self.ragdoll_breaking_threshold
                 )
@@ -60216,13 +60201,13 @@ class OnigiriRagdollProperties(bpy.types.PropertyGroup):
 
     def update_ragdoll_anchor(self, context):
         armObj = ragdoll.get_actor()
-        if armObj == False:
+        if not armObj:
             print("No actor")
             self["ragdoll_anchor"] = False
             return
         print("Got actor", armObj.name)
         directors = armObj.get("oni_ragdoll_directors")
-        if directors == None:
+        if directors is None:
             print("No directors")
             self["ragdoll_anchor"] = False
             return
@@ -60232,7 +60217,7 @@ class OnigiriRagdollProperties(bpy.types.PropertyGroup):
             self["ragdoll_anchor"] = False
             return
         rigid_type = "ACTIVE"
-        if self.ragdoll_anchor == True:
+        if self.ragdoll_anchor:
             rigid_type = "PASSIVE"
 
         directors_set = set()
@@ -60249,13 +60234,13 @@ class OnigiriRagdollProperties(bpy.types.PropertyGroup):
 
     def update_ragdoll_show_constraints(self, context):
         armObj = ragdoll.get_actor()
-        if armObj == False:
+        if not armObj:
             print("No actor")
             self["ragdoll_show_constraints"] = False
             return
         print("Got actor", armObj.name)
         empties = armObj.get("oni_ragdoll_empties")
-        if empties == None:
+        if empties is None:
             print("No empties")
             self["ragdoll_show_constraints"] = False
             return
@@ -60480,11 +60465,11 @@ class OnigiriRagdollAction(bpy.types.Operator):
 
         if 1 == 0:
             armObj = ragdoll.get_actor()
-            if armObj == False:
+            if not armObj:
                 popup("No rig found", "Error", "ERROR")
                 return {"FINISHED"}
 
-        if armObj.get("oni_ragdoll_empties") != None:
+        if armObj.get("oni_ragdoll_empties") is not None:
             print("Ragdoll is already engaged, reset to start over")
             popup(
                 "Ragdoll is already engaged, use reset to start over", "Error", "ERROR"
@@ -60541,7 +60526,7 @@ class OnigiriRagdollAction(bpy.types.Operator):
 
         directors = armObj["oni_ragdoll_directors"]
 
-        if bpy.context.scene.rigidbody_world == None:
+        if bpy.context.scene.rigidbody_world is None:
             bpy.ops.rigidbody.world_add()
         for bone in directors.keys():
             name = directors[bone]
@@ -60663,7 +60648,7 @@ class OnigiriRagdollBake(bpy.types.Operator):
     def execute(self, context):
         oni_ragdoll = bpy.context.window_manager.oni_ragdoll
         armObj = ragdoll.get_actor()
-        if armObj == False:
+        if not armObj:
             print("Can't find an actor")
             popup("Can't find an actor", "Error", "ERROR")
             return {"FINISHED"}
@@ -60671,14 +60656,14 @@ class OnigiriRagdollBake(bpy.types.Operator):
         state = utils.get_state()
 
         result = animutils.bake_motion(sarm=armObj, tarm=armObj)
-        if result == False:
+        if not result:
             print("There was an error baking the animation")
             popup("Animation couldn't bake", "Error", "ERROR")
             return {"FINISHED"}
         print("Animation baked")
 
         empties = armObj.get("oni_ragdoll_empties")
-        if empties == None:
+        if empties is None:
             print("No empties, I'll process other things anyway")
         else:
 
@@ -60688,7 +60673,7 @@ class OnigiriRagdollBake(bpy.types.Operator):
                 o.select_set(True)
             utils.activate(o)
         floorObj = armObj.get("oni_ragdoll_floor")
-        if floorObj != None:
+        if floorObj is not None:
             floorObj.select_set(True)
         bpy.ops.object.delete()
 
@@ -60696,7 +60681,7 @@ class OnigiriRagdollBake(bpy.types.Operator):
         armObj.pop("oni_ragdoll_floor", "")
 
         directors = armObj["oni_ragdoll_directors"]
-        if directors != None:
+        if directors is not None:
 
             if armObj.get("oni_ragdoll_mesh") != "existing":
                 for bone in directors.keys():
@@ -60711,7 +60696,7 @@ class OnigiriRagdollBake(bpy.types.Operator):
 
         for boneObj in armObj.pose.bones:
             cname = boneObj.bone.get("oni_ragdoll_constraint")
-            if cname != None:
+            if cname is not None:
                 for cObj in boneObj.constraints:
                     if cObj.name == cname:
                         boneObj.constraints.remove(cObj)
@@ -60732,7 +60717,7 @@ class OnigiriRagdollBake(bpy.types.Operator):
         print("Skipping parenting for now, add this back later")
         if 1 == 0:
             parents = armObj.get("oni_ragdoll_parents")
-            if parents == None:
+            if parents is None:
                 print("oni_ragdoll_parents missing after bake")
             else:
                 armObj.select_set(True)
@@ -60768,11 +60753,11 @@ class OnigiriRagdollJoin(bpy.types.Operator):
     def execute(self, context):
         oni_ragdoll = bpy.context.window_manager.oni_ragdoll
         armObj = ragdoll.get_actor()
-        if armObj == False:
+        if not armObj:
             print("Could not find actor")
             return {"FINISHED"}
         directors = armObj.get("oni_ragdoll_directors")
-        if directors == None:
+        if directors is None:
             print("No directors were found, can't join mesh")
             popup("Can't find directors", "Error" "ERROR")
             return {"FINISHED"}
@@ -60810,7 +60795,7 @@ class OnigiriRagdollRigidCopy(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         active = bpy.context.active_object
-        if active == None:
+        if active is None:
             return False
         if active.type != "MESH":
             return False
@@ -60843,13 +60828,13 @@ class OnigiriRagdollReset(bpy.types.Operator):
     def execute(self, context):
 
         armObj = ragdoll.get_actor()
-        if armObj == False:
+        if not armObj:
             print("There was no usable actor found.")
             popup("No actor found", "Error", "ERROR")
             return {"FINISHED"}
 
         empties = armObj.get("oni_ragdoll_empties")
-        if empties == None:
+        if empties is None:
             print("The ragdoll was not engaged so no reset needed")
             return {"FINISHED"}
         state = utils.get_state()
@@ -60858,7 +60843,7 @@ class OnigiriRagdollReset(bpy.types.Operator):
             o.hide_set(False)
 
         floorObj = armObj.get("oni_ragdoll_floor")
-        if floorObj != None:
+        if floorObj is not None:
             floorObj.select_set(True)
 
         for o in empties:
@@ -60964,7 +60949,7 @@ class OnigiriSimProperties(bpy.types.PropertyGroup):
     )
 
     def update_sim_controller(self, context):
-        if self.sim_controller == True:
+        if self.sim_controller:
             if bpy.context.mode == "POSE":
                 if len(bpy.context.selected_pose_bones) == 1:
                     sim.props["controller"] = bpy.context.selected_pose_bones[0].name
@@ -60992,7 +60977,7 @@ class OnigiriSimProperties(bpy.types.PropertyGroup):
         o = selected[0]
         if o.type != "ARMATURE":
             return
-        if o.data.bones.active == None:
+        if o.data.bones.active is None:
             return
         for boneObj in o.pose.bones:
             for C in boneObj.constraints:
@@ -61043,13 +61028,13 @@ class OnigiriSimProperties(bpy.types.PropertyGroup):
     )
 
     def update_sim_motion_dynamic(self, context):
-        if self.sim_motion_dynamic == True:
+        if self.sim_motion_dynamic:
             self["sim_motion_object"] = False
         else:
             self["sim_motion_object"] = True
 
     def update_sim_motion_object(self, context):
-        if self.sim_motion_object == True:
+        if self.sim_motion_object:
             self["sim_motion_dynamic"] = False
         else:
             self["sim_motion_dynamic"] = True
@@ -61240,17 +61225,17 @@ class OnigiriSimProperties(bpy.types.PropertyGroup):
             self["sim_custom_disable_armatures"] = not state
             return
         armObj = sim.get_actor(selected[0])
-        if armObj == False:
+        if not armObj:
             print("INIT: sim.get_actor returned False")
             self["sim_custom_disable_armatures"] = not state
             return
         dObj = sim.get_director(armObj)
-        if dObj == False:
+        if not dObj:
             print("INIT: sim.get_director returned False")
             self["sim_custom_disable_armatures"] = not state
             return
 
-        if isinstance(dObj, list) == False:
+        if not isinstance(dObj, list):
             dObj = [dObj]
         for meshObj in dObj:
             for modObj in meshObj.modifiers:
@@ -61281,12 +61266,12 @@ class OnigiriSimActionDynamic(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         oni_sim = bpy.context.window_manager.oni_sim
-        if oni_sim.sim_motion_dynamic == True:
+        if oni_sim.sim_motion_dynamic:
             if len(bpy.context.selected_objects) != 1:
                 return False
             if bpy.context.selected_objects[0].type != "MESH":
                 return False
-        elif oni_sim.sim_motion_object == True:
+        elif oni_sim.sim_motion_object:
             if len(bpy.context.selected_objects) < 1:
                 return False
 
@@ -61307,7 +61292,7 @@ class OnigiriSimActionDynamic(bpy.types.Operator):
 
             if 1 == 1:
                 result = sim.sync(actorObj)
-                if result == False:
+                if not result:
                     print("Bad actor, can't continue")
                     popup(
                         "Error in existing actor object, the object was cleaned up so try again"
@@ -61337,7 +61322,7 @@ class OnigiriSimActionDynamic(bpy.types.Operator):
             directorObj.pop("oni_sim_actor", "")
             return {"FINISHED"}
 
-        if actorObj == None:
+        if actorObj is None:
             print("Creating actor")
 
             armature = bpy.data.armatures.new("Actor")
@@ -61475,7 +61460,7 @@ class OnigiriSimCustomBones(bpy.types.Operator):
         if len(rigs) > 1:
             return False
 
-        if sim.props.get("custom_rig") != None:
+        if sim.props.get("custom_rig") is not None:
             if bpy.context.selected_pose_bones[0].id_data != sim.props["custom_rig"]:
                 return False
 
@@ -61543,9 +61528,9 @@ class OnigiriSimCustomAction(bpy.types.Operator):
     def poll(cls, context):
 
         oni_sim = bpy.context.window_manager.oni_sim
-        if sim.props.get("custom_rig") == None:
+        if sim.props.get("custom_rig") is None:
             return False
-        if sim.props.get("custom_mesh") == None:
+        if sim.props.get("custom_mesh") is None:
             return False
 
         if bpy.context.mode != "OBJECT":
@@ -61569,7 +61554,7 @@ class OnigiriSimCustomAction(bpy.types.Operator):
 
         armObj["oni_sim_manual"] = True
 
-        if utils.is_valid(armObj) == False:
+        if not utils.is_valid(armObj):
             print("INIT: Your armature object is no longer viable")
             popup(
                 "Armature Error: your chosen armature did not survive", "Error", "ERROR"
@@ -61629,7 +61614,7 @@ class OnigiriSimCustomAction(bpy.types.Operator):
                     for loc, index, dist in kd.find_range(hloc, radius):
                         vertices.append(index)
 
-                if preserve == False:
+                if not preserve:
                     if bone in meshObj.vertex_groups:
                         print(
                             "sanity check discovers bone already in groups, removing:",
@@ -61672,14 +61657,14 @@ class OnigiriSimCustomAction(bpy.types.Operator):
                 conObj.name = "ONI Sim " + cname
 
                 base_collection = armObj.data.collections.get(sim.props["group_base"])
-                if base_collection == None:
+                if base_collection is None:
                     base_collection = armObj.data.collections.new(sim.props["group_base"])                
                 
                 group_base = sim.props["group_base"]
                 base_collection.assign(boneObj)
                 boneObj.color.palette = sim.props["theme_base"]
 
-        if disable_armatures == True:
+        if disable_armatures:
             print("Disabling armature modifiers")
             mods = {}
             for meshObj in mesh:
@@ -61794,7 +61779,7 @@ class OnigiriSimCustomConstraints(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if sim.props.get("custom_rig") != None:
+        if sim.props.get("custom_rig") is not None:
             armObj = sim.props["custom_rig"]
             if utils.is_valid(armObj):
                 return True
@@ -61807,7 +61792,7 @@ class OnigiriSimCustomConstraints(bpy.types.Operator):
 
     def execute(self, context):
         selected = bpy.context.selected_objects
-        if sim.props.get("custom_rig") == None:
+        if sim.props.get("custom_rig") is None:
             if len(selected) == 0:
                 popup("No armature available", "Error", "ERROR")
                 return {"FINISHED"}
@@ -61819,7 +61804,7 @@ class OnigiriSimCustomConstraints(bpy.types.Operator):
         else:
             armObj = sim.props["custom_rig"]
 
-        if utils.is_valid(armObj) == False:
+        if not utils.is_valid(armObj):
             popup("Armature is no longer valid", "Error", "ERROR")
             return {"FINISHED"}
 
@@ -61850,7 +61835,7 @@ class OnigiriSimActionObject(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         oni_sim = bpy.context.window_manager.oni_sim
-        if oni_sim.sim_motion_object == True:
+        if oni_sim.sim_motion_object:
             if len(bpy.context.selected_objects) > 0:
                 return True
         return False
@@ -61869,7 +61854,7 @@ class OnigiriSimActionObject(bpy.types.Operator):
         for o in selected:
             if o.type == "MESH":
                 a = o.get("oni_sim_actor")
-                if a != None:
+                if a is not None:
                     actors.add(a)
                 o.pop("oni_sim_actor", "")
 
@@ -62019,7 +62004,7 @@ class OnigiriSimDone(bpy.types.Operator):
     def poll(cls, context):
         oni_sim = bpy.context.window_manager.oni_sim
 
-        if oni_sim.sim_motion_object == True:
+        if oni_sim.sim_motion_object:
             return False
         if len(bpy.context.selected_objects) < 1:
             return False
@@ -62046,7 +62031,7 @@ class OnigiriSimDone(bpy.types.Operator):
             bpy.ops.object.delete()
 
         dObj = sim.get_director(checkObj)
-        if dObj == False:
+        if not dObj:
             print("No director")
             popup("Not a valid set", "Error", "ERROR")
             return {"FINISHED"}
@@ -62136,25 +62121,25 @@ class OnigiriLatchProperties(bpy.types.PropertyGroup):
 
     def get_latch_actor(self):
         active = bpy.context.active_object
-        if active == None:
+        if active is None:
             return False
 
-        if active.get("oni_latch_director") != None:
+        if active.get("oni_latch_director") is not None:
             return True
 
-        if latch.props["latch_waiting"] != None:
+        if latch.props["latch_waiting"] is not None:
             return True
         return False
 
     def get_latch_director(self):
         active = bpy.context.active_object
-        if active == None:
+        if active is None:
             return False
 
-        if active.get("oni_latch_actor") != None:
+        if active.get("oni_latch_actor") is not None:
             return True
 
-        if latch.props["latch_waiting"] == None:
+        if latch.props["latch_waiting"] is None:
             return False
 
         return False
@@ -62188,10 +62173,10 @@ class OnigiriLatchcleanup(bpy.types.Operator):
 
                 for boneObj in outRig.pose.bones:
                     constraints = boneObj.get("oni_latch_constraints")
-                    if constraints != None:
+                    if constraints is not None:
                         for cname in constraints:
                             conObj = boneObj.constraints.get(cname)
-                            if conObj != None:
+                            if conObj is not None:
                                 boneObj.constraints.remove(conObj)
                         boneObj.pop("oni_latch_constraints", "")
                 inRig.pop("oni_latch_actor", "")
@@ -62200,10 +62185,10 @@ class OnigiriLatchcleanup(bpy.types.Operator):
 
             for boneObj in armObj.pose.bones:
                 constraints = boneObj.get("oni_latch_constraints")
-                if constraints != None:
+                if constraints is not None:
                     for cname in constraints:
                         conObj = boneObj.constraints.get("cname")
-                        if conObj != None:
+                        if conObj is not None:
                             boneObj.constraints.remove(conObj)
             armObj.pop("oni_latch_actor", "")
             armObj.pop("oni_latch_director", "")
@@ -62222,7 +62207,7 @@ class OnigiriLatchActor(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         active = bpy.context.active_object
-        if active == None:
+        if active is None:
             return False
         if active.type != "ARMATURE":
             return False
@@ -62269,14 +62254,14 @@ class OnigiriLatchDirector(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         active = bpy.context.active_object
-        if active == None:
+        if active is None:
             return False
         if active.type != "ARMATURE":
             return False
 
         if active.get("oni_latch_director") or active.get("oni_latch_actor"):
             return False
-        if latch.props["latch_waiting"] == None:
+        if latch.props["latch_waiting"] is None:
             return False
 
         return True
@@ -62285,7 +62270,7 @@ class OnigiriLatchDirector(bpy.types.Operator):
         oni_latch = bpy.context.window_manager.oni_latch
         inRig = bpy.context.active_object
         outRig = latch.props["latch_waiting"]
-        if outRig == None:
+        if outRig is None:
             print(
                 "weird issue with outrig for a latch, see where you forgot to reset it or to define it"
             )
@@ -62298,7 +62283,7 @@ class OnigiriLatchDirector(bpy.types.Operator):
             return {"FINISHED"}
 
         rename_map = outRig.get("oni_onemap_rename")
-        if rename_map == None:
+        if rename_map is None:
             print(
                 "Your actor object/rig must have a map on it which you can generate using any of the mapper tools"
             )
@@ -62389,14 +62374,14 @@ class OnigiriLatchSnap(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         active = bpy.context.active_object
-        if active == None:
+        if active is None:
             return False
         if active.type != "ARMATURE":
             return False
 
         if (
-            active.get("oni_latch_director") == None
-            and active.get("oni_latch_actor") == None
+            active.get("oni_latch_director") is None
+            and active.get("oni_latch_actor") is None
         ):
             return False
         return True
@@ -62405,7 +62390,7 @@ class OnigiriLatchSnap(bpy.types.Operator):
         oni_latch = bpy.context.window_manager.oni_latch
         armObj = bpy.context.active_object
         inRig = latch.get_director(armObj)
-        if inRig == False:
+        if not inRig:
             print("no director")
             popup("No Director", "Error", "ERROR")
 
@@ -62418,7 +62403,7 @@ class OnigiriLatchSnap(bpy.types.Operator):
             constraints = boneObj.pop("oni_latch_constraints", [])
             for c in constraints:
                 conObj = boneObj.constraints.get("c")
-                if conObj != None:
+                if conObj is not None:
                     boneObj.constraints.remove(conObj)
 
         armObj.select_set(False)
@@ -62471,14 +62456,14 @@ class OnigiriLatchConnect(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         active = bpy.context.active_object
-        if active == None:
+        if active is None:
             return False
         if active.type != "ARMATURE":
             return False
 
         if (
-            active.get("oni_latch_director") == None
-            and active.get("oni_latch_actor") == None
+            active.get("oni_latch_director") is None
+            and active.get("oni_latch_actor") is None
         ):
             return False
         return True
@@ -62487,7 +62472,7 @@ class OnigiriLatchConnect(bpy.types.Operator):
         oni_latch = bpy.context.window_manager.oni_latch
         armObj = bpy.context.active_object
         inRig = latch.get_director(armObj)
-        if inRig == False:
+        if not inRig:
             print("no director")
             popup("No Director", "Error", "ERROR")
 
@@ -62524,7 +62509,7 @@ class OnigiriLatchRestore(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         active = bpy.context.active_object
-        if active == None:
+        if active is None:
             return False
         if active.type != "ARMATURE":
             return False
@@ -62534,21 +62519,21 @@ class OnigiriLatchRestore(bpy.types.Operator):
         oni_latch = bpy.context.window_manager.oni_latch
         armObj = bpy.context.active_object
         inRig = latch.get_director(armObj)
-        if inRig == False:
+        if not inRig:
             print("no director")
         else:
             outRig = inRig["oni_latch_actor"]
             data = outRig.get("oni_latch_data")
-            if data != None:
+            if data is not None:
                 outRig.data = data
                 outRig.pop("oni_latch_data")
             data = inRig.get("oni_latch_data")
-            if data != None:
+            if data is not None:
                 inRig.data = data
                 inRig.pop("oni_latch_data")
-        if armObj != None:
+        if armObj is not None:
             data = armObj.get("oni_latch_data")
-            if data != None:
+            if data is not None:
                 armObj.data = data
                 armObj.pop("oni_latch_data")
 
@@ -62568,31 +62553,31 @@ class OnigiriLatchFreeze(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         active = bpy.context.active_object
-        if active == None:
+        if active is None:
             return False
         if active.type != "ARMATURE":
             return False
 
         if (
-            active.get("oni_latch_director") == None
-            or active.get("oni_latch_actor") == None
+            active.get("oni_latch_director") is None
+            or active.get("oni_latch_actor") is None
         ):
             return False
-        if active.get("oni_onemap_rename") == None:
+        if active.get("oni_onemap_rename") is None:
             return False
         return True
 
     def execute(self, context):
         oni_latch = bpy.context.window_manager.oni_latch
         inRig = bpy.context.active_object
-        if inRig == False:
+        if not inRig:
             print("no director")
             popup("No Director", "Error", "ERROR")
 
         outRig = inRig["oni_latch_actor"]
 
         rename_map = inRig.get("oni_onemap_rename")
-        if rename_map == None:
+        if rename_map is None:
             print("No map")
             popup("No map", "Error", "ERROR")
             return {"FINISHED"}
@@ -62674,7 +62659,7 @@ class OnigiriSimBake(bpy.types.Operator):
         director = o.get("oni_sim_director")
         directors = o.get("oni_sim_directors")
         actor = o.get("oni_sim_actor")
-        if director == None and directors == None and actor == None:
+        if director is None and directors is None and actor is None:
             return False
         if sim.props["marker_head"] != "":
             return False
@@ -62685,7 +62670,7 @@ class OnigiriSimBake(bpy.types.Operator):
         checkObj = bpy.context.selected_objects[0]
 
         dObj = sim.get_director(checkObj)
-        if dObj == False:
+        if not dObj:
             print("This doesn't appear to be a sim set")
             popup("This doesn't appear to be part of a sim set", "Error", "ERROR")
             return {"FINISHED"}
@@ -62701,7 +62686,7 @@ class OnigiriSimBake(bpy.types.Operator):
         if utils.is_valid(aObj):
 
             result = animutils.bake_motion(sarm=aObj, tarm=aObj)
-            if result == True:
+            if result:
                 print("Baking finished!")
 
                 for boneObj in aObj.pose.bones:
@@ -62782,7 +62767,7 @@ class OnigiriSimBake(bpy.types.Operator):
 
         if 1 == 0:
             dObj = sim.get_director(checkObj)
-            if dObj == False:
+            if not dObj:
                 print("No director link for", checkObj.name)
 
                 print("Cleaning up mesh just in case")
@@ -62809,7 +62794,7 @@ class OnigiriSimBake(bpy.types.Operator):
         sim.props["vertex_tail"] = ""
 
         armObj = sim.get_actor(checkObj)
-        if armObj == False:
+        if not armObj:
             print("No custom actor available, no problem")
         else:
             sim.props.pop("custom_rig", "")
@@ -62840,7 +62825,7 @@ class OnigiriSimJoin(bpy.types.Operator):
         director = o.get("oni_sim_director")
         directors = o.get("oni_sim_directors")
         actor = o.get("oni_sim_actor")
-        if director == None and directors == None and actor == None:
+        if director is None and directors is None and actor is None:
             return False
         if sim.props["marker_head"] != "":
             return False
@@ -62851,7 +62836,7 @@ class OnigiriSimJoin(bpy.types.Operator):
         checkObj = bpy.context.selected_objects[0]
 
         dObj = sim.get_director(checkObj)
-        if dObj == False:
+        if not dObj:
             print("This doesn't appear to be a sim set")
             popup("This doesn't appear to be part of a sim set", "Error", "ERROR")
             return {"FINISHED"}
@@ -62920,7 +62905,7 @@ class OnigiriSimParent(bpy.types.Operator):
         director = o.get("oni_sim_director")
         directors = o.get("oni_sim_directors")
         actor = o.get("oni_sim_actor")
-        if director == None and directors == None and actor == None:
+        if director is None and directors is None and actor is None:
             return False
         if sim.props["marker_head"] != "":
             return False
@@ -62931,7 +62916,7 @@ class OnigiriSimParent(bpy.types.Operator):
         checkObj = bpy.context.selected_objects[0]
 
         dObj = sim.get_director(checkObj)
-        if dObj == False:
+        if not dObj:
             print("This doesn't appear to be a sim set")
             popup("This doesn't appear to be part of a sim set", "Error", "ERROR")
             return {"FINISHED"}
@@ -62990,7 +62975,7 @@ class OnigiriSimAddBone(bpy.types.Operator):
     def poll(cls, context):
         oni_sim = bpy.context.window_manager.oni_sim
 
-        if oni_sim.sim_motion_object == True:
+        if oni_sim.sim_motion_object:
             return False
         if len(bpy.context.selected_objects) < 1:
             return False
@@ -63052,7 +63037,7 @@ class OnigiriSimAddBone(bpy.types.Operator):
         sim.props["bmesh"] = ""
 
         dObj = sim.get_director(checkObj)
-        if dObj == False:
+        if not dObj:
             print("No simulation object was in the set")
             popup("Missing simulation object so no actor either", "Error", "ERROR")
             return {"FINISHED"}
@@ -63061,7 +63046,7 @@ class OnigiriSimAddBone(bpy.types.Operator):
             print("actor was removed", "Error", "ERROR")
             return {"FINISHED"}
 
-        if oni_sim.sim_path == True:
+        if oni_sim.sim_path:
 
             dObj.select_set(True)
             utils.activate(dObj)
@@ -63098,7 +63083,7 @@ class OnigiriSimAddBone(bpy.types.Operator):
                 bpy.ops.object.delete()
                 alternate = True
 
-            if alternate == True:
+            if alternate:
                 popup(
                     "A surface path could not be determined, using a straight path instead",
                     "Error",
@@ -63146,13 +63131,13 @@ class OnigiriSimAddBone(bpy.types.Operator):
             bm = bmesh.from_edit_mesh(pathObj.data)
             bm.verts.ensure_lookup_table()
 
-            if alternate == True:
+            if alternate:
                 hid = head_vertex
 
             else:
                 vert_id = bm.verts.layers.int.get("id")
 
-                if vert_id == None:
+                if vert_id is None:
                     print("Lost the vertex properties!")
                     popup(
                         "Fatal internal error, your setup is not stable after this error",
@@ -63213,7 +63198,7 @@ class OnigiriSimAddBone(bpy.types.Operator):
             bpy.ops.object.mode_set(mode="EDIT")
             p_zero = False
             for p in curveObj.data.splines[0].points:
-                if p_zero == False:
+                if not p_zero:
                     p_zero = True
                     p.select = False
                 else:
@@ -63242,7 +63227,7 @@ class OnigiriSimAddBone(bpy.types.Operator):
             while True:
 
                 v = get_next_vertex(pathObj, last_vertex, previous_vertex)
-                if v == None:
+                if v is None:
                     print(
                         "Internal vertex search error, pathObj.name:",
                         pathObj.name,
@@ -63281,7 +63266,7 @@ class OnigiriSimAddBone(bpy.types.Operator):
 
             modArray.count = oni_sim.sim_path_count + 1
 
-            if oni_sim.sim_path_extend == True:
+            if oni_sim.sim_path_extend:
                 displace = path_length / (oni_sim.sim_path_count - 1)
             else:
                 displace = path_length / (oni_sim.sim_path_count)
@@ -63357,7 +63342,7 @@ class OnigiriSimAddBone(bpy.types.Operator):
                     tail=tloc,
                     vertices=vertices,
                 )
-                if result == False:
+                if not result:
                     print("Bone builder failed")
                     return {"FINISHED"}
 
@@ -63365,7 +63350,7 @@ class OnigiriSimAddBone(bpy.types.Operator):
 
             del kd
 
-            if oni_sim.sim_path_parent == True:
+            if oni_sim.sim_path_parent:
 
                 print(
                     "Parenting requested, the armature has",
@@ -63455,12 +63440,12 @@ class OnigiriSimEditBones(bpy.types.Operator):
     def poll(cls, context):
         oni_sim = bpy.context.window_manager.oni_sim
 
-        if oni_sim.sim_motion_object == True:
+        if oni_sim.sim_motion_object:
             return False
         if len(bpy.context.selected_objects) < 1:
             return False
         o = bpy.context.selected_objects[0]
-        if o.get("oni_sim_actor") == None and o.get("oni_sim_director") == None:
+        if o.get("oni_sim_actor") is None and o.get("oni_sim_director") is None:
             return False
         return True
 
@@ -63470,7 +63455,7 @@ class OnigiriSimEditBones(bpy.types.Operator):
 
         if bpy.context.mode == "EDIT_ARMATURE":
             dObj = sim.get_director(checkObj)
-            if dObj == False:
+            if not dObj:
                 print("No director, not the right EDIT_ARMATURE")
                 return {"FINISHED"}
             bpy.ops.object.mode_set(mode="OBJECT")
@@ -63497,7 +63482,7 @@ class OnigiriSimEditBones(bpy.types.Operator):
             bpy.ops.object.delete()
 
         dObj = sim.get_director(checkObj)
-        if dObj == False:
+        if not dObj:
             print("No director")
             popup("Not a valid set", "Error", "ERROR")
             return {"FINISHED"}
@@ -63536,7 +63521,7 @@ class OnigiriSimRigidCopy(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         oni_sim = bpy.context.window_manager.oni_sim
-        if oni_sim.sim_motion_object == False:
+        if not oni_sim.sim_motion_object:
             return False
         return True
 
@@ -63631,7 +63616,7 @@ class OnigiriSimReset(bpy.types.Operator):
         sim.props["marker_tail"] = ""
 
         dObj = sim.get_director(checkObj)
-        if dObj == False:
+        if not dObj:
             print("No director link for", checkObj.name)
 
             print("Cleaning up mesh just in case")
@@ -63649,10 +63634,10 @@ class OnigiriSimReset(bpy.types.Operator):
             for dObj in director_objects:
                 aObj = dObj.get("oni_sim_actor")
                 dObj.pop("oni_sim_actor", "")
-                if aObj != None:
+                if aObj is not None:
                     if utils.is_valid(aObj):
 
-                        if aObj.get("oni_sim_manual") != None:
+                        if aObj.get("oni_sim_manual") is not None:
                             aObj.select_set(False)
                             aObj.pop("oni_sim_manual", "")
                         else:
@@ -63688,7 +63673,7 @@ class OnigiriSimReset(bpy.types.Operator):
                 utils.activate(checkObj)
 
         armObj = sim.get_actor(checkObj)
-        if armObj == False:
+        if not armObj:
             print("No custom actor available, no problem")
         else:
             sim.props.pop("custom_rig", "")
@@ -63745,7 +63730,7 @@ class OnigiriSimStretchAdd(bpy.types.Operator):
 
         for boneObj in selected_bones:
             cname = boneObj.get("oni_sim_stretch")
-            if cname != None:
+            if cname is not None:
                 for C in boneObj.constraints:
                     if C.name == cname:
                         boneObj.constraints.remove(C)
@@ -63761,11 +63746,11 @@ class OnigiriSimStretchAdd(bpy.types.Operator):
             if boneObj.parent:
                 parent = boneObj.parent.name
 
-                if oni_sim.sim_deformable == True:
-                    if boneObj.bone.use_deform == False:
+                if oni_sim.sim_deformable:
+                    if not boneObj.bone.use_deform:
                         continue
 
-                if oni_sim.sim_anchor == False:
+                if not oni_sim.sim_anchor:
                     if parent not in bone_names:
 
                         print("Found end:", parent)
@@ -63783,7 +63768,7 @@ class OnigiriSimStretchAdd(bpy.types.Operator):
                 conObj.influence = 1
                 boneObj["oni_sim_stretch"] = cname
 
-        if anchor != None:
+        if anchor is not None:
             armObj.data.bones.active = armObj.data.bones[anchor]
 
         return {"FINISHED"}
@@ -63815,7 +63800,7 @@ class OnigiriSimStretchRemove(bpy.types.Operator):
 
         for boneObj in selected_bones:
             cname = boneObj.get("oni_sim_stretch")
-            if cname != None:
+            if cname is not None:
                 for C in boneObj.constraints:
                     if C.name == cname:
                         boneObj.constraints.remove(C)
@@ -63854,7 +63839,7 @@ class OnigiriSimCurlAdd(bpy.types.Operator):
 
         for boneObj in selected_bones:
             cname = boneObj.get("oni_sim_curl")
-            if cname != None:
+            if cname is not None:
                 for C in boneObj.constraints:
                     if C.name == cname:
                         boneObj.constraints.remove(C)
@@ -63864,10 +63849,10 @@ class OnigiriSimCurlAdd(bpy.types.Operator):
             if boneObj.parent:
                 parent = boneObj.parent.name
 
-                if oni_sim.sim_deformable == True:
-                    if boneObj.bone.use_deform == False:
+                if oni_sim.sim_deformable:
+                    if not boneObj.bone.use_deform:
                         continue
-                if oni_sim.sim_anchor == False:
+                if not oni_sim.sim_anchor:
                     if parent not in bone_names:
 
                         anchor = boneObj.name
@@ -63885,7 +63870,7 @@ class OnigiriSimCurlAdd(bpy.types.Operator):
                 conObj.influence = 1
                 boneObj["oni_sim_curl"] = cname
 
-        if anchor != None:
+        if anchor is not None:
             armObj.data.bones.active = armObj.data.bones[anchor]
 
         return {"FINISHED"}
@@ -63917,7 +63902,7 @@ class OnigiriSimCurlRemove(bpy.types.Operator):
 
         for boneObj in selected_bones:
             cname = boneObj.get("oni_sim_curl")
-            if cname != None:
+            if cname is not None:
                 for C in boneObj.constraints:
                     if C.name == cname:
                         boneObj.constraints.remove(C)
@@ -63951,7 +63936,7 @@ class OnigiriIK(bpy.types.Operator):
         cBone = bpy.context.selected_pose_bones[0]
 
         cname = cBone.get("oni_sim_controller")
-        if cname != None:
+        if cname is not None:
             for C in cBone.constraints:
                 if C.type == "IK":
                     if C.name == cname:
@@ -63966,7 +63951,7 @@ class OnigiriIK(bpy.types.Operator):
                     boneObj = boneObj.parent
 
                 else:
-                    if boneObj.bone.use_deform == True:
+                    if boneObj.bone.use_deform:
                         chain += 1
                     break
 
@@ -64016,7 +64001,7 @@ class OnigiriIKNuke(bpy.types.Operator):
 
         for boneObj in selected_bones:
             cname = boneObj.get("oni_sim_controller")
-            if cname != None:
+            if cname is not None:
                 for C in boneObj.constraints:
                     if C.type == "IK":
                         if C.name == cname:
@@ -64056,9 +64041,9 @@ class OnigiriSimKey(bpy.types.Operator):
 
         frame_current = bpy.context.scene.frame_current
 
-        if armObj.animation_data == None:
+        if armObj.animation_data is None:
             armObj.animation_data_create()
-        if armObj.animation_data.action == None:
+        if armObj.animation_data.action is None:
             armObj.animation_data_create()
 
         for boneObj in selected_bones:
@@ -64068,19 +64053,19 @@ class OnigiriSimKey(bpy.types.Operator):
             pmat = boneObj.matrix_basis.copy()
             boneObj.matrix_basis = pmat
 
-            if oni_sim.sim_key_rotation == True:
+            if oni_sim.sim_key_rotation:
                 rotation_mode = boneObj.rotation_mode
                 if rotation_mode == "QUATERNION":
                     rmode = "rotation_quaternion"
                 else:
                     rmode = "rotation_euler"
                 boneObj.keyframe_insert(data_path=rmode, frame=frame_current)
-            if oni_sim.sim_key_location == True:
+            if oni_sim.sim_key_location:
                 boneObj.keyframe_insert(data_path="location", frame=frame_current)
-            if oni_sim.sim_key_scale == True:
+            if oni_sim.sim_key_scale:
                 boneObj.keyframe_insert(data_path="scale", frame=frame_current)
 
-        if oni_sim.sim_controller == True:
+        if oni_sim.sim_controller:
             bone = sim.props["controller"]
             if bone in armObj.data.bones:
                 for boneObj in selected_bones:
@@ -64114,10 +64099,10 @@ class OnigiriInfoPanel(bpy.types.Panel):
         row.separator()
         row.label(text="Onigiri Version: " + str(bl_info["version"]))
         if len(bpy.context.selected_objects) == 1:
-            if bpy.context.selected_objects[0].get("onigiri") != None:
+            if bpy.context.selected_objects[0].get("onigiri") is not None:
                 oni_rig_class = bpy.context.object.get("rig_class", "None")
                 oni_rig_version = bpy.context.object.get("onigiri")
-                if oni_rig_version == None:
+                if oni_rig_version is None:
                     oni_rig_version = "Unknown"
                 else:
                     oni_rig_version = tuple(oni_rig_version.to_list())
@@ -64166,7 +64151,7 @@ class OnigiriPanelBind(bpy.types.Panel):
             icon_value=ico.custom_icons["glue"].icon_id,
         )
 
-        if onim.enable_bind_data == False:
+        if not onim.enable_bind_data:
             row = col.row(align=True)
             row.label(
                 text="Manipulate Bind Info Data - !",
@@ -64201,7 +64186,7 @@ class OnigiriPanelBind(bpy.types.Panel):
             )
             row = col.row(align=True)
 
-        if onim.enable_bind_data == True:
+        if onim.enable_bind_data:
             col = box.column(align=True)
 
             bind_data_loc_icon = "dot_red"
@@ -64216,13 +64201,13 @@ class OnigiriPanelBind(bpy.types.Panel):
                 armObj = selected[0]
                 if armObj.type == "ARMATURE":
 
-                    if armObj.data.bones[0].get("restpose_loc_x") != None:
+                    if armObj.data.bones[0].get("restpose_loc_x") is not None:
                         bind_data_action_loc = "del"
                         bind_data_loc_icon = "dot_green"
-                    if armObj.data.bones[0].get("restpose_rot_x") != None:
+                    if armObj.data.bones[0].get("restpose_rot_x") is not None:
                         bind_data_action_rot = "del"
                         bind_data_rot_icon = "dot_green"
-                    if armObj.data.bones[0].get("restpose_scale_x") != None:
+                    if armObj.data.bones[0].get("restpose_scale_x") is not None:
                         bind_data_action_scl = "del"
                         bind_data_scl_icon = "dot_green"
             row = col.row(align=True)
@@ -64315,7 +64300,7 @@ class OnigiriPanelBind(bpy.types.Panel):
                 icon_value=ico.custom_icons["blank"].icon_id,
             ).action = "remove_rest_matrix"
             row = col.row(align=True)
-            if onim.get("bind_info") == None:
+            if onim.get("bind_info") is None:
                 bind_copy_buffer = "blank"
             else:
                 bind_copy_buffer = "thumb_up"
@@ -64369,7 +64354,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
             )
 
             ajd = bpy.context.window_manager.oni_joint_data
-            if ajd.joint_data_enabled == True:
+            if ajd.joint_data_enabled:
                 menu_state = "menu_opened"
             else:
                 menu_state = "menu_closed"
@@ -64382,8 +64367,8 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
             elif len(bpy.context.selected_objects) > 1:
                 ajd.joint_data_enabled = False
             if len(bpy.context.selected_objects) == 1:
-                if ajd.joint_data_enabled_override != True:
-                    if bpy.context.selected_objects[0].get("onigiri") == None:
+                if not ajd.joint_data_enabled_override:
+                    if bpy.context.selected_objects[0].get("onigiri") is None:
                         ajd.joint_data_enabled = False
 
             row.prop(
@@ -64400,7 +64385,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
                 toggle=True,
             )
 
-            if ajd.joint_data_enabled == True:
+            if ajd.joint_data_enabled:
 
                 box = layout.box()
                 col = box.column(align=True)
@@ -64734,7 +64719,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
             box.label(
                 text="Alter the bone orientation:",
             )
-            if anim_advanced.matrix_converter_enabled == True:
+            if anim_advanced.matrix_converter_enabled:
                 menu_state = "menu_opened"
             else:
                 menu_state = "menu_closed"
@@ -64748,7 +64733,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
                 toggle=True,
                 icon_value=ico.custom_icons[menu_state].icon_id,
             )
-            if anim_advanced.matrix_converter_enabled == True:
+            if anim_advanced.matrix_converter_enabled:
 
                 row = col.row(align=True)
                 row.label(
@@ -64912,7 +64897,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
 
         layout = self.layout
 
-        if onia.bvh_menu_enabled == True:
+        if onia.bvh_menu_enabled:
             bvh_menu_enabled_icon = "menu_opened"
         else:
             bvh_menu_enabled_icon = "menu_closed"
@@ -64925,7 +64910,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
             icon_value=ico.custom_icons[bvh_menu_enabled_icon].icon_id,
         )
 
-        if onia.bvh_menu_enabled == True:
+        if onia.bvh_menu_enabled:
             box = layout.box()
             col = box.column(align=True)
             row = col.row(align=True)
@@ -64978,7 +64963,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
 
         oni_misc = bpy.context.window_manager.oni_misc
         object_props_menu_enabled_icon = "menu_closed"
-        if oni_misc.object_props_menu_enabled == True:
+        if oni_misc.object_props_menu_enabled:
             object_props_menu_enabled_icon = "menu_opened"
         row.prop(
             oni_misc,
@@ -64987,7 +64972,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
             toggle=True,
             icon_value=ico.custom_icons[object_props_menu_enabled_icon].icon_id,
         )
-        if oni_misc.object_props_menu_enabled == True:
+        if oni_misc.object_props_menu_enabled:
 
             layout = self.layout
             box = layout.box()
@@ -64998,13 +64983,13 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
             transfer_object_props_paste_buffer_icon = "blank"
             transfer_object_props_clear_buffer_icon = "blank"
             transfer_object_props_print_buffer_icon = "blank"
-            if oni_misc.get("prop_buffer") != None:
+            if oni_misc.get("prop_buffer") is not None:
                 transfer_object_props_copy_buffer_icon = "dot_blue"
                 transfer_object_props_paste_buffer_icon = "dot_green"
                 transfer_object_props_clear_buffer_icon = "x_red"
                 transfer_object_props_print_buffer_icon = "dot_white"
             show_object_props_icon = "menu_closed"
-            if oni_misc.show_object_props == True:
+            if oni_misc.show_object_props:
                 show_object_props_icon = "menu_opened"
 
             row = col.row(align=True)
@@ -65045,7 +65030,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
                 toggle=True,
                 icon_value=ico.custom_icons[show_object_props_icon].icon_id,
             )
-            if oni_misc.show_object_props == True:
+            if oni_misc.show_object_props:
                 if (len(bpy.context.selected_objects) == 1) and (
                     bpy.context.object.type == "MESH"
                     or bpy.context.object.type == "ARMATURE"
@@ -65088,15 +65073,15 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
                             bpy.context.mode == "POSE"
                             or bpy.context.mode == "EDIT_ARMATURE"
                         ):
-                            if bpy.context.selected_pose_bones != None:
+                            if bpy.context.selected_pose_bones is not None:
                                 if len(bpy.context.selected_pose_bones) == 1:
                                     boneObj = bpy.context.selected_pose_bones[0]
                                     show_bone_props = True
-                            if o.data.edit_bones.active != None:
+                            if o.data.edit_bones.active is not None:
                                 bone = o.data.edit_bones.active.name
                                 boneObj = o.data.bones[bone]
                                 show_bone_props = True
-                    if show_bone_props == True:
+                    if show_bone_props:
                         col = box.column(align=True)
                         row = col.row(align=True)
                         row.label(

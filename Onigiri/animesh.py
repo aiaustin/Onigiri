@@ -295,7 +295,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
 
         ani = bpy.context.window_manager.oni_animesh
         obj = bpy.data.objects
-        if ani.animesh_menu_enabled == True:
+        if ani.animesh_menu_enabled:
             print("animesh menu enabled")
         else:
             print("animesh menu disabled")
@@ -303,13 +303,13 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
 
     def update_animesh_mapper_enabled(self, context):
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
 
         ani = bpy.context.window_manager.oni_animesh
         obj = bpy.data.objects
-        if ani.animesh_mapper_enabled == True:
+        if ani.animesh_mapper_enabled:
             print("update_animesh_mapper_enabled reports: animesh mapper enabled")
             ani.animesh_message = "Select a source bone"
 
@@ -324,12 +324,12 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
         return
 
     def update_animesh_lock_source(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         ani = bpy.context.window_manager.oni_animesh
         obj = bpy.data.objects
-        if ani.animesh_lock_source == True:
+        if ani.animesh_lock_source:
             if len(bpy.context.selected_objects) == 0:
                 ani.animesh_message = "[Select at least 1 armature]"
                 oni_settings["terminate"] = True
@@ -370,12 +370,12 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
 
     def update_animesh_lock_target(self, context):
 
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         ani = bpy.context.window_manager.oni_animesh
         obj = bpy.data.objects
-        if ani.animesh_lock_target == True:
+        if ani.animesh_lock_target:
 
             ani["targets"] = dict()
             if len(bpy.context.selected_objects) == 0:
@@ -428,7 +428,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
         return
 
     def update_animesh_check(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         ani = bpy.context.window_manager.oni_animesh
@@ -437,7 +437,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
         if (
             ani.animesh_source_name == "" or ani.animesh_target_name == ""
         ) and ani.animesh_mapper_enabled == False:
-            if ani.get("targets_waiting") != None:
+            if ani.get("targets_waiting") is not None:
                 if len(ani["targets_waiting"]) > 0:
                     print("Template targets still waiting to be processed")
                     return
@@ -447,13 +447,13 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
 
         elif (
             ani.animesh_source_name == "" or ani.animesh_target_name == ""
-        ) and ani.animesh_mapper_enabled == True:
+        ) and ani.animesh_mapper_enabled:
 
             print("update_animesh_check reports: disabled animesh mapper")
             animesh_init()
             return
         else:
-            if ani.get("targets_waiting") != None:
+            if ani.get("targets_waiting") is not None:
                 if len(ani["targets_waiting"]) > 0:
                     print(
                         "Ready to enable template workshop but targets are not completely processed"
@@ -463,7 +463,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
             print("update_animesh_check reports: enabled animesh mapper")
 
             source_bone_count = len(obj[ani.animesh_source_name].data.bones)
-            if obj[ani.animesh_source_name].get("onigiri_control_rig") == True:
+            if obj[ani.animesh_source_name].get("onigiri_control_rig"):
 
                 print("has control rig", ani.animesh_source_name)
                 source_bone_count = int(source_bone_count / 2)
@@ -483,7 +483,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
         return
 
     def update_animesh_suspend(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         ani = bpy.context.window_manager.oni_animesh
@@ -494,7 +494,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
             ani.animesh_suspend = False
             return
 
-        if ani.animesh_suspend == True:
+        if ani.animesh_suspend:
             bpy.app.handlers.depsgraph_update_post.remove(animesh_mode)
             ani.animesh_message = "[SUSPENDED] Move rigs / bones"
 
@@ -531,13 +531,13 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
         return
 
     def update_animesh_reset(self, context):
-        if oni_settings["terminate"] == True:
+        if oni_settings["terminate"]:
             oni_settings["terminate"] = False
             return
         ani = bpy.context.window_manager.oni_animesh
         obj = bpy.data.objects
 
-        if ani.animesh_suspend == True:
+        if ani.animesh_suspend:
             ani.animesh_message = "ERROR: come out of suspend"
             oni_settings["terminate"] = True
             ani.animesh_reset = False
@@ -694,7 +694,7 @@ class OnigiriAnimeshGetCurrent(bpy.types.Operator):
         ani = bpy.context.window_manager.oni_animesh
         bmp = bpy.context.window_manager.oni_mapper
 
-        if bmp.mapper_enabled == True:
+        if bmp.mapper_enabled:
             return True
         return False
 
@@ -717,25 +717,25 @@ class OnigiriAnimeshGetCurrent(bpy.types.Operator):
         arm_props = {}
         for arm in arms:
             arm_props.setdefault(arm, {})
-            if obj[arm].get("onigiri_control_rig") != None:
+            if obj[arm].get("onigiri_control_rig") is not None:
                 arm_props[arm]["onigiri_control_rig"] = obj[source][
                     "onigiri_control_rig"
                 ]
-            if obj[arm].get("bone_map") != None:
+            if obj[arm].get("bone_map") is not None:
                 arm_props[arm]["bone_map"] = obj[source]["bone_map"].to_dict()
-            if obj[arm].get("bone_data") != None:
+            if obj[arm].get("bone_data") is not None:
                 arm_props[arm]["bone_data"] = obj[source]["bone_data"].to_dict()
-            if obj[arm].get("name") != None:
+            if obj[arm].get("name") is not None:
                 arm_props[arm]["name"] = obj[source]["name"]
-            if obj[arm].get("mapped") != None:
+            if obj[arm].get("mapped") is not None:
                 arm_props[arm]["mapped"] = obj[source]["mapped"]
-            if obj[arm].get("rig_type") != None:
+            if obj[arm].get("rig_type") is not None:
                 arm_props[arm]["rig_type"] = obj[source]["rig_type"]
 
-            if obj[arm].get("location") != None:
+            if obj[arm].get("location") is not None:
                 arm_props[arm]["location"] = obj[source]["location"]
 
-            if obj[arm].get("role") != None:
+            if obj[arm].get("role") is not None:
                 arm_props[arm]["role"] = obj[source]["role"]
 
         targets = bmp["targets"].to_dict()
@@ -946,7 +946,7 @@ class OnigiriAnimeshSetTarget(bpy.types.Operator):
             popup(txt, "Circular dependency", "ERROR")
             return {"FINISHED"}
 
-        if ani.get("targets") != None:
+        if ani.get("targets") is not None:
             if armObj.name in ani["targets"].keys():
                 txt = "Error: already chosen as target"
                 popup(txt, "Duplicate Target", "ERROR")
@@ -1005,7 +1005,7 @@ class OnigiriAnimeshSetTarget(bpy.types.Operator):
                         armature=source, bone=sbone, group=oni_source_group
                     )
                     add_bone_to_group(armature=tarm, bone=tbone, group=oni_target_group)
-            if sbone_error == True:
+            if sbone_error:
                 popup(
                     "There were source bones missing, this is probably not good, check console",
                     "Error",
@@ -1103,7 +1103,7 @@ class OnigiriAnimeshApply(bpy.types.Operator):
         obj = bpy.data.objects
         ani = bpy.context.window_manager.oni_animesh
 
-        if ani.animesh_suspend == True:
+        if ani.animesh_suspend:
             return False
 
         if ani.animesh_mapper_enabled == False:
@@ -1161,7 +1161,7 @@ class OnigiriAnimeshAddTarget(bpy.types.Operator):
         ani = bpy.context.window_manager.oni_animesh
         if ani.animesh_suspend != True:
             return False
-        if ani.get("targets") == None:
+        if ani.get("targets") is None:
             return False
         if len(bpy.context.selected_objects) == 0:
             return False
@@ -1207,7 +1207,7 @@ class OnigiriAnimeshStore(bpy.types.Operator):
         obj = bpy.data.objects
         ani = bpy.context.window_manager.oni_animesh
 
-        if ani.animesh_suspend == True:
+        if ani.animesh_suspend:
             return False
 
         if ani.animesh_mapper_enabled == False:
@@ -1269,7 +1269,7 @@ class OnigiriAnimeshRestore(bpy.types.Operator):
         obj = bpy.data.objects
         ani = bpy.context.window_manager.oni_animesh
 
-        if ani.animesh_suspend == True:
+        if ani.animesh_suspend:
             return False
 
         if ani.animesh_mapper_enabled == False:
@@ -1348,7 +1348,7 @@ class OnigiriAnimeshRemoveSelectedBones(bpy.types.Operator):
         obj = bpy.data.objects
         ani = bpy.context.window_manager.oni_animesh
 
-        if ani.animesh_suspend == True:
+        if ani.animesh_suspend:
             return
         if bpy.context.mode != "POSE":
             return False
@@ -1439,7 +1439,7 @@ class OnigiriAnimeshRemoveBone(bpy.types.Operator):
         obj = bpy.data.objects
         ani = bpy.context.window_manager.oni_animesh
 
-        if ani.animesh_suspend == True:
+        if ani.animesh_suspend:
             return
         if bpy.context.mode != "POSE":
             return False

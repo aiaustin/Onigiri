@@ -6,7 +6,7 @@ if True:
 
 
 def get_director(armature=None):
-    if armature == None:
+    if armature is None:
         return False
     if armature not in bpy.context.scene.objects:
         return False
@@ -16,15 +16,15 @@ def get_director(armature=None):
     actor_check = armObj.get("oni_dynamic_actor", None)
     director_check = armObj.get("oni_dynamic_director", None)
 
-    if actor_check == None:
-        if director_check == None:
+    if actor_check is None:
+        if director_check is None:
             return False
         inRig = director_check
-    elif director_check == None:
-        if actor_check == None:
+    elif director_check is None:
+        if actor_check is None:
             return False
         director = actor_check.get("oni_dynamic_director", None)
-        if director == None:
+        if director is None:
             return False
         inRig = director
 

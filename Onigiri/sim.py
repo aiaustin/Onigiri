@@ -92,7 +92,7 @@ def add_markers(testing=False):
     tailObj.name = "MARKER_TAIL"
     tailObj.select_set(False)
 
-    if testing == True:
+    if testing:
         headObj.show_name = True
         tailObj.show_name = True
 
@@ -105,7 +105,7 @@ def add_markers(testing=False):
         headMatObj = bpy.data.materials.get(head_material)
     if tail_material != "":
         tailMatObj = bpy.data.materials.get(tail_material)
-    if headMatObj == None:
+    if headMatObj is None:
         headObj.select_set(True)
         utils.activate(headObj)
         headMatObj = bpy.data.materials.new("HEAD_MARKER" + "_" + temp_name)
@@ -115,7 +115,7 @@ def add_markers(testing=False):
         headObj.select_set(False)
     else:
         headObj.active_material = headMatObj
-    if tailMatObj == None:
+    if tailMatObj is None:
         tailObj.select_set(True)
         utils.activate(tailObj)
         tailMatObj = bpy.data.materials.new("TAIL_MARKER" + "_" + temp_name)
@@ -142,7 +142,7 @@ def move_marker(testing=False):
         return False
     bm = props["bmesh"]
     for v in bm.verts:
-        if v.select == True:
+        if v.select:
             break
 
     if v.select == False:
@@ -167,7 +167,7 @@ def move_marker(testing=False):
         headObj = props["marker_head"]
         headObj.location = mw @ v.co
 
-        if testing == True:
+        if testing:
             print("First entry, moved head")
 
         return True
@@ -180,7 +180,7 @@ def move_marker(testing=False):
 
         props["last_marker"] = "tail"
 
-        if testing == True:
+        if testing:
             print("First entry, moved tail")
 
         return True
@@ -195,7 +195,7 @@ def move_marker(testing=False):
         headObj.location = mw @ props["vertex_head"].co.copy()
 
         props["last_marker"] = "head"
-        if testing == True:
+        if testing:
             print("fall through stored head from tail")
 
     else:
@@ -205,7 +205,7 @@ def move_marker(testing=False):
 
         props["last_marker"] = "tail"
 
-        if testing == True:
+        if testing:
             print("fall through stored tail from head")
 
     return True
@@ -218,20 +218,20 @@ def get_director(object):
 
     aObj = OBJ.get("oni_sim_actor")
 
-    if aObj == None:
+    if aObj is None:
         print("Entry object may be an actor")
         dObj = OBJ.get("oni_sim_director")
         dObjs = OBJ.get("oni_sim_directors")
 
-        if dObj == None and dObjs == None:
+        if dObj is None and dObjs is None:
             print("A: No directors found on the given object")
             return False
-        if dObj != None:
+        if dObj is not None:
             print("A: Found single director, checking.")
             if utils.is_valid(dObj):
                 return dObj
             print("A: This is a fall through for a single director, it failed")
-        if dObjs != None:
+        if dObjs is not None:
             print("A: Found multiple directors, checking")
             good = []
             for o in dObjs:
@@ -248,17 +248,17 @@ def get_director(object):
         dObj = aObj.get("oni_sim_director")
         dObjs = aObj.get("oni_sim_directors")
 
-        if dObj == None and dObjs == None:
+        if dObj is None and dObjs is None:
             print("D: actor has no directors, this could be a bug")
             return False
-        if dObj != None:
+        if dObj is not None:
             print("D: found single director")
             if utils.is_valid(dObj):
                 print("returning object:", dObj.name)
                 return dObj
             else:
                 print("single director is invalid, falling through to check multiple")
-        if dObjs != None:
+        if dObjs is not None:
             good = []
             for o in dObjs:
                 if utils.is_valid(o):
@@ -289,13 +289,13 @@ def get_actor(object):
         print("sim::get_actor : object is not viable")
         return False
 
-    if OBJ.get("oni_sim_actor") != None:
+    if OBJ.get("oni_sim_actor") is not None:
         return OBJ["oni_sim_actor"]
 
-    if OBJ.get("oni_sim_director") != None:
+    if OBJ.get("oni_sim_director") is not None:
         return OBJ
 
-    if OBJ.get("oni_sim_directors") != None:
+    if OBJ.get("oni_sim_directors") is not None:
         return OBJ
 
     return False
@@ -372,7 +372,7 @@ def build_bone(actor=None, director=None, head=None, tail=None, vertices=[]):
     conObj.name = "ONI Sim " + cname
 
     colObj = aObj.data.collections.get(props["group_base"])
-    if colObj == None:    
+    if colObj is None:    
         colObj = aObj.data.collections.new(props["group_base"])
 
     group_base = props["group_base"]
@@ -402,7 +402,7 @@ def get_sim_armature(objects):
     actors = set()
     for o in mesh:
         a = o.get("oni_sim_actor")
-        if a == None:
+        if a is None:
             print("The object mesh", o.name, "has no actor")
             return False, False
         try:
@@ -449,7 +449,7 @@ def export_fix(selected):
     qualified = {}
     for o in mesh:
         a = o.get("oni_sim_actor")
-        if a == None:
+        if a is None:
             continue
         try:
             if a.name not in bpy.context.scene.objects:
@@ -473,10 +473,10 @@ def export_fix(selected):
 
     for o in qualified:
         aObj = o.get("oni_sim_actor")
-        if aObj != None:
-            if aObj.get("oni_sim_director") != None:
+        if aObj is not None:
+            if aObj.get("oni_sim_director") is not None:
                 dObj = aObj.get("oni_sim_director")
-                if dObj == None:
+                if dObj is None:
                     print(
                         "Something weird happened attempting to get the dynamic sim director"
                     )
@@ -520,7 +520,7 @@ def sync(aObj):
         return False
 
     dObj = aObj.get("oni_sim_director")
-    if dObj == None:
+    if dObj is None:
         print("Can't sync, no director")
         return False
     if utils.is_valid(dObj) == False:
@@ -582,7 +582,7 @@ def ik_length(set=False, count=1):
     o = selected[0]
     if o.type != "ARMATURE":
         return False
-    if o.data.bones.active == None:
+    if o.data.bones.active is None:
         return False
     boneObj = o.data.bones.active
     bone = boneObj.name
@@ -596,7 +596,7 @@ def ik_length(set=False, count=1):
         for C in boneObj.constraints:
             if C.type == "IK":
                 old_count = C.chain_count
-                if set == True:
+                if set:
                     C.chain_count = count
 
                 if old_count == 0:
@@ -666,7 +666,7 @@ def vertex_constraint(
     conObj.name = "ONI Sim " + cname
 
     colObj = armObj.data.collections.get(props["group_base"])
-    if colObj == None:
+    if colObj is None:
         colObj = armObj.data.collections.new(props["group_base"])   
     
     group_base = sim.props["group_base"]

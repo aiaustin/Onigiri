@@ -164,18 +164,18 @@ def get_director(object, report=False):
     aObj = OBJ.get("oni_motion_actor", None)
     dObj = OBJ.get("oni_motion_director", None)
 
-    if aObj == None and dObj == None:
-        if report == True:
+    if aObj is None and dObj is None:
+        if report:
             print("shape::get_director reports : nothing gotten nothing given")
         return False
 
-    if aObj != None:
-        if report == True:
+    if aObj is not None:
+        if report:
             print("shape::get_director reports : given object is the director")
         return OBJ
 
     if utils.is_valid(dObj) == False:
-        if report == True:
+        if report:
             print("shape::get_director reports : the determined director is not valid")
 
         return False

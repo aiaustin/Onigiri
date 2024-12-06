@@ -26,7 +26,7 @@ def read(
 
     onia = bpy.context.scene.oni_anim_props
 
-    if doc == None:
+    if doc is None:
         print("bvh_tools::read reports: no xml, I need an xml object from ElementTree")
         return False
 
@@ -64,7 +64,7 @@ def read(
                 if export_volumes == False:
                     pointer += chans
                     continue
-            if sl_only == True:
+            if sl_only:
                 if bone not in skel.avatar_skeleton:
                     pointer += chans
                     continue
@@ -160,7 +160,7 @@ def read(
     rig_class = armObj.get("rig_class")
 
     test_vbones = False
-    if test_vbones == True:
+    if test_vbones:
         path = ".presets/posture.py"
         sd = os.path.dirname(os.path.abspath(__file__))
         path = sd + "/presets/posture.py"
@@ -184,7 +184,7 @@ def read(
     old_frame = bpy.context.scene.frame_current
 
     test_time = False
-    if test_time == True:
+    if test_time:
         import time
 
         rot_time_total = 0
@@ -193,9 +193,9 @@ def read(
         print("starting frames iter:", str(time_frame_start))
 
     use_storage = False
-    if use_storage == True:
+    if use_storage:
         matrix_storage = {}
-        if test_time == True:
+        if test_time:
 
             set_frame_time_start = time.time()
         for f in range(anim_start_frame, anim_end_frame + 1):
@@ -242,7 +242,7 @@ def read(
                 if export_volumes == False:
                     continue
 
-            if use_storage == True:
+            if use_storage:
                 matrix_real = matrix_storage[f][bone]["matrix_real"]
             else:
 
@@ -280,7 +280,7 @@ def read(
 
                 data["joints"][bone]["quats"] = list()
 
-            if test_time == True:
+            if test_time:
                 rot_time_0 = time.time()
                 rot_time_1 = rot_time_0
 
@@ -317,11 +317,11 @@ def read(
                 degrees_from_euler = [math.degrees(a) for a in euler_from_quat]
                 data["joints"][bone]["rot_deg"].append(degrees_from_euler)
 
-                if test_time == True:
+                if test_time:
                     rot_time_1 = time.time()
                     rot_time_total += rot_time_1 - rot_time_0
 
-            if test_time == True:
+            if test_time:
                 loc_time_0 = time.time()
                 loc_time_1 = loc_time_0
 
@@ -332,7 +332,7 @@ def read(
 
             if LOC_DATA:
 
-                if data["joints"][bone].get("loc_pose") == None:
+                if data["joints"][bone].get("loc_pose") is None:
                     data["joints"][bone]["loc_pose"] = list()
 
                 LOCATION = matrix_real.to_translation()
@@ -362,7 +362,7 @@ def read(
                     ploc = armObj.data.bones[bone].parent.matrix_local.to_translation()
                     offset = mathutils.Vector((cloc - ploc))
 
-                    if test_vbones == True:
+                    if test_vbones:
 
                         if bone in posture:
                             pos = posture[bone][rig_class]
@@ -402,11 +402,11 @@ def read(
                     tuple((round(loc[0], 6), round(loc[1], 6), round(loc[2], 6)))
                 )
 
-                if test_time == True:
+                if test_time:
                     loc_time_1 = time.time()
                     loc_time_total += loc_time_1 - loc_time_0
 
-    if test_time == True:
+    if test_time:
         time_frame_end = time.time()
         time_frame_total = time_frame_end - time_frame_start
         print("end frames iter:", str(time_frame_total))
@@ -416,8 +416,8 @@ def read(
     bpy.context.scene.frame_set(old_frame)
 
     if 1 == 0:
-        if armObj.animation_data != None:
-            if armObj.animation_data.action != None:
+        if armObj.animation_data is not None:
+            if armObj.animation_data.action is not None:
                 print("gathering interpolation data...")
                 frame_data = curves.get_fcurve_data(armObj.name)
 
@@ -442,7 +442,7 @@ def read(
         for rots in data["joints"][bone]["rot"]:
 
             x, y, z = rots
-            if ref_key == None:
+            if ref_key is None:
                 ref_key = (x, y, z)
 
                 data["joints"][bone]["tol"]["rot"].append(False)
@@ -481,7 +481,7 @@ def read(
         ref_key = None
         for locs in data["joints"][bone]["loc"]:
             x, y, z = locs
-            if ref_key == None:
+            if ref_key is None:
                 ref_key = (x, y, z)
                 data["joints"][bone]["tol"]["loc"].append(False)
 
@@ -648,10 +648,10 @@ def merge(
     buffer=False,
 ):
 
-    if buffer == True:
+    if buffer:
         print("Buffers instead of files...")
 
-    if buffer == True:
+    if buffer:
         print("Pulling vbones data from buffer...")
         buf = to_xml(vbones)
     else:
@@ -695,7 +695,7 @@ def merge(
 
     vdata["motion_data"] = motion.find("MOTION_DATA").text.split()
 
-    if buffer == True:
+    if buffer:
         print("Pulling mbones data from buffer...")
         buf = to_xml(mbones)
     else:
@@ -706,21 +706,21 @@ def merge(
     tree = ET.ElementTree(ET.fromstring(buf))
     root = tree.getroot()
 
-    if swap_offsets == True or swap_endsites == True:
+    if swap_offsets == True or swap_endsites:
 
         for node in root.iter(f"JOINT"):
             name = node.find("NAME").text
             if name in volumes.vol_joints:
-                if swap_offsets == True:
+                if swap_offsets:
                     offset = node.find("OFFSET")
                     offset.text = vjoints[name]["offset"]
-                if swap_endsites == True:
+                if swap_endsites:
                     endsite = node.find("END_SITE")
                     if endsite:
                         endsite_offset = endsite.find("OFFSET")
                         endsite_offset.text = vjoints[name]["end_site"]
 
-    if swap_motion == True:
+    if swap_motion:
         mdata = {}
         motion = root.find(f"MOTION")
         mdata["frames"] = motion.find("FRAMES").text
@@ -964,7 +964,7 @@ def from_xml(buf=""):
         tabs = tup.group(1)
         name = tup.group(2)
 
-        if data["joints"][name]["end_site"] != None:
+        if data["joints"][name]["end_site"] is not None:
             endsite = (
                 tabs
                 + "\t"

@@ -22,7 +22,7 @@ def sl_bvh_export(
     context=None,
 ):
 
-    if vbones == None:
+    if vbones is None:
         vbones = mbones
 
     oni = bpy.context.scene.onigiri
@@ -41,7 +41,7 @@ def sl_bvh_export(
     bad_bones = list()
     print("Examining deformable joint names...")
     for b in armObj.data.bones:
-        if b.use_deform == True:
+        if b.use_deform:
             if b.name not in skel.avatar_skeleton:
                 bad_bones.append(b.name)
     if len(bad_bones) > 0:
@@ -79,7 +79,7 @@ def sl_bvh_export(
     for i in range(3):
         smat[i][i] = scale[i]
 
-    if mrotate == True:
+    if mrotate:
         eu = mathutils.Euler(map(radians, (-90, 0, 0)), "XYZ")
         mat = mathutils.Matrix.Translation(loc) @ eu.to_matrix().to_4x4() @ smat
         armObj.matrix_world = mat
@@ -96,7 +96,7 @@ def sl_bvh_export(
         buffer=buffer,
     )
 
-    if mrotate == True:
+    if mrotate:
 
         eu = mathutils.Euler(map(radians, (90, 0, 0)), "XYZ")
         mat = mathutils.Matrix.Translation(loc) @ eu.to_matrix().to_4x4() @ smat
@@ -112,7 +112,7 @@ def sl_bvh_export(
     armObj.select_set(True)
     bpy.context.view_layer.objects.active = armObj
 
-    if vrotate == True:
+    if vrotate:
         eu = mathutils.Euler(map(radians, (0, 0, 90)), "XYZ")
         mat = mathutils.Matrix.Translation(loc) @ eu.to_matrix().to_4x4() @ smat
         armObj.matrix_world = mat
@@ -129,13 +129,13 @@ def sl_bvh_export(
         buffer=buffer,
     )
 
-    if vrotate == True:
+    if vrotate:
         eu = mathutils.Euler(map(radians, (0, 0, -90)), "XYZ")
         mat = mathutils.Matrix.Translation(loc) @ eu.to_matrix().to_4x4() @ smat
         armObj.matrix_world = mat
         bpy.ops.object.transform_apply(rotation=True, location=False, scale=False)
 
-    if buffer == True:
+    if buffer:
         bvh_out = bvht.merge(
             vbones=vbones_buf,
             mbones=mbones_buf,

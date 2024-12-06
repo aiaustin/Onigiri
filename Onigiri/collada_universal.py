@@ -54,7 +54,7 @@ def write_collada(armature="", root="", write=False, file_in="", file_out=""):
         rig_type = "pivot"
         print("found N/A, changed to pivot")
 
-    if armObj.get("rig_data") == None:
+    if armObj.get("rig_data") is None:
         print(
             "collada_universal::write_collada reports: Armature has no base rig data, using saved data."
         )
@@ -160,14 +160,14 @@ def write_collada(armature="", root="", write=False, file_in="", file_out=""):
                                 shorten = [round(a, 6) for a in m]
                                 t = [str(a) for a in shorten]
 
-                                if pretty_mats == True:
+                                if pretty_mats:
                                     text_mat.append("\n")
                                 else:
                                     text_mat.append(" ")
                                 text_mat.append(" ".join(t))
                             matrices.extend(text_mat)
 
-                            if pretty_mats == True:
+                            if pretty_mats:
                                 matrices.append("\n")
                             else:
                                 matrices.append(" ")
@@ -180,11 +180,11 @@ def write_collada(armature="", root="", write=False, file_in="", file_out=""):
                         data.text = "".join(matrices)
                         del matrices
 
-    if write_nodes == True:
+    if write_nodes:
         for node in root.iter(f"{n}node"):
             if node.get("type") == "JOINT":
                 matrix = node.find(f"{n}matrix")
-                if node.attrib.get("name") != None:
+                if node.attrib.get("name") is not None:
                     bone = node.attrib["name"]
 
                     if bone in joint_pose:
@@ -196,7 +196,7 @@ def write_collada(armature="", root="", write=False, file_in="", file_out=""):
                             bone,
                         )
 
-    if pretty_mats == True:
+    if pretty_mats:
         pretty_nodes(root=root)
 
     tree.write(file_out, xml_declaration=True, encoding="utf-8", method="xml")
@@ -213,7 +213,7 @@ def pretty_nodes(root=None):
     for node in root.iter(f"{n}node"):
         if node.get("type") == "JOINT":
             matrix = node.find(f"{n}matrix")
-            if node.attrib.get("name") != None:
+            if node.attrib.get("name") is not None:
                 bone = node.attrib["name"]
 
                 tmat = matrix.text.split()

@@ -301,7 +301,7 @@ def force_rig_to_class(armature="", rig_class=""):
         old_mode = "EDIT"
 
     restore_matrix = False
-    if restore_matrix == True:
+    if restore_matrix:
         matrix_world = armObj.matrix_world.inverted()
         bpy.ops.object.mode_set(mode="OBJECT")
         bpy.ops.object.transform_apply(scale=True, rotation=True, location=False)
@@ -353,7 +353,7 @@ def force_rig_to_class(armature="", rig_class=""):
 
     bpy.ops.object.mode_set(mode=old_mode)
 
-    if restore_matrix == True:
+    if restore_matrix:
         armObj.matrix_world = matrix_world
 
     return True
@@ -385,7 +385,7 @@ def convert_rig_to_class_OLD(armature="", rig_class=""):
         old_mode = "EDIT"
 
     restore_matrix = False
-    if restore_matrix == True:
+    if restore_matrix:
         matrix_world = armObj.matrix_world.inverted()
         bpy.ops.object.mode_set(mode="OBJECT")
         bpy.ops.object.transform_apply(scale=True, rotation=True, location=False)
@@ -416,7 +416,7 @@ def convert_rig_to_class_OLD(armature="", rig_class=""):
 
     bpy.ops.object.mode_set(mode=old_mode)
 
-    if restore_matrix == True:
+    if restore_matrix:
         armObj.matrix_world = matrix_world
 
     return True
@@ -445,7 +445,7 @@ def convert_rig_to_class(armature=None, rig_class=None, brand="onigiri"):
     nodes = [n.name for n in armObj.data.bones]
     bones = []
     for bone in nodes:
-        if armObj.data.bones[bone].use_deform == True:
+        if armObj.data.bones[bone].use_deform:
             bones.append(bone)
 
     print("rigs::convert_to_class : skipping count check")
@@ -524,7 +524,7 @@ def convert_rig_to_class(armature=None, rig_class=None, brand="onigiri"):
 
             has_parent = True
             bone_path = bone
-            while has_parent == True:
+            while has_parent:
 
                 parent = avs[bone_path]["parent"]
                 if parent == "":
@@ -594,7 +594,7 @@ def update(type="soft"):
 
 
 def update_frame(frame=None):
-    if frame == None:
+    if frame is None:
         print("update_frame reports: no frame")
         return False
     bpy.context.scene.frame_set(last_start)
@@ -685,7 +685,7 @@ def set_angle(armature="", angle=[0, 0, 0]):
 
     bpy.ops.object.transform_apply(rotation=True, location=False, scale=False)
 
-    if restore == True:
+    if restore:
         bpy.ops.object.mode_set(mode=old_mode)
 
     return True
@@ -705,7 +705,7 @@ def save_hide_state(armature=""):
     armObj = obj[armature]
     state = get_unique_name()
 
-    if onim.get("hide_states") == None:
+    if onim.get("hide_states") is None:
         onim["hide_states"] = dict()
     else:
         if state in onim["hide_states"]:
@@ -811,7 +811,7 @@ def save_rig(armature="", force=False):
 
     armObj = bpy.data.objects[armature]
 
-    if armObj.get("rig_data") != None:
+    if armObj.get("rig_data") is not None:
         if force == False:
             print("rig_data exists already, use (force) to overwrite")
             return False
@@ -873,7 +873,7 @@ def restore_rig(arm):
         print("The object", arm, "is not an armature, can't restore")
         return False
 
-    if obj[arm].get("rig_data") == None:
+    if obj[arm].get("rig_data") is None:
         print("Rig not frozen:", arm)
         return False
 
@@ -920,9 +920,9 @@ def restore_rig_from_map(armature=None, rig_data=None):
 
     obj = bpy.data.objects
     armObj = obj[armature]
-    if rig_data == None:
+    if rig_data is None:
         rig_data = armObj.get("rig_data")
-        if rig_data == None:
+        if rig_data is None:
             print("No rig data delivered and none on the object")
             return False
     for o in bpy.context.selected_objects:
@@ -1011,7 +1011,7 @@ def rebind(arm, report=False):
     frame_start, frame_end = animutils.get_frame_range(armObj, start=True)
     mesh_list = get_associated_mesh(armObj, report=True)
     if mesh_list == False:
-        if report == True:
+        if report:
             print(
                 "rigs::rebind reports : get_associated_mesh returned a False, no mesh found"
             )
@@ -1043,14 +1043,14 @@ def rebind(arm, report=False):
                 modObjCopy = bpy.ops.object.modifier_copy(modifier=modObj.name)
 
             try:
-                if report == True:
+                if report:
                     print(
                         "B28-rigs::rebind[Attempting to apply modifiers]", meshObj.name
                     )
                 bpy.ops.object.modifier_apply(apply_as="DATA", modifier=modObj.name)
             except Exception as e:
                 txt = traceback.format_exc()
-                if report == True:
+                if report:
                     print(txt)
                     print("B28-Failed!")
                     print(
@@ -1058,12 +1058,12 @@ def rebind(arm, report=False):
                     )
                 try:
                     bpy.ops.object.modifier_apply(modifier=modObj.name)
-                    if report == True:
+                    if report:
                         print("Success for Blender 2.9")
 
                 except Exception as e:
                     txt = traceback.format_exc()
-                    if report == True:
+                    if report:
                         print(txt)
                         if meshObj.select_get() == False:
                             print(
@@ -1076,7 +1076,7 @@ def rebind(arm, report=False):
         meshObj.select_set(False)
 
     if len(select_error) > 0:
-        if report == True:
+        if report:
             print(
                 "Some objects could not be processed because they are not selectable, below is a list of those items"
             )
@@ -1118,15 +1118,15 @@ def rebind(arm, report=False):
 
 
 def get_bind_data(armature=None, bone=None, rig_data=None):
-    if armature == None:
+    if armature is None:
         print("get_bind_data reports: no armature")
         return False
 
-    if bone == None:
+    if bone is None:
         print("get_bind_data reports: no bone")
         return False
 
-    if rig_data == None:
+    if rig_data is None:
         print("get_bind_data reports: no rig_data")
         return False
 
@@ -1150,7 +1150,7 @@ def get_bind_data(armature=None, bone=None, rig_data=None):
     transforms[bone] = dict()
     transforms[bone]["global"] = dict()
 
-    if rotate_for_sl == True:
+    if rotate_for_sl:
         R90 = mathutils.Matrix.Rotation(math.radians(90.0), 4, "Z")
     else:
         R90 = mathutils.Matrix.Rotation(math.radians(0.0), 4, "Z")
@@ -1186,7 +1186,7 @@ def get_bind_data(armature=None, bone=None, rig_data=None):
 
     transforms[bone]["global"]["matrix"] = dmgI
 
-    if use_offset_location == True:
+    if use_offset_location:
         l = dBone.head_local.copy()
     else:
         l = mathutils.Matrix(rig_data[bone]["matrix_local"]).to_translation()
@@ -1208,10 +1208,10 @@ def get_bind_data(armature=None, bone=None, rig_data=None):
     if get_rig_class() == "":
 
         if 1 == 0:
-            if process_volume_bones == True:
-                if volume_bone_rotation == True:
+            if process_volume_bones:
+                if volume_bone_rotation:
                     r = skel.avatar_skeleton[bone]["rot"]
-                if volume_bone_scale == True:
+                if volume_bone_scale:
                     s = [a for a in skel.avatar_skeleton[bone]["scale"]]
 
     l_ofs, r_ofs, s_ofs = transforms[bone]["global"]["matrix"].decompose()
@@ -1230,7 +1230,7 @@ def get_bind_data(armature=None, bone=None, rig_data=None):
 
         S[i][i] = s[i]
 
-    if use_offset_scale == True:
+    if use_offset_scale:
         s = armObj.pose.bones[bone].scale
         for i in range(3):
             S[i][i] = s[i]
@@ -1245,13 +1245,13 @@ def get_bind_data(armature=None, bone=None, rig_data=None):
 
 
 def get_joint_data(armature=None, bone=None, rig_data=None):
-    if armature == None:
+    if armature is None:
         print("get_joint_data reports: no armature")
         return False
-    if rig_data == None:
+    if rig_data is None:
         print("get_joint_data reports: no rig_data")
         return False
-    if bone == None:
+    if bone is None:
         print("get_joint_data reports: no bone")
         return False
     obj = bpy.data.objects
@@ -1297,7 +1297,7 @@ def get_joint_data(armature=None, bone=None, rig_data=None):
 
         M = L @ R @ S
 
-        if rotate_for_sl == True:
+        if rotate_for_sl:
             R90 = mathutils.Matrix.Rotation(math.radians(90.0), 4, "Z")
         else:
             R90 = mathutils.Matrix.Rotation(math.radians(0.0), 4, "Z")
@@ -1348,9 +1348,9 @@ def get_joint_data(armature=None, bone=None, rig_data=None):
 
 
 def get_bone_transforms(armature=None, rig_data=None):
-    if armature == None:
+    if armature is None:
         return False
-    if rig_data == None:
+    if rig_data is None:
         return False
 
     oni_devkit = bpy.context.scene.oni_devkit
@@ -1400,7 +1400,7 @@ def get_bone_transforms(armature=None, rig_data=None):
         r = skel.avatar_skeleton[bone]["rot"]
         s = skel.avatar_skeleton[bone]["scale"]
 
-        if use_offset_location == True:
+        if use_offset_location:
 
             L_SKEL = mathutils.Matrix.Translation(l)
             L = mathutils.Matrix.Translation(l)
@@ -1426,7 +1426,7 @@ def get_bone_transforms(armature=None, rig_data=None):
         rot = [math.radians(a) for a in r]
         R_mat = mathutils.Euler(rot, "XYZ").to_matrix().to_4x4()
 
-        if use_offset_rotation == True:
+        if use_offset_rotation:
 
             R_ofs = r_ofs.to_matrix().to_4x4()
         else:
@@ -1438,7 +1438,7 @@ def get_bone_transforms(armature=None, rig_data=None):
         for i in range(3):
             S_mat[i][i] = s[i]
 
-        if use_offset_scale == True:
+        if use_offset_scale:
 
             if 1 == 0:
 
@@ -1461,7 +1461,7 @@ def get_bone_transforms(armature=None, rig_data=None):
         R = R_mat @ R_ofs
         S = S_mat @ S_ofs
 
-        if use_offset_scale == True:
+        if use_offset_scale:
             S = S_ofs
 
         transforms[bone]["bind_data"] = L @ R @ S
@@ -1508,7 +1508,7 @@ def get_bone_transforms(armature=None, rig_data=None):
             for i in range(3):
                 S[i][i] = s[i]
 
-            if use_offset_scale == True:
+            if use_offset_scale:
                 S = S_ofs
 
             M = L @ R @ S
@@ -1544,7 +1544,7 @@ def get_bone_transforms(armature=None, rig_data=None):
 
 
 def pose_bone(boneObj=None, axis="Z", angle=10):
-    if boneObj == None:
+    if boneObj is None:
         print("rigs::pose_bone reports: No bone object")
         return False
     rm = boneObj.rotation_mode
@@ -1564,26 +1564,26 @@ def reset_pose(
     if space == "rig":
         for pBone in obj[arm].pose.bones:
             dBone = pBone.bone
-            if location == True:
+            if location:
                 pBone.location = dBone.head.copy()
-            if rotation == True:
+            if rotation:
                 rotation_mode = pBone.rotation_mode
                 pBone.rotation_mode = "QUATERNION"
                 pBone.rotation_quaternion = r
                 pBone.rotation_mode = rotation_mode
-            if scale == True:
+            if scale:
                 pBone.scale = s
     elif space == "bone":
         pBone = obj[arm].pose.bone[bone]
         dBone = pBone.bone
-        if location == True:
+        if location:
             pBone.location = dBone.head.copy()
-        if rotation == True:
+        if rotation:
             rotation_mode = obj[arm].pose.bones[bone].rotation_mode
             obj[arm].pose.bones[bone].rotation_mode = "QUATERNION"
             obj[arm].pose.bones[bone].rotation_quaternion = r
             obj[arm].pose.bones[bone].rotation_mode = rotation_mode
-        if scale == True:
+        if scale:
             obj[arm].pose.bones[bone].scale = s
     else:
         print("rigs::reset_pose reports: unknown directive - ", space)
@@ -1731,7 +1731,7 @@ def attach_slave_rig(
     obj[slave].select_set(False)
     for o in selected:
         o.select_set(True)
-    if active != None:
+    if active is not None:
         bpy.context.view_layer.objects.active = active
         bpy.ops.object.mode_set(mode=old_mode)
 
@@ -1770,7 +1770,7 @@ def attach_proxy_rig(armature=None, clean=False):
     glueObj.data.display_type = "STICK"
     glueObj.show_in_front = True
 
-    if clean == True:
+    if clean:
         remove_deps(armature=sarmObj)
 
     if 1 == 0:
@@ -1849,7 +1849,7 @@ def clean_controllers(armature=None, all=False):
 
     obj = bpy.data.objects
 
-    if all == True:
+    if all:
         targets = []
         for o in obj:
             if o.type == "ARMATURE":
@@ -1872,7 +1872,7 @@ def clean_controllers(armature=None, all=False):
                     continue
 
                 targetObj = getattr(constObj, "target")
-                if targetObj == None:
+                if targetObj is None:
                     continue
 
                 target = targetObj.name
@@ -1923,7 +1923,7 @@ def build_sl_rig(rig_class="pos", store=True, rotate=False):
             head = muV((avs[bone][rig_class]))
         has_parent = True
         bone_path = bone
-        while has_parent == True:
+        while has_parent:
 
             parent = avs[bone_path]["parent"]
             if parent == "":
@@ -1978,7 +1978,7 @@ def build_sl_rig(rig_class="pos", store=True, rotate=False):
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
-    if rotate == True:
+    if rotate:
         loc, rot, scale = armObj.matrix_world.decompose()
         smat = mathutils.Matrix()
         for i in range(3):
@@ -2074,7 +2074,7 @@ def build_rig(rig_class="pos", rotate=False, connect=True):
             head = muV((avs[bone][rig_class]))
         has_parent = True
         bone_path = bone
-        while has_parent == True:
+        while has_parent:
 
             parent = avs[bone_path]["parent"]
             if parent == "":
@@ -2119,7 +2119,7 @@ def build_rig(rig_class="pos", rotate=False, connect=True):
             arm
         ].data.edit_bones[parent]
         connected = skel.avatar_skeleton[bone]["connected"]
-        if connect == True:
+        if connect:
             bpy.data.objects[arm].data.edit_bones[bone].use_connect = connected
 
     bpy.ops.object.mode_set(mode="OBJECT")
@@ -2139,7 +2139,7 @@ def build_rig(rig_class="pos", rotate=False, connect=True):
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
-    if rotate == True:
+    if rotate:
         loc, rot, scale = armObj.matrix_world.decompose()
         smat = mathutils.Matrix()
         for i in range(3):
@@ -2258,7 +2258,7 @@ def set_bone_layers(armObj):
     for boneObj in armObj.data.bones:
         boneObj.layers[0] = False
 
-    if visible.layers.get("controller") != None:
+    if visible.layers.get("controller") is not None:
 
         armObj.data.layers[layers_c] = True
     else:
@@ -2339,7 +2339,7 @@ def show_bones(armature=None, group=None, state=True, default=False):
 
     bone_groups = armObj.get("oni_bone_groups", {})
 
-    if default == True:
+    if default:
         for group in visible.layers:
             bone_groups[group] = False
         bone_groups["base"] = True
@@ -2356,7 +2356,7 @@ def show_bones(armature=None, group=None, state=True, default=False):
                     boneObj.hide = False
         return True
 
-    if group == None:
+    if group is None:
         print(
             "rigs::show_bones reports : no group offered, hiding attachment bones instead"
         )
@@ -2516,7 +2516,7 @@ def add_constraints(
     if isinstance(target, str):
         targetObj = obj[target]
 
-    if bone_map == None:
+    if bone_map is None:
         bone_map = {}
         for boneObj in sourceObj.data.bones:
             if boneObj.name not in targetObj.data.bones:
@@ -2554,7 +2554,7 @@ def add_constraints(
             utils.set_inverse(context_py, cname)
 
         conObj.name = "ONI " + cname
-        if name != None:
+        if name is not None:
             cnames = boneObj.get(name, [])
             cnames.append(conObj.name)
             boneObj[name] = cnames
@@ -2592,7 +2592,7 @@ def add_controllers(
     if isinstance(target, str):
         targetObj = obj[target]
 
-    if bone_map == None:
+    if bone_map is None:
         bone_map = {}
         for boneObj in sourceObj.data.bones:
             if boneObj.name not in targetObj.data.bones:
@@ -2638,7 +2638,7 @@ def add_controllers(
             utils.set_inverse(context_py, cname)
 
         conObj.name = "ONI " + cname
-        if name != None:
+        if name is not None:
             cnames = boneObj.get(name, [])
             cnames.append(conObj.name)
             boneObj[name] = cnames
@@ -2706,7 +2706,7 @@ def freeze(armature=None, bones=[], transforms=True, influence=1):
 
     bpy.ops.object.mode_set(mode="POSE")
 
-    if transforms == True:
+    if transforms:
 
         for boneObj in sarmObj.pose.bones:
             sbone = boneObj.name
@@ -2777,7 +2777,7 @@ def freeze(armature=None, bones=[], transforms=True, influence=1):
 
 
 def get_controller_rig(armature=None):
-    if armature == None:
+    if armature is None:
         return False
     if armature not in bpy.context.scene.objects:
         return False
@@ -2787,10 +2787,10 @@ def get_controller_rig(armature=None):
     outRig = armObj.get("oni_controller_slave", None)
     inRig = armObj.get("oni_controller_master", None)
 
-    if outRig == None and inRig == None:
+    if outRig is None and inRig is None:
         return False
 
-    if outRig != None:
+    if outRig is not None:
         return armObj
 
     if inRig.name not in bpy.context.scene.objects:
@@ -2857,7 +2857,7 @@ def get_bone_data(
         old_mode == "EDIT"
     else:
         old_mode = this_mode
-    if bpy.context.active_object != None:
+    if bpy.context.active_object is not None:
         bpy.ops.object.mode_set(mode="OBJECT")
     selected = bpy.context.selected_objects
     active = bpy.context.active_object
@@ -2872,7 +2872,7 @@ def get_bone_data(
     proxyObj = bpy.context.active_object
 
     proxyObj.animation_data_clear()
-    if pose == True:
+    if pose:
         bpy.ops.object.mode_set(mode="POSE")
         bpy.ops.pose.armature_apply()
     bpy.ops.object.mode_set(mode="OBJECT")
@@ -2906,7 +2906,7 @@ def get_bone_data(
         o.select_set(True)
     bpy.context.view_layer.objects.active = active
 
-    if store == True:
+    if store:
         print("Storing bone data for", armObj.name)
         for boneObj in armObj.data.bones:
             bone = boneObj.name
@@ -2925,7 +2925,7 @@ def get_rig_class():
     classes = {"default", "neutral", "male_default", "male_neutral"}
     rc = "rig_class_"
     for c in classes:
-        if getattr(oni_devkit, rc + c) == True:
+        if getattr(oni_devkit, rc + c):
             return c
     return ""
 
@@ -2985,7 +2985,7 @@ def get_associated_mesh(arm, report=False):
         if utils.is_valid(arm):
             armObj = bpy.data.objects[arm]
         else:
-            if report == True:
+            if report:
                 print(
                     "rigs::get_associated_mesh reports : the armature is not in the scene",
                     arm,
@@ -2993,14 +2993,14 @@ def get_associated_mesh(arm, report=False):
             return False
 
     if len(armObj.children) == 0:
-        if report == True:
+        if report:
             print("rigs::get_associated_mesh reports : no children", arm)
         return False
 
     mesh = []
     for cObj in armObj.children:
         if cObj.type != "MESH":
-            if report == True:
+            if report:
                 print(
                     "rigs::get_associated_mesh reports : child object is not a mesh",
                     cObj.name,
@@ -3009,7 +3009,7 @@ def get_associated_mesh(arm, report=False):
         mesh.append(cObj)
 
     if len(mesh) == 0:
-        if report == True:
+        if report:
             print("rigs::get_associated_mesh reports : no mesh to process", cOBj.name)
         return False
 
@@ -3020,13 +3020,13 @@ def get_associated_mesh(arm, report=False):
             if modObj.type == "ARMATURE":
                 qualified.append(modObj)
         if len(qualified) == 0:
-            if report == True:
+            if report:
                 print(
                     "rigs::get_associated_mesh reports : no armature modifier on",
                     meshObj.name,
                 )
         elif len(qualified) > 1:
-            if report == True:
+            if report:
                 print(
                     "rigs::get_associated_mesh reports : too many armature modifiers on",
                     meshObj.name,
@@ -3035,14 +3035,14 @@ def get_associated_mesh(arm, report=False):
         if modObj.object == armObj:
             approved.append(meshObj)
         else:
-            if report == True:
+            if report:
                 print(
                     "rigs::get_associated_mesh reports : the mesh",
                     meshObj.name,
                     "has its armature modifier pointing to some other rig",
                 )
     if len(approved) == 0:
-        if report == True:
+        if report:
             print(
                 "rigs::get_associated_mesh reports :  no approved mesh associated with",
                 armObj.name,
@@ -3065,9 +3065,9 @@ def check_maps(armature=None, rename=None, reskin=None, pose=None, report=False)
     reskin_map = reskin
     pose_map = pose
 
-    if rename_map == None:
+    if rename_map is None:
         rename_map = armObj.get("oni_onemap_rename", {})
-    if reskin_map == None:
+    if reskin_map is None:
         reskin_map = armObj.get("oni_onemap_reskin", {})
 
     rename = {}
@@ -3078,19 +3078,19 @@ def check_maps(armature=None, rename=None, reskin=None, pose=None, report=False)
         else:
             bad_bones.append(bone)
     if len(rename) == 0:
-        if report == True:
+        if report:
             print(
                 "None of the bone maps in your map file matched the rig.  The following is a list of bones in the file..."
             )
             print(bad_bones)
         return False
 
-    if report == True:
+    if report:
         print("The following anchors matched:", rename)
 
     reskin = {}
     if len(reskin_map) == 0:
-        if report == True:
+        if report:
             print("No reskin bones")
     else:
         for anchor in reskin_map:
@@ -3101,7 +3101,7 @@ def check_maps(armature=None, rename=None, reskin=None, pose=None, report=False)
                         reskin[anchor] = {}
 
                     reskin[anchor][rbone] = ""
-    if report == True:
+    if report:
         if len(reskin) == 0:
             print("There's a reskin map but no usable bones")
         else:
@@ -3312,7 +3312,7 @@ def align_bones(source=None, target=None, bone=None, all=True):
         sarmObj = bpy.data.objects[source]
     if isinstance(tarmObj, str):
         tarmObj = bpy.data.objects[target]
-    if bone != None:
+    if bone is not None:
         if isinstance(boneObj, str) == False:
             bone = boneObj.name
 
@@ -3349,7 +3349,7 @@ def align_bones(source=None, target=None, bone=None, all=True):
     bpy.ops.object.mode_set(mode="EDIT")
     bpy.ops.armature.select_all(action="SELECT")
 
-    if all == True:
+    if all:
         for boneObj in tarmObj.data.edit_bones:
             if boneObj.name in source_x_axis:
                 align_bone_x_axis(
@@ -3489,7 +3489,7 @@ def make_complete(
         armObj = bpy.data.objects[armObj]
 
     print("rigs::make_complete : arguments on entry:")
-    if armature == None:
+    if armature is None:
         print("armature :", armature)
     else:
         print("armature : ", armObj.name)
@@ -3541,7 +3541,7 @@ def make_complete(
 
     newObj = build_rig(rig_class="pos", connect=connect, rotate=rotate)
 
-    if resize == True:
+    if resize:
 
         for o in bpy.context.selected_objects:
             o.select_set(False)
@@ -3567,7 +3567,7 @@ def make_complete(
     tailed = {}
     M = mathutils.Matrix()
 
-    if fix == True:
+    if fix:
         print(
             "The option (fix) is enabled, preparing the source first before conversion, this could damage it.."
         )
@@ -3575,7 +3575,7 @@ def make_complete(
             bone = boneObj.name
 
             if bone in skel.avatar_skeleton:
-                if skel.avatar_skeleton[bone]["connected"] == True:
+                if skel.avatar_skeleton[bone]["connected"]:
                     if boneObj.parent:
                         pBone = boneObj.parent
                         if pBone.name in skel.avatar_skeleton:
@@ -3601,7 +3601,7 @@ def make_complete(
     bpy.ops.object.mode_set(mode="OBJECT")
     bpy.context.view_layer.update()
 
-    if align == True:
+    if align:
         print("rigs::make_complete : align requested")
         align_bones(source=newObj, target=armObj, all=True)
 
@@ -3614,7 +3614,7 @@ def make_complete(
     armObj.select_set(True)
     utils.activate(armObj)
 
-    if strip == True:
+    if strip:
         remove_these = []
         bpy.ops.object.mode_set(mode="EDIT")
         for boneObj in armObj.data.edit_bones:
@@ -3723,7 +3723,7 @@ def make_complete(
     for boneObj in newObj.data.bones:
         boneObj.hide = False
     groups = newObj.get("oni_bone_groups")
-    if groups != None:
+    if groups is not None:
         for g in groups:
             groups[g] = 1
         newObj["oni_bone_groups"] = groups

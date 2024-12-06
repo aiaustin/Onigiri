@@ -12,7 +12,7 @@ def merge_groups(group=None, target=None, mesh=None, report=False):
     if isinstance(mesh, str):
         meshObj = bpy.data.objects[mesh]
     if group not in meshObj.vertex_groups:
-        if report == True:
+        if report:
             print("The reskin bone/group doesn't exist in the mesh:", group)
         return False
     if target not in meshObj.vertex_groups:
