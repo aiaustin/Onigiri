@@ -80,7 +80,7 @@ def write_collada(
                 has_bind_data = True
 
                 break
-        if has_bind_data == False:
+        if not has_bind_data:
 
             use_bind_data = False
             use_rig_data = True
@@ -125,7 +125,7 @@ def write_collada(
         export_full_rig = False
         rig_class = ""
 
-    if use_app_compatible_data == True and armObj.get("oni_devkit_transforms") is not None:
+    if use_app_compatible_data and armObj.get("oni_devkit_transforms") is not None:
         print("Exporting using compatible transforms")
 
         bind_pose = {}
@@ -175,7 +175,7 @@ def write_collada(
         rig_type = "pivot"
         print("found N/A, changed to pivot")
 
-    if use_rig_data == False and use_bind_data == False:
+    if not use_rig_data and not use_bind_data:
         print("No pose type selected, defaulting to Rig Pose")
         use_rig_data = True
 
@@ -204,7 +204,7 @@ def write_collada(
                 "collada::write_collada reports: no base data was available for custom bind poses, using rig instead"
             )
 
-            if utils.can_select(object=armObj.name) == False:
+            if not utils.can_select(object=armObj.name):
                 print(
                     "collada::write_collada reports bad return from utils::can_select"
                 )
@@ -233,7 +233,7 @@ def write_collada(
                 continue
 
             if skel.avatar_skeleton[bone]["type"] == "attachment":
-                if process_attachment_bones == False:
+                if not process_attachment_bones:
                     continue
 
             if use_old_transforms:
@@ -260,7 +260,7 @@ def write_collada(
         has_bind_info = list()
         not_bind_info = list()
         for boneObj in armObj.data.bones:
-            if boneObj.use_deform == False:
+            if not boneObj.use_deform:
                 continue
             bone = boneObj.name
 
@@ -268,7 +268,7 @@ def write_collada(
                 continue
 
             if skel.avatar_skeleton[bone]["type"] == "attachment":
-                if process_attachment_bones == False:
+                if not process_attachment_bones:
                     continue
 
             matf = get_bind_matrix(
@@ -294,7 +294,7 @@ def write_collada(
                 transforms = rigutils.get_joint_data(
                     armature=armObj.name, bone=bone, rig_data=rig_data
                 )
-                if transforms == False:
+                if not transforms:
                     print(
                         "Could not retrieve transform data, this is a programming bug"
                     )
@@ -381,7 +381,7 @@ def write_collada(
                 continue
 
             if skel.avatar_skeleton[bone]["type"] == "attachment":
-                if process_attachment_bones == False:
+                if not process_attachment_bones:
                     continue
 
             if old_ap:
@@ -433,7 +433,7 @@ def write_collada(
             transforms = rigutils.get_joint_data(
                 armature=armObj.name, bone=bone, rig_data=rig_data
             )
-            if transforms == False:
+            if not transforms:
                 print("Could not retrieve transform data, this is a programming bug")
                 popup(
                     "Fatal internal error processing Avastar rig, please report it",
@@ -582,12 +582,12 @@ def edit_dae(
                                     joint_type = skel.avatar_skeleton[bone]["type"]
                                     if (
                                         joint_type == "attachment"
-                                        and process_attachment_bones == True
+                                        and process_attachment_bones
                                     ):
                                         names.append(bone)
                                     elif (
                                         joint_type == "collision"
-                                        and process_volume_bones == True
+                                        and process_volume_bones
                                     ):
                                         names.append(bone)
                                     else:
@@ -682,7 +682,7 @@ def edit_dae(
 
                         if bone in skel.avatar_skeleton:
                             if skel.avatar_skeleton[bone]["type"] == "attachment":
-                                if process_attachment_bones == False:
+                                if not process_attachment_bones:
                                     continue
 
                     if bone in joint_pose:
@@ -1149,7 +1149,7 @@ def export_custom(
     obj = bpy.data.objects
     armObj = obj[armature]
 
-    if utils.can_select(object=armObj.name) == False:
+    if not utils.can_select(object=armObj.name):
         print("collada::write_collada reports bad return from utils::can_select")
         print(
             "The rig has to be in view and selectable to generate bind data, did you choose the wrong export option?"

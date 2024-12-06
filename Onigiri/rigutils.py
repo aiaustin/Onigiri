@@ -1,3 +1,6 @@
+print("rigs loaded")
+print(__name__, __file__)
+
 import os
 import bpy
 import sys

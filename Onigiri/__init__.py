@@ -4588,7 +4588,7 @@ class OnigiriSnapProperties(bpy.types.PropertyGroup):
     )
     snap_deformable: bpy.props.BoolProperty(
         name="",
-        description="Only allow mapping of bones that affect the mesh (use_deform == True). This prevents your IK and extraneous controllers from "
+        description="Only allow mapping of bones that affect the mesh (use_deform is True). This prevents your IK and extraneous controllers from "
         "getting into the mix and wasting bones."
         "\n\n"
         "If you want to map attachment bones you need to enable their deform property first.  To do this go into the panel named "
@@ -10238,7 +10238,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                                     snap.props["last_selected_actor_bone"] = pBone.name
                                     snap.props["actor_symmetry_display"] = "Click This"
 
-            if True == False: ## O.o
+            """
                 col = box.column(align=True)
                 row = col.row(align=True)
                 row.prop(
@@ -10248,6 +10248,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     text="Symmetry",
                     icon_value=ico.custom_icons["sync"].icon_id,
                 )
+            """
 
             if oni_snap.snap_symmetry_enabled:
 

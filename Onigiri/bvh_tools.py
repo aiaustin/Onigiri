@@ -706,7 +706,7 @@ def merge(
     tree = ET.ElementTree(ET.fromstring(buf))
     root = tree.getroot()
 
-    if swap_offsets == True or swap_endsites:
+    if swap_offsets or swap_endsites:
 
         for node in root.iter(f"JOINT"):
             name = node.find("NAME").text

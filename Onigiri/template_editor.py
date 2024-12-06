@@ -1622,8 +1622,8 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             )
 
             if (
-                oni_edit_template.show_map == True
-                or oni_edit_template.show_rigs == True
+                oni_edit_template.show_map
+                or oni_edit_template.show_rigs
             ):
 
                 row = col.row(align=True)

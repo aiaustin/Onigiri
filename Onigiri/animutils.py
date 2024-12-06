@@ -132,7 +132,7 @@ def export_sl_anim(armature=None, path=None):
         has_action = False
         high_fidelity = True
 
-    if has_action == False:
+    if not has_action:
         if anim_deviation_detection:
             print("No animation present, reverting to High Fidelity instead")
 
@@ -208,7 +208,7 @@ def export_sl_anim(armature=None, path=None):
     if armObj.get("avastar") is not None:
         is_avastar = True
 
-    if is_onigiri == False:
+    if not is_onigiri:
         print("Not a Onigiri rig")
 
     if export_mapped_animation:
@@ -217,13 +217,13 @@ def export_sl_anim(armature=None, path=None):
 
     if export_onigiri_disabled:
         print("Onigiri rig checking is disabled")
-    if is_avastar == True and is_onigiri == False:
+    if is_avastar and not is_onigiri:
         print("This is an Avastar rig")
         if export_avastar_disabled:
             print("Avastar export is disabled, Avastar properties will not be analyzed")
         else:
             print("Avastar checking is enabled, properties will be processed")
-    if is_onigiri == False and is_avastar == False and export_onigiri_disabled == False:
+    if not is_onigiri and not is_avastar and not export_onigiri_disabled:
         txt = "This rig is not flagged as being compatible with Second Life, you can disable \n"
         txt += "the Onigiri rig checking in order to attempt to export this if you like, \n"
         txt += "then try again."
@@ -232,10 +232,10 @@ def export_sl_anim(armature=None, path=None):
         props["FATAL"] = True
         return False
     if (
-        is_onigiri == False
-        and is_avastar == True
-        and export_onigiri_disabled == False
-        and export_avastar_disabled == True
+        not is_onigiri
+        and is_avastar
+        and not export_onigiri_disabled
+        and export_avastar_disabled
     ):
         txt = "This is not a Onigiri rig, it is an Avastar rig, Avastar export feature is disabled \n"
         txt += "and Onigiri rig checking is enabled.  This combination of settings prevent the \n"
@@ -253,7 +253,7 @@ def export_sl_anim(armature=None, path=None):
     )
 
     is_avastar = False
-    if oni.export_avastar_disabled == False:
+    if not oni.export_avastar_disabled:
         if armObj.get("avastar") is not None and armObj.get("onigiri") is None:
             print("Processing an Avastar rig..")
             print(
@@ -280,7 +280,7 @@ def export_sl_anim(armature=None, path=None):
     if anim_linear:
 
         print("Linear...")
-        if has_action == False:
+        if not has_action:
             print("Linear Animation:")
             print("")
             print(
@@ -300,7 +300,7 @@ def export_sl_anim(armature=None, path=None):
         lerp_data = get_animated_keys(
             armature=armObj.name, frame_start=frame_start, frame_end=frame_end
         )
-        if lerp_data == False:
+        if not lerp_data:
             print("Interpolation data returned False from linear process")
             popup("Interpolation data was not valid", "Error", "ERROR")
             return False
@@ -312,7 +312,7 @@ def export_sl_anim(armature=None, path=None):
                 frames.extend(lerp_data[bone][trs])
 
         motion = get_motion(armature=armObj.name, frames=frames, bones=bones)
-        if motion == False:
+        if not motion:
             print("Motion data returned False from linear process")
             popup("Motion data was not valid", "Error", "ERROR")
             return False
@@ -323,7 +323,7 @@ def export_sl_anim(armature=None, path=None):
             time_slices=time_slices,
             is_avastar=is_avastar,
         )
-        if bone_data == False:
+        if not bone_data:
             print("Bone data returned False from linear process")
             popup("Bone data was not valid", "Error", "ERROR")
             return False
@@ -338,7 +338,7 @@ def export_sl_anim(armature=None, path=None):
 
             print("Using source keys")
 
-            if has_action == False:
+            if not has_action:
                 print(
                     "** Use Source Keys is enabled but there's no animation data to acquire!"
                 )
@@ -348,7 +348,7 @@ def export_sl_anim(armature=None, path=None):
                 lerp_source = get_source_keys(
                     armature=armObj.name, frame_start=frame_start, frame_end=frame_end
                 )
-                if lerp_source == False:
+                if not lerp_source:
                     print(
                         "** No key data on the source, does not appear to be animated!"
                     )
@@ -380,7 +380,7 @@ def export_sl_anim(armature=None, path=None):
             print("-----------------------------------------------------------")
 
         has_keys = False
-        if anim_use_source_keys == True or anim_use_target_keys:
+        if anim_use_source_keys or anim_use_target_keys:
             has_keys = True
             if len(lerp_source) == 0 and len(lerp_target) == 0:
                 print(
@@ -451,7 +451,7 @@ def export_sl_anim(armature=None, path=None):
                         mark_tol_loc=mark_tol_loc,
                     )
 
-                    if lerp_smooth == False:
+                    if not lerp_smooth:
                         print("Return from smooth motion resulted nothing")
 
                     else:
@@ -487,7 +487,7 @@ def export_sl_anim(armature=None, path=None):
                         frames=frames,
                     )
 
-        if has_keys == False:
+        if not has_keys:
 
             print("No key sources, using baked motion...")
 
@@ -507,7 +507,7 @@ def export_sl_anim(armature=None, path=None):
                 mark_tol_rot=mark_tol_rot,
                 mark_tol_loc=mark_tol_loc,
             )
-            if lerp_data == False:
+            if not lerp_data:
                 print("Return from baking resulted in False")
                 popup("No detected animation, bake failed", "Error", "ERROR")
                 return False
@@ -520,7 +520,7 @@ def export_sl_anim(armature=None, path=None):
             is_avastar=is_avastar,
         )
 
-        if bone_data == False:
+        if not bone_data:
             print("Bone data returned False from baking process")
             popup("Bone data was not valid from baking", "Error", "ERROR")
             return False
@@ -568,7 +568,7 @@ def export_sl_anim(armature=None, path=None):
         lerp_data = get_animated_keys(
             armature=armObj.name, frame_start=frame_start, frame_end=frame_end
         )
-        if lerp_data == False:
+        if not lerp_data:
             print("Interpolation data returned False")
             popup("Interpolation data was not valid", "Error", "ERROR")
             return False
@@ -581,7 +581,7 @@ def export_sl_anim(armature=None, path=None):
             frame_start=frame_start,
             frame_end=frame_end,
         )
-        if motion == False:
+        if not motion:
             print("Motion data returned False from interpolation process")
             popup("Motion data was not valid", "Error", "ERROR")
             return False
@@ -594,7 +594,7 @@ def export_sl_anim(armature=None, path=None):
             mark_tol_rot=mark_tol_rot,
             mark_tol_loc=mark_tol_loc,
         )
-        if len(key_stops) == 0 or key_stops == False:
+        if len(key_stops) == 0 or not key_stops:
             print("Some interpolation data was irretrievable.")
             print(
                 "This can happen with static poses or baking an animation so you can ignore it if that's the case."
@@ -645,7 +645,7 @@ def export_sl_anim(armature=None, path=None):
             is_avastar=is_avastar,
         )
 
-        if bone_data == False:
+        if not bone_data:
             print("Bone data returned False from interpolation process")
             popup("Bone data was not valid", "Error", "ERROR")
             return False
@@ -853,7 +853,7 @@ def export_sl_anim(armature=None, path=None):
                 path=path,
             )
 
-            if result == False:
+            if not result:
                 txt = "animutils::export_sl_anim: ERROR - write_mapped_animation returned false!"
                 return False
 
@@ -952,7 +952,7 @@ def export_sl_anim(armature=None, path=None):
         path=path,
     )
 
-    if result == False:
+    if not result:
         txt = "animutils::export_sl_anim: ERROR - write_animation returned false!"
         return False
 
@@ -1550,7 +1550,7 @@ def get_baked_animation(
                         loc_mark = True
                         animated.add(bone)
                         break
-                if rot_mark == True or loc_mark:
+                if rot_mark or loc_mark:
                     break
         print("Bones that exceeded motion tolerance:", animated)
     else:
@@ -1624,7 +1624,7 @@ def get_baked_animation(
                         stage_one[bone]["locs"] = []
                     stage_one[bone]["locs"].append(frame)
 
-    if oni.export_volume_motion == False:
+    if not oni.export_volume_motion:
         bones_del = []
         for bone in stage_one:
             if bone in volumes.vol_joints:
@@ -1777,12 +1777,12 @@ def get_animated_frames(
         rot_frames = [i for i in range(frame_start, frame_end + 1)]
         loc_frames = [i for i in range(frame_start, frame_end + 1)]
 
-    if action == False:
+    if not action:
         frame_data = {}
         for boneObj in armObj.data.bones:
             bone = boneObj.name
 
-            if oni.export_volume_motion == False:
+            if not oni.export_volume_motion:
                 if bone in volumes.vol_joints:
                     continue
 
@@ -1924,7 +1924,7 @@ def get_animated_keys(armature=None, frame_start=0, frame_end=0):
 
         real_bone = fcurve_paths[bone_path]
 
-        if oni.export_volume_motion == False:
+        if not oni.export_volume_motion:
             if real_bone in volumes.vol_joints:
                 continue
 
@@ -2056,7 +2056,7 @@ def get_source_keys(armature=None, frame_start=0, frame_end=0):
 
         real_bone = fcurve_paths[bone_path]
 
-        if oni.export_volume_motion == False:
+        if not oni.export_volume_motion:
             if real_bone in volumes.vol_joints:
                 continue
 
@@ -2176,7 +2176,7 @@ def get_target_keys(
 
                 real_bone = bone_targets[sbone][tarm][bone_path]
 
-                if oni.export_volume_motion == False:
+                if not oni.export_volume_motion:
                     if sbone in volumes.vol_joints:
                         continue
 
@@ -2260,7 +2260,7 @@ def get_action_keys(armature=None, action=None):
             lrs = "scale"
 
         elif transform_type == "rotation_euler" and rot_mode == "QUATERNION":
-            if been_here == False:
+            if not been_here:
                 print(
                     "The rotation type of this particular key frame is incompatible with the bone rotation mode."
                 )
@@ -2429,7 +2429,7 @@ def clean_motion(matrices=None, rot_tol=1.0, loc_tol=0.01):
         for frame in cleaned_mats[bone]:
             rot = cleaned_mats[bone][frame].get("rot", False)
             loc = cleaned_mats[bone][frame].get("loc", False)
-            if rot == False and loc == False:
+            if not rot and not loc:
                 continue
             if new_matrices.get(bone) is None:
                 new_matrices[bone] = {}
@@ -2547,7 +2547,7 @@ def get_deviations(
                         loc_mark = True
                         animated.add(bone)
                         break
-                if rot_mark == True or loc_mark:
+                if rot_mark or loc_mark:
                     break
         print("Bones that exceeded motion tolerance:", animated)
     else:
@@ -2757,7 +2757,7 @@ def get_animated_bones(
                     loc_mark = True
                     animated.add(bone)
                     break
-            if rot_mark == True or loc_mark:
+            if rot_mark or loc_mark:
                 break
     return animated
 
@@ -3467,7 +3467,7 @@ def clean_frames(
         if frame_entry > 2:
             if hit_now:
 
-                if hits[1] == False and hits[2] == False:
+                if not hits[1] and not hits[2]:
                     tr_animated.append(frame - 1)
 
     if len(tr_animated) > 0:
@@ -3580,7 +3580,7 @@ def get_speed_changes(
                 has_keys = True
                 continue
 
-    if has_keys == False:
+    if not has_keys:
         return []
 
     key_set.append(frame_end)
@@ -3639,7 +3639,7 @@ def get_rate_changes(
                 has_keys = True
                 break
 
-    if has_keys == False:
+    if not has_keys:
         return []
 
     key_set.append(frame_end)
@@ -3700,7 +3700,7 @@ def convert_animated_controllers(source=None, target=None):
 
 def morph_to(source=None, target=None, morph=False):
 
-    if morph == False:
+    if not morph:
         shifter.morpher_reset(arms=[source])
         return True
 
@@ -4037,9 +4037,9 @@ def bake_motion(sarm=None, tarm=None, frame_start=0, frame_end=0):
 
 
 def get_matrix_basis(armature=None, bone=None):
-    if isinstance(armature, str) == False:
+    if not isinstance(armature, str):
         armature = armature.name
-    if isinstance(bone, str) == False:
+    if not isinstance(bone, str):
         bone = bone.name
 
     armObj = bpy.data.objects[armature]
@@ -4125,7 +4125,7 @@ def apply_transforms(arm, report=False):
     for o in bpy.context.selected_objects:
         o.select_set(False)
 
-    if result == False:
+    if not result:
         print("The call to transfer motion seems to have failed")
         popup("Motion transfer failed", "Error", "ERROR")
         sarmObj.select_set(True)
