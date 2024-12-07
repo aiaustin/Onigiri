@@ -3,47 +3,34 @@ import os
 from . import mod_settings
 from .mod_settings import *
 
+## https://docs.blender.org/api/current/bpy_types_enum_items/icon_items.html
+
 script_dir = os.path.dirname(os.path.abspath(__file__))
 icons_dir = script_dir + oni_settings["paths"]["icons"]
-custom_icons = None
 
+custom_icons = None
+builtin_icons = None
+map_icons = None
 
 def load_icons():
-    global custom_icons
-    custom_icons = bpy.utils.previews.new()
-    custom_icons.load(
-        "arrow_top_right", os.path.join(icons_dir, "arrow_top_right.png"), "IMAGE"
-    )
-    custom_icons.load(
-        "arrow_bottom_right", os.path.join(icons_dir, "arrow_bottom_right.png"), "IMAGE"
-    )
-    custom_icons.load("arrow_up", os.path.join(icons_dir, "arrow_up.png"), "IMAGE")
-    custom_icons.load(
-        "arrow_right_green", os.path.join(icons_dir, "arrow_right_green.png"), "IMAGE"
-    )
-    custom_icons.load(
-        "arrow_left_green", os.path.join(icons_dir, "arrow_left_green.png"), "IMAGE"
-    )
-    custom_icons.load("configure", os.path.join(icons_dir, "configure.png"), "IMAGE")
-    custom_icons.load(
-        "settings_general", os.path.join(icons_dir, "settings_general.png"), "IMAGE"
-    )
-    custom_icons.load(
-        "settings_advanced", os.path.join(icons_dir, "settings_advanced.png"), "IMAGE"
-    )
 
-    custom_icons.load(
-        "bone_source", os.path.join(icons_dir, "bone_source.png"), "IMAGE"
-    )
-    custom_icons.load(
-        "bone_target", os.path.join(icons_dir, "bone_target.png"), "IMAGE"
-    )
-    custom_icons.load(
-        "walking_green", os.path.join(icons_dir, "walking_green.png"), "IMAGE"
-    )
-    custom_icons.load(
-        "walking_white", os.path.join(icons_dir, "walking_white.png"), "IMAGE"
-    )
+    global custom_icons
+    global map_icons
+    global builtin_icons
+
+    custom_icons = bpy.utils.previews.new()
+    custom_icons.load("arrow_top_right", os.path.join(icons_dir, "arrow_top_right.png"), "IMAGE")
+    custom_icons.load("arrow_bottom_right", os.path.join(icons_dir, "arrow_bottom_right.png"), "IMAGE")
+    custom_icons.load("arrow_up", os.path.join(icons_dir, "arrow_up.png"), "IMAGE")
+    custom_icons.load("arrow_right_green", os.path.join(icons_dir, "arrow_right_green.png"), "IMAGE")
+    custom_icons.load("arrow_left_green", os.path.join(icons_dir, "arrow_left_green.png"), "IMAGE")
+    custom_icons.load("configure", os.path.join(icons_dir, "configure.png"), "IMAGE")
+    custom_icons.load("settings_general", os.path.join(icons_dir, "settings_general.png"), "IMAGE")
+    custom_icons.load("settings_advanced", os.path.join(icons_dir, "settings_advanced.png"), "IMAGE")
+    custom_icons.load("bone_source", os.path.join(icons_dir, "bone_source.png"), "IMAGE")
+    custom_icons.load("bone_target", os.path.join(icons_dir, "bone_target.png"), "IMAGE")
+    custom_icons.load("walking_green", os.path.join(icons_dir, "walking_green.png"), "IMAGE")
+    custom_icons.load("walking_white", os.path.join(icons_dir, "walking_white.png"), "IMAGE")
     custom_icons.load(
         "walking_black", os.path.join(icons_dir, "walking_black.png"), "IMAGE"
     )
@@ -320,12 +307,8 @@ def load_icons():
     custom_icons.load(
         "menu_closed", os.path.join(icons_dir, "menu_closed.png"), "IMAGE"
     )
-    custom_icons.load(
-        "menu_opened", os.path.join(icons_dir, "menu_opened.png"), "IMAGE"
-    )
-    custom_icons.load(
-        "orientation", os.path.join(icons_dir, "orientation.png"), "IMAGE"
-    )
+    custom_icons.load("menu_opened", os.path.join(icons_dir, "menu_opened.png"), "IMAGE")
+    custom_icons.load("orientation", os.path.join(icons_dir, "orientation.png"), "IMAGE")
     custom_icons.load("off", os.path.join(icons_dir, "off.png"), "IMAGE")
     custom_icons.load("on", os.path.join(icons_dir, "on.png"), "IMAGE")
     custom_icons.load("choice_off", os.path.join(icons_dir, "choice_off.png"), "IMAGE")
@@ -617,7 +600,26 @@ def load_icons():
     custom_icons.load("unknown", os.path.join(icons_dir, "unknown.png"), "IMAGE")
     custom_icons.load("ragdoll", os.path.join(icons_dir, "ragdoll.png"), "IMAGE")
 
+    
+    icon_items = bpy.types.UILayout.bl_rna.functions["prop"].parameters["icon"].enum_items.items()    
+    builtin_icons = {tup[1].identifier : tup[1].value for tup in icon_items}
+
+    map_icons = {
+        "menu_opened": "TRIA_DOWN",
+        "menu_closed": "TRIA_RIGHT"
+    }
 
 def unload_icons():
     global custom_icons
-    bpy.utils.previews.remove(custom_icons)
+    bpy.utils.previews.remove(custom_icons)    
+
+## https://blender.stackexchange.com/questions/224015/is-there-a-way-to-get-icon-value-for-the-uilist-using-icon-name-from-enum
+
+def get_icon_id(name):
+    global custom_icons
+    global builtin_icons
+    icon_name = map_icons.get(name)    
+    if icon_name is None:
+        return custom_icons[name].icon_id
+    else:
+        return builtin_icons[icon_name]
