@@ -606,7 +606,16 @@ def load_icons():
 
     map_icons = {
         "menu_opened": "TRIA_DOWN",
-        "menu_closed": "TRIA_RIGHT"
+        "menu_closed": "TRIA_RIGHT",
+        "star_green": "ARMATURE_DATA",
+        "axis_y" : "AXIS_FRONT",
+        "axis": "EMPTY_AXIS",
+        "tools": "TOOL_SETTINGS",
+        "star": "SOLO_ON",
+        "kit": "OUTLINER_OB_ARMATURE",
+        "rotate": "ORIENTATION_GIMBAL",
+        "clean": "BRUSH_DATA",
+        "time": "PREVIEW_RANGE"
     }
 
 def unload_icons():
