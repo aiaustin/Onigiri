@@ -49219,7 +49219,7 @@ class OnigiriRigCreationPanel(bpy.types.Panel):
             "rig_rotate",
             toggle=True,
             text="",
-            icon_value = get_icon_id("rotate"),
+            icon_value = get_icon_id("axis_y"),
         )
         row = self.layout.row(align=True)
         row.prop(
@@ -49246,44 +49246,44 @@ class OnigiriRigCreationPanel(bpy.types.Panel):
             row.operator(
                 "onigiri.create_pivot_rig",
                 text="Add Pivot Rig",
-                icon_value = get_icon_id("star_black"),
+                icon_value = get_icon_id("axis"),
             )
             row.prop(
                 oni_rig,
                 "rig_rotate",
                 toggle=True,
                 text="",
-                icon_value = get_icon_id("rotate"),
+                icon_value = get_icon_id("axis_y"),
             )
             row = self.layout.row(align=True)
             row.operator(
                 "onigiri.create_devkit_rig",
                 text="Add Female Neutral Devkit Rig",
-                icon_value = get_icon_id("alert"),
+                icon_value = get_icon_id("kit"),
             ).rig_class = "female_neutral"
             row = self.layout.row(align=True)
             row.operator(
                 "onigiri.create_devkit_rig",
                 text="Add Female Default Devkit Rig",
-                icon_value = get_icon_id("alert"),
+                icon_value = get_icon_id("kit"),
             ).rig_class = "female_default"
             row = self.layout.row(align=True)
             row.operator(
                 "onigiri.create_devkit_rig",
                 text="Add Male Neutral Devkit Rig",
-                icon_value = get_icon_id("alert"),
+                icon_value = get_icon_id("kit"),
             ).rig_class = "male_neutral"
             row = self.layout.row(align=True)
             row.operator(
                 "onigiri.create_devkit_rig",
                 text="Add Male Default Devkit Rig",
-                icon_value = get_icon_id("alert"),
+                icon_value = get_icon_id("kit"),
             ).rig_class = "male_default"
             row = self.layout.row(align=True)
             row.operator(
                 "onigiri.create_old_rig",
                 text="Add old (basic) Rig",
-                icon_value = get_icon_id("alert"),
+                icon_value = get_icon_id("kit"),
             )
 
 
