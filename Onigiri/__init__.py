@@ -8961,7 +8961,8 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             onie,
             "editor_manual_menu_enabled",
             toggle=True,
-            text="Expand manual editor",
+            emboss=False,
+            text="Expand manual editor",            
             icon_value = get_panel_icon_id(onie.editor_manual_menu_enabled),
         )
         if onie.editor_manual_menu_enabled:
@@ -9115,6 +9116,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     oni_edit_template,
                     "show_map",
                     toggle=True,
+                    emboss=False,
                     text="Expand Map",
                     icon_value = get_panel_icon_id(oni_edit_template.show_map),
                 )
@@ -9123,6 +9125,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     oni_edit_template,
                     "show_rigs",
                     toggle=True,
+                    emboss=False,
                     text="Rig Options",
                     icon_value =  get_panel_icon_id(oni_edit_template.show_rigs),
                 )
@@ -18698,6 +18701,7 @@ class OnigiriPanelImport(bpy.types.Panel):
             oni_import,
             "dae_import_menu_enabled",
             toggle=True,
+            emboss=False,
             text="Dae Import",
             icon_value = get_panel_icon_id(oni_import.dae_import_menu_enabled),
         )
@@ -18795,6 +18799,7 @@ class OnigiriPanelImport(bpy.types.Panel):
             oni_anim_edit,
             "anim_menu_enabled",
             toggle=True,
+            emboss=False,
             text="Anim Editor",
             icon_value = get_panel_icon_id(oni_anim_edit.anim_menu_enabled),
         )
@@ -19051,6 +19056,7 @@ class OnigiriPanelImport(bpy.types.Panel):
                 oni_anim_edit,
                 "anim_show_joints_menu_enabled",
                 toggle=True,
+                emboss=False,
                 text="Edit Joints",
                 icon_value = get_panel_icon_id(oni_anim_edit.anim_show_joints_menu_enabled),
             )
@@ -47734,6 +47740,7 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
             oni_devkit,
             "export_menu_enabled",
             toggle=True,
+            emboss=False,
             text="Expand rig and kit Options",
             icon_value = get_panel_icon_id(oni_devkit.export_menu_enabled),
         )
@@ -48104,6 +48111,7 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                 oni_devkit,
                 "export_advanced",
                 toggle=True,
+                emboss=False,
                 text="Advanced Export Options",
                 icon_value = get_panel_icon_id(oni_devkit.export_advanced),
             )
@@ -48736,6 +48744,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
             "skin_pose_menu_enabled",
             text="Skin Pose",
             toggle=True,
+            emboss=False,
             icon_value = get_panel_icon_id(oni_skin.skin_pose_menu_enabled),
         )
 
@@ -48844,6 +48853,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
             "skin_weight_tools_menu_enabled",
             text="Weight Tools",
             toggle=True,
+            emboss=False,
             icon_value = get_panel_icon_id(oni_skin.skin_weight_tools_menu_enabled),
         )
         if oni_skin.skin_weight_tools_menu_enabled:
@@ -49151,6 +49161,7 @@ class OnigiriRigCreationPanel(bpy.types.Panel):
             brp,
             "rigs_enabled",
             toggle=True,
+            emboss=False,
             text="Additional choices",
             icon_value = get_panel_icon_id(brp.rigs_enabled),
         )
@@ -49237,6 +49248,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
             bmp,
             "mapper_menu_enabled",
             toggle=True,
+            emboss=False,
             text="Character Mapper / Retargeter",
             icon_value = get_panel_icon_id(bmp.mapper_menu_enabled),
         )
@@ -49777,6 +49789,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
             ani,
             "animesh_menu_enabled",
             toggle=True,
+            emboss=False,
             text="Template Workshop (superfluous)",
             icon_value = get_panel_icon_id(ani.animesh_menu_enabled),
         )
@@ -49924,6 +49937,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             oni_inherit,
             "inherit_menu_enabled",
             toggle=True,
+            emboss=False,
             text="Inherit Animation",
             icon_value = get_panel_icon_id(oni_inherit.inherit_menu_enabled),
         )
@@ -50068,6 +50082,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             oni_motion,
             "motion_menu_enabled",
             toggle=True,
+            emboss=False,
             text="Retarget Motion",
             icon_value = get_panel_icon_id(oni_motion.motion_menu_enabled),
         )
@@ -50332,6 +50347,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 oni_motion,
                 "motion_interactive_menu_enabled",
                 toggle=True,
+                emboss=False,
                 text="Interactive Retarget Mapping",
                 icon_value = get_panel_icon_id(oni_motion.motion_interactive_menu_enabled),
             )
@@ -50449,6 +50465,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                     oni_motion,
                     "motion_view_map_menu_enabled",
                     toggle=True,
+                    emboss=False,
                     text="View map",
                     icon_value = get_panel_icon_id(oni_motion.motion_view_map_menu_enabled),
                 )
@@ -50479,6 +50496,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             oni_mapper,
             "bone_control_menu_enabled",
             toggle=True,
+            emboss=False,
             text="Bone Control",
             icon_value = get_panel_icon_id(oni_mapper.bone_control_menu_enabled),
         )
@@ -50784,6 +50802,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             oni_motion,
             "clean_motion_menu_enabled",
             toggle=True,
+            emboss=False,
             text="Clean Motion",
             icon_value = get_panel_icon_id(oni_motion.clean_motion_menu_enabled),
         )
@@ -50906,6 +50925,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 oni_shape,
                 "shape_menu_enabled",
                 toggle=True,
+                emboss=False,
                 text="Shape Configuration",
                 icon_value = get_panel_icon_id(oni_shape.shape_menu_enabled),
             )
@@ -51044,6 +51064,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 "sliders_menu_enabled",
                 text="Body Shop",
                 toggle=True,
+                emboss=False,
                 icon_value = get_panel_icon_id(oni_sliders.sliders_menu_enabled),
             )
 
@@ -53125,6 +53146,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             anim,
             "anim_menu_enabled",
             toggle=True,
+            emboss=False,
             text="Anim Export Features",
             icon_value = get_panel_icon_id(anim.anim_menu_enabled),
         )
@@ -53640,6 +53662,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 "anim_unfold_menu_enabled",
                 text="Expand lots of options",
                 toggle=True,
+                emboss=False,
                 icon_value = get_panel_icon_id(anim.anim_unfold_menu_enabled),
             )
 
@@ -53963,6 +53986,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         "anim_joint_priority_menu_enabled",
                         text="Joint Priority Options",
                         toggle=True,
+                        emboss=False,
                         icon_value = get_panel_icon_id(anim.anim_joint_priority_menu_enabled),
                     )
                     row = col.row(align=True)
@@ -54189,6 +54213,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             "bvh_menu_enabled",
             text="BVH Export Features",
             toggle=True,
+            emboss=False,
             icon_value = get_panel_icon_id(bpy.context.scene.onigiri.bvh_menu_enabled),
         )
 
@@ -54232,6 +54257,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             "extended_animation_options",
             text="Extended Options",
             toggle=True,
+            emboss=False,
             icon_value = get_panel_icon_id(oni.extended_animation_options),
         )
 
@@ -55408,6 +55434,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     "alib_ranges_menu_enabled",
                     text="Frame and Loop Ranges",
                     toggle=True,
+                    emboss=False,
                     icon_value = get_panel_icon_id(oni_alib.alib_ranges_menu_enabled),
                 )
                 if oni_alib.alib_ranges_menu_enabled:
@@ -57870,6 +57897,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
             "shifter_morph_menu_enabled",
             text="Morph Character Rig",
             toggle=True,
+            emboss=False,
             icon_value = get_panel_icon_id(ss.shifter_morph_menu_enabled),
         )
         if ss.shifter_morph_menu_enabled:
@@ -58056,6 +58084,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
             "shifter_freeform_menu_enabled",
             text="Free-form Morph Pose",
             toggle=True,
+            emboss=False,
             icon_value = get_panel_icon_id(ss.shifter_freeform_menu_enabled),
         )
         if ss.shifter_freeform_menu_enabled:
@@ -58144,6 +58173,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
             "shifter_build_menu_enabled",
             text="Build-A-Rig",
             toggle=True,
+            emboss=False,
             icon_value = get_panel_icon_id(oni_shifter.shifter_build_menu_enabled),
         )
         if oni_shifter.shifter_build_menu_enabled:
@@ -58250,6 +58280,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 "latch_menu_enabled",
                 text="Latch Rigs (chain)",
                 toggle=True,
+                emboss=False,
                 icon_value = get_panel_icon_id(oni_latch.latch_menu_enabled),
             )
             if oni_latch.latch_menu_enabled:
@@ -58347,6 +58378,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 "sim_menu_enabled",
                 text="Simulation",
                 toggle=True,
+                emboss=False,
                 icon_value = get_panel_icon_id(oni_sim.sim_menu_enabled),
             )
             if oni_sim.sim_menu_enabled:
@@ -58771,6 +58803,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 "puppet_menu_enabled",
                 text="Puppeteer",
                 toggle=True,
+                emboss=False,
                 icon_value = get_panel_icon_id(oni_puppet.puppet_menu_enabled),
             )
             if oni_puppet.puppet_menu_enabled:
@@ -59540,6 +59573,7 @@ class OnigiriReactorPanel(bpy.types.Panel):
                 "reactor_menu_enabled",
                 text="Reactor",
                 toggle=True,
+                emboss=False,
                 icon_value = get_panel_icon_id(oni_reactor.reactor_menu_enabled),
             )
             if oni_reactor.reactor_menu_enabled:
@@ -59562,6 +59596,7 @@ class OnigiriReactorPanel(bpy.types.Panel):
             "ragdoll_menu_enabled",
             text="Ragdoll",
             toggle=True,
+            emboss=False,
             icon_value = get_panel_icon_id(oni_ragdoll.ragdoll_menu_enabled),
         )
         if oni_ragdoll.ragdoll_menu_enabled:
@@ -64133,6 +64168,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
                 "joint_data_enabled_override",
                 text="",
                 toggle=True,
+                emboss=False,
                 icon_value = get_panel_icon_id(ajd.joint_data_enabled),
             )
             row.prop(
@@ -64448,6 +64484,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
                 "matrix_converter_enabled",
                 text="Modify Animated Joint Orientation",
                 toggle=True,
+                emboss=False,
                 icon_value = get_panel_icon_id(anim_advanced.matrix_converter_enabled),
             )
             if anim_advanced.matrix_converter_enabled:
@@ -64619,6 +64656,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
             "bvh_menu_enabled",
             text="BVH / XML Tools",
             toggle=True,
+            emboss=False,
             icon_value = get_panel_icon_id(onia.bvh_menu_enabled),
         )
 
@@ -64680,6 +64718,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
             "object_props_menu_enabled",
             text="Object Properties",
             toggle=True,
+            emboss=False,
             icon_value = get_panel_icon_id(oni_misc.object_props_menu_enabled),
         )
         if oni_misc.object_props_menu_enabled:
@@ -64728,6 +64767,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
                 "show_object_props",
                 text="Show Object Props",
                 toggle=True,
+                emboss=False,
                 icon_value = get_panel_icon_id(oni_misc.show_object_props),
             )
             if oni_misc.show_object_props:
