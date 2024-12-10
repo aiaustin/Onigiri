@@ -3,7 +3,7 @@ import os
 import json
 from bpy_extras.io_utils import ImportHelper, ExportHelper
 
-from . import ico
+from .ico import *
 from . import utils
 from .mod_settings import oni_settings
 
@@ -1440,27 +1440,27 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
         row.operator(
             "onigiri.load_generic_template",
             text="Load ctm or ccm",
-            icon_value=ico.custom_icons["load"].icon_id,
+            icon_value=get_icon_id("load"),
         )
         row.prop(
             onie,
             "info_onigiri_load_generic_template",
             toggle=True,
             text="",
-            icon_value=ico.custom_icons["alert"].icon_id,
+            icon_value=get_icon_id("alert"),
         )
         row = col.row(align=True)
 
         row.operator(
             "onigiri.save_ccm",
             text="Save as Character Converter",
-            icon_value=ico.custom_icons["save"].icon_id,
+            icon_value=get_icon_id("save"),
         )
         row = col.row(align=True)
         row.operator(
             "onigiri.save_ctm",
             text="Save as Template Map",
-            icon_value=ico.custom_icons["save"].icon_id,
+            icon_value=get_icon_id("save"),
         )
 
         layout = self.layout
@@ -1479,7 +1479,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
         row.operator(
             "onigiri.combine_generic_template",
             text=label_text,
-            icon_value=ico.custom_icons["load"].icon_id,
+            icon_value=get_icon_id("load"),
         )
 
         row.prop(
@@ -1487,14 +1487,14 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             "disable_map_pose",
             text="",
             toggle=True,
-            icon_value=ico.custom_icons["disable_map_pose"].icon_id,
+            icon_value=get_icon_id("disable_map_pose"),
         )
         row.prop(
             onie,
             "info_onigiri_combine_generic_template",
             toggle=True,
             text="",
-            icon_value=ico.custom_icons["alert"].icon_id,
+            icon_value=get_icon_id("alert"),
         )
         if (
             onie.get("template_map_combine") is not None
@@ -1505,7 +1505,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             row.operator(
                 "onigiri.reset_template_composer",
                 text="Reset Composer",
-                icon_value=ico.custom_icons["reset"].icon_id,
+                icon_value=get_icon_id("reset"),
             )
             if len(onie["map_files_combine"]) > 1:
                 layout = self.layout
@@ -1514,13 +1514,13 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     row.operator(
                         "onigiri.save_combined_ccm",
                         text="Save Combined CCM",
-                        icon_value=ico.custom_icons["save"].icon_id,
+                        icon_value=get_icon_id("save"),
                     )
                 elif onie["map_type_combine"] == "ctm":
                     row.operator(
                         "onigiri.save_combined_ctm",
                         text="Save Combined CTM",
-                        icon_value=ico.custom_icons["save"].icon_id,
+                        icon_value=get_icon_id("save"),
                     )
                 else:
                     row.label(
@@ -1548,12 +1548,12 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
         row.operator(
             "onigiri.edit_template_new_ctm",
             text="New ctm",
-            icon_value=ico.custom_icons["magic"].icon_id,
+            icon_value=get_icon_id("magic"),
         )
         row.operator(
             "onigiri.edit_template_load_ctm",
             text="Load ctm",
-            icon_value=ico.custom_icons["load"].icon_id,
+            icon_value=get_icon_id("load"),
         )
 
         test_ccm = False
@@ -1561,13 +1561,13 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             row.operator(
                 "onigiri.edit_template_load_ccm",
                 text="Load ccm",
-                icon_value=ico.custom_icons["load"].icon_id,
+                icon_value=get_icon_id("load"),
             )
 
         row.operator(
             "onigiri.edit_template_load_txt",
             text="Load txt",
-            icon_value=ico.custom_icons["load"].icon_id,
+            icon_value=get_icon_id("load"),
         )
 
         row.prop(
@@ -1575,7 +1575,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             "load_txt_reversed",
             toggle=True,
             text="",
-            icon_value=ico.custom_icons["loop"].icon_id,
+            icon_value=get_icon_id("loop"),
         )
 
         if test_ccm:
@@ -1583,7 +1583,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             row.operator(
                 "onigiri.edit_template_save_ccm",
                 text="Save ccm",
-                icon_value=ico.custom_icons["save"].icon_id,
+                icon_value=get_icon_id("save"),
             )
 
         if oni_edit_template.get("template_editing"):
@@ -1591,17 +1591,8 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             row.operator(
                 "onigiri.edit_template_save_ctm",
                 text="Save ctm",
-                icon_value=ico.custom_icons["save"].icon_id,
+                icon_value=get_icon_id("save"),
             )
-
-            if oni_edit_template.show_map:
-                edit_template_show_map_icon = "menu_opened"
-            else:
-                edit_template_show_map_icon = "menu_closed"
-            if oni_edit_template.show_rigs:
-                edit_template_show_rigs_icon = "menu_opened"
-            else:
-                edit_template_show_rigs_icon = "menu_closed"
 
             col = box.column(align=True)
             row = col.row(align=True)
@@ -1610,7 +1601,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 "show_map",
                 toggle=True,
                 text="Expand Map",
-                icon_value=ico.custom_icons[edit_template_show_map_icon].icon_id,
+                icon_value=get_panel_icon_id(oni_edit_template.show_map),
             )
 
             row.prop(
@@ -1618,7 +1609,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 "show_rigs",
                 toggle=True,
                 text="Rig Options",
-                icon_value=ico.custom_icons[edit_template_show_rigs_icon].icon_id,
+                icon_value=get_panel_icon_id(oni_edit_template.show_rigs),
             )
 
             if (
@@ -1629,7 +1620,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 row = col.row(align=True)
                 for i in range(icon_repeat):
                     row.label(
-                        text="", icon_value=ico.custom_icons["line_thin_white"].icon_id
+                        text="", icon_value=get_icon_id("line_thin_white")
                     )
 
                 row = col.row(align=True)
@@ -1648,7 +1639,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 row.operator(
                     "onigiri.edit_template_undo",
                     text="",
-                    icon_value=ico.custom_icons[edit_template_undo_icon].icon_id,
+                    icon_value=get_icon_id(edit_template_undo_icon),
                 )
 
             if oni_edit_template.show_rigs:
@@ -1656,7 +1647,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
 
                 for i in range(icon_repeat):
                     row.label(
-                        text="", icon_value=ico.custom_icons["line_thin_white"].icon_id
+                        text="", icon_value=get_icon_id("line_thin_white")
                     )
 
                 if 1 == 0:
@@ -1667,18 +1658,18 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                             "source_active",
                             toggle=True,
                             text="Source Active",
-                            icon_value=ico.custom_icons["walking_black"].icon_id,
+                            icon_value=get_icon_id("walking_black"),
                         )
                     else:
                         row.operator(
                             "onigiri.edit_template_pick_source",
                             text="Pick the source rig",
-                            icon_value=ico.custom_icons["walking_blue"].icon_id,
+                            icon_value=get_icon_id("walking_blue"),
                         )
                     row.operator(
                         "onigiri.edit_template_pick_target",
                         text="Pick a target rig",
-                        icon_value=ico.custom_icons["walking_red"].icon_id,
+                        icon_value=get_icon_id("walking_red"),
                     )
 
                     col = box.column(align=True)
@@ -1697,7 +1688,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     row.operator(
                         "onigiri.edit_template_move_target",
                         text="",
-                        icon_value=ico.custom_icons["edit_red"].icon_id,
+                        icon_value=get_icon_id("edit_red"),
                     ).name = target
                     if (
                         oni_edit_template.get("item") == "move"
@@ -1716,13 +1707,13 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     row.operator(
                         "onigiri.edit_template_remove_prefix",
                         text="",
-                        icon_value=ico.custom_icons["prefix_remove"].icon_id,
+                        icon_value=get_icon_id("prefix_remove"),
                     )
 
                     row.operator(
                         "onigiri.edit_template_remove_target",
                         text="",
-                        icon_value=ico.custom_icons["x_red"].icon_id,
+                        icon_value=get_icon_id("x_red"),
                     ).name = target
 
             if oni_edit_template.show_map:
@@ -1737,23 +1728,23 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     for i in range(icon_repeat):
                         row.label(
                             text="",
-                            icon_value=ico.custom_icons["line_thin_white"].icon_id,
+                            icon_value=get_icon_id("line_thin_white"),
                         )
 
                     row = col.row(align=True)
                     row.label(
-                        text="Source Bone", icon_value=ico.custom_icons["blank"].icon_id
+                        text="Source Bone", icon_value=get_icon_id("blank")
                     )
                     row.label(
-                        text="Target Rig", icon_value=ico.custom_icons["blank"].icon_id
+                        text="Target Rig", icon_value=get_icon_id("blank")
                     )
                     row.label(
-                        text="Target Bone", icon_value=ico.custom_icons["blank"].icon_id
+                        text="Target Bone", icon_value=get_icon_id("blank")
                     )
                     row.operator(
                         "onigiri.edit_template_reset",
                         text="",
-                        icon_value=ico.custom_icons["reset"].icon_id,
+                        icon_value=get_icon_id("reset"),
                     )
                     scale_factor = 21
                     icon_repeat = int(round(bpy.context.region.width / scale_factor))
@@ -1762,14 +1753,14 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     for i in range(icon_repeat):
                         row.label(
                             text="",
-                            icon_value=ico.custom_icons["line_thin_white"].icon_id,
+                            icon_value=get_icon_id("line_thin_white"),
                         )
 
                     row = col.row(align=True)
                     row.operator(
                         "onigiri.edit_template_add_bone",
                         text="",
-                        icon_value=ico.custom_icons["magic"].icon_id,
+                        icon_value=get_icon_id("magic"),
                     )
                     row.label(
                         text="Manually add a custom bone to the map",
@@ -1785,9 +1776,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     row.operator(
                         "onigiri.edit_template_change_source_bone",
                         text="",
-                        icon_value=ico.custom_icons[
-                            edit_template_change_source_bone_icon
-                        ].icon_id,
+                        icon_value=get_icon_id(edit_template_change_source_bone_icon),
                     ).name = sbone
 
                     if (
@@ -1804,9 +1793,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     row.operator(
                         "onigiri.edit_template_change_rig_name",
                         text="",
-                        icon_value=ico.custom_icons[
-                            edit_template_change_rig_name_icon
-                        ].icon_id,
+                        icon_value=get_icon_id(edit_template_change_rig_name_icon),
                     ).name = sbone
 
                     if (
@@ -1823,9 +1810,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     row.operator(
                         "onigiri.edit_template_change_target_bone",
                         text="",
-                        icon_value=ico.custom_icons[
-                            edit_template_change_target_bone_icon
-                        ].icon_id,
+                        icon_value=get_icon_id(edit_template_change_target_bone_icon),
                     ).name = sbone
 
                     if (
@@ -1842,7 +1827,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     row.operator(
                         "onigiri.edit_template_remove_bone",
                         text="",
-                        icon_value=ico.custom_icons["x_black"].icon_id,
+                        icon_value=get_icon_id("x_black"),
                     ).bone = sbone
 
         oni_onemap = bpy.context.window_manager.oni_onemap
@@ -1858,12 +1843,12 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
         row.operator(
             "onigiri.template_load_onemap",
             text="Load Hybrid",
-            icon_value=ico.custom_icons["load"].icon_id,
+            icon_value=get_icon_id("load"),
         )
         row.operator(
             "onigiri.template_save_onemap",
             text="Save Hybrid",
-            icon_value=ico.custom_icons["save"].icon_id,
+            icon_value=get_icon_id("save"),
         )
         row = col.row(align=True)
         row.prop(

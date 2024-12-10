@@ -131,11 +131,6 @@ reset_file = oni_settings["files"]["reset"]
 bvh_template = oni_settings["files"]["bvh_template"]
 character_path = oni_settings["paths"]["characters"]
 
-
-def get_icon(key):
-    return ico.custom_icons[key].icon_id
-
-
 @persistent
 def clean_data(context):
 
@@ -460,7 +455,7 @@ def retarget_mode(context):
             bpy.ops.pose.select_all(action="DESELECT")
 
             del obj[onir.retarget_source_name]["bone_map"][onir.retarget_source_bone]
-        
+
         bpy.data.objects[onir.retarget_rig].data.collections[oni_source_group].assign(boneObj)
 
         for b in obj[onir.retarget_source_name].data.bones:
@@ -557,7 +552,7 @@ def animation_retarget():
             boneObj.hide_select = False
         for boneObj in obj[onir.retarget_target_name_backup].data.bones:
             boneObj.hide_select = False
-        
+
         remove_bone_groups(onir.retarget_source_name_backup)
         remove_bone_groups(onir.retarget_target_name_backup)
 
@@ -2577,7 +2572,7 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
             print("Move toggled to True")
             in_bone = onemap.props["input_bone"]
             onemap.props["move_bone"] = in_bone
-            inRig.data.collections["Move"].assign(inRig.pose.bones[in_bone])            
+            inRig.data.collections["Move"].assign(inRig.pose.bones[in_bone])
 
         if not self.onemap_move:
             bpy.ops.onigiri.onemap_move()
@@ -2651,7 +2646,7 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
         oni_onemap_reskin = inRig.get("oni_onemap_reskin", [])
         if bone_name in oni_onemap_reskin:
             reskin_bones = oni_onemap_reskin[bone_name]
-            for bone in reskin_bones:                
+            for bone in reskin_bones:
                 inRig.data.collections["Branch"].assign(inRig.pose.bones[bone])
 
         return True
@@ -2661,7 +2656,7 @@ class OnigiriOnemapProperties(bpy.types.PropertyGroup):
         outRig = bpy.context.active_object
         bone_name = onemap.props["group_output_bone"]
         group_name = onemap.props["group_output_name"]
-        
+
         outRig.data.collections[group_name].assign(outRig.pose.bones[bone_name])
         return True
 
@@ -3430,7 +3425,7 @@ class OnigiriOneMapReskin(bpy.types.Operator):
                 inRig["oni_onemap_reskin"][anchor_bone] = reskin_bones
                 onemap.update_map(input=inRig, output=outRig)
 
-                for bone in reskin_bones:                    
+                for bone in reskin_bones:
                     inRig.data.collections["Branch"].assign(inRig.pose.bones[bone])
 
         print("Color reskin bone exiting resking without resetting fake properties")
@@ -6140,7 +6135,7 @@ class OnigiriSnapAction(bpy.types.Operator):
         inRig.select_set(True)
         outRig.select_set(True)
 
-        for g in inRig.data.collections: 
+        for g in inRig.data.collections:
             inRig.data.collections.remove(g)
 
         for g in outRig.data.collections:
@@ -6148,15 +6143,15 @@ class OnigiriSnapAction(bpy.types.Operator):
 
         bpy.ops.object.mode_set(mode="POSE")
 
-        bpy.context.view_layer.objects.active = inRig        
+        bpy.context.view_layer.objects.active = inRig
         inRig.data.collections.new(snap.props["director_group_base"])
-        #inRig.data.collections.active.color_set = snap.props["director_theme_base"]        
+        #inRig.data.collections.active.color_set = snap.props["director_theme_base"]
         inRig.data.collections.new(snap.props["director_group_mapped"])
         #inRig.data.collections.active.color_set = snap.props["director_theme_mapped"]
 
-        bpy.context.view_layer.objects.active = outRig        
+        bpy.context.view_layer.objects.active = outRig
         outRig.data.collections.new(snap.props["actor_group_base"])
-        #outRig.data.collections.active.color_set = snap.props["actor_theme_base"]        
+        #outRig.data.collections.active.color_set = snap.props["actor_theme_base"]
         outRig.data.collections.new(snap.props["actor_group_mapped"])
         #outRig.data.collections.active.color_set = snap.props["actor_theme_mapped"]
 
@@ -8961,17 +8956,13 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
 
         icon_repeat = int(round(bpy.context.region.width / scale_factor))
 
-        editor_manual_menu_enabled_icon = "menu_closed"
-        if onie.editor_manual_menu_enabled:
-            editor_manual_menu_enabled_icon = "menu_opened"
-
         row = self.layout.row(align=True)
         row.prop(
             onie,
             "editor_manual_menu_enabled",
             toggle=True,
             text="Expand manual editor",
-            icon_value = get_icon_id(editor_manual_menu_enabled_icon),
+            icon_value = get_panel_icon_id(onie.editor_manual_menu_enabled),
         )
         if onie.editor_manual_menu_enabled:
             layout = self.layout
@@ -9118,15 +9109,6 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     icon_value = get_icon_id("save"),
                 )
 
-                if oni_edit_template.show_map:
-                    edit_template_show_map_icon = "menu_opened"
-                else:
-                    edit_template_show_map_icon = "menu_closed"
-                if oni_edit_template.show_rigs:
-                    edit_template_show_rigs_icon = "menu_opened"
-                else:
-                    edit_template_show_rigs_icon = "menu_closed"
-
                 col = box.column(align=True)
                 row = col.row(align=True)
                 row.prop(
@@ -9134,7 +9116,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     "show_map",
                     toggle=True,
                     text="Expand Map",
-                    icon_value = get_icon_id(edit_template_show_map_icon),
+                    icon_value = get_panel_icon_id(oni_edit_template.show_map),
                 )
 
                 row.prop(
@@ -9142,7 +9124,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     "show_rigs",
                     toggle=True,
                     text="Rig Options",
-                    icon_value = get_icon_id(edit_template_show_rigs_icon),
+                    icon_value =  get_panel_icon_id(oni_edit_template.show_rigs),
                 )
 
                 if (oni_edit_template.show_map or oni_edit_template.show_rigs):
@@ -9370,15 +9352,11 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
         row = self.layout.row(align=True)
         oni_onemap = bpy.context.scene.oni_onemap
 
-        onemap_menu_enabled_icon = "menu_closed"
-        if oni_edit_template.onemap_menu_enabled:
-            onemap_menu_enabled_icon = "menu_opened"
-
         row.prop(
             oni_edit_template,
             "onemap_menu_enabled",
             text="Hybrid Mapper",
-            icon_value = get_icon_id(onemap_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_edit_template.onemap_menu_enabled),
         )
 
         if oni_edit_template.onemap_menu_enabled:
@@ -9903,15 +9881,11 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
         row = self.layout.row(align=True)
         oni_snap = bpy.context.window_manager.oni_snap
 
-        snap_menu_enabled_icon = "menu_closed"
-        if oni_snap.snap_menu_enabled:
-            snap_menu_enabled_icon = "menu_opened"
-
         row.prop(
             oni_snap,
             "snap_menu_enabled",
             text="Visual Snap Mapper",
-            icon_value = get_icon_id(snap_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_snap.snap_menu_enabled),
         )
         if oni_snap.snap_menu_enabled:
             layout = self.layout
@@ -10436,15 +10410,11 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             col = box.column(align=True)
             row = col.row(align=True)
 
-            snap_mapped_menu_enabled_icon = "menu_closed"
-            if oni_snap.snap_mapped_menu_enabled:
-                snap_mapped_menu_enabled_icon = "menu_opened"
-
             row.prop(
                 oni_snap,
                 "snap_mapped_menu_enabled",
                 text="View mapped bones",
-                icon_value = get_icon_id(snap_menu_enabled_icon),
+                icon_value = get_panel_icon_id(oni_snap.snap_mapped_menu_enabled),
             )
             if oni_snap.snap_mapped_menu_enabled:
 
@@ -14379,7 +14349,7 @@ class CharacterConverterProperties(bpy.types.PropertyGroup):
                 reskin_bones.extend(reskin_candidates)
                 ccp["remap_stored"]["reskin"][anchor] = reskin_bones
 
-                for bone in reskin_candidates:                    
+                for bone in reskin_candidates:
                     bpy.data.objects[source].data.collections[cc_reskin_group].assign(obj[source].pose.bones[bone])
 
             ccp["map_editor"]["active_anchor"] = ""
@@ -14701,7 +14671,7 @@ class CharacterConverterSetRename(bpy.types.Operator):
 
         bpy.ops.pose.group_unassign()
 
-        
+
         obj[armObj.name].data.collections[cc_rename_group].assign(obj[armObj.name].pose.bones[boneObj.name])
 
         obj[armObj.name].data.bones[boneObj.name].select = False
@@ -18724,16 +18694,12 @@ class OnigiriPanelImport(bpy.types.Panel):
         oni_import = bpy.context.scene.oni_import
         oni_devkit = bpy.context.scene.oni_devkit
 
-        if oni_import.dae_import_menu_enabled:
-            dae_import_menu_enabled_icon = "menu_opened"
-        else:
-            dae_import_menu_enabled_icon = "menu_closed"
         row.prop(
             oni_import,
             "dae_import_menu_enabled",
             toggle=True,
             text="Dae Import",
-            icon_value = get_icon_id(dae_import_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_import.dae_import_menu_enabled),
         )
         if oni_import.dae_import_menu_enabled:
 
@@ -18825,17 +18791,12 @@ class OnigiriPanelImport(bpy.types.Panel):
         row = self.layout.row(align=True)
         oni_anim_edit = bpy.context.window_manager.oni_anim_edit
 
-        if oni_anim_edit.anim_menu_enabled:
-            anim_menu_enabled_icon = "menu_opened"
-        else:
-            anim_menu_enabled_icon = "menu_closed"
-
         row.prop(
             oni_anim_edit,
             "anim_menu_enabled",
             toggle=True,
             text="Anim Editor",
-            icon_value = get_icon_id(anim_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_anim_edit.anim_menu_enabled),
         )
         if oni_anim_edit.anim_menu_enabled:
             layout = self.layout
@@ -18861,12 +18822,7 @@ class OnigiriPanelImport(bpy.types.Panel):
 
             col = box.column(align=True)
             row = col.row(align=True)
-
-            if oni_anim_edit.anim_show_joints_menu_enabled:
-                anim_show_joints_menu_enabled_icon = "menu_opened"
-            else:
-                anim_show_joints_menu_enabled_icon = "menu_closed"
-
+            
             if len(anim.props["anim_data"]) > 0:
                 version = anim.props["anim_data"]["header"]["version"]
                 sub_version = anim.props["anim_data"]["header"]["sub_version"]
@@ -19096,7 +19052,7 @@ class OnigiriPanelImport(bpy.types.Panel):
                 "anim_show_joints_menu_enabled",
                 toggle=True,
                 text="Edit Joints",
-                icon_value = get_icon_id(anim_show_joints_menu_enabled_icon),
+                icon_value = get_panel_icon_id(oni_anim_edit.anim_show_joints_menu_enabled),
             )
             if oni_anim_edit.anim_show_joints_menu_enabled:
                 row = col.row(align=True)
@@ -21980,7 +21936,7 @@ class OnigiriProperties(bpy.types.PropertyGroup):
         return (oni.animation_end_frame - oni.animation_start_frame) / oni.animation_fps
 
     def set_fps(self, context):
-        bpy.context.scene.render.fps = bpy.context.scene.onigiri.animation_fps
+        bpy.context.scene.render.fps = int(bpy.context.scene.onigiri.animation_fps)
 
         return
 
@@ -22760,7 +22716,7 @@ class OnigiriRetargetLoad(bpy.types.Operator, ImportHelper):
 
         activate(onir.retarget_target_name)
         for tbone in tmap:
-            obj[onir.retarget_target_name].data.bones[tbone].select = True            
+            obj[onir.retarget_target_name].data.bones[tbone].select = True
             bpy.data.objects[onir.retarget_target_name].data.collections[oni_target_group].assign(obj[onir.retarget_target_name].pose.bones[tbone])
 
         if len(smap) == 0:
@@ -28179,7 +28135,7 @@ class OnigiriShapeShifterMorph(bpy.types.Operator):
             source = ss.shifter_morph_source_name
 
             if (
-                 notss.shifter_morph_source_locked
+                notss.shifter_morph_source_locked
                 or not ss.shifter_morph_target_locked
             ):
                 print(
@@ -39971,9 +39927,9 @@ class OnigiriMotionMixerLockTarget(bpy.types.Operator):
             targetObj.data.collections.remove(g)
 
         bpy.ops.object.mode_set(mode="POSE")
-        
+
         inactiveCollection = targetObj.data.collections.new(mixer_group_target_inactive_name)
-        
+
         targetObj.data.collections.new(mixer_group_target_active_name)
         #targetObj.data.collections.active.color_set = mixer_group_target_active_theme
 
@@ -40113,10 +40069,10 @@ class OnigiriMotionMixerAddSource(bpy.types.Operator):
                 sourceObj.data.collections.remove(g)
 
             bpy.ops.object.mode_set(mode="POSE")
-            
-            sourceObj.data.collections.new(mixer_group_source_inactive_name)                        
+
+            sourceObj.data.collections.new(mixer_group_source_inactive_name)
             sourceObj.data.collections.new(mixer_group_source_active_name)
-            
+
 
             for boneObj in sourceObj.data.bones:
                 sourceObj.data.collections[mixer_group_source_inactive_name].assign(boneObj)
@@ -40319,7 +40275,7 @@ class OnigiriMotionMixerSetAnchor(bpy.types.Operator):
         if oni_mixer["maps"].get("sources") is None:
             oni_mixer["maps"]["sources"] = {}
 
-        for sourceObj in oni_mixer["sources"]:            
+        for sourceObj in oni_mixer["sources"]:
             sourceObj.data.collections[mixer_group_source_inactive_name].assign(sourceObj.pose.bones[bone])
 
         bone_dict = None
@@ -40347,7 +40303,7 @@ class OnigiriMotionMixerSetAnchor(bpy.types.Operator):
 
         targetObj.data.collections[mixer_group_source_active_name].assign(targetObj.pose.bones[bone])
         targetObj.pose.bones[bone].color.palette = mixer_group_source_active_theme
-        
+
         obj[self.name].data.collections[mixer_group_source_active_name].assign(obj[self.name].pose.bones[bone])
 
         constraints = targetObj.pose.bones[bone].constraints
@@ -40675,9 +40631,9 @@ class OnigiriMotionMixerRemoveBones(bpy.types.Operator):
         for bone in bone_names:
             for sourceObj in oni_mixer["sources"]:
                 sourceObj.data.collections[mixer_group_source_inactive_name].assign(bone)
-                #bone.color.palette = mixer_group_source_inactive_theme                
+                #bone.color.palette = mixer_group_source_inactive_theme
 
-            targetObj.data.collections[mixer_group_target_inactive_name].assign(bone)            
+            targetObj.data.collections[mixer_group_target_inactive_name].assign(bone)
 
             for arm in oni_mixer["maps"]["sources"]:
                 oni_mixer["maps"]["sources"][arm].pop(bone, "")
@@ -47766,11 +47722,6 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
 
         devkit_poll_state = oni_devkit.devkit_poll
 
-        if oni_devkit.export_menu_enabled:
-            export_menu_enabled_icon = "menu_opened"
-        else:
-            export_menu_enabled_icon = "menu_closed"
-
         row = self.layout.row(align=True)
         row.operator(
             "onigiri.collada_export",
@@ -47784,7 +47735,7 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
             "export_menu_enabled",
             toggle=True,
             text="Expand rig and kit Options",
-            icon_value = get_icon_id(export_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_devkit.export_menu_enabled),
         )
 
         if oni_devkit.export_menu_enabled:
@@ -48148,17 +48099,13 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                 text="Neutral (M)",
             )
 
-            if oni_devkit.export_advanced:
-                export_advanced_icon = "menu_opened"
-            else:
-                export_advanced_icon = "menu_closed"
             row = self.layout.row(align=True)
             row.prop(
                 oni_devkit,
                 "export_advanced",
                 toggle=True,
                 text="Advanced Export Options",
-                icon_value = get_icon_id(export_advanced_icon),
+                icon_value = get_panel_icon_id(oni_devkit.export_advanced),
             )
             row.operator(
                 "onigiri.devkit_reset_collada",
@@ -48428,14 +48375,12 @@ class OnigiriPanelMeshTools(bpy.types.Panel):
         )
 
         row = self.layout.row(align=True)
-        edit_mesh_menu_enabled_icon = "menu_closed"
-        if oni_mesh.edit_mesh_menu_enabled:
-            edit_mesh_menu_enabled_icon = "menu_opened"
+
         row.prop(
             oni_mesh,
             "edit_mesh_menu_enabled",
             text="Edit Mesh",
-            icon_value = get_icon_id(edit_mesh_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_mesh.edit_mesh_menu_enabled),
         )
         if oni_mesh.edit_mesh_menu_enabled:
             layout = self.layout
@@ -48785,15 +48730,13 @@ class OnigiriSkinningPanel(bpy.types.Panel):
                         )
 
         row = self.layout.row(align=True)
-        skin_pose_menu_enabled_icon = "menu_closed"
-        if oni_skin.skin_pose_menu_enabled:
-            skin_pose_menu_enabled_icon = "menu_opened"
+
         row.prop(
             oni_skin,
             "skin_pose_menu_enabled",
             text="Skin Pose",
             toggle=True,
-            icon_value = get_icon_id(skin_pose_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_skin.skin_pose_menu_enabled),
         )
 
         if oni_skin.skin_pose_menu_enabled:
@@ -48895,15 +48838,13 @@ class OnigiriSkinningPanel(bpy.types.Panel):
             ).action = "reset"
 
         row = self.layout.row(align=True)
-        skin_weight_tools_menu_enabled_icon = "menu_closed"
-        if oni_skin.skin_weight_tools_menu_enabled:
-            skin_weight_tools_menu_enabled_icon = "menu_opened"
+
         row.prop(
             oni_skin,
             "skin_weight_tools_menu_enabled",
             text="Weight Tools",
             toggle=True,
-            icon_value = get_icon_id(skin_weight_tools_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_skin.skin_weight_tools_menu_enabled),
         )
         if oni_skin.skin_weight_tools_menu_enabled:
 
@@ -49193,8 +49134,6 @@ class OnigiriRigCreationPanel(bpy.types.Panel):
         obj = bpy.data.objects
 
         row = self.layout.row(align=True)
-
-        row = self.layout.row(align=True)
         row.operator(
             "onigiri.create_pos_rig",
             text="Add Safe Rig (pos/neutral)",
@@ -49212,7 +49151,8 @@ class OnigiriRigCreationPanel(bpy.types.Panel):
             brp,
             "rigs_enabled",
             toggle=True,
-            text="Enable additional choices",
+            text="Additional choices",
+            icon_value = get_panel_icon_id(brp.rigs_enabled),
         )
         if brp.rigs_enabled:
             row = self.layout.row(align=True)
@@ -49228,7 +49168,8 @@ class OnigiriRigCreationPanel(bpy.types.Panel):
                 icon_value = get_icon_id("clean"),
             )
 
-            row = self.layout.row(align=True)
+            layout = self.layout
+            row = layout.row(align=True)
             row.operator(
                 "onigiri.create_pivot_rig",
                 text="Add Pivot Rig",
@@ -49241,31 +49182,31 @@ class OnigiriRigCreationPanel(bpy.types.Panel):
                 text="",
                 icon_value = get_icon_id("axis_y"),
             )
-            row = self.layout.row(align=True)
+            row = layout.row(align=True)
             row.operator(
                 "onigiri.create_devkit_rig",
                 text="Add Female Neutral Devkit Rig",
                 icon_value = get_icon_id("kit"),
             ).rig_class = "female_neutral"
-            row = self.layout.row(align=True)
+            row = layout.row(align=True)
             row.operator(
                 "onigiri.create_devkit_rig",
                 text="Add Female Default Devkit Rig",
                 icon_value = get_icon_id("kit"),
             ).rig_class = "female_default"
-            row = self.layout.row(align=True)
+            row = layout.row(align=True)
             row.operator(
                 "onigiri.create_devkit_rig",
                 text="Add Male Neutral Devkit Rig",
                 icon_value = get_icon_id("kit"),
             ).rig_class = "male_neutral"
-            row = self.layout.row(align=True)
+            row = layout.row(align=True)
             row.operator(
                 "onigiri.create_devkit_rig",
                 text="Add Male Default Devkit Rig",
                 icon_value = get_icon_id("kit"),
             ).rig_class = "male_default"
-            row = self.layout.row(align=True)
+            row = layout.row(align=True)
             row.operator(
                 "onigiri.create_old_rig",
                 text="Add old (basic) Rig",
@@ -49292,17 +49233,12 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
 
         row = self.layout.row(align=True)
 
-        if bmp.mapper_menu_enabled:
-            mapper_menu_enabled_icon = "menu_opened"
-        else:
-            mapper_menu_enabled_icon = "menu_closed"
-
         row.prop(
             bmp,
             "mapper_menu_enabled",
             toggle=True,
             text="Character Mapper / Retargeter",
-            icon_value = get_icon_id(mapper_menu_enabled_icon),
+            icon_value = get_panel_icon_id(bmp.mapper_menu_enabled),
         )
 
         if bmp.mapper_menu_enabled:
@@ -49837,17 +49773,12 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
         layout = self.layout
         row = self.layout.row(align=True)
 
-        if ani.animesh_menu_enabled:
-            animesh_menu_enabled_icon = "menu_opened"
-        else:
-            animesh_menu_enabled_icon = "menu_closed"
-
         row.prop(
             ani,
             "animesh_menu_enabled",
             toggle=True,
             text="Template Workshop (superfluous)",
-            icon_value = get_icon_id(animesh_menu_enabled_icon),
+            icon_value = get_panel_icon_id(ani.animesh_menu_enabled),
         )
 
         if ani.animesh_menu_enabled:
@@ -49988,17 +49919,13 @@ class OnigiriCharacterPanel(bpy.types.Panel):
 
         row = self.layout.row(align=True)
         oni_inherit = bpy.context.window_manager.oni_inherit
-        if oni_inherit.inherit_menu_enabled:
-            inherit_menu_enabled_icon = "menu_opened"
-        else:
-            inherit_menu_enabled_icon = "menu_closed"
 
         row.prop(
             oni_inherit,
             "inherit_menu_enabled",
             toggle=True,
             text="Inherit Animation",
-            icon_value = get_icon_id(inherit_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_inherit.inherit_menu_enabled),
         )
 
         if oni_inherit.inherit_menu_enabled:
@@ -50136,17 +50063,13 @@ class OnigiriCharacterPanel(bpy.types.Panel):
 
         row = self.layout.row(align=True)
         oni_motion = bpy.context.window_manager.oni_motion
-        if oni_motion.motion_menu_enabled:
-            motion_menu_enabled_icon = "menu_opened"
-        else:
-            motion_menu_enabled_icon = "menu_closed"
 
         row.prop(
             oni_motion,
             "motion_menu_enabled",
             toggle=True,
             text="Retarget Motion",
-            icon_value = get_icon_id(motion_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_motion.motion_menu_enabled),
         )
         if oni_motion.motion_menu_enabled:
             layout = self.layout
@@ -50405,16 +50328,12 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             col = box.column(align=True)
             row = col.row(align=True)
 
-            motion_interactive_menu_enabled_icon = "menu_closed"
-            if oni_motion.motion_interactive_menu_enabled:
-                motion_interactive_menu_enabled_icon = "menu_opened"
-
             row.prop(
                 oni_motion,
                 "motion_interactive_menu_enabled",
                 toggle=True,
                 text="Interactive Retarget Mapping",
-                icon_value = get_icon_id(motion_interactive_menu_enabled_icon),
+                icon_value = get_panel_icon_id(oni_motion.motion_interactive_menu_enabled),
             )
             if oni_motion.motion_interactive_menu_enabled:
                 row = col.row(align=True)
@@ -50525,15 +50444,13 @@ class OnigiriCharacterPanel(bpy.types.Panel):
 
                 col = box.column(align=True)
                 row = col.row(align=True)
-                motion_view_map_menu_enabled_icon = "menu_closed"
-                if oni_motion.motion_view_map_menu_enabled:
-                    motion_view_map_menu_enabled_icon = "menu_opened"
+
                 row.prop(
                     oni_motion,
                     "motion_view_map_menu_enabled",
                     toggle=True,
                     text="View map",
-                    icon_value = get_icon_id(motion_view_map_menu_enabled_icon),
+                    icon_value = get_panel_icon_id(oni_motion.motion_view_map_menu_enabled),
                 )
                 if oni_motion.motion_view_map_menu_enabled:
                     motion_rename_map = inRig.get("oni_onemap_rename")
@@ -50556,11 +50473,6 @@ class OnigiriCharacterPanel(bpy.types.Panel):
 
         oni_mapper = bpy.context.window_manager.oni_mapper
 
-        if oni_mapper.bone_control_menu_enabled:
-            bone_control_menu_enabled_icon = "menu_opened"
-        else:
-            bone_control_menu_enabled_icon = "menu_closed"
-
         layout = self.layout
         row = self.layout.row(align=True)
         row.prop(
@@ -50568,7 +50480,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             "bone_control_menu_enabled",
             toggle=True,
             text="Bone Control",
-            icon_value = get_icon_id(bone_control_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_mapper.bone_control_menu_enabled),
         )
         if oni_mapper.bone_control_menu_enabled:
             layout = self.layout
@@ -50866,10 +50778,6 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 )
 
         oni_motion = bpy.context.window_manager.oni_motion
-        if oni_motion.clean_motion_menu_enabled:
-            clean_motion_menu_enabled_icon = "menu_opened"
-        else:
-            clean_motion_menu_enabled_icon = "menu_closed"
 
         row = self.layout.row(align=True)
         row.prop(
@@ -50877,7 +50785,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             "clean_motion_menu_enabled",
             toggle=True,
             text="Clean Motion",
-            icon_value = get_icon_id(clean_motion_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_motion.clean_motion_menu_enabled),
         )
         if oni_motion.clean_motion_menu_enabled:
             layout = self.layout
@@ -50991,10 +50899,6 @@ class OnigiriCharacterPanel(bpy.types.Panel):
 
         oni_shape = bpy.context.window_manager.oni_shape
         oni = bpy.context.scene.onigiri
-        if oni_shape.shape_menu_enabled:
-            shape_menu_enabled_icon = "menu_opened"
-        else:
-            shape_menu_enabled_icon = "menu_closed"
 
         if 1 == 0:
             row = self.layout.row(align=True)
@@ -51003,7 +50907,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 "shape_menu_enabled",
                 toggle=True,
                 text="Shape Configuration",
-                icon_value = get_icon_id(shape_menu_enabled_icon),
+                icon_value = get_panel_icon_id(oni_shape.shape_menu_enabled),
             )
             if oni_shape.shape_menu_enabled:
 
@@ -51134,16 +51038,13 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             row.scale_y = 1
 
             oni_sliders = bpy.context.scene.oni_sliders
-            sliders_menu_enabled_icon = "menu_closed"
-            if oni_sliders.sliders_menu_enabled:
-                sliders_menu_enabled_icon = "menu_opened"
 
             row.prop(
                 oni_sliders,
                 "sliders_menu_enabled",
                 text="Body Shop",
                 toggle=True,
-                icon_value = get_icon_id(sliders_menu_enabled_icon),
+                icon_value = get_panel_icon_id(oni_sliders.sliders_menu_enabled),
             )
 
             if oni_sliders.sliders_menu_enabled:
@@ -53220,16 +53121,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
         row = self.layout.row(align=True)
 
-        if anim.anim_menu_enabled:
-            menu_state = "menu_opened"
-        else:
-            menu_state = "menu_closed"
         row.prop(
             anim,
             "anim_menu_enabled",
             toggle=True,
             text="Anim Export Features",
-            icon_value = get_icon_id(menu_state),
+            icon_value = get_panel_icon_id(anim.anim_menu_enabled),
         )
         if anim.anim_menu_enabled:
 
@@ -53736,9 +53633,6 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 icon_value = get_icon_id(export_avastar_deform_bones_icon),
             )
 
-            anim_unfold_menu_enabled_icon = "menu_closed"
-            if anim.anim_unfold_menu_enabled:
-                anim_unfold_menu_enabled_icon = "menu_opened"
             col = box.column(align=True)
             row = col.row(align=True)
             row.prop(
@@ -53746,7 +53640,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 "anim_unfold_menu_enabled",
                 text="Expand lots of options",
                 toggle=True,
-                icon_value = get_icon_id(anim_unfold_menu_enabled_icon),
+                icon_value = get_panel_icon_id(anim.anim_unfold_menu_enabled),
             )
 
             if anim.anim_unfold_menu_enabled:
@@ -53788,10 +53682,6 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     )
                     row = col.row(align=True)
 
-                native_features_menu_enabled_icon = "menu_closed"
-                if anim.native_features_menu_enabled:
-                    native_features_menu_enabled_icon = "menu_opened"
-
                 col = box.column(align=True)
                 row = col.row(align=True)
 
@@ -53799,17 +53689,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     anim,
                     "native_features_menu_enabled",
                     text="Anim Extended Features",
-                    icon_value = get_icon_id(native_features_menu_enabled_icon),
+                    icon_value = get_panel_icon_id(anim.native_features_menu_enabled),
                 )
 
                 if anim.native_features_menu_enabled:
 
                     row = col.row(align=True)
-
-                    if anim.mark_tol_options:
-                        mark_tol_options_icon = "menu_opened"
-                    else:
-                        mark_tol_options_icon = "menu_closed"
 
                     col = box.column(align=True)
                     row = col.row(align=True)
@@ -53841,7 +53726,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         anim,
                         "mark_tol_options",
                         text="Key Cleanup Options",
-                        icon_value = get_icon_id(mark_tol_options_icon),
+                        icon_value = get_panel_icon_id(anim.mark_tol_options),
                     )
 
                     row = col.row(align=True)
@@ -54070,10 +53955,6 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                             row = col.row(align=True)
                             row.label(text="    - " + key_loc_text)
 
-                    anim_joint_priority_menu_enabled_icon = "menu_closed"
-                    if anim.anim_joint_priority_menu_enabled:
-                        anim_joint_priority_menu_enabled_icon = "menu_opened"
-
                     col = box.column(align=True)
                     row = col.row(align=True)
 
@@ -54082,7 +53963,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         "anim_joint_priority_menu_enabled",
                         text="Joint Priority Options",
                         toggle=True,
-                        icon_value = get_icon_id(anim_joint_priority_menu_enabled_icon),
+                        icon_value = get_panel_icon_id(anim.anim_joint_priority_menu_enabled),
                     )
                     row = col.row(align=True)
 
@@ -54156,15 +54037,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
                     col = box.column(align=True)
                     row = col.row(align=True)
-                    anim_interpolation_menu_enabled_icon = "menu_closed"
-                    if anim.anim_interpolation_menu_enabled:
-                        anim_interpolation_menu_enabled_icon = "menu_opened"
 
                     row.prop(
                         context.scene.oni_anim,
                         "anim_interpolation_menu_enabled",
                         text="Interpolation Options",
-                        icon_value = get_icon_id(anim_interpolation_menu_enabled_icon),
+                        icon_value = get_panel_icon_id(anim.anim_interpolation_menu_enabled),
                     )
 
                     if anim.anim_interpolation_menu_enabled:
@@ -54208,17 +54086,13 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                                 icon=extra_interpolation_types[interp],
                             ).mode = interp
 
-                    anim_expression_menu_enabled_icon = "menu_closed"
-                    if anim.anim_expression_menu_enabled:
-                        anim_expression_menu_enabled_icon = "menu_opened"
-
                     col = box.column(align=True)
                     row = col.row(align=True)
                     row.prop(
                         context.scene.oni_anim,
                         "anim_expression_menu_enabled",
                         text="Expression Options",
-                        icon_value = get_icon_id(anim_expression_menu_enabled_icon),
+                        icon_value = get_panel_icon_id(anim.anim_expression_menu_enabled),
                     )
 
                     if anim.anim_expression_menu_enabled:
@@ -54238,14 +54112,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
                         col = box.column(align=True)
                         row = col.row(align=True)
-                        anim_emote_menu_enabled_icon = "menu_closed"
-                        if anim.anim_emote_menu_enabled:
-                            anim_emote_menu_enabled_icon = "menu_opened"
+
                         row.prop(
                             anim,
                             "anim_emote_menu_enabled",
                             text="Emote List",
-                            icon_value = get_icon_id(anim_emote_menu_enabled_icon),
+                            icon_value = get_panel_icon_id(anim.anim_emote_menu_enabled),
                         )
                         if anim.anim_emote_menu_enabled:
                             col = box.column(align=True)
@@ -54311,17 +54183,13 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                                 )
 
         row = self.layout.row(align=True)
-        if not bpy.context.scene.onigiri.bvh_menu_enabled:
-            menu_state = "menu_closed"
-        else:
-            menu_state = "menu_opened"
 
         row.prop(
             context.scene.onigiri,
             "bvh_menu_enabled",
             text="BVH Export Features",
             toggle=True,
-            icon_value = get_icon_id(menu_state),
+            icon_value = get_panel_icon_id(bpy.context.scene.onigiri.bvh_menu_enabled),
         )
 
         if bpy.context.scene.onigiri.bvh_menu_enabled:
@@ -54358,17 +54226,13 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             )
             row = col.row(align=True)
 
-        extended_animation_options_icon = "menu_closed"
-        if oni.extended_animation_options:
-            extended_animation_options_icon = "menu_opened"
-
         row = self.layout.row(align=True)
         row.prop(
             oni,
             "extended_animation_options",
             text="Extended Options",
             toggle=True,
-            icon_value = get_icon_id(extended_animation_options_icon),
+            icon_value = get_panel_icon_id(oni.extended_animation_options),
         )
 
         if oni.extended_animation_options:
@@ -54462,14 +54326,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
         oni_deform = bpy.context.window_manager.oni_deform
         row = self.layout.row(align=True)
-        deformer_menu_enabled_icon = "menu_closed"
-        if oni_deform.deformer_menu_enabled:
-            deformer_menu_enabled_icon = "menu_opened"
+
         row.prop(
             context.window_manager.oni_deform,
             "deformer_menu_enabled",
             text="Deformer",
-            icon_value = get_icon_id(deformer_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_deform.deformer_menu_enabled),
         )
         if oni_deform.deformer_menu_enabled:
             layout = self.layout
@@ -54516,16 +54378,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 icon_value = get_icon_id("undeform"),
             )
 
-        if context.scene.oni_anim_props.scale_animation_menu:
-            scale_animation_menu_icon = "menu_opened"
-        else:
-            scale_animation_menu_icon = "menu_closed"
         row = self.layout.row(align=True)
         row.prop(
             context.scene.oni_anim_props,
             "scale_animation_menu",
             text="Resize Animation ",
-            icon_value = get_icon_id(scale_animation_menu_icon),
+            icon_value = get_panel_icon_id(context.scene.oni_anim_props.scale_animation_menu),
         )
         if context.scene.oni_anim_props.scale_animation_menu:
             layout = self.layout
@@ -54552,17 +54410,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
         onia = bpy.context.scene.oni_anim_props
 
-        if onia.reference_pose_menu_enabled:
-            reference_pose_menu_enabled_icon = "menu_opened"
-        else:
-            reference_pose_menu_enabled_icon = "menu_closed"
-
         row = self.layout.row(align=True)
         row.prop(
             context.scene.oni_anim_props,
             "reference_pose_menu_enabled",
             text="Reference Pose Features",
-            icon_value = get_icon_id(reference_pose_menu_enabled_icon),
+            icon_value = get_panel_icon_id(onia.reference_pose_menu_enabled),
         )
 
         if onia.reference_pose_menu_enabled:
@@ -54682,16 +54535,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 text="Create reference pose",
             )
 
-        anim_misc_menu_enabled_icon = "menu_closed"
-        if oni_anim.anim_misc_menu_enabled:
-            anim_misc_menu_enabled_icon = "menu_opened"
-
         row = self.layout.row(align=True)
         row.prop(
             context.scene.oni_anim,
             "anim_misc_menu_enabled",
             text="Misc Options",
-            icon_value = get_icon_id(anim_misc_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_anim.anim_misc_menu_enabled),
         )
 
         if oni_anim.anim_misc_menu_enabled:
@@ -54914,15 +54763,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
         oni_autokey = bpy.context.scene.oni_autokey
         oni = bpy.context.scene.onigiri
 
-        autokey_menu_enabled_icon = "menu_closed"
-        if oni_autokey.autokey_menu_enabled:
-            autokey_menu_enabled_icon = "menu_opened"
         row = self.layout.row(align=True)
         row.prop(
             oni_autokey,
             "autokey_menu_enabled",
             text="Auto Key",
-            icon_value = get_icon_id(autokey_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_autokey.autokey_menu_enabled),
         )
         if oni_autokey.autokey_menu_enabled:
             layout = self.layout
@@ -55095,15 +54941,11 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
         oni_alib = bpy.context.scene.oni_alib
 
-        alib_motion_processing_menu_enabled_icon = "menu_closed"
-        if oni_alib.alib_motion_processing_menu_enabled:
-            alib_motion_processing_menu_enabled_icon = "menu_opened"
-
         row.prop(
             oni_alib,
             "alib_motion_processing_menu_enabled",
             text="Motion Processing",
-            icon_value = get_icon_id(alib_motion_processing_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_alib.alib_motion_processing_menu_enabled),
         )
 
         if oni_alib.alib_motion_processing_menu_enabled:
@@ -55112,15 +54954,11 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             col = box.column(align=True)
             row = col.row(align=True)
 
-            alib_anim_menu_enabled_icon = "menu_closed"
-            if oni_alib.alib_anim_menu_enabled:
-                alib_anim_menu_enabled_icon = "menu_opened"
-
             row.prop(
                 oni_alib,
                 "alib_anim_menu_enabled",
                 text="Animations",
-                icon_value = get_icon_id(alib_anim_menu_enabled_icon),
+                icon_value = get_panel_icon_id(oni_alib.alib_anim_menu_enabled),
             )
 
             if oni_alib.alib_anim_menu_enabled:
@@ -55201,16 +55039,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
                 row = col.row(align=True)
 
-            alib_action_menu_enabled_icon = "menu_closed"
-            if oni_alib.alib_action_menu_enabled:
-                alib_action_menu_enabled_icon = "menu_opened"
-
             row = col.row(align=True)
             row.prop(
                 oni_alib,
                 "alib_action_menu_enabled",
                 text="Actions",
-                icon_value = get_icon_id(alib_action_menu_enabled_icon),
+                icon_value = get_panel_icon_id(oni_alib.alib_action_menu_enabled),
             )
 
             if oni_alib.alib_action_menu_enabled:
@@ -55567,16 +55401,14 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     )
 
                 oni_anim = bpy.context.scene.oni_anim
-                alib_ranges_menu_enabled_icon = "menu_closed"
-                if oni_alib.alib_ranges_menu_enabled:
-                    alib_ranges_menu_enabled_icon = "menu_opened"
+
                 row = col.row(align=True)
                 row.prop(
                     oni_alib,
                     "alib_ranges_menu_enabled",
                     text="Frame and Loop Ranges",
                     toggle=True,
-                    icon_value = get_icon_id(alib_ranges_menu_enabled_icon),
+                    icon_value = get_panel_icon_id(oni_alib.alib_ranges_menu_enabled),
                 )
                 if oni_alib.alib_ranges_menu_enabled:
 
@@ -55860,15 +55692,13 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                             ).action = actionObj.name
 
             oni_pose = bpy.context.scene.oni_pose
-            pose_library_menu_enabled_icon = "menu_closed"
-            if oni_pose.pose_library_menu_enabled:
-                pose_library_menu_enabled_icon = "menu_opened"
+
             row = col.row(align=True)
             row.prop(
                 oni_pose,
                 "pose_library_menu_enabled",
                 text="Poses",
-                icon_value = get_icon_id(pose_library_menu_enabled_icon),
+                icon_value = get_panel_icon_id(oni_pose.pose_library_menu_enabled),
             )
             if oni_pose.pose_library_menu_enabled:
                 row = col.row(align=True)
@@ -56005,15 +55835,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             oni_mixer = bpy.context.window_manager.oni_mixer
             oni = bpy.context.scene.onigiri
 
-            mixer_menu_enabled_icon = "menu_closed"
-            if oni_mixer.mixer_menu_enabled:
-                mixer_menu_enabled_icon = "menu_opened"
             row = col.row(align=True)
             row.prop(
                 oni_mixer,
                 "mixer_menu_enabled",
                 text="Motion Mixer",
-                icon_value = get_icon_id(mixer_menu_enabled_icon),
+                icon_value = get_panel_icon_id(oni_mixer.mixer_menu_enabled),
             )
             if oni_mixer.mixer_menu_enabled:
                 row = col.row(align=True)
@@ -56413,16 +56240,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 oni_splice.property_unset("splice_target_locked")
                 splice.props["startup"] = False
 
-            splice_menu_enabled_icon = "menu_closed"
-            if oni_splice.splice_menu_enabled:
-                splice_menu_enabled_icon = "menu_opened"
-
             row = col.row(align=True)
             row.prop(
                 oni_splice,
                 "splice_menu_enabled",
                 text="Motion Splicer",
-                icon_value = get_icon_id(splice_menu_enabled_icon),
+                icon_value = get_panel_icon_id(oni_splice.splice_menu_enabled),
             )
             if oni_splice.splice_menu_enabled:
                 row = col.row(align=True)
@@ -58041,15 +57864,13 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
         layout = self.layout
 
         row = self.layout.row(align=True)
-        shifter_morph_menu_enabled_icon = "menu_closed"
-        if ss.shifter_morph_menu_enabled:
-            shifter_morph_menu_enabled_icon = "menu_opened"
+
         row.prop(
             ss,
             "shifter_morph_menu_enabled",
             text="Morph Character Rig",
             toggle=True,
-            icon_value = get_icon_id(shifter_morph_menu_enabled_icon),
+            icon_value = get_panel_icon_id(ss.shifter_morph_menu_enabled),
         )
         if ss.shifter_morph_menu_enabled:
 
@@ -58229,15 +58050,13 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
             row.label(text="Peak Message: " + peak_message)
 
         row = self.layout.row(align=True)
-        shifter_freeform_menu_enabled_icon = "menu_closed"
-        if ss.shifter_freeform_menu_enabled:
-            shifter_freeform_menu_enabled_icon = "menu_opened"
+
         row.prop(
             ss,
             "shifter_freeform_menu_enabled",
             text="Free-form Morph Pose",
             toggle=True,
-            icon_value = get_icon_id(shifter_freeform_menu_enabled_icon),
+            icon_value = get_panel_icon_id(ss.shifter_freeform_menu_enabled),
         )
         if ss.shifter_freeform_menu_enabled:
 
@@ -58319,15 +58138,13 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
 
         oni_shifter = bpy.context.scene.oni_shifter
         row = self.layout.row(align=True)
-        shifter_build_menu_enabled_icon = "menu_closed"
-        if oni_shifter.shifter_build_menu_enabled:
-            shifter_build_menu_enabled_icon = "menu_opened"
+
         row.prop(
             oni_shifter,
             "shifter_build_menu_enabled",
             text="Build-A-Rig",
             toggle=True,
-            icon_value = get_icon_id(shifter_build_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_shifter.shifter_build_menu_enabled),
         )
         if oni_shifter.shifter_build_menu_enabled:
 
@@ -58428,15 +58245,12 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
         if 1 == 0:
             oni_latch = bpy.context.window_manager.oni_latch
             row = self.layout.row(align=True)
-            latch_menu_enabled_icon = "menu_closed"
-            if oni_latch.latch_menu_enabled:
-                latch_menu_enabled_icon = "menu_opened"
             row.prop(
                 oni_latch,
                 "latch_menu_enabled",
                 text="Latch Rigs (chain)",
                 toggle=True,
-                icon_value = get_icon_id(latch_menu_enabled_icon),
+                icon_value = get_panel_icon_id(oni_latch.latch_menu_enabled),
             )
             if oni_latch.latch_menu_enabled:
                 layout = self.layout
@@ -58527,15 +58341,13 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
         if 1 == 1:
             oni_sim = bpy.context.window_manager.oni_sim
             row = self.layout.row(align=True)
-            sim_menu_enabled_icon = "menu_closed"
-            if oni_sim.sim_menu_enabled:
-                sim_menu_enabled_icon = "menu_opened"
+
             row.prop(
                 oni_sim,
                 "sim_menu_enabled",
                 text="Simulation",
                 toggle=True,
-                icon_value = get_icon_id(sim_menu_enabled_icon),
+                icon_value = get_panel_icon_id(oni_sim.sim_menu_enabled),
             )
             if oni_sim.sim_menu_enabled:
                 layout = self.layout
@@ -58954,15 +58766,12 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
         if 1 == 1:
             oni_puppet = bpy.context.window_manager.oni_puppet
             row = self.layout.row(align=True)
-            puppet_menu_enabled_icon = "menu_closed"
-            if oni_puppet.puppet_menu_enabled:
-                puppet_menu_enabled_icon = "menu_opened"
             row.prop(
                 oni_puppet,
                 "puppet_menu_enabled",
                 text="Puppeteer",
                 toggle=True,
-                icon_value = get_icon_id(puppet_menu_enabled_icon),
+                icon_value = get_panel_icon_id(oni_puppet.puppet_menu_enabled),
             )
             if oni_puppet.puppet_menu_enabled:
                 layout = self.layout
@@ -59726,15 +59535,12 @@ class OnigiriReactorPanel(bpy.types.Panel):
         row = self.layout.row(align=True)
 
         if 1 == 0:
-            reactor_menu_enabled_icon = "menu_closed"
-            if oni_reactor.reactor_menu_enabled:
-                reactor_menu_enabled_icon = "menu_opened"
             row.prop(
                 oni_reactor,
                 "reactor_menu_enabled",
                 text="Reactor",
                 toggle=True,
-                icon_value = get_icon_id(reactor_menu_enabled_icon),
+                icon_value = get_panel_icon_id(oni_reactor.reactor_menu_enabled),
             )
             if oni_reactor.reactor_menu_enabled:
                 layout = self.layout
@@ -59751,16 +59557,12 @@ class OnigiriReactorPanel(bpy.types.Panel):
                     icon_value = get_icon_id("info"),
                 )
 
-        ragdoll_menu_enabled_icon = "menu_closed"
-        if oni_ragdoll.ragdoll_menu_enabled:
-            ragdoll_menu_enabled_icon = "menu_opened"
-
         row.prop(
             oni_ragdoll,
             "ragdoll_menu_enabled",
             text="Ragdoll",
             toggle=True,
-            icon_value = get_icon_id(ragdoll_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_ragdoll.ragdoll_menu_enabled),
         )
         if oni_ragdoll.ragdoll_menu_enabled:
             layout = self.layout
@@ -61617,8 +61419,8 @@ class OnigiriSimCustomAction(bpy.types.Operator):
 
                 base_collection = armObj.data.collections.get(sim.props["group_base"])
                 if base_collection is None:
-                    base_collection = armObj.data.collections.new(sim.props["group_base"])                
-                
+                    base_collection = armObj.data.collections.new(sim.props["group_base"])
+
                 group_base = sim.props["group_base"]
                 base_collection.assign(boneObj)
                 boneObj.color.palette = sim.props["theme_base"]
@@ -64313,10 +64115,6 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
             )
 
             ajd = bpy.context.window_manager.oni_joint_data
-            if ajd.joint_data_enabled:
-                menu_state = "menu_opened"
-            else:
-                menu_state = "menu_closed"
 
             layout = self.layout
             row = layout.row(align=True)
@@ -64335,7 +64133,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
                 "joint_data_enabled_override",
                 text="",
                 toggle=True,
-                icon_value = get_icon_id(menu_state),
+                icon_value = get_panel_icon_id(ajd.joint_data_enabled),
             )
             row.prop(
                 ajd,
@@ -64642,10 +64440,6 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
             box.label(
                 text="Alter the bone orientation:",
             )
-            if anim_advanced.matrix_converter_enabled:
-                menu_state = "menu_opened"
-            else:
-                menu_state = "menu_closed"
 
             col = box.column(align=True)
             row = col.row(align=True)
@@ -64654,7 +64448,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
                 "matrix_converter_enabled",
                 text="Modify Animated Joint Orientation",
                 toggle=True,
-                icon_value = get_icon_id(menu_state),
+                icon_value = get_panel_icon_id(anim_advanced.matrix_converter_enabled),
             )
             if anim_advanced.matrix_converter_enabled:
 
@@ -64820,17 +64614,12 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
 
         layout = self.layout
 
-        if onia.bvh_menu_enabled:
-            bvh_menu_enabled_icon = "menu_opened"
-        else:
-            bvh_menu_enabled_icon = "menu_closed"
-
         row.prop(
             onia,
             "bvh_menu_enabled",
             text="BVH / XML Tools",
             toggle=True,
-            icon_value = get_icon_id(bvh_menu_enabled_icon),
+            icon_value = get_panel_icon_id(onia.bvh_menu_enabled),
         )
 
         if onia.bvh_menu_enabled:
@@ -64885,15 +64674,13 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
         row = self.layout.row(align=True)
 
         oni_misc = bpy.context.window_manager.oni_misc
-        object_props_menu_enabled_icon = "menu_closed"
-        if oni_misc.object_props_menu_enabled:
-            object_props_menu_enabled_icon = "menu_opened"
+
         row.prop(
             oni_misc,
             "object_props_menu_enabled",
             text="Object Properties",
             toggle=True,
-            icon_value = get_icon_id(object_props_menu_enabled_icon),
+            icon_value = get_panel_icon_id(oni_misc.object_props_menu_enabled),
         )
         if oni_misc.object_props_menu_enabled:
 
@@ -64911,9 +64698,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
                 transfer_object_props_paste_buffer_icon = "dot_green"
                 transfer_object_props_clear_buffer_icon = "x_red"
                 transfer_object_props_print_buffer_icon = "dot_white"
-            show_object_props_icon = "menu_closed"
-            if oni_misc.show_object_props:
-                show_object_props_icon = "menu_opened"
+
 
             row = col.row(align=True)
             row.operator(
@@ -64943,7 +64728,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
                 "show_object_props",
                 text="Show Object Props",
                 toggle=True,
-                icon_value = get_icon_id(show_object_props_icon),
+                icon_value = get_panel_icon_id(oni_misc.show_object_props),
             )
             if oni_misc.show_object_props:
                 if (len(bpy.context.selected_objects) == 1) and (

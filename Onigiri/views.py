@@ -4,7 +4,7 @@ import mathutils
 import uuid
 from bpy.app.handlers import persistent
 
-from . import ico
+from .ico import *
 
 
 view_layers = {}
@@ -519,7 +519,7 @@ class OnigiriPanelView(bpy.types.Panel):
             row.operator(
                 "onigiri.access_everything",
                 text="Open Your Eyes",
-                icon_value=ico.custom_icons["eye"].icon_id,
+                icon_value=get_icon_id("eye"),
             ).state = "open"
         else:
 

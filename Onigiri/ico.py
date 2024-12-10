@@ -605,8 +605,8 @@ def load_icons():
     builtin_icons = {tup[1].identifier : tup[1].value for tup in icon_items}
 
     map_icons = {
-        "menu_opened": "TRIA_DOWN",
-        "menu_closed": "TRIA_RIGHT",
+        "panel_opened": "TRIA_DOWN",
+        "panel_closed": "TRIA_RIGHT",
         "star_green": "ARMATURE_DATA",
         "axis_y" : "AXIS_FRONT",
         "axis": "EMPTY_AXIS",
@@ -615,7 +615,9 @@ def load_icons():
         "kit": "OUTLINER_OB_ARMATURE",
         "rotate": "ORIENTATION_GIMBAL",
         "clean": "BRUSH_DATA",
-        "time": "PREVIEW_RANGE"
+        "time": "PREVIEW_RANGE",
+        "reset": "FILE_REFRESH",
+        "load": "FILE_FOLDER"
     }
 
 def unload_icons():
@@ -629,6 +631,17 @@ def get_icon_id(name):
     global builtin_icons
     icon_name = map_icons.get(name)    
     if icon_name is None:
-        return custom_icons[name].icon_id
+        icon = custom_icons[name]
+        if icon:
+            return icon.icon_id
+        else:
+            return builtin_icons[icon_name]
     else:
         return builtin_icons[icon_name]
+
+
+def get_panel_icon_id(opened):
+    if opened:
+        return get_icon_id("panel_opened")
+    else:
+        return get_icon_id("panel_closed")
