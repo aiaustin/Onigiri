@@ -64333,7 +64333,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
         row.operator(
             "onigiri.select_bone",
             text="mEyeLeft",
-        ).bone = "mEyeLEft"
+        ).bone = "mEyeLeft"
         row = col.row(align=True)
         row.operator(
             "onigiri.select_bone",
