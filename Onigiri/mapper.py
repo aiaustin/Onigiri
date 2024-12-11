@@ -48,7 +48,7 @@ def mapper_handler(context):
         bpy.ops.onigiri.mapper_reset()
         return
 
-    if bmp.mapper_lock_source == False:
+    if not bmp.mapper_lock_source:
         try:
             bpy.app.handlers.depsgraph_update_post.remove(mapper_handler)
         except:
@@ -226,7 +226,7 @@ def restore_rig(armature="", type="", roll=False, data="all"):
 
     for sbone in bone_data:
         error = restore_bone(armature=armature, bone=sbone, type=type, roll=True)
-        if error == False:
+        if not error:
             print("restore_rig reports: restore_bone returned False")
             return False
 

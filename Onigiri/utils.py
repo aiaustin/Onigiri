@@ -665,7 +665,7 @@ def remove_empty_groups(mesh):
     meshObj = bpy.data.objects[mesh]
 
     armObj = meshutils.get_armature(meshObj)
-    if armObj == False:
+    if not armObj:
         print(
             "There's no functional armature associated with the mesh",
             meshOb.name,
@@ -954,7 +954,7 @@ def percentage(percent, whole):
     return (percent * whole) / 100.0
 
 
-def cleanup():
+def cleanup1():
     print("running cleanup 1")
     try:
         bpy.context.scene.oni_anim.property_unset("export_sl_anim_label")
@@ -1117,7 +1117,7 @@ def move_to_top(object=None, modifier=None):
     return True
 
 
-def cleanup():
+def cleanup2():
     print("running cleanup 2")
     for block in bpy.data.meshes:
         if block.users == 0:
@@ -1488,7 +1488,7 @@ def update():
 def compose_bone_transforms(
     inBone=None, outBone=None, location=False, rotation=False, scale=False, apply=False
 ):
-    if location == False and rotation == False and scale == False:
+    if not location and not rotation and not scale:
         print("utils::compose_bone_transforms reports : no directive")
         return False
     if inBone is None:
@@ -1523,7 +1523,7 @@ def compose_bone_transforms(
 def compose_transforms(
     matrix_in=None, matrix_out=None, location=False, rotation=False, scale=False
 ):
-    if location == False and rotation == False and scale == False:
+    if not location and not rotation and not scale:
         print("utils::compose_transforms reports : no directive")
         return False
     if matrix_in is None:
@@ -1714,7 +1714,7 @@ def get_object_props(object=None, prop=None, scope="all", report=True):
         props["object"] = {}
         for p in OBJ.keys():
             result = get_single_property(OBJ, p)
-            if result != False:
+            if result:
                 props["object"][p] = result
         if OBJ.type == "ARMATURE":
             armObj = OBJ
@@ -1732,15 +1732,15 @@ def get_object_props(object=None, prop=None, scope="all", report=True):
                 edit_boneObj = armObj.data.edit_bones[bone]
                 for p in pose_boneObj.keys():
                     result = get_single_property(pose_boneObj, p)
-                    if result != False:
+                    if result:
                         props["bones"]["pose"][p] = result
                 for p in data_boneObj.keys():
                     result = get_single_property(data_boneObj, p)
-                    if result != False:
+                    if result:
                         props["bones"]["data"][p] = result
                 for p in edit_boneObj.keys():
                     result = get_single_property(edit_boneObj, p)
-                    if result != False:
+                    if result:
                         props["bones"]["edit"][p] = result
             set_state(state)
 
@@ -1898,9 +1898,9 @@ def vertex_constraint(
     coll = armObj.data.collections.get(props["constraint_group_base"])
     if coll is None:
         coll = armObj.data.collections.new(props["constraint_group_base"])
-    
+
     coll.assign(boneObj)
-    boneObj.color.palette = props["constraint_theme_base"]    
+    boneObj.color.palette = props["constraint_theme_base"]
     group_base = sim.props["constraint_group_base"]
 
     return True

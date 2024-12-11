@@ -1747,7 +1747,7 @@ def get_animated_frames(
     onia = bpy.context.scene.oni_anim_props
     oni_anim = bpy.context.scene.oni_anim
 
-    export_volume_motion - oni.export_volume_motion
+    export_volume_motion = oni.export_volume_motion
 
     obj = bpy.data.objects
     armObj = obj[armature]
@@ -2447,9 +2447,9 @@ def clean_motion(matrices=None, rot_tol=1.0, loc_tol=0.01):
                 print("  matrix:")
                 print(new_matrices[bone][frame])
 
-        print("len bone frame matrices    :", len(matrices[test_bone]))
-        print("len bone frame cleaned_mats:", len(cleaned_mats[test_bone]))
-        print("len bone frame new_matrices:", len(new_matrices[test_bone]))
+        print("len bone frame matrices    :", len(matrices[bone]))
+        print("len bone frame cleaned_mats:", len(cleaned_mats[bone]))
+        print("len bone frame new_matrices:", len(new_matrices[bone]))
 
     return new_matrices
 

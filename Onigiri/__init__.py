@@ -724,19 +724,19 @@ def remove_data_prefix(container="", prefix=""):
     if oni_flags["debug"] == 1:
         print("Warning: remove_data_prefix may not be fully functional")
 
-    if type(container) == dict:
+    if type(container) is dict:
         data_thing = dict()
         for data in container:
             if data.startswith(prefix):
                 new_data = data.replace(prefix, "", 1)
                 data_thing[new_data] = container[data]
-    elif type(container) == set:
+    elif type(container) is set:
         data_thing = set()
         for data in container:
             if data.startswith(prefix):
                 new_data = data.replace(prefix, "", 1)
                 data_thing.add(data)
-    elif type(container) == list:
+    elif type(container) is list:
         data_thing = list()
         for data in container:
             if data.startswith(prefix):
@@ -20538,12 +20538,6 @@ class OnigiriAnimationProperties(bpy.types.PropertyGroup):
     def get_scale_second_frame(self):
         end_frame = bpy.context.active_object.animation_data.action.frame_range[1]
         return end_frame
-
-    def get_scale_total_frames(self):
-        start_frame, end_frame = (
-            bpy.context.active_object.animation_data.action.frame_range
-        )
-        return end_frame - start_frame + 1
 
     def trigger_scale_frames_access(self):
 

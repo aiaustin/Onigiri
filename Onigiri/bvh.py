@@ -176,8 +176,8 @@ def write_armature(
             serialized_names.append(child_bone)
             write_recursive_nodes(child_bone, indent)
 
-        if buffer:
-            buff.append("}\n")
+        #if buffer:
+        #    buff.append("}\n")
         else:
             file.write("}\n")
 

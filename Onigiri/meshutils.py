@@ -1,7 +1,7 @@
 import bpy
 import mathutils
 from mathutils import Vector
-import math
+from math import *
 from . import rigutils
 from . import utils
 from .presets import bone_sides
@@ -69,7 +69,7 @@ def remove_empty_groups(mesh):
     meshObj = bpy.data.objects[mesh]
 
     armObj = get_armature(meshObj)
-    if armObj == False:
+    if not armObj:
         print(
             "There's no functional armature associated with the mesh",
             meshObj.name,
@@ -1067,7 +1067,7 @@ def get_exportable_mesh(objects=None, report=False):
     for o in new_objects:
         arm = get_mesh_armature(mesh=o.name)
 
-        if arm != False:
+        if arm:
             new_arms.add(arm)
     if len(new_arms) == 0:
         if report:
@@ -1140,44 +1140,6 @@ def clone_mesh(mesh=None):
     utils.set_state(state)
 
     return clones
-
-
-def get_mesh_armature(mesh=""):
-    print("get_mesh_armature two runs")
-    obj = bpy.data.objects
-
-    if mesh == "":
-        print(
-            "get_mesh_armature reports: I need a mesh object to work with, I got nothing"
-        )
-        return False
-
-    if mesh not in obj:
-        print("get_mesh_armature reports: mesh not in the viewable scene:", mesh)
-        return False
-
-    mods = []
-    for m in obj[mesh].modifiers:
-        if m.type == "ARMATURE":
-            mods.append(m.name)
-
-    if len(mods) > 1:
-        print("get_mesh_armature reports: too many armature modifiers")
-        return False
-    if len(mods) == 0:
-        print("get_mesh_armature reports: can't find an armature modifier")
-        return False
-
-    mod = mods[0]
-
-    if obj[mesh].modifiers[mod].object is None:
-        print(
-            "get_mesh_armature reports: armature modifier exists but doesn't point to anything"
-        )
-        return False
-    arm = obj[mesh].modifiers[mod].object.name
-
-    return arm
 
 
 def clean(object=None, copy=False, rotation=True, location=False, scale=True, pose=True):
@@ -1577,7 +1539,7 @@ def set_normalized_weights(
             "meshutils::restrict_weights : none of the provided data returned an armature object, trying mesh as last resort."
         )
         armObj = get_armature(meshObj)
-        if armObj == False:
+        if not armObj:
             print(
                 "meshutils::restrict_weights : a last effort attempt to find an armature failed."
             )

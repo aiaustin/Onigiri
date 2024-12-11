@@ -51,18 +51,18 @@ def update_preset_source(report=False):
     armObj = utils.has_armature()
     preset = get_properties()
 
-    if armObj == False:
-        if report == False:
+    if armObj is None:
+        if not report:
             print("No armature found, updating preset for defaults...")
         for prop in preset:
 
             default[prop] = preset[prop]
     else:
         if armObj.get("oni_devkit_preset") is None:
-            if report == False:
+            if not report:
                 print("Associated armature contains no preset, applying...")
         else:
-            if report == False:
+            if not report:
                 print("Armature preset updating...")
         armObj["oni_devkit_preset"] = {}
         for prop in preset:
@@ -1010,6 +1010,7 @@ def has_devkit_armature(object=None):
 def save_default_presets(path):
 
     import pprint
+    oni_splice = bpy.context.scene.oni_splice
 
     oni_devkit = bpy.context.scene.oni_devkit
     presets_backup = {}
