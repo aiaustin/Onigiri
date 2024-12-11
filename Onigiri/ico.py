@@ -354,7 +354,7 @@ def load_icons():
         "ease_enabled", os.path.join(icons_dir, "ease_enabled.png"), "IMAGE"
     )
 
-    custom_icons.load("blank", os.path.join(icons_dir, "blank.png"), "IMAGE")
+    #custom_icons.load("blank", os.path.join(icons_dir, "blank.png"), "IMAGE")
     custom_icons.load("eye", os.path.join(icons_dir, "eye.png"), "IMAGE")
     custom_icons.load("hammer", os.path.join(icons_dir, "hammer.png"), "IMAGE")
     custom_icons.load("calc", os.path.join(icons_dir, "calc.png"), "IMAGE")
@@ -527,6 +527,7 @@ def load_icons():
     custom_icons.load("link", os.path.join(icons_dir, "link.png"), "IMAGE")
 
     custom_icons.load("opensim", os.path.join(icons_dir, "opensim.png"), "IMAGE")
+    custom_icons.load("second-life", os.path.join(icons_dir, "second-life.svg"), "IMAGE")
     custom_icons.load("controller", os.path.join(icons_dir, "controller.png"), "IMAGE")
     custom_icons.load("start", os.path.join(icons_dir, "start.png"), "IMAGE")
 
@@ -617,7 +618,8 @@ def load_icons():
         "clean": "BRUSH_DATA",
         "time": "PREVIEW_RANGE",
         "reset": "FILE_REFRESH",
-        "load": "FILE_FOLDER"
+        "load": "FILE_FOLDER",
+        "x_red": "CANCEL"
     }
 
 def unload_icons():
