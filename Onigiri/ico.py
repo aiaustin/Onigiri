@@ -3,6 +3,8 @@ import os
 from . import mod_settings
 from .mod_settings import *
 
+use_prop_icons = False
+
 ## https://docs.blender.org/api/current/bpy_types_enum_items/icon_items.html
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -621,7 +623,7 @@ def load_icons():
         "refresh": "FILE_REFRESH",
         #"reset": "DECORATE_OVERRIDE",
         "reset_all": "CON_ROTLIKE",
-        "target": "CON_OBJECTSOLVER", #PIVOT_BOUNDBOX
+        "target": "CON_OBJECTSOLVER", #PIVOT_BOUNDBOX or OBJECT_DATAMODE
         "reset": "LOOP_BACK",
         "folder": "FILE_FOLDER",
         "x_red": "CANCEL",
@@ -635,7 +637,17 @@ def load_icons():
         "apply": "NLA_PUSHDOWN",
         "tag": "BOOKMARKS",
         "lock": "DECORATE_LOCKED",
-        "unlock": "DECORATE_UNLOCKED"
+        "unlock": "DECORATE_UNLOCKED",
+        "code": "CONSOLE",
+        "camera": "OUTLINER_OB_CAMERA",
+        "action": "SEQUENCE",
+        "join": "RESTRICT_INSTANCED_OFF",
+        "reverse": "UV_SYNC_SELECT",
+        "location": "TRACKER",
+        "rotation": "ORIENTATION_GIMBAL", #FORCE_MAGNETIC
+        "scale": "AREA_SWAP",
+        "selection": "SELECT_SET",
+        "keys": "KEYINGSET",
     }
 
 def unload_icons():
@@ -663,3 +675,10 @@ def get_panel_icon_id(opened):
         return get_icon_id("panel_opened")
     else:
         return get_icon_id("panel_closed")
+
+def get_prop_icon_id(name):
+    global use_prop_icons
+    if use_prop_icons:
+        return get_icon_id(name)
+    else:
+        return 0

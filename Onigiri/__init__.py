@@ -2250,9 +2250,9 @@ class OnigiriCharacterConverterPanel(bpy.types.Panel):
         row.prop(
             oni_cc,
             "copy",
-            #toggle=True,
+            toggle=True,
             text="Make Copy",
-            icon_value = get_icon_id("copy"),
+            icon_value = get_prop_icon_id("copy"),
         )
         row = col.row(align=True)
         row.prop(
@@ -9361,6 +9361,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             oni_edit_template,
             "onemap_menu_enabled",
             text="Hybrid Mapper",
+            emboss=False,
             icon_value = get_panel_icon_id(oni_edit_template.onemap_menu_enabled),
         )
 
@@ -9881,6 +9882,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             oni_snap,
             "snap_menu_enabled",
             text="Visual Snap Mapper",
+            emboss = False,
             icon_value = get_panel_icon_id(oni_snap.snap_menu_enabled),
         )
         if oni_snap.snap_menu_enabled:
@@ -28089,7 +28091,7 @@ class OnigiriShapeShifterMorph(bpy.types.Operator):
             source = ss.shifter_morph_source_name
 
             if (
-                notss.shifter_morph_source_locked
+                not ss.shifter_morph_source_locked
                 or not ss.shifter_morph_target_locked
             ):
                 print(
@@ -48299,6 +48301,7 @@ class OnigiriPanelMeshTools(bpy.types.Panel):
             oni_mesh,
             "edit_mesh_menu_enabled",
             text="Edit Mesh",
+            emboss = False,
             icon_value = get_panel_icon_id(oni_mesh.edit_mesh_menu_enabled),
         )
         if oni_mesh.edit_mesh_menu_enabled:
@@ -48388,7 +48391,8 @@ class OnigiriPanelMeshTools(bpy.types.Panel):
             onim,
             "refit_enabled",
             text="Enable Mesh Refit",
-            icon_value = get_icon_id("reshape"),
+            emboss = False,
+            icon_value = get_panel_icon_id(onim.refit_enabled),
         )
 
         if onim.refit_enabled:
@@ -53559,6 +53563,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     anim,
                     "native_features_menu_enabled",
                     text="Anim Extended Features",
+                    emboss = False,
                     icon_value = get_panel_icon_id(anim.native_features_menu_enabled),
                 )
 
@@ -53596,6 +53601,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         anim,
                         "mark_tol_options",
                         text="Key Cleanup Options",
+                        emboss = False,
                         icon_value = get_panel_icon_id(anim.mark_tol_options),
                     )
 
@@ -53910,6 +53916,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         context.scene.oni_anim,
                         "anim_interpolation_menu_enabled",
                         text="Interpolation Options",
+                        emboss = False,
                         icon_value = get_panel_icon_id(anim.anim_interpolation_menu_enabled),
                     )
 
@@ -53960,6 +53967,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         context.scene.oni_anim,
                         "anim_expression_menu_enabled",
                         text="Expression Options",
+                        emboss = False,
                         icon_value = get_panel_icon_id(anim.anim_expression_menu_enabled),
                     )
 
@@ -53985,6 +53993,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                             anim,
                             "anim_emote_menu_enabled",
                             text="Emote List",
+                            emboss = False,
                             icon_value = get_panel_icon_id(anim.anim_emote_menu_enabled),
                         )
                         if anim.anim_emote_menu_enabled:
@@ -54056,8 +54065,8 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             context.scene.onigiri,
             "bvh_menu_enabled",
             text="BVH Export Features",
-            toggle=True,
-            emboss=False,
+            toggle = True,
+            emboss = False,
             icon_value = get_panel_icon_id(bpy.context.scene.onigiri.bvh_menu_enabled),
         )
 
@@ -54201,6 +54210,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             context.window_manager.oni_deform,
             "deformer_menu_enabled",
             text="Deformer",
+            emboss = False,
             icon_value = get_panel_icon_id(oni_deform.deformer_menu_enabled),
         )
         if oni_deform.deformer_menu_enabled:
@@ -54253,6 +54263,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             context.scene.oni_anim_props,
             "scale_animation_menu",
             text="Resize Animation ",
+            emboss = False,
             icon_value = get_panel_icon_id(context.scene.oni_anim_props.scale_animation_menu),
         )
         if context.scene.oni_anim_props.scale_animation_menu:
@@ -54285,6 +54296,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             context.scene.oni_anim_props,
             "reference_pose_menu_enabled",
             text="Reference Pose Features",
+            emboss = False,
             icon_value = get_panel_icon_id(onia.reference_pose_menu_enabled),
         )
 
@@ -54410,6 +54422,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             context.scene.oni_anim,
             "anim_misc_menu_enabled",
             text="Misc Options",
+            emboss = False,
             icon_value = get_panel_icon_id(oni_anim.anim_misc_menu_enabled),
         )
 
@@ -54467,7 +54480,8 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             "pose_enable_library",
             toggle=True,
             text="Enable Posing Library",
-            icon_value = get_icon_id("pose_library"),
+            emboss = False,
+            icon_value = get_panel_icon_id(ccl.pose_enable_library),
         )
         if ccl.pose_enable_library:
 
@@ -54638,6 +54652,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             oni_autokey,
             "autokey_menu_enabled",
             text="Auto Key",
+            emboss = False,
             icon_value = get_panel_icon_id(oni_autokey.autokey_menu_enabled),
         )
         if oni_autokey.autokey_menu_enabled:
@@ -54815,6 +54830,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             oni_alib,
             "alib_motion_processing_menu_enabled",
             text="Motion Processing",
+            emboss = False,
             icon_value = get_panel_icon_id(oni_alib.alib_motion_processing_menu_enabled),
         )
 
@@ -54828,6 +54844,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 oni_alib,
                 "alib_anim_menu_enabled",
                 text="Animations",
+                emboss = False,
                 icon_value = get_panel_icon_id(oni_alib.alib_anim_menu_enabled),
             )
 
@@ -54913,6 +54930,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 oni_alib,
                 "alib_action_menu_enabled",
                 text="Actions",
+                emboss = False,
                 icon_value = get_panel_icon_id(oni_alib.alib_action_menu_enabled),
             )
 
@@ -55556,6 +55574,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 oni_pose,
                 "pose_library_menu_enabled",
                 text="Poses",
+                emboss = False,
                 icon_value = get_panel_icon_id(oni_pose.pose_library_menu_enabled),
             )
             if oni_pose.pose_library_menu_enabled:
@@ -55696,6 +55715,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 oni_mixer,
                 "mixer_menu_enabled",
                 text="Motion Mixer",
+                emboss = False,
                 icon_value = get_panel_icon_id(oni_mixer.mixer_menu_enabled),
             )
             if oni_mixer.mixer_menu_enabled:
@@ -56096,6 +56116,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 oni_splice,
                 "splice_menu_enabled",
                 text="Motion Splicer",
+                emboss = False,
                 icon_value = get_panel_icon_id(oni_splice.splice_menu_enabled),
             )
             if oni_splice.splice_menu_enabled:
