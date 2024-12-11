@@ -19,6 +19,7 @@ def load_icons():
     global builtin_icons
 
     custom_icons = bpy.utils.previews.new()
+    custom_icons.load("blank", "", "IMAGE")
     custom_icons.load("arrow_top_right", os.path.join(icons_dir, "arrow_top_right.png"), "IMAGE")
     custom_icons.load("arrow_bottom_right", os.path.join(icons_dir, "arrow_bottom_right.png"), "IMAGE")
     custom_icons.load("arrow_up", os.path.join(icons_dir, "arrow_up.png"), "IMAGE")
@@ -354,7 +355,6 @@ def load_icons():
         "ease_enabled", os.path.join(icons_dir, "ease_enabled.png"), "IMAGE"
     )
 
-    #custom_icons.load("blank", os.path.join(icons_dir, "blank.png"), "IMAGE")
     custom_icons.load("eye", os.path.join(icons_dir, "eye.png"), "IMAGE")
     custom_icons.load("hammer", os.path.join(icons_dir, "hammer.png"), "IMAGE")
     custom_icons.load("calc", os.path.join(icons_dir, "calc.png"), "IMAGE")
@@ -617,9 +617,21 @@ def load_icons():
         "rotate": "ORIENTATION_GIMBAL",
         "clean": "BRUSH_DATA",
         "time": "PREVIEW_RANGE",
-        "reset": "FILE_REFRESH",
-        "load": "FILE_FOLDER",
-        "x_red": "CANCEL"
+        "build": "MOD_BUILD",
+        "refresh": "FILE_REFRESH",
+        #"reset": "DECORATE_OVERRIDE",
+        "reset_all": "CON_ROTLIKE",
+        "target": "CON_OBJECTSOLVER", #PIVOT_BOUNDBOX
+        "reset": "LOOP_BACK",
+        "folder": "FILE_FOLDER",
+        "x_red": "CANCEL",
+        "load": "EXPORT",
+        "save": "IMPORT",
+        "first": "TRIA_LEFT_BAR",
+        "last": "TRIA_RIGHT_BAR",
+        "bone": "BONE_DATA",
+        "bones": "GROUP_BONE",
+        "delete": "TRASH"
     }
 
 def unload_icons():
@@ -632,14 +644,14 @@ def get_icon_id(name):
     global custom_icons
     global builtin_icons
     icon_name = map_icons.get(name)    
-    if icon_name is None:
-        icon = custom_icons[name]
+    if icon_name:
+        return builtin_icons[icon_name]
+    else:
+        icon = custom_icons.get(name)
         if icon:
             return icon.icon_id
         else:
-            return builtin_icons[icon_name]
-    else:
-        return builtin_icons[icon_name]
+            return builtin_icons[name]    
 
 
 def get_panel_icon_id(opened):
