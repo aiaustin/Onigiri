@@ -3,7 +3,7 @@ import bpy
 import sys
 import time
 import mathutils
-from utils import *
+from . import utils
 
 if 1 == 1:
 

@@ -2,8 +2,7 @@ import bpy
 import traceback
 import mathutils
 import xml.etree.ElementTree as ET
-import utils
-
+from . import utils
 
 if 1 == 1:
 

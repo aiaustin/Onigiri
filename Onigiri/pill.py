@@ -1,6 +1,7 @@
 import bpy
-import math
+import mathutils
 from mathutils import *
+import math
 from .presets import skeleton as skel
 from .presets import avatar_skeleton as skel_old
 from .presets import volumes

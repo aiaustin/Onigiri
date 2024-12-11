@@ -20,7 +20,7 @@ from .mod_flags import *
 from .mod_data import *
 from . import mod_settings
 from .mod_settings import *
-from . import avatar_skeleton
+#from . import avatar_skeleton
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 presets_path = oni_settings["paths"]["presets"]

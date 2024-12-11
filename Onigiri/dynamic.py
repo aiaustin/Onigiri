@@ -1,5 +1,5 @@
 import bpy
-import utils
+from . import utils
 
 if True:
     props = {}

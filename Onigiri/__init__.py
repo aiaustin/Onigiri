@@ -7,7 +7,6 @@ bl_info = {
     "warning": "",
     "category": "3D View",
     "location": "View3D > Tools > Onigiri",
-    "source_url": "https://github.com/aiaustin/Onigiri"
 }
 
 print("NOTES:")
@@ -123,6 +122,7 @@ if 1 == 0:
     from .template_editor import *
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
+source_url = "https://github.com/aiaustin/Onigiri"
 
 presets_path = oni_settings["paths"]["presets"]
 data_path = oni_settings["paths"]["data"]
@@ -9503,12 +9503,10 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             row.operator(
                 "onigiri.snap_mesh",
                 text="Hide Mesh",
-                toggle = True
             ).action = "hide"
             row.operator(
                 "onigiri.snap_mesh",
                 text="Show Mesh",
-                toggle = True
             ).action = "show"
 
             col = box.column(align=True)
@@ -9598,24 +9596,20 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                             row.operator(
                                 "onigiri.onemap_mesh",
                                 text="Hide Mesh",
-                                toggle = True
                             ).action = "hide"
                             row.operator(
                                 "onigiri.onemap_mesh",
                                 text="Show Mesh",
-                                toggle = True
                             ).action = "show"
 
                         row = col.row(align=True)
                         row.operator(
                             "onigiri.onemap_bones",
                             text="Restore Bone View",
-                            toggle = True
                         ).action = "restore"
                         row.operator(
                             "onigiri.onemap_bones",
                             text="Show All Bones",
-                            toggle = True
                         ).action = "show"
 
                         col = box.column(align=True)
@@ -9630,7 +9624,6 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                         row.operator(
                             "onigiri.onemap_reskin_to_parent",
                             text="Reskin to Parent",
-                            toggle = True
                         )
                         row = col.row(align=True)
 
@@ -9976,12 +9969,10 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             row.operator(
                 "onigiri.snap_mesh",
                 text="Hide Mesh",
-                toggle = True
             ).action = "hide"
             row.operator(
                 "onigiri.snap_mesh",
                 text="Show Mesh",
-                toggle = True
             ).action = "show"
 
             col = box.column(align=True)
@@ -19091,7 +19082,7 @@ class OnigiriPanelDevKitTools(bpy.types.Panel):
         row = col.row(align=True)
 
         row.operator("wm.url_open", text="Devkit Tools Help (website)").url = (
-            bl_info.source_url+"/wiki/DEVKIT-Help"
+            source_url+"/wiki/DEVKIT-Help"
         )
 
         col = box.column(align=True)
@@ -19113,15 +19104,13 @@ class OnigiriPanelDevKitTools(bpy.types.Panel):
         row.operator(
             "onigiri.devkit_combine",
             text="Combine Selected",
-            toggle = True
         )
 
         col = box.column(align=True)
         row = col.row(align=True)
         row.operator(
             "onigiri.devkit_reshape",
-            text="Reshape Devkit",
-            toggle = True
+            text="Reshape Devkit"
         )
 
 
@@ -48107,7 +48096,6 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
         row.operator(
             "onigiri.snap_export_mesh",
             text="Export Mapped Mesh",
-            toggle=True,
         )
 
 
@@ -50135,34 +50123,28 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             row.operator(
                 "onigiri.snap_mesh",
                 text="Hide Mesh",
-                toggle=True,
             ).action = "hide"
             row.operator(
                 "onigiri.snap_mesh",
-                text="Show Mesh",
-                toggle=True,
+                text="Show Mesh"
             ).action = "show"
             row = col.row(align=True)
             row.operator(
                 "onigiri.motion_view_bones",
                 text="Hide Unmapped Bones",
-                toggle=True,
             ).action = "hide"
             row.operator(
                 "onigiri.motion_view_bones",
                 text="View All Bones",
-                toggle=True,
             ).action = "show"
             row = col.row(align=True)
             row.operator(
                 "onigiri.motion_hide_target",
                 text="Hide Target Bones",
-                toggle=True,
             )
             row.operator(
                 "onigiri.motion_remove_lock",
                 text="Remove Lock map",
-                toggle=True,
             )
 
             row = col.row(align=True)
@@ -55007,12 +54989,10 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 row.operator(
                     "onigiri.alib_action_fake_user",
                     text="Enable Fake User [" + str(fake_count) + "]",
-                    toggle=True,
                 ).action = True
                 row.operator(
                     "onigiri.alib_action_fake_user",
                     text="Disable Fake User",
-                    toggle=True,
                 ).action = False
 
                 row = col.row(align=True)
@@ -55021,7 +55001,6 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 row.operator(
                     "onigiri.alib_action_name",
                     text="Generate Name",
-                    toggle=True
                 )
                 row.prop(
                     oni_alib,
@@ -57925,7 +57904,6 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
             row.operator(
                 "onigiri.shifter_pose_rig",
                 text="Pose Rig",
-                toggle=True,
             )
             col = box.column(align=True)
             row = col.row(align=True)
@@ -58043,44 +58021,37 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
             else:
                 row.operator(
                     "onigiri.shifter_build_link",
-                    text="Link Bones",
-                    toggle=True,
+                    text="Link Bones"
                 )
 
             row.operator(
                 "onigiri.shifter_build_unlink",
                 text="Unlink Bones",
-                toggle=True,
             )
 
             row = col.row(align=True)
             row.operator(
                 "onigiri.shifter_build_connect",
                 text="Connect",
-                toggle=True,
             ).use_connect = "yes"
             row.operator(
                 "onigiri.shifter_build_connect",
-                text="Disconnect",
-                toggle=True,
+                text="Disconnect"
             ).use_connect = "no"
             row = col.row(align=True)
             row.operator(
                 "onigiri.shifter_build_snap",
-                text="Snap selected to parent",
-                toggle=True,
+                text="Snap selected to parent"
             )
             row = col.row(align=True)
 
             row.operator(
                 "onigiri.shifter_build_select",
                 text="Select Parents",
-                toggle=True,
             ).action = "parents"
             row.operator(
                 "onigiri.shifter_build_select",
                 text="Select Children",
-                toggle=True,
             ).action = "children"
 
             if len(shifter.props["frozen_bones"]) == 0:
@@ -58180,12 +58151,10 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 row.operator(
                     "onigiri.latch_snap",
                     text="Latch Snap",
-                    toggle=True,
                 )
                 row.operator(
                     "onigiri.latch_connect",
                     text="Latch Connect",
-                    toggle=True,
                 )
                 row = col.row(align=True)
                 row.operator(
@@ -63823,44 +63792,37 @@ class OnigiriPanelBind(bpy.types.Panel):
             row.operator(
                 "onigiri.bind_info",
                 text="Scale PBones ",
-                toggle=True,
             ).action = "scale_vbones_pbones"
             row.operator(
                 "onigiri.bind_info",
                 text="Scale EBones ",
-                toggle=True,
             ).action = "scale_vbones_ebones"
 
             row = col.row(align=True)
             row.operator(
                 "onigiri.bind_info",
                 text="Save Bind Data",
-                toggle=True,
             ).action = "save_bind_data"
             row = col.row(align=True)
             row.operator(
                 "onigiri.bind_info",
                 text="Load Bind Data",
-                toggle=True,
             ).action = "load_bind_data"
 
             row = col.row(align=True)
             row.operator(
                 "onigiri.bind_info",
                 text="Remove Bind Info",
-                toggle=True,
             ).action = "remove"
             row = col.row(align=True)
             row.operator(
                 "onigiri.bind_info",
                 text="Remove Bind Matrix",
-                toggle=True,
             ).action = "remove_bind_matrix"
             row = col.row(align=True)
             row.operator(
                 "onigiri.bind_info",
                 text="Remove Rest Matrix",
-                toggle=True,
             ).action = "remove_rest_matrix"
             row = col.row(align=True)
             if onim.get("bind_info") is None:
@@ -63876,7 +63838,6 @@ class OnigiriPanelBind(bpy.types.Panel):
             row.operator(
                 "onigiri.bind_info",
                 text="Paste Bind Info",
-                toggle=True,
             ).action = "paste"
 
 

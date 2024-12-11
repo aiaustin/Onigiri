@@ -5,7 +5,7 @@ import sys
 # import time
 import mathutils
 
-import utils
+from . import utils
 
 # from . import mod_settings
 # from .mod_settings import oni_settings
