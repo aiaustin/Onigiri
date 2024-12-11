@@ -168,7 +168,7 @@ def apply_map(director=None, actor=None):
                 outRig.data.edit_bones[tbone].tail = tail + floc
                 outRig.data.edit_bones[tbone].roll = roll
 
-        if release == False:
+        if not release:
             for boneObj in outRig.data.bones:
                 tbone = boneObj.name
                 if tbone not in mapped:
@@ -220,7 +220,7 @@ def apply_map(director=None, actor=None):
     outRig.select_set(True)
     bpy.context.view_layer.objects.active = outRig
 
-    if release == False:
+    if not release:
 
         bpy.ops.object.mode_set(mode="EDIT")
         for boneObj in outRig.data.edit_bones:
@@ -278,9 +278,9 @@ def update_map(inRig=None, anchor=None, target=None, report=False):
 
     if isinstance(inRig, str):
         inRig = bpy.data.objects[inRig]
-    if isinstance(anchor, str) == False:
+    if not isinstance(anchor, str):
         anchor = anchor.name
-    if isinstance(target, str) == False:
+    if not isinstance(target, str):
         target = tbone.name
 
     if inRig.get("oni_onemap_rename") is None:

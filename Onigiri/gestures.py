@@ -264,12 +264,12 @@ emote = {
         "looped": False,
         "description": "Facial expression",
     },
-    "express_shrug_emote": {
-        "uuid": "a351b1bc-cc94-aac2-7bea-a7e6ebad15ef ",
-        "priority": 1,
-        "looped": False,
-        "description": "Facial expression",
-    },
+#    "express_shrug_emote": {
+#        "uuid": "a351b1bc-cc94-aac2-7bea-a7e6ebad15ef ",
+#        "priority": 1,
+#        "looped": False,
+#        "description": "Facial expression",
+#    },
     "express_shrug_emote": {
         "uuid": "b7c7c833-e3d3-c4e3-9fc0-131237446312",
         "priority": 1,

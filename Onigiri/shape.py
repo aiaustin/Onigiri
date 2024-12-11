@@ -2,6 +2,7 @@ import bpy
 import traceback
 import mathutils
 import xml.etree.ElementTree as ET
+import utils
 
 
 if 1 == 1:
@@ -38,7 +39,7 @@ def import_shape(file=None):
     shape["attachment_point"] = {}
     shape["joint_rig_info"] = {}
 
-    tags = root.find(f"archetype")
+    tags = root.find("archetype")
     for t in tags:
         tag = t.tag
         if tag == "param":
@@ -174,7 +175,7 @@ def get_director(object, report=False):
             print("shape::get_director reports : given object is the director")
         return OBJ
 
-    if utils.is_valid(dObj) == False:
+    if not utils.is_valid(dObj):
         if report:
             print("shape::get_director reports : the determined director is not valid")
 

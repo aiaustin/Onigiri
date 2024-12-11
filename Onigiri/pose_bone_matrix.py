@@ -56,15 +56,6 @@ def get_mat_rest(pose_bone, mat_pose_parent):
     return mat_rotscale, mat_loc
 
 
-@default_to_existing_values
-def get_mat_pose(pose_bone, mat_pose_parent, mat_basis):
-    mat_rotscale, mat_loc = get_mat_rest(pose_bone, mat_pose_parent)
-    mat_pose = mat_rotscale @ mat_basis
-    mat_pose.translation = mat_loc @ mat_basis.translation
-
-    return mat_pose
-
-
 def default_to_existing_values(func):
     def func_new(pose_bone, mat_pose_parent=None, mat_basis=None):
         if pose_bone.parent and not mat_pose_parent:
@@ -75,3 +66,11 @@ def default_to_existing_values(func):
         func(pose_bone, mat_pose_parent, mat_basis)
 
     return func_new
+
+@default_to_existing_values
+def get_mat_pose(pose_bone, mat_pose_parent, mat_basis):
+    mat_rotscale, mat_loc = get_mat_rest(pose_bone, mat_pose_parent)
+    mat_pose = mat_rotscale @ mat_basis
+    mat_pose.translation = mat_loc @ mat_basis.translation
+
+    return mat_pose

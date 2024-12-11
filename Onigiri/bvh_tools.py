@@ -39,7 +39,7 @@ def read(
 
     compose = dict()
 
-    for node in root.iter(f"JOINT"):
+    for node in root.iter("JOINT"):
         bone = node.find("NAME").text
         offsets = node.find("OFFSET").text
         channels = int(node.find("CHANNEL_COUNT").text)
@@ -61,7 +61,7 @@ def read(
             chans = compose[bone]["channels"]
 
             if bone in volumes.vol_joints:
-                if export_volumes == False:
+                if not export_volumes:
                     pointer += chans
                     continue
             if sl_only:
@@ -124,7 +124,7 @@ def read(
 
                 bone_lower = bone.lower()
                 if bone_lower == "mpelvis" or bone == "hip" or bone == "hips":
-                    if onia.disable_pelvis_location_animation == False:
+                    if not onia.disable_pelvis_location_animation:
                         data["joints"][bone]["loc"].append(tuple(locs))
                 else:
                     data["joints"][bone]["loc"].append(tuple(locs))
@@ -239,7 +239,7 @@ def read(
             bone = boneObj.name
 
             if bone in volumes.vol_joints:
-                if export_volumes == False:
+                if not export_volumes:
                     continue
 
             if use_storage:
@@ -451,7 +451,7 @@ def read(
 
                 if ce(x, ref_key[0], tol=rot_tol):
 
-                    if data["joints"][bone]["tol"]["rot"][-1] == False:
+                    if not data["joints"][bone]["tol"]["rot"][-1]:
                         data["joints"][bone]["tol"]["rot"][-1] = True
                         rot_count += 1
                     data["joints"][bone]["tol"]["rot"].append(True)
@@ -459,7 +459,7 @@ def read(
                     rot_count += 1
                     continue
                 if ce(y, ref_key[1], tol=rot_tol):
-                    if data["joints"][bone]["tol"]["rot"][-1] == False:
+                    if not data["joints"][bone]["tol"]["rot"][-1]:
                         data["joints"][bone]["tol"]["rot"][-1] = True
                         rot_count += 1
                     data["joints"][bone]["tol"]["rot"].append(True)
@@ -467,7 +467,7 @@ def read(
                     rot_count += 1
                     continue
                 if ce(z, ref_key[2], tol=rot_tol):
-                    if data["joints"][bone]["tol"]["rot"][-1] == False:
+                    if not data["joints"][bone]["tol"]["rot"][-1]:
                         data["joints"][bone]["tol"]["rot"][-1] = True
                         rot_count += 1
                     data["joints"][bone]["tol"]["rot"].append(True)
@@ -488,7 +488,7 @@ def read(
                 continue
             else:
                 if ce(x, ref_key[0], tol=loc_tol):
-                    if data["joints"][bone]["tol"]["loc"][-1] == False:
+                    if not data["joints"][bone]["tol"]["loc"][-1]:
                         data["joints"][bone]["tol"]["loc"][-1] = True
                         loc_count += 1
                     data["joints"][bone]["tol"]["loc"].append(True)
@@ -496,7 +496,7 @@ def read(
                     loc_count += 1
                     continue
                 if ce(y, ref_key[1], tol=loc_tol):
-                    if data["joints"][bone]["tol"]["loc"][-1] == False:
+                    if not data["joints"][bone]["tol"]["loc"][-1]:
                         data["joints"][bone]["tol"]["loc"][-1] = True
                         loc_count += 1
                     data["joints"][bone]["tol"]["loc"].append(True)
@@ -504,7 +504,7 @@ def read(
                     loc_count += 1
                     continue
                 if ce(z, ref_key[2], tol=loc_tol):
-                    if data["joints"][bone]["tol"]["loc"][-1] == False:
+                    if not data["joints"][bone]["tol"]["loc"][-1]:
                         data["joints"][bone]["tol"]["loc"][-1] = True
                         loc_count += 1
                     data["joints"][bone]["tol"]["loc"].append(True)
@@ -544,9 +544,7 @@ def close_enough(a, b, tol=0.000001):
 
 
 def clean_xml(doc=None):
-    pass
-
-    return data
+    return doc
 
 
 def compose_bvh_buffers(context=False, return_type="bvh", scale_factor="meters"):
@@ -560,7 +558,7 @@ def compose_bvh_buffers(context=False, return_type="bvh", scale_factor="meters")
         scale = scale_factor
 
     print("passing context to bvh writer, clean this up")
-    if context == False:
+    if not context:
         print("goofy did a boo")
         return False
 
@@ -677,7 +675,7 @@ def merge(
 
     vjoints = {}
 
-    for node in root.iter(f"JOINT"):
+    for node in root.iter("JOINT"):
         name = node.find("NAME").text
         vjoints[name] = {}
 
@@ -689,7 +687,7 @@ def merge(
             vjoints[name]["end_site"] = endsite.find("OFFSET").text
 
     vdata = {}
-    motion = root.find(f"MOTION")
+    motion = root.find("MOTION")
     vdata["frames"] = motion.find("FRAMES").text
     vdata["frame_time"] = motion.find("FRAME_TIME").text
 
@@ -708,7 +706,7 @@ def merge(
 
     if swap_offsets or swap_endsites:
 
-        for node in root.iter(f"JOINT"):
+        for node in root.iter("JOINT"):
             name = node.find("NAME").text
             if name in volumes.vol_joints:
                 if swap_offsets:
@@ -722,7 +720,7 @@ def merge(
 
     if swap_motion:
         mdata = {}
-        motion = root.find(f"MOTION")
+        motion = root.find("MOTION")
         mdata["frames"] = motion.find("FRAMES").text
 
         frames = int(mdata["frames"])
@@ -734,7 +732,7 @@ def merge(
 
         slot = 0
         for f in range(frames):
-            for node in root.iter(f"JOINT"):
+            for node in root.iter("JOINT"):
                 name = node.find("NAME").text
                 chans = int(vjoints[name]["channel_count"])
                 if name in volumes.vol_joints:
@@ -1025,9 +1023,9 @@ def from_xml(buf=""):
     buffer.append("}\n")
 
     motion = list()
-    frames = root.find(f"./MOTION/FRAMES")
-    frame_time = root.find(f"./MOTION/FRAME_TIME")
-    motion_data = root.find(f"./MOTION/MOTION_DATA")
+    frames = root.find("./MOTION/FRAMES")
+    frame_time = root.find("./MOTION/FRAME_TIME")
+    motion_data = root.find("./MOTION/MOTION_DATA")
 
     motion_list = motion_data.text.split()
 

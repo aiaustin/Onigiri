@@ -51,7 +51,7 @@ def merge_groups(group=None, target=None, mesh=None, report=False):
 # main
 # --------------------------------------------------------------------------------------------
 armObj = utils.has_armature()
-if armObj == False:
+if not armObj:
     print("Devkit code runs but armature is missing, returning without results")
 else:
     bad_bones = ["mSpine1", "mSpine2", "mSpine3", "mSpine4"]

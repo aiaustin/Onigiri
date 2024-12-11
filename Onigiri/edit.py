@@ -10,7 +10,7 @@ def auto_weight_on_select(context):
     if bpy.context.selected_pose_bones is None:
         return
 
-    if bpy.context.window_manager.cc_props.edit_mode == False:
+    if not bpy.context.window_manager.cc_props.edit_mode:
 
         return
 
@@ -90,10 +90,10 @@ def auto_weight_colors(bone="", state=""):
     arm = bpy.context.active_object.name
     if state == "active":
         boneCollection = obj[arm].data.collections.get(md.cc_rename_selected_name)
-        if boneCollection is None:            
-            boneCollection = obj[arm].data.collections.new(md.cc_rename_selected_name)                 
+        if boneCollection is None:
+            boneCollection = obj[arm].data.collections.new(md.cc_rename_selected_name)
             obj[arm].data.collections.new(md.cc_reskin_selected_name)
-            
+
         boneObj = bpy.data.objects[arm].pose.bones[bone]
         boneCollection.assign(boneObj)
         boneObj.color.palette = md.cc_rename_selected_color

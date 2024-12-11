@@ -3,7 +3,7 @@ import bpy
 import sys
 import time
 import mathutils
-from . import utils
+from utils import *
 
 if 1 == 1:
 
@@ -145,7 +145,7 @@ def move_marker(testing=False):
         if v.select:
             break
 
-    if v.select == False:
+    if not v.select:
         return False
 
     if v == props["last_vertex"]:
@@ -285,7 +285,7 @@ def get_actor(object):
     OBJ = object
     if isinstance(object, str):
         OBJ = bpy.data.objects[object]
-    if utils.is_valid(OBJ) == False:
+    if not utils.is_valid(OBJ):
         print("sim::get_actor : object is not viable")
         return False
 
@@ -372,11 +372,11 @@ def build_bone(actor=None, director=None, head=None, tail=None, vertices=[]):
     conObj.name = "ONI Sim " + cname
 
     colObj = aObj.data.collections.get(props["group_base"])
-    if colObj is None:    
+    if colObj is None:
         colObj = aObj.data.collections.new(props["group_base"])
 
     group_base = props["group_base"]
-    colObj.assign(boneObj)    
+    colObj.assign(boneObj)
     boneObj.color.palette = props["theme_base"]
 
     utils.set_state(new_state)
@@ -523,7 +523,7 @@ def sync(aObj):
     if dObj is None:
         print("Can't sync, no director")
         return False
-    if utils.is_valid(dObj) == False:
+    if not utils.is_valid(dObj):
         print("Cant' sync, director is unavailable")
         return False
 
@@ -667,10 +667,10 @@ def vertex_constraint(
 
     colObj = armObj.data.collections.get(props["group_base"])
     if colObj is None:
-        colObj = armObj.data.collections.new(props["group_base"])   
-    
+        colObj = armObj.data.collections.new(props["group_base"])
+
     group_base = sim.props["group_base"]
     colObj.assign(boneObj)
-    boneObj.color.palette = props["theme_base"]    
+    boneObj.color.palette = props["theme_base"]
 
     return True

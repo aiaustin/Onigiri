@@ -75,7 +75,7 @@ def animesh_init():
 
         return
 
-    elif ani.animesh_mapper_enabled == False:
+    elif not ani.animesh_mapper_enabled:
 
         print(
             "animesh_init reports: from disabled to enabled -> adding map data to animesh rigs"
@@ -110,7 +110,7 @@ def animesh_init():
 
         print("animesh_init reports: assuming safe mode", bpy.context.mode)
 
-        if ani.animesh_bone_map == False:
+        if not ani.animesh_bone_map:
 
             remove_bone_groups(ani.animesh_source_name)
             for arm in ani["targets"]:
@@ -127,7 +127,7 @@ def animesh_init():
         else:
             print("animesh_init reports: bone_map exists, skipping definition")
 
-        if ani.animesh_data_map == False:
+        if not ani.animesh_data_map:
 
             obj[ani.animesh_source_name_backup]["bone_data"] = dict()
             for arm in ani["targets"]:
@@ -436,7 +436,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
 
         if (
             ani.animesh_source_name == "" or ani.animesh_target_name == ""
-        ) and ani.animesh_mapper_enabled == False:
+        ) and not ani.animesh_mapper_enabled:
             if ani.get("targets_waiting") is not None:
                 if len(ani["targets_waiting"]) > 0:
                     print("Template targets still waiting to be processed")
@@ -488,7 +488,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
             return
         ani = bpy.context.window_manager.oni_animesh
         obj = bpy.data.objects
-        if ani.animesh_mapper_enabled == False:
+        if not ani.animesh_mapper_enabled:
 
             oni_settings["terminate"] = True
             ani.animesh_suspend = False
@@ -511,7 +511,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
             ]
             print("mapper suspended")
             return
-        elif ani.animesh_suspend == False:
+        elif not ani.animesh_suspend:
             print("mapper resumed")
             arms = ani["targets"].keys()
             set_select_enabled(select="disabled", armatures=arms)
@@ -548,7 +548,7 @@ class OnigiriAnimeshProps(bpy.types.PropertyGroup):
         error = mapper.restore_rig(
             armature=ani.animesh_source_name_backup, type="edit", roll=True
         )
-        if error == False:
+        if not error:
 
             print(
                 "update_animesh_reset reports: restore_rig returned False, that's not good"
@@ -1043,7 +1043,7 @@ class OnigiriAnimeshSave(bpy.types.Operator, ExportHelper):
         obj = bpy.data.objects
         ani = bpy.context.window_manager.oni_animesh
 
-        if ani.animesh_mapper_enabled == False:
+        if not ani.animesh_mapper_enabled:
             return False
 
         if len(obj[ani.animesh_source_name]["bone_map"]) == 0:
@@ -1106,7 +1106,7 @@ class OnigiriAnimeshApply(bpy.types.Operator):
         if ani.animesh_suspend:
             return False
 
-        if ani.animesh_mapper_enabled == False:
+        if not ani.animesh_mapper_enabled:
             return False
 
         if "targets" not in ani:
@@ -1138,7 +1138,7 @@ class OnigiriAnimeshApply(bpy.types.Operator):
 
         error = snap_to(source=ani.animesh_source_name)
 
-        if error == False:
+        if not error:
             print("snap_to reports: returned False, not good")
 
         bpy.ops.object.mode_set(mode="POSE")
@@ -1159,7 +1159,7 @@ class OnigiriAnimeshAddTarget(bpy.types.Operator):
     def poll(cls, context):
         obj = bpy.data.objects
         ani = bpy.context.window_manager.oni_animesh
-        if ani.animesh_suspend != True:
+        if not ani.animesh_suspend:
             return False
         if ani.get("targets") is None:
             return False
@@ -1210,7 +1210,7 @@ class OnigiriAnimeshStore(bpy.types.Operator):
         if ani.animesh_suspend:
             return False
 
-        if ani.animesh_mapper_enabled == False:
+        if not ani.animesh_mapper_enabled:
             return False
 
         if "targets" not in ani:
@@ -1272,7 +1272,7 @@ class OnigiriAnimeshRestore(bpy.types.Operator):
         if ani.animesh_suspend:
             return False
 
-        if ani.animesh_mapper_enabled == False:
+        if not ani.animesh_mapper_enabled:
             return False
 
         if "targets" not in ani:
@@ -1299,7 +1299,7 @@ class OnigiriAnimeshRestore(bpy.types.Operator):
         return_value = mapper.restore_rig(
             armature=ani.animesh_source_name_backup, type="edit", data="all", roll=True
         )
-        if return_value == False:
+        if not return_value:
             print("OnigiriAnimeshRestore reports: restore_rig returned False")
 
         arms = ani["targets"].keys()
@@ -1462,7 +1462,7 @@ class OnigiriAnimeshRemoveBone(bpy.types.Operator):
         error = restore_bone(
             armature=ani.animesh_source_name, bone=self.bone, type="edit", roll=True
         )
-        if error == False:
+        if not error:
             print("OnigiriRemoveBone reports: restore_bone returned False")
         bpy.ops.object.mode_set(mode="POSE")
 

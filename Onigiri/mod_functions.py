@@ -20,7 +20,7 @@ from .mod_flags import *
 from .mod_data import *
 from . import mod_settings
 from .mod_settings import *
-
+from . import avatar_skeleton
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 presets_path = oni_settings["paths"]["presets"]
@@ -1162,7 +1162,7 @@ def create_bone_group(armature="", group="", theme=""): ## theme is deprecated
             print("Bone group already exists for", "[" + arm + "] " + "[" + group + "] " + "- skipping add function",)
         return colObj
 
-    colObj = bpy.data.objects[arm].data.collections.new(group)    
+    colObj = bpy.data.objects[arm].data.collections.new(group)
 
     bpy.ops.object.mode_set(mode="OBJECT")
     bpy.ops.object.select_all(action="DESELECT")
@@ -1181,7 +1181,7 @@ def add_bone_to_group(armature="", bone="", group="", theme=""):
     boneObj = bpy.data.objects[armature].pose.bones[bone]
     bpy.data.objects[armature].data.collections[group].assign(boneObj)
     if theme != "":
-        boneObj.color.palette = theme    
+        boneObj.color.palette = theme
 
     bpy.ops.object.mode_set(mode="OBJECT")
     bpy.ops.object.select_all(action="DESELECT")
@@ -2025,8 +2025,6 @@ def generate_human_ref():
     arm = srcObj.name
     set_mode(arm, "edit")
 
-    from . import avatar_skeleton
-    from .avatar_skeleton import avatar_skeleton
 
     human_reference = {}
     for bone in avatar_skeleton:
@@ -2216,9 +2214,6 @@ def create_selected_reference_rig(arm, oni_arm, add_control_rig=False):
         )
         print("It would appear that the active object is not accessible")
         return None
-
-    from . import avatar_skeleton
-    from .avatar_skeleton import avatar_skeleton
 
     human_reference = {}
     for bone in avatar_skeleton:
@@ -3081,9 +3076,6 @@ def add_constraint(
 
 
 def get_unique_name():
-
-    import uuid
-    import time
 
     idn = str(uuid.uuid4())
     name = idn.replace("-", "")
@@ -4227,7 +4219,7 @@ def update():
 
 def save_state():
 
-    if oni_settings["save_state"] == False:
+    if not oni_settings["save_state"]:
         print("save_state reports: save_state is disabled")
         return False
 
@@ -4266,7 +4258,7 @@ def save_state():
 
 def restore_state(state):
 
-    if oni_settings["save_state"] == False:
+    if not oni_settings["save_state"]:
         print("save_state reports: save_state is disabled so restore_state is as well")
         return False
 

@@ -61,7 +61,7 @@ def main(
             if len(fc.keyframe_points) > 0:
                 has_keys = True
                 break
-    if has_keys == False:
+    if not has_keys:
         t_frame_end = t_frame_start
 
     bpy.context.scene.frame_set(frame_current)
@@ -87,7 +87,7 @@ def main(
             return False
         s_frame_start, s_frame_end = int(spread_start), int(spread_end)
 
-    elif spread_enabled == False and s_has_action == False:
+    elif not spread_enabled and not s_has_action:
         print(
             "There's no sample range to acquire, motion is disabled, spread is disabled and there is no animation on",
             sarmObj.name,
@@ -101,7 +101,7 @@ def main(
 
             if len(s_frame_data) == 0:
                 print("No keys on the source object")
-                if spread_enabled == False:
+                if not spread_enabled:
                     print(
                         "No motion keys, set a spread to capture an empty time line if you are using controllers."
                     )

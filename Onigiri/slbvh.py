@@ -167,7 +167,7 @@ def sl_bvh_export(
     else:
         print("nothing to alter for now, parser is turned off")
 
-    if buffer != True:
+    if not buffer:
         try:
             os.remove(bvh_temp_name)
             print("ONI BVH Cleanup...")

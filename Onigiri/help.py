@@ -1,5 +1,5 @@
 import bpy
-
+from .mod_settings import *
 
 def get_unique_name():
 

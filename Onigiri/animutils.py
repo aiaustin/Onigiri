@@ -9,6 +9,7 @@ import traceback
 from . import utils
 from . import rigutils
 from . import mod_data
+from .globals import *
 
 from .presets import volumes
 from .presets import skeleton as skel
@@ -55,7 +56,7 @@ def export_sl_anim(armature=None, path=None):
     anim = bpy.context.scene.oni_anim
     oni_anim = anim
 
-    if oni.export_sl_limitations_check_disabled != True:
+    if not oni.export_sl_limitations_check_disabled:
         if oni.animation_time > 60:
             print("Skipping SL max time check")
 
@@ -4112,7 +4113,7 @@ def apply_transforms(arm, report=False):
     for o in bpy.context.selected_objects:
         o.select_set(False)
     mesh = rigutils.get_associated_mesh(tarmObj)
-    if mesh != False:
+    if mesh:
         for o in mesh:
             o.select_set(True)
         utils.activate(o)
@@ -4506,11 +4507,11 @@ def write_lsl(source=None, target=None, actions=None, prefix="Anim", fps=24):
     time_string = ""
     last = ", "
     count = 0
-    for time in time_list:
+    for t in time_list:
         count += 1
         if count == len(time_list):
             last = ""
-        time_string += '"' + time + '"' + last
+        time_string += '"' + t + '"' + last
 
     print("anim_string:", anim_string)
     print("time_list:", time_string)

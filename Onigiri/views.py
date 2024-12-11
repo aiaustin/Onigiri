@@ -130,7 +130,6 @@ bpy.app.handlers.depsgraph_update_post.append(viewable_layers)
 
 def get_unique_name():
 
-    import uuid
     import time
 
     idn = str(uuid.uuid4())

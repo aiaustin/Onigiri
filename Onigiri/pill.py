@@ -1,6 +1,6 @@
 import bpy
 import math
-import mathutils
+from mathutils import *
 from .presets import skeleton as skel
 from .presets import avatar_skeleton as skel_old
 from .presets import volumes
@@ -189,14 +189,6 @@ def eulerRotate(x, y, z, rot_order):
     ).toEuler()
 
 
-def matrix_from_list(l):
-    M = mathutils.Matrix()
-    for c in range(4):
-        for r in range(4):
-            M[c][r] = l[r + (c * 4)]
-    return M
-
-
 def matrix_from_vectors(v):
     matL = list()
     for fl in v:
@@ -325,7 +317,7 @@ def UpdateObjectTransform(ob):
 
 
 def ident(tmat):
-    if type(tmat[0]) == type(str()):
+    if type(tmat[0]) is type(str()):
         one = "1"
     else:
         one = 1.0

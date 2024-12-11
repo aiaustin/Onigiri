@@ -27795,15 +27795,6 @@ class OnigiriShapeShifterFreezeRig(bpy.types.Operator):
         o = bpy.context.selected_objects[0]
         if o.type != "ARMATURE":
             return False
-        return True
-
-    @classmethod
-    def poll(cls, context):
-        if len(bpy.context.selected_objects) != 1:
-            return False
-        o = bpy.context.selected_objects[0]
-        if o.type != "ARMATURE":
-            return False
         if o.get("oni_glue") is not None:
             return False
 
@@ -38549,19 +38540,19 @@ class OnigiriActionFillScript(bpy.types.Operator, ExportHelper):
         anim_string = ""
         last = ", "
         count = 0
-        for anim in anim_list:
+        for a in anim_list:
             count += 1
             if count == len(anim_list):
                 last = ""
-            anim_string += '"' + anim + '"' + last
+            anim_string += '"' + a + '"' + last
         time_string = ""
         last = ", "
         count = 0
-        for time in time_list:
+        for t in time_list:
             count += 1
             if count == len(time_list):
                 last = ""
-            time_string += '"' + time + '"' + last
+            time_string += '"' + t + '"' + last
 
         print("anim_string:", anim_string)
         print("time_list:", time_string)
@@ -38916,22 +38907,6 @@ class OnigiriPoseLibraryAdd(bpy.types.Operator):
 
         print("Added pose", name, "to your library")
 
-        return {"FINISHED"}
-
-
-class OnigiriPoseLibraryDelete(bpy.types.Operator):
-    """Delete this pose from your library"""
-
-    name: bpy.props.StringProperty(default="")
-
-    bl_idname = "onigiri.pose_library_delete"
-    bl_label = "Delete Pose"
-
-    def execute(self, context):
-        oni_pose = bpy.context.scene.oni_pose
-        del oni_pose["poses"][self.name]
-        print("Deleted", self.name, "from your library")
-        self.name = ""
         return {"FINISHED"}
 
 
@@ -40497,7 +40472,7 @@ class OnigiriMotionMixerAddBones(bpy.types.Operator):
             if rig in oni_mixer["maps"]["sources"]:
                 oni_mixer["maps"]["sources"][rig].pop(bone, "")
 
-        rig_data = {}
+        #rig_data = {}
         for boneObj in bones:
             bone = boneObj.name
             rigObj = boneObj.id_data
@@ -47612,9 +47587,9 @@ class OnigiriRefitDuplicate(bpy.types.Operator):
                 target_arm = get_mesh_armature(mesh=target)
 
                 if (
-                    source_arm_mod != False
-                    and target_arm_mod != False
-                    and target_arm != False
+                    source_arm_mod
+                    and target_arm_mod
+                    and target_arm
                 ):
 
                     vgroups = obj[avatar_new].vertex_groups.keys()
@@ -52602,32 +52577,6 @@ class OnigiriMotionHideTarget(bpy.types.Operator):
 
         for boneObj in outRig.data.bones:
             boneObj.hide = True
-
-        return {"FINISHED"}
-
-
-class OnigiriMotionMapSelect(bpy.types.Operator):
-    """You can select the bone indicated here by clicking this button"""
-
-    bl_idname = "onigiri.motion_map_select"
-    bl_label = "Select bones"
-
-    in_bone: bpy.props.StringProperty(default="")
-    out_bone: bpy.props.StringProperty(default="")
-
-    def execute(self, context):
-        inRig = bpy.context.selected_objects[0]
-
-        if inRig.get("oni_onemap_rename") is None:
-            inRig["oni_onemap_rename"] = {}
-
-        rename_map = inRig["oni_onemap_rename"]
-        outRig = inRig["oni_motion_actor"]
-
-        if self.in_bone != "":
-            inRig.data.bones[self.in_bone].select = True
-        if self.out_bone != "":
-            outRig.data.bones[self.out_bone].select = True
 
         return {"FINISHED"}
 

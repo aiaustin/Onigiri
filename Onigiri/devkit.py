@@ -766,7 +766,7 @@ def export_dae(matrices=None, joint="bone_data", file=None, real=None):
     tree.write(file_out, xml_declaration=True, encoding="utf-8", method="xml")
 
     try:
-        if testing == False:
+        if not testing:
             os.remove(file_path)
             print("ONI dae cleanup")
         else:
@@ -1024,7 +1024,7 @@ def save_default_presets(path):
         oni_devkit[prop] = presets_backup[prop]
 
     f = open(path, "w", encoding="UTF8")
-    f.write(formatted)
+    f.write(formatted) ##* TODO
     f.close()
     return True
 
@@ -1493,7 +1493,7 @@ def reshape(
             matrices[bone] = mat
 
     mesh = rigutils.get_associated_mesh(armObj, report=True)
-    if mesh == False:
+    if not mesh:
         print(
             "devkit::reshape reports : the function rigutils::get_associated_mesh returned False"
         )

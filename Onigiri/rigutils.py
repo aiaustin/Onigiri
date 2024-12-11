@@ -245,7 +245,7 @@ def build_devkit_rig(target="female_neutral", connect=True):
     obj[arm].data.collections.new(mod_data.rig_group_vbones)
     obj[arm].data.collections.new(mod_data.rig_group_abones)
     obj[arm].data.collections.new(mod_data.rig_group_nbones)
-    
+
     bpy.context.view_layer.objects.active = obj[arm]
     for bone in skel.avatar_skeleton:
         if skel.avatar_skeleton[bone]["type"] == "bone":
@@ -693,7 +693,7 @@ def update_frame(frame=None):
     if frame is None:
         print("update_frame reports: no frame")
         return False
-    bpy.context.scene.frame_set(last_start)
+    bpy.context.scene.frame_set(frame)
     return True
 
 
@@ -908,7 +908,7 @@ def save_rig(armature="", force=False):
     armObj = bpy.data.objects[armature]
 
     if armObj.get("rig_data") is not None:
-        if force == False:
+        if not force:
             print("rig_data exists already, use (force) to overwrite")
             return False
         else:
@@ -1116,7 +1116,7 @@ def rebind(arm, keep_animation=False, report=False):
 
     frame_start, frame_end = animutils.get_frame_range(armObj, start=False)
     mesh_list = get_associated_mesh(armObj, report=True)
-    if mesh_list == False:
+    if not mesh_list:
         if report:
             print(
                 "rigs::rebind reports : get_associated_mesh returned a False, no mesh found"
@@ -1132,7 +1132,7 @@ def rebind(arm, keep_animation=False, report=False):
         meshObj.select_set(True)
 
         is_selected = meshObj.select_get()
-        if is_selected == False:
+        if not is_selected:
             select_error.append(meshObj)
             continue
 
@@ -1171,7 +1171,7 @@ def rebind(arm, keep_animation=False, report=False):
                     txt = traceback.format_exc()
                     if report:
                         print(txt)
-                        if meshObj.select_get() == False:
+                        if not meshObj.select_get():
                             print(
                                 "rigs::rebind reports : An important object could not be selected:",
                                 meshObj.name,
@@ -1752,12 +1752,12 @@ def attach_slave_rig(
         o.select_set(False)
 
     slaveObj = create_rig(target="neutral")
-    if slaveObj == False:
+    if not slaveObj:
         print("create_rig() failed")
         return False
     slave = slaveObj.name
     result = convert_rig_to_class(armature=slave, rig_class=rig_class)
-    if result == False:
+    if not result:
         print("convert_rig_class_to() failed")
         return False
 
@@ -1889,7 +1889,7 @@ def attach_proxy_rig(armature=None, clean=False):
 
     bpy.ops.object.mode_set(mode="POSE")
     for b in obj[glue].pose.bones:
-        
+
         for c in b.constraints:
             b.constraints.remove(c)
 
@@ -1901,10 +1901,10 @@ def attach_proxy_rig(armature=None, clean=False):
     #    glueObj.data.collections.remove(g)
 
     glueGroup = glueObj.data.collections.new("Glue")
-    glueObj.data.collections.move(glueGroup.index, 0)    
+    glueObj.data.collections.move(glueGroup.index, 0)
 
-    for boneObj in glueObj.data.bones:        
-        glueGroup.assign(boneObj)        
+    for boneObj in glueObj.data.bones:
+        glueGroup.assign(boneObj)
         boneObj.color.palette =  "THEME07"
 
     bpy.ops.object.mode_set(mode="OBJECT")
@@ -1983,7 +1983,7 @@ def clean_controllers(armature=None, all=False):
                 t = hasattr(constObj, "target")
                 st = hasattr(constObj, "subtarget")
 
-                if t == False:
+                if not t:
                     continue
 
                 targetObj = getattr(constObj, "target")
@@ -2104,7 +2104,7 @@ def build_sl_rig(rig_class="pos", store=True, rotate=False):
         bpy.ops.object.transform_apply(rotation=True, location=False, scale=False)
 
     bpy.ops.object.mode_set(mode="POSE")
-    
+
     obj[arm].data.collections.new(mod_data.rig_group_mbones) #mod_data.rig_group_mtheme
     obj[arm].data.collections.new(mod_data.rig_group_vbones) #mod_data.rig_group_vtheme
 
@@ -2113,10 +2113,10 @@ def build_sl_rig(rig_class="pos", store=True, rotate=False):
         if skel.avatar_skeleton[bone]["type"] == "bone":
             obj[arm].data.collections[mod_data.rig_group_mbones].assign(bone)
             bone.color.palette = mod_data.rig_group_mtheme
-        else:            
+        else:
             obj[arm].data.collections[mod_data.rig_group_vbones].assign(bone)
             bone.color.palette = mod_data.rig_group_vtheme
-        
+
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
@@ -2265,7 +2265,7 @@ def build_rig(rig_class="pos", rotate=False, connect=False):
         bpy.ops.object.transform_apply(rotation=True, location=False, scale=False)
 
     bpy.ops.object.mode_set(mode="POSE")
-    
+
     allBones = obj[arm].data.collections.new(mod_data.rig_group_all_bones)
     obj[arm].data.collections.new(mod_data.rig_group_mbones)
     obj[arm].data.collections.new(mod_data.rig_group_vbones)
@@ -2289,7 +2289,7 @@ def build_rig(rig_class="pos", rotate=False, connect=False):
             palette = mod_data.rig_group_vtheme
 
         boneObj = obj[arm].data.bones[bone]
-        allBones.assign(boneObj)        
+        allBones.assign(boneObj)
         obj[arm].data.collections[group].assign(boneObj)
         boneObj.color.palette =  palette
 
@@ -2824,12 +2824,12 @@ def freeze(armature=None, bones=[], transforms=True, influence=1):
 
     for g in obj[glue].data.collections: ## maybe crash
         obj[glue].data.collections.remove(g)
-    
+
     glueCollection = glueObj.data.collections.new("Glue") # "THEME07"
 
     for boneObj in glueObj.data.bones:
         glueCollection.assign(boneObj)
-        boneObj.color.palette = "THEME07"        
+        boneObj.color.palette = "THEME07"
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
@@ -2988,7 +2988,7 @@ def get_bone_data(
     if 1 == 0:
         this_mode = bpy.context.mode
         if this_mode.startswith("EDIT"):
-            old_mode == "EDIT"
+            old_mode = "EDIT"
         else:
             old_mode = this_mode
         if bpy.context.active_object is not None:
@@ -3353,7 +3353,7 @@ def match_bone_orientation(inRig=None, outRig=None, apply=False):
             conObj.influence = 1
             conObj.name = "TEMP " + cname
 
-    if apply == False:
+    if not apply:
 
         bpy.ops.object.mode_set(mode="EDIT")
         for boneObj in outRig.data.edit_bones:
@@ -3371,7 +3371,7 @@ def match_bone_orientation(inRig=None, outRig=None, apply=False):
         for tbone in rename_map:
             sbone = rename_map[tbone]
             if tbone in outRig.data.bones and sbone in inRig.data.bones:
-                outrig.data.bones[tbone].matrix = new_matrices[tbone]
+                outRig.data.bones[tbone].matrix = new_matrices[tbone]
 
         bpy.ops.object.mode_set(mode="EDIT")
         for boneObj in outRig.data.edit_bones:
@@ -3429,7 +3429,7 @@ def freeze_state(arm, state="start", report=False):
 
     utils.make_single(armObj)
     mesh_list = get_associated_mesh(armObj, report=True)
-    if mesh_list != False:
+    if mesh_list:
         for meshObj in mesh_list:
             utils.make_single(meshObj)
     else:
@@ -3461,7 +3461,7 @@ def align_bones(source=None, target=None, bone=None, all=True):
     if isinstance(tarmObj, str):
         tarmObj = bpy.data.objects[target]
     if bone is not None:
-        if isinstance(boneObj, str) == False:
+        if not isinstance(boneObj, str):
             bone = boneObj.name
 
     def align_bone_x_axis(edit_bone, new_x_axis):
@@ -3517,9 +3517,9 @@ def align_bones(source=None, target=None, bone=None, all=True):
 
 
 def get_matrix_basis(armature=None, bone=None):
-    if isinstance(armature, str) == False:
+    if not isinstance(armature, str):
         armature = armature.name
-    if isinstance(bone, str) == False:
+    if not isinstance(bone, str):
         bone = bone.name
 
     armObj = bpy.data.objects[armature]
@@ -3546,11 +3546,11 @@ def get_matrix_basis(armature=None, bone=None):
 
 
 def get_matrix_offset(source=None, target=None, bone=None):
-    if isinstance(source, str) == False:
+    if not isinstance(source, str):
         source = source.name
-    if isinstance(target, str) == False:
+    if not isinstance(target, str):
         target = target.name
-    if isinstance(bone, str) == False:
+    if not isinstance(bone, str):
         bone = bone.name
     sarmObj = bpy.data.objects[source]
     tarmObj = bpy.data.objects[target]
@@ -3676,7 +3676,7 @@ def make_complete(
     print("Rig bone count:", len(armObj.data.bones))
 
     armObj.select_set(True)
-    if armObj.select_get() == False:
+    if not armObj.select_get():
         print("The associated armature couldn't be selected")
         popup("The associated armature could not be selected", "Error", "ERROR")
         return False
@@ -3810,7 +3810,7 @@ def make_complete(
 
         if bone not in missing_bones:
 
-            if match == False:
+            if not match:
                 continue
         boneObj.head = newObj.data.bones[bone].head_local.copy()
         boneObj.tail = newObj.data.bones[bone].tail_local.copy()
@@ -3991,7 +3991,7 @@ def cycle_rig(armature=None, frame_start=0, frame_end=0):
         root_transform_only=False,
     )
 
-    if os.path.isfile(file_path) == False:
+    if not os.path.isfile(file_path):
         print("Attempt to write a temporary file failed:", file_path)
         return False
 
@@ -4068,7 +4068,7 @@ def cycle_rig(armature=None, frame_start=0, frame_end=0):
 
 def map_convert(armObj):
     if isinstance(armObj, str):
-        armObj = bpy.data.objects[armature]
+        armObj = bpy.data.objects[armObj]
     if armObj.get("oni_onemap_rename") is None:
         print("No map on the armature")
         return False
@@ -4131,11 +4131,11 @@ def set_deform_view(arm, action=None):
     if action == "hide":
         print("Hide Non-Deformable")
         for boneObj in armObj.data.bones:
-            if boneObj.use_deform == False:
+            if not boneObj.use_deform:
                 boneObj.hide = True
 
         mesh = get_associated_mesh(armObj)
-        if mesh == False:
+        if not mesh:
             print(
                 "rigutils::set_deform_view : reports that (get_associated_mesh) failed, why am I calling this?"
             )

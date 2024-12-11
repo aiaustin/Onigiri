@@ -5,7 +5,7 @@ import sys
 # import time
 import mathutils
 
-from . import utils
+import utils
 
 # from . import mod_settings
 # from .mod_settings import oni_settings
@@ -169,7 +169,7 @@ def set_rig(armObj=None):
         if props["this_rig"] is None:
             return
         armObj = props["this_rig"]
-        if utils.is_valid(armObj) == False:
+        if not utils.is_valid(armObj):
             return
     for boneObj in armObj.pose.bones:
         dBone = boneObj.bone
@@ -205,7 +205,7 @@ def restore_rig(armObj=None):
         if props["last_rig"] is None:
             return
         armObj = props["last_rig"]
-        if utils.is_valid(armObj) == False:
+        if not utils.is_valid(armObj):
             return
     # Sanity check, prolly never happen
     if armObj.type != "ARMATURE":

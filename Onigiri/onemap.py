@@ -137,7 +137,7 @@ def update_map(input=None, output=None, rename=None, reskin=None, controllers=Tr
                 if inRig.animation_data.action is not None:
                     has_action = True
                     frame_start = inRig.animation_data.action.frame_range[0]
-            if has_action == False:
+            if not has_action:
                 frame_start = bpy.context.scene.frame_start
             bpy.context.scene.frame_set(frame_start)
 
@@ -281,7 +281,7 @@ def ready(input=None, output=None):
     bpy.context.view_layer.objects.active = outRig
     bpy.ops.object.mode_set(mode="POSE")
 
-    for group in output_groups:        
+    for group in output_groups:
         outRig.data.collections.new(group)
         #outRig.data.collections.active.color_set = output_groups[group]
 
@@ -290,7 +290,7 @@ def ready(input=None, output=None):
     bpy.context.view_layer.objects.active = inRig
 
     bpy.ops.object.mode_set(mode="POSE")
-    for group in input_groups:        
+    for group in input_groups:
         inRig.data.collections.new(group)
         #inRig.data.collections.active.color_set = input_groups[group]
 
@@ -514,7 +514,7 @@ def attach_proxy(inRig=None, outRig=None):
         if inRig.animation_data.action is not None:
             has_action = True
             frame_start = inRig.animation_data.action.frame_range[0]
-    if has_action == False:
+    if not has_action:
         frame_start = bpy.context.scene.frame_start
     bpy.context.scene.frame_set(frame_start)
 
@@ -527,7 +527,7 @@ def attach_proxy(inRig=None, outRig=None):
                     boneObj.constraints.remove(C)
 
     duplicate = utils.duplicate(objects=outRig)
-    if duplicate == False:
+    if not duplicate:
         print("Something went wrong when attempting to copy the rig")
         return False
     proxyRig = duplicate[0]
