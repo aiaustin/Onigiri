@@ -601,8 +601,8 @@ def load_icons():
     custom_icons.load("unknown", os.path.join(icons_dir, "unknown.png"), "IMAGE")
     custom_icons.load("ragdoll", os.path.join(icons_dir, "ragdoll.png"), "IMAGE")
 
-    
-    icon_items = bpy.types.UILayout.bl_rna.functions["prop"].parameters["icon"].enum_items.items()    
+
+    icon_items = bpy.types.UILayout.bl_rna.functions["prop"].parameters["icon"].enum_items.items()
     builtin_icons = {tup[1].identifier : tup[1].value for tup in icon_items}
 
     map_icons = {
@@ -631,19 +631,23 @@ def load_icons():
         "last": "TRIA_RIGHT_BAR",
         "bone": "BONE_DATA",
         "bones": "GROUP_BONE",
-        "delete": "TRASH"
+        "delete": "TRASH",
+        "apply": "NLA_PUSHDOWN",
+        "tag": "BOOKMARKS",
+        "lock": "DECORATE_LOCKED",
+        "unlock": "DECORATE_UNLOCKED"
     }
 
 def unload_icons():
     global custom_icons
-    bpy.utils.previews.remove(custom_icons)    
+    bpy.utils.previews.remove(custom_icons)
 
 ## https://blender.stackexchange.com/questions/224015/is-there-a-way-to-get-icon-value-for-the-uilist-using-icon-name-from-enum
 
 def get_icon_id(name):
     global custom_icons
     global builtin_icons
-    icon_name = map_icons.get(name)    
+    icon_name = map_icons.get(name)
     if icon_name:
         return builtin_icons[icon_name]
     else:
@@ -651,7 +655,7 @@ def get_icon_id(name):
         if icon:
             return icon.icon_id
         else:
-            return builtin_icons[name]    
+            return builtin_icons[name]
 
 
 def get_panel_icon_id(opened):

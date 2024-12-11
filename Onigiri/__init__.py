@@ -56879,7 +56879,7 @@ class OnigiriPanelRigTools(bpy.types.Panel):
         row.operator(
             "onigiri.clean_controllers",
             text="Remove Unusable Controllers",
-            icon_value = get_icon_id("cut"),
+            icon_value = get_icon_id("clean"),
         )
 
         row = col.row(align=True)
@@ -56937,11 +56937,11 @@ class OnigiriPanelRigTools(bpy.types.Panel):
             if selected[0].get("oni_bones_locked"):
                 use_connect_text = "Unlock Bones"
                 use_connect_action = "unlock"
-                use_connect_icon = "key_green"
+                use_connect_icon = "lock"
             elif not selected[0].get("oni_bones_locked"):
                 use_connect_text = "Lock Bones"
                 use_connect_action = "lock"
-                use_connect_icon = "key_red"
+                use_connect_icon = "unlock"
 
         row.operator(
             "onigiri.rigs_use_connect",
