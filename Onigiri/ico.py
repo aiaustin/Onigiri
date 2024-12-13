@@ -608,6 +608,8 @@ def load_icons():
     builtin_icons = {tup[1].identifier : tup[1].value for tup in icon_items}
 
     map_icons = {
+        "checked": "CHECKBOX_HLT",
+        "unchecked": "CHECKBOX_DEHLT",
         "panel_opened": "TRIA_DOWN",
         "panel_closed": "TRIA_RIGHT",
         "star_green": "ARMATURE_DATA",
@@ -652,7 +654,12 @@ def load_icons():
         "dot_off": "RADIOBUT_OFF",
         "point": "DOT",
         "x": "X",
+        #"data": "ASSET_MANAGER",
+        "loop": "DECORATE_OVERRIDE",
         "pin": "PINNED",
+        "alert": "ERROR",
+        "error": "ERROR",
+        "info": "INFO",
         "pin_off": "UNPINNED",
     }
 
