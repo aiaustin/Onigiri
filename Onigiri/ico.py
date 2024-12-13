@@ -627,8 +627,8 @@ def load_icons():
         "reset": "LOOP_BACK",
         "folder": "FILE_FOLDER",
         "x_red": "CANCEL",
-        "load": "EXPORT",
-        "save": "IMPORT",
+        "load": "IMPORT",
+        "save": "EXPORT",
         "first": "TRIA_LEFT_BAR",
         "last": "TRIA_RIGHT_BAR",
         "bone": "BONE_DATA",
@@ -645,9 +645,15 @@ def load_icons():
         "reverse": "UV_SYNC_SELECT",
         "location": "TRACKER",
         "rotation": "ORIENTATION_GIMBAL", #FORCE_MAGNETIC
-        "scale": "AREA_SWAP",
+        "scale": "AREA_SWAP", #FULLSCREEN_EXIT
         "selection": "SELECT_SET",
         "keys": "KEYINGSET",
+        "dot": "RADIOBUT_ON",
+        "dot_off": "RADIOBUT_OFF",
+        "point": "DOT",
+        "x": "X",
+        "pin": "PINNED",
+        "pin_off": "UNPINNED",
     }
 
 def unload_icons():

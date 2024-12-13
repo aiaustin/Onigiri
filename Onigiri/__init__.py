@@ -2252,7 +2252,7 @@ class OnigiriCharacterConverterPanel(bpy.types.Panel):
             "copy",
             toggle=True,
             text="Make Copy",
-            icon_value = get_prop_icon_id("copy"),
+            icon_value = get_icon_id("copy"),
         )
         row = col.row(align=True)
         row.prop(
@@ -47864,19 +47864,15 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                     toggle=True,
                     text="Use Attach Points"
                 )
+
                 unsupported_enabled_icon = "blank"
-                if (
-                    oni_devkit.process_attachment_bones
-                    and oni_devkit.process_unsupported_bones
-                ):
+                if (oni_devkit.process_attachment_bones and oni_devkit.process_unsupported_bones):
                     unsupported_enabled_icon = "dot_green"
-                elif (
-                    oni_devkit.process_attachment_bones
-                    and not oni_devkit.process_unsupported_bones
-                ):
+                elif (oni_devkit.process_attachment_bones and not oni_devkit.process_unsupported_bones):
                     unsupported_enabled_icon = "dot_yellow"
                 elif not oni_devkit.process_attachment_bones:
                     unsupported_enabled_icon = "dot_red"
+
                 row.prop(
                     oni_devkit,
                     "process_unsupported_bones",
