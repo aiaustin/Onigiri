@@ -2227,7 +2227,7 @@ class OnigiriCharacterConverterPanel(bpy.types.Panel):
             icon_value = get_icon_id("delete"),
         )
         row = col.row(align=True)
-        oni_onemap_rename_text = " "
+        oni_onemap_rename_text = "[No Map]"
         oni_onemap_rename_icon = "blank"
         selected = bpy.context.selected_objects
         arms = []
@@ -2237,13 +2237,14 @@ class OnigiriCharacterConverterPanel(bpy.types.Panel):
         if len(arms) == 1:
             if arms[0].get("oni_onemap_rename") is not None:
                 oni_onemap_rename_text = "Armature contains a map!"
-                oni_onemap_rename_icon = "bone_black_red"
+                oni_onemap_rename_icon = "bones"
         row.prop(
             oni_cc,
             "blank",
             text=oni_onemap_rename_text,
-            toggle=use_prop_icons,
-            icon_value = get_prop_icon_id(oni_onemap_rename_icon),
+            toggle=True,
+            emboss=False,
+            icon_value = get_icon_id(oni_onemap_rename_icon),
         )
         col = box.column(align=True)
         row = col.row(align=True)
@@ -2298,7 +2299,7 @@ class OnigiriCharacterConverterPanel(bpy.types.Panel):
         row.operator(
             "onigiri.character_converter",
             text="Convert",
-            icon_value = get_icon_id("character_converter"),
+            icon_value = get_icon_id("convert"),
         )
 
         layout = self.layout
@@ -9959,6 +9960,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 oni_snap,
                 "snap_blank",
                 toggle=True,
+                emboss=False,
                 text="Last Loaded: " + snap_template_name
             )
 
@@ -10051,7 +10053,8 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             row.prop(
                 oni_snap,
                 "snap_blank",
-                toggle=use_prop_icons,
+                toggle=True,
+                emboss=False,
                 text="Distance",
             )
             row.prop(
@@ -10076,16 +10079,18 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             row.prop(
                 oni_snap,
                 "snap_blank",
-                toggle=use_prop_icons,
+                toggle=True,
+                emboss=False,
                 text="Director: " + inRig.name,
-                icon_value = get_prop_icon_id("director"),
+                icon_value = get_icon_id("director"),
             )
             row.prop(
                 oni_snap,
                 "snap_blank",
-                toggle=use_prop_icons,
+                toggle=True,
+                emboss=False,
                 text="Actor: " + outRig.name,
-                icon_value = get_prop_icon_id("running_guy"),
+                icon_value = get_icon_id("running_guy"),
             )
 
             director_bone = ""
@@ -10121,16 +10126,18 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             row.prop(
                 oni_snap,
                 "snap_blank",
-                toggle=use_prop_icons,
+                toggle=True,
+                emboss=False,
                 text=dbone_mapped,
-                icon_value = get_prop_icon_id("bone_black"),
+                icon_value = get_icon_id("bone_black"),
             )
             row.prop(
                 oni_snap,
                 "snap_blank",
-                toggle=use_prop_icons,
+                toggle=True,
+                emboss=False,
                 text=abone_mapped,
-                icon_value = get_prop_icon_id("bone_black"),
+                icon_value = get_icon_id("bone_black"),
             )
 
             if 1 == 0:
@@ -10220,12 +10227,16 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     oni_snap,
                     "snap_blank",
                     text="Side A: " + snap.props["director_side_a"],
+                    toggle=True,
+                    emboss=False,
                     icon_value = get_icon_id("bone_red"),
                 )
                 row.prop(
                     oni_snap,
                     "snap_blank",
                     text="Side A: " + snap.props["actor_side_a"],
+                    toggle=True,
+                    emboss=False,
                     icon_value = get_icon_id("bone_blue"),
                 )
                 row = col.row(align=True)
@@ -10233,12 +10244,16 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                     oni_snap,
                     "snap_blank",
                     text="Side B: " + snap.props["director_side_b"],
+                    toggle=True,
+                    emboss=False,
                     icon_value = get_icon_id("bone_red"),
                 )
                 row.prop(
                     oni_snap,
                     "snap_blank",
                     text="Side B: " + snap.props["actor_side_b"],
+                    toggle=True,
+                    emboss=False,
                     icon_value = get_icon_id("bone_blue"),
                 )
 
@@ -10256,15 +10271,17 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 oni_snap,
                 "snap_blank",
                 text=director_bone,
-                toggle=use_prop_icons,
-                icon_value = get_prop_icon_id("bone_blue"),
+                toggle=True,
+                emboss=False,
+                icon_value = get_icon_id("bone_blue"),
             )
             row.prop(
                 oni_snap,
                 "snap_blank",
                 text=actor_bone,
-                toggle=use_prop_icons,
-                icon_value = get_prop_icon_id("bone_red"),
+                toggle=True,
+                emboss=False,
+                icon_value = get_icon_id("bone_red"),
             )
 
             row = col.row(align=True)
@@ -48061,7 +48078,7 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
             icon_value = get_icon_id("x_red"),
         )
         snap_has_map_text = "No map present "
-        snap_has_map_icon = "bone_black"
+        snap_has_map_icon = "blank"
         selected = bpy.context.selected_objects
         if len(selected) > 0:
             for snap_selected in selected:
@@ -48070,22 +48087,23 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                     if snap_has_armature:
                         if snap_has_armature.get("oni_onemap_rename") is not None:
                             snap_has_map_text = "Associated rig has a map"
-                            snap_has_map_icon = "bone_black_red"
+                            snap_has_map_icon = "bones"
                             break
         row = col.row(align=True)
         row.prop(
             oni_snap,
             "snap_blank",
-            toggle=use_prop_icons,
+            toggle=True,
+            emboss=False,
             text=snap_has_map_text,
-            icon_value = get_prop_icon_id(snap_has_map_icon),
+            icon_value = get_icon_id(snap_has_map_icon),
         )
         row = col.row(align=True)
         row.prop(
             oni_snap,
             "snap_export_mapped_old",
             text="",
-            icon_value = get_icon_id("export_mesh"),
+            icon_value = get_icon_id("old"),
         )
 
         row.operator(
@@ -55507,7 +55525,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                             icon_value = get_icon_id(alib_action_range_set_icon),
                         ).action = actionObj.name
                         if oni_alib.alib_action_range_set_name == actionObj.name:
-                            row.prop(oni, "blank", text=total_time_text, toggle=True)
+                            row.prop(oni, "blank", text=total_time_text, toggle=True, emboss=False)
                             row.prop(oni_alib, "alib_action_frame_start", text="")
                             row.prop(oni_alib, "alib_action_frame_end", text="")
                             row.prop(oni_alib, "alib_action_loop_start", text="")
@@ -55518,7 +55536,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
                         else:
 
-                            row.prop(oni, "blank", text=total_time_text, toggle=use_prop_icons)
+                            row.prop(oni, "blank", text=total_time_text, toggle=True, emboss=False)
 
                             row.operator(
                                 "onigiri.alib_action_range_set",
@@ -55690,7 +55708,8 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 row.prop(
                     oni,
                     "blank",
-                    toggle=use_prop_icons,
+                    toggle=True,
+                    emboss=False,
                     text="Last Loaded: " + oni_pose.pose_library_last_loaded,
                 )
 
@@ -55737,8 +55756,9 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         oni,
                         "blank",
                         text=mixer_target_name,
-                        toggle=use_prop_icons,
-                        icon_value = get_prop_icon_id("dot_yellow"),
+                        toggle=True,
+                        emboss=False,
+                        icon_value = get_icon_id("dot_yellow"),
                     )
                 else:
                     row.prop(
@@ -55816,7 +55836,8 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         oni,
                         "blank",
                         text="Mix Mode",
-                        toggle=use_prop_icons,
+                        toggle=True,
+                        emboss=False,
                     )
                     row = col.row(align=True)
                     row.operator(
@@ -55845,13 +55866,15 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         oni,
                         "blank",
                         text="Target Space",
-                        toggle=use_prop_icons,
+                        toggle=True,
+                        emboss=False,
                     )
                     row.prop(
                         oni,
                         "blank",
                         text="Owner Space",
-                        toggle=use_prop_icons,
+                        toggle=True,
+                        emboss=False,
                     )
 
                     row = col.row(align=True)
@@ -55919,7 +55942,8 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         oni,
                         "blank",
                         text="Target Parent Inheritance",
-                        toggle=use_prop_icons,
+                        toggle=True,
+                        emboss=False,
                     )
 
                     row = col.row(align=True)
@@ -55957,7 +55981,8 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                             oni,
                             "blank",
                             text="Animation Sources",
-                            toggle=use_prop_icons,
+                            toggle=True,
+                            emboss=False,
                         )
 
                     for sourceObj in sources:
@@ -56001,6 +56026,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                                     "blank",
                                     text="",
                                     toggle=True,
+                                    emboss=False,
                                     icon_value = get_icon_id("bone_black"),
                                 )
 
@@ -56008,7 +56034,8 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                                     oni,
                                     "blank",
                                     text=bone,
-                                    toggle=use_prop_icons,
+                                    toggle=True,
+                                    emboss=False,
                                 )
 
                                 mixer_location_influence = int(
@@ -56384,8 +56411,9 @@ class OnigiriPanelRigTools(bpy.types.Panel):
 
         layout = self.layout
         box = layout.box()
+
         box.label(text="View / Select bone types:")
-        col = box.column(align=True)
+        col = box.column(align=False)
 
         is_qualified = False
 
@@ -56396,189 +56424,194 @@ class OnigiriPanelRigTools(bpy.types.Panel):
                 if o.type == "ARMATURE":
                     is_qualified = True
 
-        if 1 == 1:
 
-            MOOFEEDOODLEPOODLEMAKOODLE = onim.poll_enable_bones
-            row = col.row(align=True)
-            select_base_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_green"),
-            )
-            select_base_bones.action = "select"
-            select_base_bones.group = "base"
-            deselect_base_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_red"),
-            )
-            deselect_base_bones.action = "deselect"
-            deselect_base_bones.group = "base"
-            row.prop(
-                onim,
-                "enable_base_bones",
-                toggle=use_prop_icons,
-                text="Base"
-            )
-            select_hand_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_green"),
-            )
-            select_hand_bones.action = "select"
-            select_hand_bones.group = "hand"
-            deselect_hand_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_red"),
-            )
-            deselect_hand_bones.action = "deselect"
-            deselect_hand_bones.group = "hand"
-            row.prop(
-                onim,
-                "enable_hand_bones",
-                toggle=use_prop_icons,
-                text="Hand"
-            )
+        MOOFEEDOODLEPOODLEMAKOODLE = onim.poll_enable_bones
+        row = col.row(align=True)
+        select_base_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("checked"),
+        )
+        select_base_bones.action = "select"
+        select_base_bones.group = "base"
+        deselect_base_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("unchecked"),
+        )
+        deselect_base_bones.action = "deselect"
+        deselect_base_bones.group = "base"
+        row.prop(
+            onim,
+            "enable_base_bones",
+            toggle=use_prop_icons,
+            text="Base"
+        )
+        select_hand_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("checked"),
+        )
+        select_hand_bones.action = "select"
+        select_hand_bones.group = "hand"
+        deselect_hand_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("unchecked"),
+        )
+        deselect_hand_bones.action = "deselect"
+        deselect_hand_bones.group = "hand"
+        row.prop(
+            onim,
+            "enable_hand_bones",
+            toggle=use_prop_icons,
+            text="Hand"
+        )
 
-            row = col.row(align=True)
-            select_face_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_green"),
-            )
-            select_face_bones.action = "select"
-            select_face_bones.group = "face"
-            deselect_face_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_red"),
-            )
-            deselect_face_bones.action = "deselect"
-            deselect_face_bones.group = "face"
-            row.prop(onim, "enable_face_bones", toggle=use_prop_icons, text="Face")
-            select_tail_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_green"),
-            )
-            select_tail_bones.action = "select"
-            select_tail_bones.group = "tail"
-            deselect_tail_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_red"),
-            )
-            deselect_tail_bones.action = "deselect"
-            deselect_tail_bones.group = "tail"
-            row.prop(onim, "enable_tail_bones", toggle=use_prop_icons, text="Tail")
-            row = col.row(align=True)
-            select_wing_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_green"),
-            )
-            select_wing_bones.action = "select"
-            select_wing_bones.group = "wing"
-            deselect_wing_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_red"),
-            )
-            deselect_wing_bones.action = "deselect"
-            deselect_wing_bones.group = "wing"
-            row.prop(onim, "enable_wing_bones", toggle=use_prop_icons, text="Wing")
-            select_hind_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_green"),
-            )
-            select_hind_bones.action = "select"
-            select_hind_bones.group = "hind"
-            deselect_hind_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_red"),
-            )
-            deselect_hind_bones.action = "deselect"
-            deselect_hind_bones.group = "hind"
-            row.prop(onim, "enable_hind_bones", toggle=use_prop_icons, text="Hind")
-            row = col.row(align=True)
-            select_spine_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_green"),
-            )
-            select_spine_bones.action = "select"
-            select_spine_bones.group = "spine"
-            deselect_spine_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_red"),
-            )
-            deselect_spine_bones.action = "deselect"
-            deselect_spine_bones.group = "spine"
-            row.prop(onim, "enable_spine_bones", toggle=use_prop_icons, text="Spine")
-            select_volume_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_green"),
-            )
-            select_volume_bones.action = "select"
-            select_volume_bones.group = "volume"
-            deselect_volume_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_red"),
-            )
-            deselect_volume_bones.action = "deselect"
-            deselect_volume_bones.group = "volume"
-            row.prop(onim, "enable_volume_bones", toggle=use_prop_icons, text="Volume")
-            row = col.row(align=True)
-            select_attach_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_green"),
-            )
-            select_attach_bones.action = "select"
-            select_attach_bones.group = "attach"
-            deselect_attach_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_red"),
-            )
-            deselect_attach_bones.action = "deselect"
-            deselect_attach_bones.group = "attach"
-            row.prop(onim, "enable_attach_bones", toggle=use_prop_icons, text="Attach (1)")
+        row = col.row(align=True)
+        select_face_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("checked"),
+        )
+        select_face_bones.action = "select"
+        select_face_bones.group = "face"
+        deselect_face_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("unchecked"),
+        )
+        deselect_face_bones.action = "deselect"
+        deselect_face_bones.group = "face"
+        row.prop(onim, "enable_face_bones", toggle=use_prop_icons, text="Face")
+        select_tail_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("checked"),
+        )
+        select_tail_bones.action = "select"
+        select_tail_bones.group = "tail"
+        deselect_tail_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("unchecked"),
+        )
+        deselect_tail_bones.action = "deselect"
+        deselect_tail_bones.group = "tail"
+        row.prop(onim, "enable_tail_bones", toggle=use_prop_icons, text="Tail")
+        row = col.row(align=True)
+        select_wing_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("checked"),
+        )
+        select_wing_bones.action = "select"
+        select_wing_bones.group = "wing"
+        deselect_wing_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("unchecked"),
+        )
+        deselect_wing_bones.action = "deselect"
+        deselect_wing_bones.group = "wing"
+        row.prop(onim, "enable_wing_bones", toggle=use_prop_icons, text="Wing")
+        select_hind_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("checked"),
+        )
+        select_hind_bones.action = "select"
+        select_hind_bones.group = "hind"
+        deselect_hind_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("unchecked"),
+        )
+        deselect_hind_bones.action = "deselect"
+        deselect_hind_bones.group = "hind"
+        row.prop(onim, "enable_hind_bones", toggle=use_prop_icons, text="Hind")
+        row = col.row(align=True)
+        select_spine_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("checked"),
+        )
+        select_spine_bones.action = "select"
+        select_spine_bones.group = "spine"
+        deselect_spine_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("unchecked"),
+        )
+        deselect_spine_bones.action = "deselect"
+        deselect_spine_bones.group = "spine"
+        row.prop(onim, "enable_spine_bones", toggle=use_prop_icons, text="Spine")
+        select_volume_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("checked"),
+        )
+        select_volume_bones.action = "select"
+        select_volume_bones.group = "volume"
+        deselect_volume_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("unchecked"),
+        )
+        deselect_volume_bones.action = "deselect"
+        deselect_volume_bones.group = "volume"
+        row.prop(onim, "enable_volume_bones", toggle=use_prop_icons, text="Volume")
+        row = col.row(align=True)
+        select_attach_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("checked"),
+        )
+        select_attach_bones.action = "select"
+        select_attach_bones.group = "attach"
+        deselect_attach_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("unchecked"),
+        )
+        deselect_attach_bones.action = "deselect"
+        deselect_attach_bones.group = "attach"
+        row.prop(onim, "enable_attach_bones", toggle=use_prop_icons, text="Attach (1)")
 
-            select_attach_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_green"),
-            )
-            select_attach_bones.action = "select"
-            select_attach_bones.group = "attach"
-            deselect_attach_bones = row.operator(
-                "onigiri.select_bones",
-                text="",
-                icon_value = get_icon_id("dot_red"),
-            )
-            deselect_attach_bones.action = "deselect"
-            deselect_attach_bones.group = "attach"
-            row.prop(onim, "enable_attach2_bones", toggle=use_prop_icons, text="Attach (2)")
+        select_attach_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("checked"),
+        )
+        select_attach_bones.action = "select"
+        select_attach_bones.group = "attach"
+        deselect_attach_bones = row.operator(
+            "onigiri.select_bones",
+            text="",
+            icon_value = get_icon_id("unchecked"),
+        )
+        deselect_attach_bones.action = "deselect"
+        deselect_attach_bones.group = "attach"
+        row.prop(
+            onim,
+            "enable_attach2_bones",
+            toggle=use_prop_icons,
+            text="Attach (2)"
+        )
 
+        if 1==0: ## Unkown is not working, Invert no need for it
             row = col.row(align=True)
             select_unknown_bones = row.operator(
                 "onigiri.select_bones",
                 text="",
-                icon_value = get_icon_id("dot_green"),
+                icon_value = get_icon_id("checked"),
             )
             select_unknown_bones.action = "select"
             select_unknown_bones.group = "unknown"
             deselect_unknown_bones = row.operator(
                 "onigiri.select_bones",
                 text="",
-                icon_value = get_icon_id("dot_red"),
+                icon_value = get_icon_id("unchecked"),
             )
             deselect_unknown_bones.action = "deselect"
             deselect_unknown_bones.group = "unknown"
@@ -56586,12 +56619,14 @@ class OnigiriPanelRigTools(bpy.types.Panel):
                 onim,
                 "blank",
                 text="Unknown",
-                toggle=use_prop_icons,
+                toggle=True,
+                emboss=False,
             )
             row.prop(
                 onim,
                 "blank",
                 text="",
+                #emboss=False,
                 toggle=True,
             )
             invert_selected_bones = row.operator(
@@ -56606,31 +56641,30 @@ class OnigiriPanelRigTools(bpy.types.Panel):
             )
             invert_selected_bones.group = "invert"
 
-            row = col.row(align=True)
-            row.operator(
-                "onigiri.rigs_match_edit_to_view",
-                text="Match edit to view",
-            )
-
-        box = layout.box()
-        box.label(text="Hide / Show bones:")
-        col = box.column(align=True)
         row = col.row(align=True)
         row.operator(
-            "onigiri.rigs_view_bones",
-            text="Hide Selected",
-        ).action = "hide"
-        row.operator(
-            "onigiri.rigs_view_bones",
-            text="Show All",
-        ).action = "show"
+            "onigiri.rigs_match_edit_to_view",
+            text="Match edit to view",
+        )
+
+        if 1 == 0:
+            box = layout.box()
+            box.label(text="Hide / Show bones:")
+            col = box.column(align=True)
+            row = col.row(align=True)
+            row.operator(
+                "onigiri.rigs_view_bones",
+                text="Hide Selected",
+            ).action = "hide"
+            row.operator(
+                "onigiri.rigs_view_bones",
+                text="Show All",
+            ).action = "show"
 
         layout = self.layout
         box = layout.box()
 
         col = box.column(align=True)
-
-        col.separator()
 
         row = col.row(align=True)
         row.label(text="Rig Converter:")
@@ -57063,16 +57097,18 @@ class OnigiriPanelRigTools(bpy.types.Panel):
                     oni,
                     "blank",
                     text="Rig: " + oni_rig.rig_selected,
-                    toggle=use_prop_icons,
-                    icon_value = get_prop_icon_id("running_guy"),
+                    toggle=True,
+                    emboss=False,
+                    icon_value = get_icon_id("running_guy"),
                 )
                 row = col.row(align=True)
                 row.prop(
                     oni,
                     "blank",
                     text="Bone: " + oni_rig.bone_selected,
-                    toggle=use_prop_icons,
-                    icon_value = get_prop_icon_id("bone_black"),
+                    toggle=True,
+                    emboss=False,
+                    icon_value = get_icon_id("bone_black"),
                 )
                 row = col.row(align=True)
 
@@ -57080,14 +57116,16 @@ class OnigiriPanelRigTools(bpy.types.Panel):
                     oni,
                     "blank",
                     text="ROT: " + str(deg),
-                    toggle=use_prop_icons,
+                    toggle=True,
+                    emboss=False,
                 )
                 row = col.row(align=True)
                 row.prop(
                     oni,
                     "blank",
                     text="LOC: " + str(loc),
-                    toggle=use_prop_icons,
+                    toggle=True,
+                    emboss=False,
                 )
 
                 if dBone.parent:
@@ -57107,35 +57145,40 @@ class OnigiriPanelRigTools(bpy.types.Panel):
                         oni,
                         "blank",
                         text="ROT Local: " + str(degl),
-                        toggle=use_prop_icons,
+                        toggle=True,
+                        emboss=False,
                     )
                     row = col.row(align=True)
                     row.prop(
                         oni,
                         "blank",
                         text="LOC Local: " + str(locl),
-                        toggle=use_prop_icons,
+                        toggle=True,
+                        emboss=False,
                     )
                     row = col.row(align=True)
                     row.prop(
                         oni,
                         "blank",
                         text="ROT Global: " + str(degg),
-                        toggle=use_prop_icons,
+                        toggle=True,
+                        emboss=False,
                     )
                     row = col.row(align=True)
                     row.prop(
                         oni,
                         "blank",
                         text="LOC Global: " + str(locg),
-                        toggle=use_prop_icons,
+                        toggle=True,
+                        emboss=False,
                     )
                     row = col.row(align=True)
                     row.prop(
                         oni,
                         "blank",
                         text="Scale: " + str(sca),
-                        toggle=use_prop_icons,
+                        toggle=True,
+                        emboss=False,
                     )
 
 
@@ -63765,8 +63808,9 @@ class OnigiriPanelBind(bpy.types.Panel):
             row.prop(
                 oni,
                 "blank",
-                toggle=use_prop_icons,
-                text="Bind Data add / del",
+                toggle=True,
+                emboss=False,
+                text="Bind Data Add/Del",
             )
             row = col.row(align=True)
 

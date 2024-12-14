@@ -610,6 +610,7 @@ def load_icons():
     map_icons = {
         "checked": "CHECKBOX_HLT",
         "unchecked": "CHECKBOX_DEHLT",
+        "mesh": "MONKEY",
         "panel_opened": "TRIA_DOWN",
         "panel_closed": "TRIA_RIGHT",
         "star_green": "ARMATURE_DATA",
@@ -661,6 +662,9 @@ def load_icons():
         "error": "ERROR",
         "info": "INFO",
         "pin_off": "UNPINNED",
+        "old": "SCREEN_BACK",
+        "image": "IMAGE_DATA",
+        "convert": "CON_FOLLOWPATH",
     }
 
 def unload_icons():
