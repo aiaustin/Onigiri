@@ -9064,7 +9064,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             row.operator(
                 "onigiri.edit_template_new_ctm",
                 text="New map",
-                icon_value = get_icon_id("magic"),
+                icon_value = get_icon_id("map"),
             )
             row.operator(
                 "onigiri.edit_template_load_ctm",
@@ -20547,7 +20547,7 @@ class OnigiriAnimationProperties(bpy.types.PropertyGroup):
             bpy.context.active_object.animation_data.action.frame_range
         )
 
-        bpy.context.scene.oni_anim_props.scale_total_frames = end_frame - start_frame
+        bpy.context.scene.oni_anim_props.scale_total_frames = int(end_frame - start_frame)
         return True
 
     def get_scale_total_frames(self):
@@ -47800,15 +47800,17 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
 
             row.prop(
                 oni_devkit,
-                "preserve_empty_counterparts",
-                text="",
-                icon_value = get_icon_id("symmetric"),
-            )
-            row.prop(
-                oni_devkit,
                 "remove_empty_groups",
                 toggle=use_prop_icons,
                 text="Remove Empty Groups"
+            )
+
+            row.prop(
+                oni_devkit,
+                "preserve_empty_counterparts",
+                text="Preserve Empty Counterparts",
+                toggle=use_prop_icons,
+                icon_value = get_prop_icon_id("symmetric"),
             )
 
             row.prop(
@@ -47819,7 +47821,6 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                 icon_value = get_prop_icon_id("copy"),
             )
 
-            row = col.row(align=True)
             row.prop(
                 oni_devkit,
                 "apply_rig_scale",
@@ -48294,7 +48295,7 @@ class OnigiriPanelMeshTools(bpy.types.Panel):
         row.operator(
             "onigiri.create_mesh_deformer",
             text="Create Mesh Deformer",
-            icon_value = get_icon_id("undeform"),
+            icon_value = get_icon_id("export"),
         )
         row.prop(
             onim,
@@ -51007,7 +51008,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 row.operator(
                     "onigiri.sliders_apply",
                     text="Apply Shape",
-                    icon_value = get_icon_id("freeze"),
+                    icon_value = get_icon_id("apply"),
                 )
                 row.operator(
                     "onigiri.sliders_clean",
@@ -51018,7 +51019,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 row.operator(
                     "onigiri.sliders_reset_selected",
                     text="Reset Selected",
-                    icon_value = get_icon_id("selected_bones"),
+                    icon_value = get_icon_id("selection"),
                 )
                 row.operator(
                     "onigiri.sliders_reset_all",
@@ -51055,165 +51056,167 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                                 sliders_bones.append(boneObj)
 
                 row = col.row(align=True)
-                row.prop(
-                    data=oni_sliders,
-                    property="sliders_blank",
-                    toggle=True,
-                    emboss = False,
-                    text="",
-                    icon_value = get_icon_id("sliders"),
-                )
-                row.prop(
-                    data=oni_sliders,
-                    property="sliders_show_all",
-                    toggle=use_prop_icons,
-                    text="Show All Sliders",
-                )
-                row.prop(
-                    data=oni_sliders,
-                    property="sliders_rig_display_stick",
-                    toggle=True,
-                    text="",
-                    icon_value = get_icon_id("all_types"),
-                )
                 row.operator(
                     "onigiri.sliders_show_all_bones",
                     text="Show All Bones",
                 )
 
-                col = box.column(align=True)
                 row = col.row(align=True)
                 row.prop(
                     data=oni_sliders,
-                    property="sliders_location",
-                    text="Position",
+                    property="sliders_rig_display_stick",
                     toggle=use_prop_icons,
-                    icon_value = get_prop_icon_id("location"),
+                    text="Sliders Rig Display Stick",
+                    icon_value = get_prop_icon_id("all_types"),
                 )
+
+                have_sliders = len(sliders_bones)
+
+                row = col.row(align=True)
                 row.prop(
                     data=oni_sliders,
-                    property="sliders_scale",
-                    text="Scale",
-                    toggle=use_prop_icons,
-                    icon_value = get_prop_icon_id("scale"),
+                    property="sliders_show_all",
+                    toggle=True,
+                    emboss=False,
+                    text="Show All Sliders",
+                    icon_value = get_panel_icon_id(have_sliders),
                 )
 
-                slider_bone_icon = "bone_mixed"
-                for boneObj in sliders_bones:
-                    if boneObj.name in skel.avatar_skeleton:
-                        if skel.avatar_skeleton[boneObj.name]["type"] == "bone":
-                            slider_bone_icon = "bone_blue"
-                        elif skel.avatar_skeleton[boneObj.name]["type"] == "collision":
-                            slider_bone_icon = "bone_black"
-                        elif skel.avatar_skeleton[boneObj.name]["type"] == "attachment":
-                            slider_bone_icon = "bone_red"
-
+                if have_sliders:
                     col = box.column(align=True)
                     row = col.row(align=True)
-
-                    slider_size = 1
-
                     row.prop(
                         data=oni_sliders,
-                        property="sliders_blank",
+                        property="sliders_location",
+                        text="Position",
                         toggle=use_prop_icons,
-                        text="[" + boneObj.name + "]",
-                        icon_value = get_prop_icon_id(slider_bone_icon),
+                        icon_value = get_prop_icon_id("location"),
                     )
-                    row = col.row(align=True)
-                    if oni_sliders.sliders_location:
-                        row = col.row(align=True)
-                        row.prop(
-                            data=oni_sliders,
-                            property="sliders_blank",
-                            toggle=True,
-                            text="",
-                            icon_value = get_icon_id("axis_x"),
-                        )
-                        row.prop(
-                            data=boneObj,
-                            property="oni_sliders_location_x",
-                            slider=True,
-                            text="",
-                        )
-                        row = col.row(align=True)
-                        row.prop(
-                            data=oni_sliders,
-                            property="sliders_blank",
-                            toggle=True,
-                            text="",
-                            icon_value = get_icon_id("axis_y"),
-                        )
-                        row.prop(
-                            data=boneObj,
-                            property="oni_sliders_location_y",
-                            slider=True,
-                            text="",
-                        )
-                        row = col.row(align=True)
-                        row.prop(
-                            data=oni_sliders,
-                            property="sliders_blank",
-                            toggle=True,
-                            text="",
-                            icon_value = get_icon_id("axis_z"),
-                        )
-                        row.prop(
-                            data=boneObj,
-                            property="oni_sliders_location_z",
-                            slider=True,
-                            text="",
-                        )
-                    elif oni_sliders.sliders_scale:
-                        row = col.row(align=True)
-                        row.scale_x = slider_size
-                        row.scale_y = slider_size
-                        row.prop(
-                            data=boneObj,
-                            property="oni_sliders_scale_x_lock",
-                            toggle=True,
-                            text="",
-                            icon_value = get_icon_id("axis_x"),
-                        )
-                        row.prop(
-                            data=boneObj,
-                            property="oni_sliders_scale_x",
-                            slider=True,
-                            text="",
-                        )
+                    row.prop(
+                        data=oni_sliders,
+                        property="sliders_scale",
+                        text="Scale",
+                        toggle=use_prop_icons,
+                        icon_value = get_prop_icon_id("scale"),
+                    )
 
+                    slider_bone_icon = "bone_mixed"
+                    for boneObj in sliders_bones:
+                        if boneObj.name in skel.avatar_skeleton:
+                            if skel.avatar_skeleton[boneObj.name]["type"] == "bone":
+                                slider_bone_icon = "bone_blue"
+                            elif skel.avatar_skeleton[boneObj.name]["type"] == "collision":
+                                slider_bone_icon = "bone_black"
+                            elif skel.avatar_skeleton[boneObj.name]["type"] == "attachment":
+                                slider_bone_icon = "bone_red"
+
+                        col = box.column(align=True)
                         row = col.row(align=True)
-                        row.scale_x = slider_size
-                        row.scale_y = slider_size
+
+                        slider_size = 1
+
                         row.prop(
-                            data=boneObj,
-                            property="oni_sliders_scale_y_lock",
+                            data=oni_sliders,
+                            property="sliders_blank",
                             toggle=True,
-                            text="",
-                            icon_value = get_icon_id("axis_y"),
-                        )
-                        row.prop(
-                            data=boneObj,
-                            property="oni_sliders_scale_y",
-                            slider=True,
-                            text="",
+                            emboss=False,
+                            text="[" + boneObj.name + "]",
+                            icon_value = get_icon_id(slider_bone_icon),
                         )
                         row = col.row(align=True)
-                        row.scale_x = slider_size
-                        row.scale_y = slider_size
-                        row.prop(
-                            data=boneObj,
-                            property="oni_sliders_scale_z_lock",
-                            toggle=True,
-                            text="",
-                            icon_value = get_icon_id("axis_z"),
-                        )
-                        row.prop(
-                            data=boneObj,
-                            property="oni_sliders_scale_z",
-                            slider=True,
-                            text="",
-                        )
+                        if oni_sliders.sliders_location:
+                            row = col.row(align=True)
+                            row.prop(
+                                data=oni_sliders,
+                                property="sliders_blank",
+                                toggle=True,
+                                text="",
+                                icon_value = get_icon_id("x"),
+                            )
+                            row.prop(
+                                data=boneObj,
+                                property="oni_sliders_location_x",
+                                slider=True,
+                                text="",
+                            )
+                            row = col.row(align=True)
+                            row.prop(
+                                data=oni_sliders,
+                                property="sliders_blank",
+                                toggle=True,
+                                text="",
+                                icon_value = get_icon_id("y"),
+                            )
+                            row.prop(
+                                data=boneObj,
+                                property="oni_sliders_location_y",
+                                slider=True,
+                                text="",
+                            )
+                            row = col.row(align=True)
+                            row.prop(
+                                data=oni_sliders,
+                                property="sliders_blank",
+                                toggle=True,
+                                text="",
+                                icon_value = get_icon_id("z"),
+                            )
+                            row.prop(
+                                data=boneObj,
+                                property="oni_sliders_location_z",
+                                slider=True,
+                                text="",
+                            )
+                        elif oni_sliders.sliders_scale:
+                            row = col.row(align=True)
+                            row.scale_x = slider_size
+                            row.scale_y = slider_size
+                            row.prop(
+                                data=boneObj,
+                                property="oni_sliders_scale_x_lock",
+                                toggle=True,
+                                text="",
+                                icon_value = get_icon_id("x"),
+                            )
+                            row.prop(
+                                data=boneObj,
+                                property="oni_sliders_scale_x",
+                                slider=True,
+                                text="",
+                            )
+
+                            row = col.row(align=True)
+                            row.scale_x = slider_size
+                            row.scale_y = slider_size
+                            row.prop(
+                                data=boneObj,
+                                property="oni_sliders_scale_y_lock",
+                                toggle=True,
+                                text="",
+                                icon_value = get_icon_id("y"),
+                            )
+                            row.prop(
+                                data=boneObj,
+                                property="oni_sliders_scale_y",
+                                slider=True,
+                                text="",
+                            )
+                            row = col.row(align=True)
+                            row.scale_x = slider_size
+                            row.scale_y = slider_size
+                            row.prop(
+                                data=boneObj,
+                                property="oni_sliders_scale_z_lock",
+                                toggle=True,
+                                text="",
+                                icon_value = get_icon_id("z"),
+                            )
+                            row.prop(
+                                data=boneObj,
+                                property="oni_sliders_scale_z",
+                                slider=True,
+                                text="",
+                            )
 
 
 class OnigiriInheritProperties(bpy.types.PropertyGroup):
@@ -53347,32 +53350,33 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             row.operator(
                 "onigiri.export_sl_anim",
                 text=export_sl_anim_label,
-                icon_value = get_icon_id("walking_green"),
+                icon_value = get_icon_id("export"),
             )
             row.scale_y = 1.4
             row.alert = False
             row.operator(
                 "onigiri.export_sl_pose",
                 text="Export Static Pose",
-                icon_value = get_icon_id("walking_red"),
+                icon_value = get_icon_id("export"),
             )
 
             row = col.row(align=True)
             row.operator(
                 "onigiri.bake_proxy",
                 text="Bake To Proxy",
-                icon_value = get_icon_id("walking_blue"),
+                icon_value = get_icon_id("export"),
             )
 
             col = box.column(align=True)
             row = col.row(align=True)
 
+            row = col.row(align=True)
             row.prop(
                 anim,
-                "anim_use_keys_smooth",
-                text="",
-                toggle=True,
-                icon_value = get_icon_id("deviation"),
+                "export_mapped_animation",
+                text="Export Mapped Animation",
+                toggle=use_prop_icons,
+                icon_value = get_prop_icon_id("map_bones"),
             )
 
             row.prop(
@@ -53381,15 +53385,25 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 text="High Fidelity (Bake)",
                 toggle=use_prop_icons,
             )
-            row.prop(
-                anim,
-                "anim_use_keys_linear",
-                text="",
-                toggle=True,
-                icon_value = get_icon_id("linear"),
-            )
 
             if anim.anim_high_fidelity:
+                row = col.row(align=True)
+                row.enabled = anim.anim_high_fidelity
+                row.prop(
+                    anim,
+                    "anim_use_keys_smooth",
+                    text="Keys Smooth",
+                    toggle=use_prop_icons,
+                    icon_value = get_prop_icon_id("deviation"),
+                )
+
+                row.prop(
+                    anim,
+                    "anim_use_keys_linear",
+                    text="Keys Linear",
+                    toggle=use_prop_icons,
+                    icon_value = get_prop_icon_id("linear"),
+                )
                 row = col.row(align=True)
                 row.enabled = anim.anim_high_fidelity
                 row.prop(
@@ -53447,14 +53461,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     icon_value = get_prop_icon_id("linear"),
                 )
 
-            row = col.row(align=True)
-            row.prop(
-                anim,
-                "export_mapped_animation",
-                text="Export Mapped Animation",
-                toggle=use_prop_icons,
-                icon_value = get_prop_icon_id("map_bones"),
-            )
+                row = col.separator()
 
             col = box.column(align=True)
             row = col.row(align=True)
@@ -53519,559 +53526,560 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 toggle=use_prop_icons,
             )
 
+            if 1 == 0:
+                col = box.column(align=True)
+                row = col.row(align=True)
+                row.prop(
+                    anim,
+                    "anim_unfold_menu_enabled",
+                    text="Expand lots of options",
+                    toggle=True,
+                    emboss=False,
+                    icon_value = get_panel_icon_id(anim.anim_unfold_menu_enabled),
+                )
+
+                if anim.anim_unfold_menu_enabled:
+
+                    col = box.column(align=True)
+
+                    row = col.row(align=True)
+
+                    if 1 == 0:
+                        row = col.row(align=True)
+                        row.prop(
+                            anim,
+                            "anim_deviation_detection",
+                            text="",
+                            toggle=True,
+                            icon_value = get_icon_id("deviation"),
+                        )
+
+                        row.prop(
+                            anim,
+                            "anim_deviation_detection",
+                            text="Smooth Motion",
+                            toggle=use_prop_icons,
+                        )
+
+                    if 1 == 0:
+                        row.prop(
+                            anim,
+                            "anim_deviation_rotation",
+                            text="Rot:",
+                            toggle=use_prop_icons,
+                        )
+                        row.prop(
+                            anim,
+                            "anim_deviation_location",
+                            text="Loc:",
+                            toggle=use_prop_icons,
+                        )
+                        row = col.row(align=True)
+
             col = box.column(align=True)
             row = col.row(align=True)
+
             row.prop(
                 anim,
-                "anim_unfold_menu_enabled",
-                text="Expand lots of options",
-                toggle=True,
-                emboss=False,
-                icon_value = get_panel_icon_id(anim.anim_unfold_menu_enabled),
+                "native_features_menu_enabled",
+                text="Anim Extended Features",
+                emboss = False,
+                icon_value = get_panel_icon_id(anim.native_features_menu_enabled),
             )
 
-            if anim.anim_unfold_menu_enabled:
-
-                col = box.column(align=True)
+            if anim.native_features_menu_enabled:
 
                 row = col.row(align=True)
 
-                if 1 == 0:
-                    row = col.row(align=True)
-                    row.prop(
-                        anim,
-                        "anim_deviation_detection",
-                        text="",
-                        toggle=True,
-                        icon_value = get_icon_id("deviation"),
-                    )
+                col = box.column(align=True)
+                row = col.row(align=True)
 
-                    row.prop(
-                        anim,
-                        "anim_deviation_detection",
-                        text="Smooth Motion",
-                        toggle=use_prop_icons,
-                    )
-
-                if 1 == 0:
-                    row.prop(
-                        anim,
-                        "anim_deviation_rotation",
-                        text="Rot:",
-                        toggle=use_prop_icons,
-                    )
-                    row.prop(
-                        anim,
-                        "anim_deviation_location",
-                        text="Loc:",
-                        toggle=use_prop_icons,
-                    )
-                    row = col.row(align=True)
+                row.alert = anim.export_sl_anim_old_alert
+                export_sl_anim_old_label = "Use old exporter"
+                if anim.export_sl_anim_old_alert:
+                    export_sl_anim_old_label = "Exporting, please wait..."
+                row.scale_y = 1.3
+                row.operator(
+                    "onigiri.export_sl_anim_old",
+                    text=export_sl_anim_old_label,
+                    #icon_value = get_icon_id("running_guy"),
+                )
+                row.scale_y = 1
+                row.alert = False
+                row.prop(
+                    anim,
+                    "anim_preserve_interpolation",
+                    text="",
+                    toggle=True,
+                    icon_value = get_icon_id("pen"),
+                )
 
                 col = box.column(align=True)
                 row = col.row(align=True)
 
                 row.prop(
                     anim,
-                    "native_features_menu_enabled",
-                    text="Anim Extended Features",
+                    "mark_tol_options",
+                    text="Key Cleanup Options",
                     emboss = False,
-                    icon_value = get_panel_icon_id(anim.native_features_menu_enabled),
+                    icon_value = get_panel_icon_id(anim.mark_tol_options),
                 )
 
-                if anim.native_features_menu_enabled:
-
-                    row = col.row(align=True)
-
+                row = col.row(align=True)
+                if anim.mark_tol_options:
                     col = box.column(align=True)
                     row = col.row(align=True)
 
-                    row.alert = anim.export_sl_anim_old_alert
-                    export_sl_anim_old_label = "Use old exporter"
-                    if anim.export_sl_anim_old_alert:
-                        export_sl_anim_old_label = "Exporting, please wait..."
-                    row.scale_y = 1.3
-                    row.operator(
-                        "onigiri.export_sl_anim_old",
-                        text=export_sl_anim_old_label,
-                        icon_value = get_icon_id("running_guy"),
-                    )
-                    row.scale_y = 1
-                    row.alert = False
                     row.prop(
-                        anim,
-                        "anim_preserve_interpolation",
+                        context.scene.oni_anim_props,
+                        "remove_isolated_keys",
+                        toggle=use_prop_icons,
+                        text="Remove Isolated Keys",
+                    )
+
+                    row = col.row(align=True)
+
+                    row.prop(
+                        oni,
+                        "blank",
                         text="",
                         toggle=True,
-                        icon_value = get_icon_id("curves"),
+                        emboss=False,
+                        icon_value = get_icon_id("tolerance"),
                     )
-
-                    col = box.column(align=True)
-                    row = col.row(align=True)
-
                     row.prop(
                         anim,
-                        "mark_tol_options",
-                        text="Key Cleanup Options",
-                        emboss = False,
-                        icon_value = get_panel_icon_id(anim.mark_tol_options),
+                        "mark_tol",
+                        text="Tolerance:",
+                        toggle=use_prop_icons,
+                    )
+                    row.prop(
+                        anim,
+                        "mark_tol_rot",
+                        text="Rot:",
+                    )
+                    row.prop(
+                        anim,
+                        "mark_tol_loc",
+                        text="Loc:",
                     )
 
-                    row = col.row(align=True)
-                    if anim.mark_tol_options:
-                        col = box.column(align=True)
+                    if 1 == 0:
                         row = col.row(align=True)
-
                         row.prop(
-                            context.scene.oni_anim_props,
-                            "remove_isolated_keys",
-                            toggle=use_prop_icons,
-                            text="Remove Isolated Keys",
-                        )
-
-                        row = col.row(align=True)
-
-                        row.prop(
-                            oni,
-                            "blank",
+                            anim,
+                            "anim_resample_auto",
                             text="",
                             toggle=True,
-                            emboss=False,
-                            icon_value = get_icon_id("tolerance"),
+                            icon_value = get_icon_id("sample"),
                         )
                         row.prop(
                             anim,
-                            "mark_tol",
-                            text="Tolerance:",
+                            "anim_resample",
+                            text="Resample:",
                             toggle=use_prop_icons,
                         )
                         row.prop(
                             anim,
-                            "mark_tol_rot",
+                            "anim_resample_rate_rotation",
                             text="Rot:",
                         )
                         row.prop(
                             anim,
-                            "mark_tol_loc",
+                            "anim_resample_rate_location",
                             text="Loc:",
                         )
 
-                        if 1 == 0:
-                            row = col.row(align=True)
-                            row.prop(
-                                anim,
-                                "anim_resample_auto",
-                                text="",
-                                toggle=True,
-                                icon_value = get_icon_id("sample"),
-                            )
-                            row.prop(
-                                anim,
-                                "anim_resample",
-                                text="Resample:",
-                                toggle=use_prop_icons,
-                            )
-                            row.prop(
-                                anim,
-                                "anim_resample_rate_rotation",
-                                text="Rot:",
-                            )
-                            row.prop(
-                                anim,
-                                "anim_resample_rate_location",
-                                text="Loc:",
-                            )
+                    if 1 == 0:
 
-                        if 1 == 0:
+                        col = box.column(align=True)
+                        row = col.row(align=True)
+                        row.operator(
+                            "onigiri.anim_keep_bone_transforms",
+                            text="",
+                            icon_value = get_icon_id("reset"),
+                        ).action = "sub_all"
 
-                            col = box.column(align=True)
-                            row = col.row(align=True)
-                            row.operator(
-                                "onigiri.anim_keep_bone_transforms",
-                                text="",
-                                icon_value = get_icon_id("reset"),
-                            ).action = "sub_all"
+                        row.prop(
+                            oni,
+                            "blank",
+                            text="Protect From Cleanup",
+                            toggle=True,
+                            emboss=False,
+                        )
 
-                            row.prop(
-                                oni,
-                                "blank",
-                                text="Protect From Cleanup",
-                                toggle=True,
-                                emboss=False,
-                            )
+                        row.operator(
+                            "onigiri.anim_keep_key_transforms",
+                            text="",
+                            icon_value = get_icon_id("reset"),
+                        ).action = "sub_all"
 
-                            row.operator(
-                                "onigiri.anim_keep_key_transforms",
-                                text="",
-                                icon_value = get_icon_id("reset"),
-                            ).action = "sub_all"
+                        row = col.row(align=True)
+                        row.operator(
+                            "onigiri.anim_keep_bone_transforms",
+                            text="",
+                            icon_value = get_icon_id("subtract"),
+                        ).action = "sub_rot"
+                        row.operator(
+                            "onigiri.anim_keep_bone_transforms",
+                            text="",
+                            icon_value = get_icon_id("add"),
+                        ).action = "add_rot"
+                        row.operator(
+                            "onigiri.anim_keep_bone_transforms",
+                            text="Bone Rotation:",
+                        )
 
-                            row = col.row(align=True)
-                            row.operator(
-                                "onigiri.anim_keep_bone_transforms",
-                                text="",
-                                icon_value = get_icon_id("subtract"),
-                            ).action = "sub_rot"
-                            row.operator(
-                                "onigiri.anim_keep_bone_transforms",
-                                text="",
-                                icon_value = get_icon_id("add"),
-                            ).action = "add_rot"
-                            row.operator(
-                                "onigiri.anim_keep_bone_transforms",
-                                text="Bone Rotation:",
-                            )
+                        row.operator(
+                            "onigiri.anim_keep_key_transforms",
+                            text="Key Rotation:",
+                        )
+                        row.operator(
+                            "onigiri.anim_keep_key_transforms",
+                            text="",
+                            icon_value = get_icon_id("add"),
+                        ).action = "add_rot"
+                        row.operator(
+                            "onigiri.anim_keep_key_transforms",
+                            text="",
+                            icon_value = get_icon_id("subtract"),
+                        ).action = "sub_rot"
 
-                            row.operator(
-                                "onigiri.anim_keep_key_transforms",
-                                text="Key Rotation:",
-                            )
-                            row.operator(
-                                "onigiri.anim_keep_key_transforms",
-                                text="",
-                                icon_value = get_icon_id("add"),
-                            ).action = "add_rot"
-                            row.operator(
-                                "onigiri.anim_keep_key_transforms",
-                                text="",
-                                icon_value = get_icon_id("subtract"),
-                            ).action = "sub_rot"
+                        row = col.row(align=True)
 
-                            row = col.row(align=True)
+                        row.operator(
+                            "onigiri.anim_keep_bone_transforms",
+                            text="",
+                            icon_value = get_icon_id("subtract"),
+                        ).action = "sub_loc"
+                        row.operator(
+                            "onigiri.anim_keep_bone_transforms",
+                            text="",
+                            icon_value = get_icon_id("add"),
+                        ).action = "add_loc"
+                        row.operator(
+                            "onigiri.anim_keep_bone_transforms",
+                            text="Bone Location:",
+                        )
 
-                            row.operator(
-                                "onigiri.anim_keep_bone_transforms",
-                                text="",
-                                icon_value = get_icon_id("subtract"),
-                            ).action = "sub_loc"
-                            row.operator(
-                                "onigiri.anim_keep_bone_transforms",
-                                text="",
-                                icon_value = get_icon_id("add"),
-                            ).action = "add_loc"
-                            row.operator(
-                                "onigiri.anim_keep_bone_transforms",
-                                text="Bone Location:",
-                            )
+                        row.operator(
+                            "onigiri.anim_keep_key_transforms",
+                            text="Key Location:",
+                        )
+                        row.operator(
+                            "onigiri.anim_keep_key_transforms",
+                            text="",
+                            icon_value = get_icon_id("add"),
+                        ).action = "add_loc"
+                        row.operator(
+                            "onigiri.anim_keep_key_transforms",
+                            text="",
+                            icon_value = get_icon_id("subtract"),
+                        ).action = "sub_loc"
+                        row = col.row(align=True)
 
-                            row.operator(
-                                "onigiri.anim_keep_key_transforms",
-                                text="Key Location:",
-                            )
-                            row.operator(
-                                "onigiri.anim_keep_key_transforms",
-                                text="",
-                                icon_value = get_icon_id("add"),
-                            ).action = "add_loc"
-                            row.operator(
-                                "onigiri.anim_keep_key_transforms",
-                                text="",
-                                icon_value = get_icon_id("subtract"),
-                            ).action = "sub_loc"
-                            row = col.row(align=True)
-
-                            selected_bone = "None"
-                            selected_bone_overrides = {}
-                            frame_current = str(bpy.context.scene.frame_current)
-                            bone_rot_text = "Rotation: None"
-                            bone_loc_text = "Location: None"
-                            key_rot_text = "Rotation: None"
-                            key_loc_text = "Location: None"
-                            if bpy.context.mode == "POSE":
-                                if len(bpy.context.selected_pose_bones) != 0:
-                                    pBone = bpy.context.selected_pose_bones[0]
-                                    dBone = pBone.bone
-                                    selected_bone = dBone.name
+                        selected_bone = "None"
+                        selected_bone_overrides = {}
+                        frame_current = str(bpy.context.scene.frame_current)
+                        bone_rot_text = "Rotation: None"
+                        bone_loc_text = "Location: None"
+                        key_rot_text = "Rotation: None"
+                        key_loc_text = "Location: None"
+                        if bpy.context.mode == "POSE":
+                            if len(bpy.context.selected_pose_bones) != 0:
+                                pBone = bpy.context.selected_pose_bones[0]
+                                dBone = pBone.bone
+                                selected_bone = dBone.name
+                                if (
+                                    dBone.get("cleaner") is not None
+                                    and dBone["cleaner"].get("bone") is not None
+                                ):
+                                    bone_rot_text = (
+                                        "Rotation: "
+                                        + dBone["cleaner"]["bone"]["rot_text"]
+                                    )
+                                    bone_loc_text = (
+                                        "Location: "
+                                        + dBone["cleaner"]["bone"]["loc_text"]
+                                    )
+                                if (
+                                    dBone.get("cleaner") is not None
+                                    and dBone["cleaner"].get("frames") is not None
+                                ):
                                     if (
-                                        dBone.get("cleaner") is not None
-                                        and dBone["cleaner"].get("bone") is not None
+                                        dBone["cleaner"]["frames"].get(
+                                            frame_current
+                                        )
+                                        is not None
                                     ):
-                                        bone_rot_text = (
+                                        key_rot_text = (
                                             "Rotation: "
-                                            + dBone["cleaner"]["bone"]["rot_text"]
-                                        )
-                                        bone_loc_text = (
-                                            "Location: "
-                                            + dBone["cleaner"]["bone"]["loc_text"]
-                                        )
-                                    if (
-                                        dBone.get("cleaner") is not None
-                                        and dBone["cleaner"].get("frames") is not None
-                                    ):
-                                        if (
-                                            dBone["cleaner"]["frames"].get(
+                                            + dBone["cleaner"]["frames"][
                                                 frame_current
-                                            )
-                                            is not None
-                                        ):
-                                            key_rot_text = (
-                                                "Rotation: "
-                                                + dBone["cleaner"]["frames"][
-                                                    frame_current
-                                                ]["rot_text"]
-                                            )
-                                            key_loc_text = (
-                                                "Location: "
-                                                + dBone["cleaner"]["frames"][
-                                                    frame_current
-                                                ]["loc_text"]
-                                            )
-
-                                    if len(bpy.context.selected_pose_bones) > 1:
-                                        selected_bone = str(
-                                            len(bpy.context.selected_pose_bones)
+                                            ]["rot_text"]
+                                        )
+                                        key_loc_text = (
+                                            "Location: "
+                                            + dBone["cleaner"]["frames"][
+                                                frame_current
+                                            ]["loc_text"]
                                         )
 
-                            col = box.column(align=True)
-                            row = col.row(align=True)
-                            row.label(text="- Overrides -")
-                            row = col.row(align=True)
-                            row.label(text="Selected Bone(s): " + selected_bone)
-                            row = col.row(align=True)
-                            row.label(text="  Bone:")
-                            row = col.row(align=True)
-                            row.label(text="    - " + bone_rot_text)
-                            row = col.row(align=True)
-                            row.label(text="    - " + bone_loc_text)
-                            row = col.row(align=True)
-                            row.label(text="Selected Key: " + frame_current)
-                            row = col.row(align=True)
-                            row.label(text="  Key:")
-                            row = col.row(align=True)
-                            row.label(text="    - " + key_rot_text)
-                            row = col.row(align=True)
-                            row.label(text="    - " + key_loc_text)
+                                if len(bpy.context.selected_pose_bones) > 1:
+                                    selected_bone = str(
+                                        len(bpy.context.selected_pose_bones)
+                                    )
+
+                        col = box.column(align=True)
+                        row = col.row(align=True)
+                        row.label(text="- Overrides -")
+                        row = col.row(align=True)
+                        row.label(text="Selected Bone(s): " + selected_bone)
+                        row = col.row(align=True)
+                        row.label(text="  Bone:")
+                        row = col.row(align=True)
+                        row.label(text="    - " + bone_rot_text)
+                        row = col.row(align=True)
+                        row.label(text="    - " + bone_loc_text)
+                        row = col.row(align=True)
+                        row.label(text="Selected Key: " + frame_current)
+                        row = col.row(align=True)
+                        row.label(text="  Key:")
+                        row = col.row(align=True)
+                        row.label(text="    - " + key_rot_text)
+                        row = col.row(align=True)
+                        row.label(text="    - " + key_loc_text)
+
+                col = box.column(align=True)
+                row = col.row(align=True)
+
+                row.prop(
+                    anim,
+                    "anim_joint_priority_menu_enabled",
+                    text="Joint Priority Options",
+                    toggle=True,
+                    emboss=False,
+                    icon_value = get_panel_icon_id(anim.anim_joint_priority_menu_enabled),
+                )
+                row = col.row(align=True)
+
+                if anim.anim_joint_priority_menu_enabled:
+
+                    col = box.column(align=True)
+                    row = col.row(align=True)
+                    row.operator(
+                        "onigiri.anim_enable_joint_priority",
+                        text="Enable Override",
+                    )
+                    row.operator(
+                        "onigiri.anim_disable_joint_priority",
+                        text="Disable Override",
+                    )
+                    col = box.column(align=True)
+
+                    row = col.row(align=True)
+                    row.label(
+                        text="Apply Joint Priority:",
+                    )
+                    row = col.row(align=True)
+                    for p in range(-1, 7):
+                        row.operator(
+                            "onigiri.anim_apply_joint_priority",
+                            text=str(p),
+                        ).priority = p
+                    row = col.row(align=True)
+                    col = box.column(align=True)
+
+                    row = col.row(align=True)
+                    col = box.column(align=True)
+                    row.label(
+                        text="Select bones by priority: "
+                        + str(anim.anim_selected_pose_bones),
+                    )
+                    row = col.row(align=True)
+                    for p in range(-1, 7):
+                        row.operator(
+                            "onigiri.select_priority",
+                            text=str(p),
+                        ).priority = p
+
+                    row = col.row(align=True)
+                    row.prop(
+                        anim,
+                        "anim_joint_priority_view_enabled",
+                        text="View selected priorities",
+                        toggle=use_prop_icons,
+                    )
+
+                    if anim.anim_joint_priority_view_enabled:
+                        if selected_pose_bones():
+                            for boneObj in bpy.context.selected_pose_bones:
+                                priority = boneObj.get("priority")
+                                if priority is None:
+                                    priority = anim.anim_base_priority
+
+                                enabled = "No "
+                                if boneObj.get("priority_enabled") == 1:
+                                    enabled = "Yes"
+                                row = col.row(align=True)
+                                row.label(
+                                    text="P: "
+                                    + str(priority)
+                                    + " E: "
+                                    + enabled
+                                    + " Name: "
+                                    + boneObj.name
+                                )
+
+                col = box.column(align=True)
+                row = col.row(align=True)
+
+                row.prop(
+                    context.scene.oni_anim,
+                    "anim_interpolation_menu_enabled",
+                    text="Interpolation Options",
+                    emboss = False,
+                    icon_value = get_panel_icon_id(anim.anim_interpolation_menu_enabled),
+                )
+
+                if anim.anim_interpolation_menu_enabled:
+
+                    row = col.row(align=True)
+                    box.label(
+                        text="Interpolation Method:",
+                    )
+                    col = box.column(align=True)
+                    row = col.row(align=True)
+
+                    row.prop(
+                        context.scene.oni_anim,
+                        "anim_interpolate_bone",
+                        text="Entire Bone / Curve",
+                        icon_value = get_icon_id("bone"),
+                    )
+                    row = col.row(align=True)
+
+                    row.operator(
+                        "onigiri.set_interpolation",
+                        text="Bezier",
+                        icon="IPO_BEZIER",
+                    ).mode = "BEZIER"
+                    row.operator(
+                        "onigiri.set_interpolation",
+                        text="Linear",
+                        icon="IPO_LINEAR",
+                    ).mode = "LINEAR"
+                    row.operator(
+                        "onigiri.set_interpolation",
+                        text="Constant",
+                        icon="IPO_CONSTANT",
+                    ).mode = "CONSTANT"
+
+                    row = col.row(align=True)
+                    for interp in extra_interpolation_types:
+                        row.operator(
+                            "onigiri.set_interpolation",
+                            text=" ",
+                            icon=extra_interpolation_types[interp],
+                        ).mode = interp
+
+                col = box.column(align=True)
+                row = col.row(align=True)
+                row.prop(
+                    context.scene.oni_anim,
+                    "anim_expression_menu_enabled",
+                    text="Expression Options",
+                    emboss = False,
+                    icon_value = get_panel_icon_id(anim.anim_expression_menu_enabled),
+                )
+
+                if anim.anim_expression_menu_enabled:
+                    row = col.row(align=True)
+                    box.prop(
+                        anim,
+                        "anim_hand_pose_enabled",
+                        text="Use an internal hand pose",
+                        toggle=use_prop_icons,
+                        icon_value = get_prop_icon_id("hand_love"),
+                    )
+                    if anim.anim_hand_pose_enabled:
+                        box.prop_menu_enum(
+                            anim,
+                            "anim_hand_pose",
+                        )
 
                     col = box.column(align=True)
                     row = col.row(align=True)
 
                     row.prop(
                         anim,
-                        "anim_joint_priority_menu_enabled",
-                        text="Joint Priority Options",
-                        toggle=True,
-                        emboss=False,
-                        icon_value = get_panel_icon_id(anim.anim_joint_priority_menu_enabled),
+                        "anim_emote_menu_enabled",
+                        text="Emote List",
+                        emboss = False,
+                        icon_value = get_panel_icon_id(anim.anim_emote_menu_enabled),
                     )
-                    row = col.row(align=True)
-
-                    if anim.anim_joint_priority_menu_enabled:
-
+                    if anim.anim_emote_menu_enabled:
                         col = box.column(align=True)
                         row = col.row(align=True)
-                        row.operator(
-                            "onigiri.anim_enable_joint_priority",
-                            text="Enable Override",
-                        )
-                        row.operator(
-                            "onigiri.anim_disable_joint_priority",
-                            text="Disable Override",
-                        )
-                        col = box.column(align=True)
 
+                        row.label(text="- Emote list coded by Candy")
                         row = col.row(align=True)
                         row.label(
-                            text="Apply Joint Priority:",
-                        )
-                        row = col.row(align=True)
-                        for p in range(-1, 7):
-                            row.operator(
-                                "onigiri.anim_apply_joint_priority",
-                                text=str(p),
-                            ).priority = p
-                        row = col.row(align=True)
-                        col = box.column(align=True)
-
-                        row = col.row(align=True)
-                        col = box.column(align=True)
-                        row.label(
-                            text="Select bones by priority: "
-                            + str(anim.anim_selected_pose_bones),
-                        )
-                        row = col.row(align=True)
-                        for p in range(-1, 7):
-                            row.operator(
-                                "onigiri.select_priority",
-                                text=str(p),
-                            ).priority = p
-
-                        row = col.row(align=True)
-                        row.prop(
-                            anim,
-                            "anim_joint_priority_view_enabled",
-                            text="View selected priorities",
-                            toggle=use_prop_icons,
+                            text="- Emote Name: " + anim.anim_emote_name,
                         )
 
-                        if anim.anim_joint_priority_view_enabled:
-                            if selected_pose_bones():
-                                for boneObj in bpy.context.selected_pose_bones:
-                                    priority = boneObj.get("priority")
-                                    if priority is None:
-                                        priority = anim.anim_base_priority
-
-                                    enabled = "No "
-                                    if boneObj.get("priority_enabled") == 1:
-                                        enabled = "Yes"
-                                    row = col.row(align=True)
-                                    row.label(
-                                        text="P: "
-                                        + str(priority)
-                                        + " E: "
-                                        + enabled
-                                        + " Name: "
-                                        + boneObj.name
-                                    )
-
-                    col = box.column(align=True)
-                    row = col.row(align=True)
-
-                    row.prop(
-                        context.scene.oni_anim,
-                        "anim_interpolation_menu_enabled",
-                        text="Interpolation Options",
-                        emboss = False,
-                        icon_value = get_panel_icon_id(anim.anim_interpolation_menu_enabled),
-                    )
-
-                    if anim.anim_interpolation_menu_enabled:
-
-                        row = col.row(align=True)
-                        box.label(
-                            text="Interpolation Method:",
-                        )
                         col = box.column(align=True)
                         row = col.row(align=True)
-
-                        row.prop(
-                            context.scene.oni_anim,
-                            "anim_interpolate_bone",
-                            text="Entire Bone / Curve",
-                            icon_value = get_icon_id("bone"),
-                        )
-                        row = col.row(align=True)
-
                         row.operator(
-                            "onigiri.set_interpolation",
-                            text="Bezier",
-                            icon="IPO_BEZIER",
-                        ).mode = "BEZIER"
-                        row.operator(
-                            "onigiri.set_interpolation",
-                            text="Linear",
-                            icon="IPO_LINEAR",
-                        ).mode = "LINEAR"
-                        row.operator(
-                            "onigiri.set_interpolation",
-                            text="Constant",
-                            icon="IPO_CONSTANT",
-                        ).mode = "CONSTANT"
-
-                        row = col.row(align=True)
-                        for interp in extra_interpolation_types:
-                            row.operator(
-                                "onigiri.set_interpolation",
-                                text=" ",
-                                icon=extra_interpolation_types[interp],
-                            ).mode = interp
-
-                    col = box.column(align=True)
-                    row = col.row(align=True)
-                    row.prop(
-                        context.scene.oni_anim,
-                        "anim_expression_menu_enabled",
-                        text="Expression Options",
-                        emboss = False,
-                        icon_value = get_panel_icon_id(anim.anim_expression_menu_enabled),
-                    )
-
-                    if anim.anim_expression_menu_enabled:
-                        row = col.row(align=True)
-                        box.prop(
-                            anim,
-                            "anim_hand_pose_enabled",
-                            text="Use an internal hand pose",
-                            toggle=use_prop_icons,
-                            icon_value = get_prop_icon_id("hand_love"),
-                        )
-                        if anim.anim_hand_pose_enabled:
-                            box.prop_menu_enum(
-                                anim,
-                                "anim_hand_pose",
-                            )
-
+                            "onigiri.add_emote",
+                            text="Clear",
+                            icon_value = get_icon_id("x_red"),
+                        ).emote = ""
                         col = box.column(align=True)
                         row = col.row(align=True)
 
-                        row.prop(
-                            anim,
-                            "anim_emote_menu_enabled",
-                            text="Emote List",
-                            emboss = False,
-                            icon_value = get_panel_icon_id(anim.anim_emote_menu_enabled),
-                        )
-                        if anim.anim_emote_menu_enabled:
-                            col = box.column(align=True)
-                            row = col.row(align=True)
-
-                            row.label(text="- Emote list coded by Candy")
-                            row = col.row(align=True)
-                            row.label(
-                                text="- Emote Name: " + anim.anim_emote_name,
-                            )
-
-                            col = box.column(align=True)
+                        for emote in gestures.emote:
+                            if emote == anim.anim_emote_name:
+                                chosen_icon = "check_green"
+                            else:
+                                chosen_icon = "blank"
+                            p = gestures.emote[emote].get("priority")
+                            if p is not None:
+                                p = str(p)
+                            l = gestures.emote[emote].get("looped")
+                            if l:
+                                l = "yes"
+                            elif not l:
+                                l = "no"
+                            else:
+                                l = "unknown"
                             row = col.row(align=True)
                             row.operator(
                                 "onigiri.add_emote",
-                                text="Clear",
-                                icon_value = get_icon_id("x_red"),
-                            ).emote = ""
-                            col = box.column(align=True)
-                            row = col.row(align=True)
+                                text=emote
+                                + " - Looped: "
+                                + l
+                                + " / Priority: "
+                                + p,
+                                icon_value = get_icon_id(chosen_icon),
+                            ).emote = emote
 
-                            for emote in gestures.emote:
-                                if emote == anim.anim_emote_name:
-                                    chosen_icon = "check_green"
-                                else:
-                                    chosen_icon = "blank"
-                                p = gestures.emote[emote].get("priority")
-                                if p is not None:
-                                    p = str(p)
-                                l = gestures.emote[emote].get("looped")
-                                if l:
-                                    l = "yes"
-                                elif not l:
-                                    l = "no"
-                                else:
-                                    l = "unknown"
-                                row = col.row(align=True)
-                                row.operator(
-                                    "onigiri.add_emote",
-                                    text=emote
-                                    + " - Looped: "
-                                    + l
-                                    + " / Priority: "
-                                    + p,
-                                    icon_value = get_icon_id(chosen_icon),
-                                ).emote = emote
-
-                        if anim.anim_show_actions:
-                            col = box.column(align=True)
+                    if anim.anim_show_actions:
+                        col = box.column(align=True)
+                        row = col.row(align=True)
+                        row.label(
+                            text="- Enable items to export -",
+                        )
+                        for actionObj in bpy.data.actions:
                             row = col.row(align=True)
-                            row.label(
-                                text="- Enable items to export -",
+                            row.prop(
+                                anim,
+                                "anim_action_selected",
+                                text="",
                             )
-                            for actionObj in bpy.data.actions:
-                                row = col.row(align=True)
-                                row.prop(
-                                    anim,
-                                    "anim_action_selected",
-                                    text="",
-                                )
-                                row.label(
-                                    text=actionObj.name,
-                                )
+                            row.label(
+                                text=actionObj.name,
+                            )
 
         row = self.layout.row(align=True)
 
@@ -54238,7 +54246,8 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 context.window_manager.oni_deform,
                 "deformer_acquire_animation_details",
                 text="Acquire Deformer Details",
-                icon_value = get_icon_id("undeform"),
+                toggle=use_prop_icons,
+                icon_value = get_prop_icon_id("undeform"),
             )
 
         row = self.layout.row(align=True)
@@ -57485,7 +57494,7 @@ class OnigiriHeadPanel(bpy.types.Panel):
             onih,
             "bento_head_lock",
             text="Lock Mesh",
-            icon_value = get_icon_id("head"),
+            icon_value = get_icon_id("mesh"),
         )
         row.prop(
             onih,

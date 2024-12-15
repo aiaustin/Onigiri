@@ -1,7 +1,7 @@
 import bpy
 import mathutils
 from mathutils import Vector
-from math import *
+import math
 from . import rigutils
 from . import utils
 from .presets import bone_sides
@@ -601,7 +601,7 @@ def mesh_from_rig(armature=None):
             editBoneTailRadius = editBone.tail_radius
 
             baseIndex = len(verts)
-            baseSize = sqrt(editBoneSize)
+            baseSize = math.sqrt(editBoneSize)
             newVerts, newFaces = boneGeometry(
                 editBoneHead,
                 editBoneTail,

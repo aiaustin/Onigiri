@@ -22,6 +22,15 @@ def load_icons():
 
     custom_icons = bpy.utils.previews.new()
     custom_icons.load("blank", "", "IMAGE")
+
+    custom_icons.load("bone", os.path.join(icons_dir, "bone.svg"), "IMAGE")
+    custom_icons.load("bone_red", os.path.join(icons_dir, "bone_red.svg"), "IMAGE")
+    custom_icons.load("bone_blue", os.path.join(icons_dir, "bone_blue.svg"), "IMAGE")
+    custom_icons.load("bone_black", os.path.join(icons_dir, "bone_black.svg"), "IMAGE")
+    custom_icons.load("bone_green", os.path.join(icons_dir, "bone_green.svg"), "IMAGE")
+
+    custom_icons.load("second-life", os.path.join(icons_dir, "second-life.svg"), "IMAGE")
+
     custom_icons.load("arrow_top_right", os.path.join(icons_dir, "arrow_top_right.png"), "IMAGE")
     custom_icons.load("arrow_bottom_right", os.path.join(icons_dir, "arrow_bottom_right.png"), "IMAGE")
     custom_icons.load("arrow_up", os.path.join(icons_dir, "arrow_up.png"), "IMAGE")
@@ -72,15 +81,10 @@ def load_icons():
         "restore_bone", os.path.join(icons_dir, "restore_bone.png"), "IMAGE"
     )
 
-    custom_icons.load("bone", os.path.join(icons_dir, "bone.png"), "IMAGE")
+    custom_icons.load("bone_fixed", os.path.join(icons_dir, "bone_fixed.png"), "IMAGE")
     custom_icons.load("bones", os.path.join(icons_dir, "bones.png"), "IMAGE")
     custom_icons.load("bones_blue", os.path.join(icons_dir, "bones_blue.png"), "IMAGE")
     custom_icons.load("bone_bent", os.path.join(icons_dir, "bone_bent.png"), "IMAGE")
-    custom_icons.load("bone_fixed", os.path.join(icons_dir, "bone_fixed.png"), "IMAGE")
-    custom_icons.load("bone_red", os.path.join(icons_dir, "bone_red.png"), "IMAGE")
-    custom_icons.load("bone_blue", os.path.join(icons_dir, "bone_blue.png"), "IMAGE")
-    custom_icons.load("bone_black", os.path.join(icons_dir, "bone_black.png"), "IMAGE")
-    custom_icons.load("bone_green", os.path.join(icons_dir, "bone_green.png"), "IMAGE")
     custom_icons.load(
         "bone_yellow", os.path.join(icons_dir, "bone_yellow.png"), "IMAGE"
     )
@@ -529,7 +533,6 @@ def load_icons():
     custom_icons.load("link", os.path.join(icons_dir, "link.png"), "IMAGE")
 
     custom_icons.load("opensim", os.path.join(icons_dir, "opensim.png"), "IMAGE")
-    custom_icons.load("second-life", os.path.join(icons_dir, "second-life.svg"), "IMAGE")
     custom_icons.load("controller", os.path.join(icons_dir, "controller.png"), "IMAGE")
     custom_icons.load("start", os.path.join(icons_dir, "start.png"), "IMAGE")
 
@@ -630,6 +633,7 @@ def load_icons():
         "reset": "LOOP_BACK",
         "folder": "FILE_FOLDER",
         "x_red": "CANCEL",
+        "export": "EXPORT",
         "load": "IMPORT",
         "save": "EXPORT",
         "first": "TRIA_LEFT_BAR",
@@ -637,7 +641,8 @@ def load_icons():
         "bone": "BONE_DATA",
         "bones": "GROUP_BONE",
         "delete": "TRASH",
-        "apply": "NLA_PUSHDOWN",
+        "apply": "NLA_PUSHDOWN", #SHADERFX
+        "cube" :"CUBE",
         "tag": "BOOKMARKS",
         "lock": "DECORATE_LOCKED",
         "unlock": "DECORATE_UNLOCKED",
@@ -654,7 +659,9 @@ def load_icons():
         "dot": "RADIOBUT_ON",
         "dot_off": "RADIOBUT_OFF",
         "point": "DOT",
-        "x": "X",
+        "x": "EVENT_X",
+        "y": "EVENT_Y",
+        "z": "EVENT_Z",
         #"data": "ASSET_MANAGER",
         "loop": "DECORATE_OVERRIDE",
         "pin": "PINNED",
@@ -664,6 +671,10 @@ def load_icons():
         "pin_off": "UNPINNED",
         "old": "SCREEN_BACK",
         "image": "IMAGE_DATA",
+        "map": "VIEW_ORTHO",
+        "visibility": "VIS_SEL_11",
+        "eye": "VIS_SEL_11",
+        "pen": "GREASEPENCIL",
         "convert": "CON_FOLLOWPATH",
     }
 
