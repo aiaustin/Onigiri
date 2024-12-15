@@ -48241,8 +48241,8 @@ class OnigiriPanelMeshTools(bpy.types.Panel):
             onim,
             "from_default_class",
             text="",
-            toggle=use_prop_icons,
-            icon_value = get_prop_icon_id("default"),
+            toggle=True,
+            icon_value = get_icon_id("default"),
         )
 
         col = box.column(align=True)
@@ -48425,7 +48425,6 @@ class OnigiriPanelMeshTools(bpy.types.Panel):
             row = col.row(align=True)
             row.operator(
                 "onigiri.refit_reset",
-                toggle=True,
                 text="Reset refitter",
             )
             row = col.row(align=True)
@@ -48602,19 +48601,19 @@ class OnigiriSkinningPanel(bpy.types.Panel):
                     oni_skin,
                     "skin_pose_mode",
                     text="Pose Mode",
-                    icon_value = get_icon_id("apply_pose"),
+                    icon_value = get_prop_icon_id("apply_pose"),
                 )
                 row.prop(
                     oni_skin,
                     "skin_keep_proxy",
                     text="Keep Proxy",
-                    icon_value = get_icon_id("proxy"),
+                    icon_value = get_prop_icon_id("proxy"),
                 )
                 row.prop(
                     oni_skin,
                     "skin_use_skin_pose",
                     text="Skin Pose",
-                    icon_value = get_icon_id("walking_red"),
+                    icon_value = get_prop_icon_id("walking_red"),
                 )
 
                 col = box.column(align=True)
@@ -48760,9 +48759,9 @@ class OnigiriSkinningPanel(bpy.types.Panel):
                 "onigiri.skin_pose",
                 text="Pose Arms",
             ).action = "arms"
-            row.prop(oni_skin, "skin_pose_arms_axis_x", text="X", toggle=use_prop_icons)
-            row.prop(oni_skin, "skin_pose_arms_axis_y", text="Y", toggle=use_prop_icons)
-            row.prop(oni_skin, "skin_pose_arms_axis_z", text="Z", toggle=use_prop_icons)
+            row.prop(oni_skin, "skin_pose_arms_axis_x", text="X", toggle=True)
+            row.prop(oni_skin, "skin_pose_arms_axis_y", text="Y", toggle=True)
+            row.prop(oni_skin, "skin_pose_arms_axis_z", text="Z", toggle=True)
             row.prop(oni_skin, "skin_pose_arms_angle", text="", toggle=True)
             row = col.row(align=True)
             row.operator(
@@ -48770,9 +48769,9 @@ class OnigiriSkinningPanel(bpy.types.Panel):
                 text="Pose Legs",
             ).action = "legs"
 
-            row.prop(oni_skin, "skin_pose_legs_axis_x", text="X", toggle=use_prop_icons)
-            row.prop(oni_skin, "skin_pose_legs_axis_y", text="Y", toggle=use_prop_icons)
-            row.prop(oni_skin, "skin_pose_legs_axis_z", text="Z", toggle=use_prop_icons)
+            row.prop(oni_skin, "skin_pose_legs_axis_x", text="X", toggle=True)
+            row.prop(oni_skin, "skin_pose_legs_axis_y", text="Y", toggle=True)
+            row.prop(oni_skin, "skin_pose_legs_axis_z", text="Z", toggle=True)
             row.prop(oni_skin, "skin_pose_legs_angle", text="", toggle=True)
             row = col.row(align=True)
             row.operator(
@@ -48908,9 +48907,9 @@ class OnigiriSkinningPanel(bpy.types.Panel):
             row.prop(
                 bpy.context.scene.oni_devkit,
                 "preserve_empty_counterparts",
-                toggle=use_prop_icons,
+                toggle=True,
                 text="",
-                icon_value = get_prop_icon_id("symmetric"),
+                icon_value = get_icon_id("symmetric"),
             )
 
             groups_total = 0
@@ -53379,6 +53378,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 icon_value = get_prop_icon_id("map_bones"),
             )
 
+            row = col.row(align=True)
             row.prop(
                 anim,
                 "anim_high_fidelity",

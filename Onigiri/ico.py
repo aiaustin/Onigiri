@@ -29,6 +29,16 @@ def load_icons():
     custom_icons.load("bone_black", os.path.join(icons_dir, "bone_black.svg"), "IMAGE")
     custom_icons.load("bone_green", os.path.join(icons_dir, "bone_green.svg"), "IMAGE")
 
+    custom_icons.load("dot_red", os.path.join(icons_dir, "dot_red.svg"), "IMAGE")
+    custom_icons.load("dot_blue", os.path.join(icons_dir, "dot_blue.svg"), "IMAGE")
+    custom_icons.load("dot_white", os.path.join(icons_dir, "dot_white.svg"), "IMAGE")
+    custom_icons.load("dot_black", os.path.join(icons_dir, "dot_black.svg"), "IMAGE")
+    custom_icons.load("dot_green", os.path.join(icons_dir, "dot_green.svg"), "IMAGE")
+    custom_icons.load("dot_yellow", os.path.join(icons_dir, "dot_yellow.svg"), "IMAGE")
+
+    custom_icons.load("cut", os.path.join(icons_dir, "cut.svg"), "IMAGE")
+    custom_icons.load("loop", os.path.join(icons_dir, "loop.svg"), "IMAGE")
+    custom_icons.load("anchor", os.path.join(icons_dir, "anchor.svg"), "IMAGE")
     custom_icons.load("second-life", os.path.join(icons_dir, "second-life.svg"), "IMAGE")
 
     custom_icons.load("arrow_top_right", os.path.join(icons_dir, "arrow_top_right.png"), "IMAGE")
@@ -43,73 +53,41 @@ def load_icons():
     custom_icons.load("bone_target", os.path.join(icons_dir, "bone_target.png"), "IMAGE")
     custom_icons.load("walking_green", os.path.join(icons_dir, "walking_green.png"), "IMAGE")
     custom_icons.load("walking_white", os.path.join(icons_dir, "walking_white.png"), "IMAGE")
-    custom_icons.load(
-        "walking_black", os.path.join(icons_dir, "walking_black.png"), "IMAGE"
-    )
-    custom_icons.load(
-        "walking_blue", os.path.join(icons_dir, "walking_blue.png"), "IMAGE"
-    )
-    custom_icons.load(
-        "walking_red", os.path.join(icons_dir, "walking_red.png"), "IMAGE"
-    )
+    custom_icons.load("walking_black", os.path.join(icons_dir, "walking_black.png"), "IMAGE")
+    custom_icons.load("walking_blue", os.path.join(icons_dir, "walking_blue.png"), "IMAGE")
+    custom_icons.load("walking_red", os.path.join(icons_dir, "walking_red.png"), "IMAGE")
     custom_icons.load("follow", os.path.join(icons_dir, "follow.png"), "IMAGE")
     custom_icons.load("lead", os.path.join(icons_dir, "lead.png"), "IMAGE")
 
     custom_icons.load("map_bones", os.path.join(icons_dir, "map_bones.png"), "IMAGE")
-    custom_icons.load(
-        "map_bones_reverse", os.path.join(icons_dir, "map_bones_reverse.png"), "IMAGE"
-    )
-    custom_icons.load(
-        "map_to_mbones", os.path.join(icons_dir, "map_to_mbones.png"), "IMAGE"
-    )
-    custom_icons.load(
-        "map_to_template", os.path.join(icons_dir, "map_to_template.png"), "IMAGE"
-    )
-    custom_icons.load(
-        "load_template", os.path.join(icons_dir, "load_template.png"), "IMAGE"
-    )
+    custom_icons.load("map_bones_reverse", os.path.join(icons_dir, "map_bones_reverse.png"), "IMAGE")
+    custom_icons.load("map_to_mbones", os.path.join(icons_dir, "map_to_mbones.png"), "IMAGE")
+    custom_icons.load("map_to_template", os.path.join(icons_dir, "map_to_template.png"), "IMAGE")
+    custom_icons.load("load_template", os.path.join(icons_dir, "load_template.png"), "IMAGE")
     custom_icons.load("save", os.path.join(icons_dir, "save.png"), "IMAGE")
     custom_icons.load("save_dark", os.path.join(icons_dir, "save_dark.png"), "IMAGE")
     custom_icons.load("load", os.path.join(icons_dir, "load.png"), "IMAGE")
     custom_icons.load("reset", os.path.join(icons_dir, "reset.png"), "IMAGE")
-    custom_icons.load(
-        "reset_warning", os.path.join(icons_dir, "reset_warning.png"), "IMAGE"
-    )
+    custom_icons.load("reset_warning", os.path.join(icons_dir, "reset_warning.png"), "IMAGE")
     custom_icons.load("fix_pose", os.path.join(icons_dir, "fix_pose.png"), "IMAGE")
     custom_icons.load("magnify", os.path.join(icons_dir, "magnify.png"), "IMAGE")
-    custom_icons.load(
-        "restore_bone", os.path.join(icons_dir, "restore_bone.png"), "IMAGE"
-    )
+    custom_icons.load("restore_bone", os.path.join(icons_dir, "restore_bone.png"), "IMAGE")
 
     custom_icons.load("bone_fixed", os.path.join(icons_dir, "bone_fixed.png"), "IMAGE")
     custom_icons.load("bones", os.path.join(icons_dir, "bones.png"), "IMAGE")
     custom_icons.load("bones_blue", os.path.join(icons_dir, "bones_blue.png"), "IMAGE")
     custom_icons.load("bone_bent", os.path.join(icons_dir, "bone_bent.png"), "IMAGE")
-    custom_icons.load(
-        "bone_yellow", os.path.join(icons_dir, "bone_yellow.png"), "IMAGE"
-    )
+    custom_icons.load("bone_yellow", os.path.join(icons_dir, "bone_yellow.png"), "IMAGE")
     custom_icons.load("bone_mixed", os.path.join(icons_dir, "bone_mixed.png"), "IMAGE")
-    custom_icons.load(
-        "bone_black_red", os.path.join(icons_dir, "bone_black_red.png"), "IMAGE"
-    )
-    custom_icons.load(
-        "bone_yellow_blue", os.path.join(icons_dir, "bone_yellow_blue.png"), "IMAGE"
-    )
+    custom_icons.load("bone_black_red", os.path.join(icons_dir, "bone_black_red.png"), "IMAGE")
+    custom_icons.load("bone_yellow_blue", os.path.join(icons_dir, "bone_yellow_blue.png"), "IMAGE")
     custom_icons.load("joint", os.path.join(icons_dir, "joint.png"), "IMAGE")
 
-    custom_icons.load(
-        "view_anchor_bones", os.path.join(icons_dir, "view_anchor_bones.png"), "IMAGE"
-    )
-    custom_icons.load(
-        "view_reskin_bones", os.path.join(icons_dir, "view_reskin_bones.png"), "IMAGE"
-    )
-    custom_icons.load(
-        "view_output_bones", os.path.join(icons_dir, "view_output_bones.png"), "IMAGE"
-    )
+    custom_icons.load("view_anchor_bones", os.path.join(icons_dir, "view_anchor_bones.png"), "IMAGE")
+    custom_icons.load("view_reskin_bones", os.path.join(icons_dir, "view_reskin_bones.png"), "IMAGE")
+    custom_icons.load("view_output_bones", os.path.join(icons_dir, "view_output_bones.png"), "IMAGE")
 
-    custom_icons.load(
-        "tail_to_head", os.path.join(icons_dir, "tail_to_head.png"), "IMAGE"
-    )
+    custom_icons.load("tail_to_head", os.path.join(icons_dir, "tail_to_head.png"), "IMAGE")
     custom_icons.load("map", os.path.join(icons_dir, "map.png"), "IMAGE")
     custom_icons.load("create_rig", os.path.join(icons_dir, "create_rig.png"), "IMAGE")
     custom_icons.load(
@@ -214,13 +192,6 @@ def load_icons():
 
     custom_icons.load("info", os.path.join(icons_dir, "info.png"), "IMAGE")
 
-    custom_icons.load("dot_red", os.path.join(icons_dir, "dot_red.png"), "IMAGE")
-    custom_icons.load("dot_blue", os.path.join(icons_dir, "dot_blue.png"), "IMAGE")
-    custom_icons.load("dot_white", os.path.join(icons_dir, "dot_white.png"), "IMAGE")
-    custom_icons.load("dot_black", os.path.join(icons_dir, "dot_black.png"), "IMAGE")
-    custom_icons.load("dot_green", os.path.join(icons_dir, "dot_green.png"), "IMAGE")
-    custom_icons.load("dot_yellow", os.path.join(icons_dir, "dot_yellow.png"), "IMAGE")
-
     custom_icons.load("key_red", os.path.join(icons_dir, "key_red.png"), "IMAGE")
     custom_icons.load("key_blue", os.path.join(icons_dir, "key_blue.png"), "IMAGE")
     custom_icons.load("key_white", os.path.join(icons_dir, "key_white.png"), "IMAGE")
@@ -256,7 +227,6 @@ def load_icons():
         "broken_link", os.path.join(icons_dir, "broken_link.png"), "IMAGE"
     )
 
-    custom_icons.load("loop", os.path.join(icons_dir, "loop.png"), "IMAGE")
     custom_icons.load(
         "loop_enabled", os.path.join(icons_dir, "loop_enabled.png"), "IMAGE"
     )
@@ -330,7 +300,6 @@ def load_icons():
     custom_icons.load("retarget", os.path.join(icons_dir, "retarget.png"), "IMAGE")
     custom_icons.load("proxy", os.path.join(icons_dir, "proxy.png"), "IMAGE")
     custom_icons.load("detach", os.path.join(icons_dir, "detach.png"), "IMAGE")
-    custom_icons.load("anchor", os.path.join(icons_dir, "anchor.png"), "IMAGE")
     custom_icons.load("target", os.path.join(icons_dir, "target.png"), "IMAGE")
     custom_icons.load(
         "disable_map_pose", os.path.join(icons_dir, "disable_map_pose.png"), "IMAGE"
@@ -484,7 +453,6 @@ def load_icons():
     custom_icons.load("clean", os.path.join(icons_dir, "clean.png"), "IMAGE")
     custom_icons.load("fill", os.path.join(icons_dir, "fill.png"), "IMAGE")
     custom_icons.load("empty", os.path.join(icons_dir, "empty.png"), "IMAGE")
-    custom_icons.load("cut", os.path.join(icons_dir, "cut.png"), "IMAGE")
     custom_icons.load("copy", os.path.join(icons_dir, "copy.png"), "IMAGE")
     custom_icons.load("paste", os.path.join(icons_dir, "paste.png"), "IMAGE")
     custom_icons.load("insert", os.path.join(icons_dir, "insert.png"), "IMAGE")
@@ -577,9 +545,7 @@ def load_icons():
     custom_icons.load("ik", os.path.join(icons_dir, "ik.png"), "IMAGE")
     custom_icons.load("object", os.path.join(icons_dir, "object.png"), "IMAGE")
     custom_icons.load("object_black", os.path.join(icons_dir, "object.png"), "IMAGE")
-    custom_icons.load(
-        "object_white", os.path.join(icons_dir, "object_white.png"), "IMAGE"
-    )
+    custom_icons.load("object_white", os.path.join(icons_dir, "object_white.png"), "IMAGE")
     custom_icons.load("object_red", os.path.join(icons_dir, "object_red.png"), "IMAGE")
     custom_icons.load("dynamic", os.path.join(icons_dir, "dynamic.png"), "IMAGE")
 
@@ -588,14 +554,10 @@ def load_icons():
     custom_icons.load("pull", os.path.join(icons_dir, "pull.png"), "IMAGE")
     custom_icons.load("master", os.path.join(icons_dir, "master.png"), "IMAGE")
     custom_icons.load("puppet", os.path.join(icons_dir, "puppet.png"), "IMAGE")
-    custom_icons.load(
-        "align_bones", os.path.join(icons_dir, "align_bones.png"), "IMAGE"
-    )
+    custom_icons.load("align_bones", os.path.join(icons_dir, "align_bones.png"), "IMAGE")
     custom_icons.load("project", os.path.join(icons_dir, "project.png"), "IMAGE")
     custom_icons.load("pin", os.path.join(icons_dir, "pin.png"), "IMAGE")
-    custom_icons.load(
-        "inverse_motion", os.path.join(icons_dir, "inverse_motion.png"), "IMAGE"
-    )
+    custom_icons.load("inverse_motion", os.path.join(icons_dir, "inverse_motion.png"), "IMAGE")
 
     custom_icons.load("nametag", os.path.join(icons_dir, "nametag.png"), "IMAGE")
 
@@ -675,6 +637,8 @@ def load_icons():
         "visibility": "VIS_SEL_11",
         "eye": "VIS_SEL_11",
         "pen": "GREASEPENCIL",
+        "mirror": "MOD_MIRROR",
+        "symmetric": "MOD_MIRROR",
         "convert": "CON_FOLLOWPATH",
     }
 
