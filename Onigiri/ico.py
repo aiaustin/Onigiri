@@ -39,7 +39,10 @@ def load_icons():
     custom_icons.load("cut", os.path.join(icons_dir, "cut.svg"), "IMAGE")
     custom_icons.load("loop", os.path.join(icons_dir, "loop.svg"), "IMAGE")
     custom_icons.load("anchor", os.path.join(icons_dir, "anchor.svg"), "IMAGE")
+    custom_icons.load("roll", os.path.join(icons_dir, "roll.svg"), "IMAGE")
     custom_icons.load("second-life", os.path.join(icons_dir, "second-life.svg"), "IMAGE")
+    #https://www.svgrepo.com/svg/321379/skeleton-inside
+    #custom_icons.load("skeleton", os.path.join(icons_dir, "skeleton.svg"), "IMAGE")
 
     custom_icons.load("arrow_top_right", os.path.join(icons_dir, "arrow_top_right.png"), "IMAGE")
     custom_icons.load("arrow_bottom_right", os.path.join(icons_dir, "arrow_bottom_right.png"), "IMAGE")
@@ -236,7 +239,6 @@ def load_icons():
     )
 
     custom_icons.load("angle", os.path.join(icons_dir, "angle.png"), "IMAGE")
-    custom_icons.load("roll", os.path.join(icons_dir, "roll.png"), "IMAGE")
     custom_icons.load("bake", os.path.join(icons_dir, "bake.png"), "IMAGE")
     custom_icons.load("store", os.path.join(icons_dir, "store.png"), "IMAGE")
     custom_icons.load("record", os.path.join(icons_dir, "record.png"), "IMAGE")
@@ -586,6 +588,7 @@ def load_icons():
         "kit": "OUTLINER_OB_ARMATURE",
         "rotate": "ORIENTATION_GIMBAL",
         "clean": "BRUSH_DATA",
+        "restore": "LOOP_BACK",
         "time": "PREVIEW_RANGE",
         "build": "MOD_BUILD",
         "refresh": "FILE_REFRESH",
@@ -595,6 +598,7 @@ def load_icons():
         "reset": "LOOP_BACK",
         "folder": "FILE_FOLDER",
         "x_red": "CANCEL",
+        "cancel": "CANCEL",
         "export": "EXPORT",
         "load": "IMPORT",
         "save": "EXPORT",
@@ -624,6 +628,7 @@ def load_icons():
         "x": "EVENT_X",
         "y": "EVENT_Y",
         "z": "EVENT_Z",
+        "axis_side": "AXIS_SIDE",
         #"data": "ASSET_MANAGER",
         "loop": "DECORATE_OVERRIDE",
         "pin": "PINNED",
@@ -635,11 +640,25 @@ def load_icons():
         "image": "IMAGE_DATA",
         "map": "VIEW_ORTHO",
         "visibility": "VIS_SEL_11",
-        "eye": "VIS_SEL_11",
+        "eye": "HIDE_OFF",
         "pen": "GREASEPENCIL",
         "mirror": "MOD_MIRROR",
         "symmetric": "MOD_MIRROR",
         "convert": "CON_FOLLOWPATH",
+        "move": "TRACKING_FORWARDS_SINGLE",
+        "preset": "PRESET",
+        "save_default": "FILE_CACHE",
+        "save_preset": "PRESET_NEW",
+        "script": "SCRIPT",
+        "split": "AREA_SWAP",
+        "magnify": "VIEWZOOM", #"VIEW_ZOOM",
+        "settings": "SETTINGS",
+        "broken_link": "UNLINKED",
+        "attach": "APPEND_BLEND",
+        "skeleton": "ARMATURE_DATA",
+        "bake": "TRIA_DOWN_BAR",
+        "sync": "UV_SYNC_SELECT",
+        "isolate": "SPLIT_VERTICAL",
     }
 
 def unload_icons():

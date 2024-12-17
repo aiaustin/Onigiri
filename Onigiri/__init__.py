@@ -46002,7 +46002,7 @@ class OnigiriPaintEnabled(bpy.types.Operator):
         obj = bpy.data.objects
         oni_paint = bpy.context.scene.oni_paint
 
-        utils.cleanup()
+        utils.cleanup1()
 
         if self.state:
 
@@ -47709,6 +47709,7 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
             row.operator(
                 "onigiri.devkit_preset_load",
                 text="Load Preset",
+                icon_value = get_icon_id("load"),
             )
             row.operator(
                 "onigiri.devkit_preset_save",
@@ -47719,7 +47720,7 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
             row.operator(
                 "onigiri.devkit_preset_save_defaults",
                 text="Save Defaults",
-                icon_value = get_icon_id("sliders"),
+                icon_value = get_icon_id("save_default"),
             )
             row.operator(
                 "onigiri.devkit_reset_all",
@@ -47728,24 +47729,21 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
             )
 
             devkit_state_text = " "
-            devkit_state_icon = "code_disabled"
 
             armObj = utils.has_armature()
             if armObj:
                 devkit_state = armObj.get("oni_collada_unsaved")
                 if devkit_state is not None:
                     devkit_state_text = "Unsaved Devkit!"
-                    devkit_state_icon = "code"
                 elif armObj.get("oni_collada_matrices") is not None:
                     devkit_state_text = "Preset Ready!"
-                    devkit_state_icon = "code"
             row = col.row(align=True)
             row.prop(
                 oni_devkit,
                 "devkit_state",
                 emboss=False,
                 text=devkit_state_text,
-                icon_value = get_icon_id(devkit_state_icon),
+                icon_value = get_icon_id("preset"),
             )
             row.operator(
                 "onigiri.collada_data_remove",
@@ -48706,7 +48704,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
                     oni_skin,
                     "skin_pose_lock_sources",
                     text="Sources Recorded",
-                    toggle=use_prop_icons,
+                    toggle=True,
                 )
             if not oni_skin.skin_pose_lock_targets:
                 row.operator(
@@ -48718,7 +48716,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
                     oni_skin,
                     "skin_pose_lock_targets",
                     text="Targets Recorded",
-                    toggle=use_prop_icons,
+                    toggle=True,
                 )
             row = col.row(align=True)
             row.operator(
@@ -53640,14 +53638,6 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     row = col.row(align=True)
 
                     row.prop(
-                        oni,
-                        "blank",
-                        text="",
-                        toggle=True,
-                        emboss=False,
-                        icon_value = get_icon_id("tolerance"),
-                    )
-                    row.prop(
                         anim,
                         "mark_tol",
                         text="Tolerance:",
@@ -54383,21 +54373,25 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 context.scene.oni_anim_props,
                 "pose_clear_location",
                 text="Clear Location",
-                icon_value = get_icon_id("location"),
+                toggle=use_prop_icons,
+                icon_value = get_prop_icon_id("location"),
             )
             row.prop(
                 context.scene.oni_anim_props,
                 "pose_clear_location_root",
                 text="Clear Root Location",
-                icon_value = get_icon_id("center"),
+                toggle=use_prop_icons,
+                icon_value = get_prop_icon_id("center"),
             )
             row = col.row(align=True)
             row.prop(
                 context.scene.oni_anim_props,
                 "reference_from_pose",
                 text="Reference from pose",
-                icon_value = get_icon_id("arrow_left_green"),
+                toggle=use_prop_icons,
+                icon_value = get_prop_icon_id("arrow_left_green"),
             )
+            row = col.row(align=True)
             row.operator(
                 "onigiri.restore_reference_pose",
                 text="Restore reference pose",
@@ -54657,7 +54651,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             row.operator(
                 "onigiri.auto_key_reset",
                 text="",
-                icon_value = get_icon_id("x_black"),
+                icon_value = get_icon_id("cancel"),
             )
             row.operator(
                 "onigiri.auto_key",
@@ -54668,7 +54662,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 oni_autokey,
                 "autokey_steps_disabled",
                 text="",
-                icon_value = get_icon_id("x_red"),
+                icon_value = get_icon_id("cancel"),
             )
             row.prop(
                 oni_autokey,
@@ -54703,13 +54697,13 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 oni_autokey,
                 "autokey_bake_rotation_disabled",
                 text="Rotation Baking",
-                icon_value = get_icon_id("x_black"),
+                icon_value = get_icon_id("cancel"),
             )
             row.prop(
                 oni_autokey,
                 "autokey_bake_location_disabled",
                 text="Location Baking",
-                icon_value = get_icon_id("x_black"),
+                icon_value = get_icon_id("cancel"),
             )
 
             row = col.row(align=True)
@@ -56908,7 +56902,7 @@ class OnigiriPanelRigTools(bpy.types.Panel):
         row.operator(
             "onigiri.restore_bones",
             text="Restore Bones",
-            icon_value = get_icon_id("restore_bone"),
+            icon_value = get_icon_id("restore"),
         )
 
         layout = self.layout
@@ -56933,7 +56927,7 @@ class OnigiriPanelRigTools(bpy.types.Panel):
         row.operator(
             "onigiri.fix_hierarchy",
             text="Fix Hierarchy",
-            icon_value = get_icon_id("integrity_check"),
+            icon_value = get_icon_id("skeleton"),
         )
         row = col.row(align=True)
         row.operator(
@@ -57001,7 +56995,7 @@ class OnigiriPanelRigTools(bpy.types.Panel):
         row.operator(
             "onigiri.fix_rig_orientation",
             text="Fix Rig Orientation (SL)",
-            icon_value = get_icon_id("orientation"),
+            icon_value = get_icon_id("axis_side"),
         )
 
         row = col.row(align=True)
