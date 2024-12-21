@@ -36,6 +36,7 @@ def load_icons():
     custom_icons.load("dot_green", os.path.join(icons_dir, "dot_green.svg"), "IMAGE")
     custom_icons.load("dot_yellow", os.path.join(icons_dir, "dot_yellow.svg"), "IMAGE")
 
+    custom_icons.load("click", os.path.join(icons_dir, "click.svg"), "IMAGE")
     custom_icons.load("cut", os.path.join(icons_dir, "cut.svg"), "IMAGE")
     custom_icons.load("loop", os.path.join(icons_dir, "loop.svg"), "IMAGE")
     custom_icons.load("anchor", os.path.join(icons_dir, "anchor.svg"), "IMAGE")
