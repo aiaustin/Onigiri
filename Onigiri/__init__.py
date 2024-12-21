@@ -6203,18 +6203,22 @@ class OnigiriSnapDestroy(bpy.types.Operator):
             if o.type == "ARMATURE":
                 armObj = snap.get_director(armature=o.name)
                 if armObj:
-                    for k in armObj.keys():
+                    keys = list(armObj.keys())
+                    for k in keys:
                         armObj.pop(k, "")
         for o in bpy.context.selected_objects:
-            for k in o.keys():
+            keys = list(o.keys())
+            for k in keys:
                 o.pop(k, "")
+
         arms = []
         for o in bpy.context.selected_objects:
             for mObj in o.modifiers:
                 if mObj.type == "ARMATURE":
                     arms.append(mObj.object)
         for o in arms:
-            for k in o.keys():
+            keys = list(o.keys())
+            for k in keys:
                 o.pop(k, "")
 
         return {"FINISHED"}
