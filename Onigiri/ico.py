@@ -4,6 +4,7 @@ from . import mod_settings
 from .mod_settings import *
 
 use_prop_icons = False
+use_oper_icons = False
 
 ## https://docs.blender.org/api/current/bpy_types_enum_items/icon_items.html
 
@@ -579,8 +580,8 @@ def load_icons():
         "checked": "CHECKBOX_HLT",
         "unchecked": "CHECKBOX_DEHLT",
         "mesh": "MONKEY",
-        "panel_opened": "TRIA_DOWN",
-        "panel_closed": "TRIA_RIGHT",
+        "panel_opened": "DISCLOSURE_TRI_DOWN",
+        "panel_closed": "DISCLOSURE_TRI_RIGHT",
         "star_green": "ARMATURE_DATA",
         "axis_y" : "AXIS_FRONT",
         "axis": "EMPTY_AXIS",
@@ -654,12 +655,16 @@ def load_icons():
         "split": "AREA_SWAP",
         "magnify": "VIEWZOOM", #"VIEW_ZOOM",
         "settings": "SETTINGS",
+        "configure": "PREFERENCES",
+        "smooth": "MOD_SMOOTH",
         "broken_link": "UNLINKED",
         "attach": "APPEND_BLEND",
         "skeleton": "ARMATURE_DATA",
         "bake": "TRIA_DOWN_BAR",
         "sync": "UV_SYNC_SELECT",
         "isolate": "SPLIT_VERTICAL",
+        "mod_time": "MOD_TIME",
+        "match": "CON_SIZELIKE",
     }
 
 def unload_icons():
@@ -694,3 +699,13 @@ def get_prop_icon_id(name):
         return get_icon_id(name)
     else:
         return 0
+
+def get_oper_icon_id(name):
+    if use_oper_icons:
+        icon_name = map_icons.get(name)
+        if icon_name:
+            return builtin_icons[icon_name]
+        else:
+            return get_icon_id("click")
+    else:
+        return get_icon_id(name)

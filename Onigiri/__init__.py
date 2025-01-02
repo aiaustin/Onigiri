@@ -47815,6 +47815,8 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                 icon_value = get_prop_icon_id("symmetric"),
             )
 
+            row = col.row(align=True)
+
             row.prop(
                 oni_devkit,
                 "export_copies",
@@ -47830,6 +47832,9 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                 text="Apply Rig Scale",
                 icon_value = get_prop_icon_id("scale"),
             )
+
+            row = col.row(align=True)
+
             row.prop(
                 oni_devkit,
                 "use_bind_pose",
@@ -48252,7 +48257,7 @@ class OnigiriPanelMeshTools(bpy.types.Panel):
         row.operator(
             "onigiri.mesh_from_armature",
             text="Create mesh from armature",
-            icon_value = get_icon_id("rig_to_mesh"),
+            icon_value = get_oper_icon_id("rig_to_mesh"),
         )
         row.prop(
             onim,
@@ -48418,7 +48423,7 @@ class OnigiriPanelMeshTools(bpy.types.Panel):
         if onim.refit_enabled:
             layout = self.layout
             box = layout.box()
-            col = box.column(align=True)
+            col = box.column(align=False)
 
             row = col.row(align=True)
 
@@ -53146,7 +53151,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 "anim_loop_advanced",
                 text="",
                 toggle=True,
-                icon_value = get_icon_id("configure"),
+                icon_value = get_icon_id("time"),
             )
             col = box.column(align=True)
 
@@ -53193,15 +53198,19 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             oni_split = bpy.context.window_manager.oni_split
             col = box.column(align=True)
             row = col.row(align=True)
+
             row.prop(
                 oni_split,
                 "split_enabled",
-                text="Split Animation",
+                text="Split Animation ",
                 toggle=use_prop_icons,
                 icon_value = get_prop_icon_id("split"),
             )
 
             if oni_split.split_enabled:
+                col = col.column(align=True)
+                col.enabled = oni_split.split_enabled
+
                 row = col.row(align=True)
                 row.prop(
                     oni_split,
@@ -53381,11 +53390,20 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             )
 
             row = col.row(align=True)
+
             row.prop(
                 anim,
                 "anim_high_fidelity",
                 text="High Fidelity (Bake)",
                 toggle=use_prop_icons,
+            )
+
+            row.prop(
+                anim,
+                "anim_linear",
+                text="Linear Motion",
+                toggle=use_prop_icons,
+                icon_value = get_prop_icon_id("linear"),
             )
 
             if anim.anim_high_fidelity:
@@ -53451,16 +53469,6 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     text="Location",
                     toggle=use_prop_icons,
                     icon_value = get_prop_icon_id("location_red"),
-                )
-
-                row = col.row(align=True)
-
-                row.prop(
-                    anim,
-                    "anim_linear",
-                    text="Linear Motion",
-                    toggle=use_prop_icons,
-                    icon_value = get_prop_icon_id("linear"),
                 )
 
                 row = col.separator()
