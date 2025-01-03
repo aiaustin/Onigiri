@@ -604,6 +604,7 @@ def load_icons():
         "export": "EXPORT",
         "load": "IMPORT",
         "save": "EXPORT",
+        "store": "EXPORT",
         "first": "TRIA_LEFT_BAR",
         "last": "TRIA_RIGHT_BAR",
         "bone": "BONE_DATA",
@@ -664,6 +665,8 @@ def load_icons():
         "sync": "UV_SYNC_SELECT",
         "isolate": "SPLIT_VERTICAL",
         "mod_time": "MOD_TIME",
+        "deform": "MOD_SIMPLEDEFORM",
+        "shape": "SHAPEKEY_DATA",
         "match": "CON_SIZELIKE",
     }
 

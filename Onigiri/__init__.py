@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Onigiri",
     "author": "Nessaki",
-    "version": (4, 0, 1, 1),
+    "version": (4, 1, 0, 1),
     "blender": (4, 0, 0),
     "description": "A Japanese dish consisting of small balls or triangles of rice stuffed with a pickled or salted filling, and typically wrapped in dried seaweed.",
     "warning": "",
@@ -2331,7 +2331,7 @@ class OnigiriCharacterConverterPanel(bpy.types.Panel):
             context.scene.oni_mesh,
             "project_rig",
             toggle=use_prop_icons,
-            text="Project full rig",
+            text="Project Full rig",
             icon_value = get_prop_icon_id("project"),
         )
 
@@ -47673,18 +47673,21 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
     def draw(self, context):
         oni_devkit = bpy.context.scene.oni_devkit
         oni = bpy.context.scene.onigiri
-        row = self.layout.row(align=True)
 
         devkit_poll_state = oni_devkit.devkit_poll
 
-        row = self.layout.row(align=True)
+        layout = self.layout
+
+        box = layout.box()
+
+        row = box.row(align=True)
         row.operator(
             "onigiri.collada_export",
             text="Export Mesh For SL / OpenSim",
             icon_value = get_icon_id("second-life"),
         )
 
-        row = self.layout.row(align=True)
+        row = box.row(align=True)
         row.prop(
             oni_devkit,
             "export_menu_enabled",
@@ -47695,9 +47698,6 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
         )
 
         if oni_devkit.export_menu_enabled:
-
-            layout = self.layout
-            box = layout.box()
 
             col = box.column(align=True)
             row = col.row(align=True)
@@ -47871,7 +47871,7 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                 oni_devkit,
                 "project_rig",
                 toggle=use_prop_icons,
-                text="Project full rig",
+                text="Project Full rig",
                 icon_value = get_prop_icon_id("project"),
             )
 
@@ -48039,7 +48039,7 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                 text="Neutral (M)",
             )
 
-            row = self.layout.row(align=True)
+            row = box.row(align=True)
             row.prop(
                 oni_devkit,
                 "export_advanced",
@@ -48054,11 +48054,12 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                 icon_value = get_icon_id("reset"),
             )
 
+            #box.separator(type='LINE')
+
+            col = box.column_flow(columns = 2, align=True)
             if oni_devkit.export_advanced:
                 for export_option in oni_settings["dae_export_options"]:
-
-                    row = self.layout.row(align=True)
-                    row.prop(
+                    col.prop(
                         oni_devkit,
                         export_option,
                         toggle=use_prop_icons,
@@ -48107,18 +48108,18 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
             icon_value = get_icon_id(snap_has_map_icon),
         )
         row = col.row(align=True)
+        row.operator(
+            "onigiri.snap_export_mesh",
+            text="Export Mapped Mesh",
+            icon_value = get_icon_id("export"),
+        )
+
         row.prop(
             oni_snap,
             "snap_export_mapped_old",
             text="",
             icon_value = get_icon_id("old"),
         )
-
-        row.operator(
-            "onigiri.snap_export_mesh",
-            text="Export Mapped Mesh",
-        )
-
 
 class OnigiriPanelMeshTools(bpy.types.Panel):
     """Mesh Tools"""
@@ -48565,8 +48566,14 @@ class OnigiriSkinningPanel(bpy.types.Panel):
         )
         row = col.row(align=True)
         row.label(text=oni_skin.skin_message, icon="INFO")
+
         row = col.row(align=True)
-        row.prop(oni_skin, "skin_lock_garment", text="Lock Mesh(s)", toggle=use_prop_icons)
+        row.prop(
+            oni_skin,
+            "skin_lock_garment",
+            text="Lock Mesh(s)",
+            toggle=True,
+        )
 
         if oni_skin.skin_count > 1:
             row.label(
@@ -48583,7 +48590,10 @@ class OnigiriSkinningPanel(bpy.types.Panel):
             row = col.row(align=True)
             row.enabled = oni_skin.skin_lock_garment
             row.prop(
-                oni_skin, "skin_lock_avatar", text="Lock Weight Sources", toggle=use_prop_icons
+                oni_skin,
+                "skin_lock_avatar",
+                text="Lock Weight Sources",
+                toggle=True
             )
             if oni_skin.source_count > 1:
                 row.label(text=str(oni_skin.source_count))
@@ -48761,25 +48771,27 @@ class OnigiriSkinningPanel(bpy.types.Panel):
             )
 
             col = box.column(align=True)
+
             row = col.row(align=True)
-            row.operator(
-                "onigiri.skin_pose",
-                text="Pose Arms",
-            ).action = "arms"
             row.prop(oni_skin, "skin_pose_arms_axis_x", text="X", toggle=True)
             row.prop(oni_skin, "skin_pose_arms_axis_y", text="Y", toggle=True)
             row.prop(oni_skin, "skin_pose_arms_axis_z", text="Z", toggle=True)
             row.prop(oni_skin, "skin_pose_arms_angle", text="", toggle=True)
+            row.operator(
+                "onigiri.skin_pose",
+                text="Pose Arms",
+            ).action = "arms"
+
             row = col.row(align=True)
+            row.prop(oni_skin, "skin_pose_legs_axis_x", text="X", toggle=True)
+            row.prop(oni_skin, "skin_pose_legs_axis_y", text="Y", toggle=True)
+            row.prop(oni_skin, "skin_pose_legs_axis_z", text="Z", toggle=True)
+            row.prop(oni_skin, "skin_pose_legs_angle", text="", toggle=True)
             row.operator(
                 "onigiri.skin_pose",
                 text="Pose Legs",
             ).action = "legs"
 
-            row.prop(oni_skin, "skin_pose_legs_axis_x", text="X", toggle=True)
-            row.prop(oni_skin, "skin_pose_legs_axis_y", text="Y", toggle=True)
-            row.prop(oni_skin, "skin_pose_legs_axis_z", text="Z", toggle=True)
-            row.prop(oni_skin, "skin_pose_legs_angle", text="", toggle=True)
             row = col.row(align=True)
             row.operator(
                 "onigiri.skin_pose",
@@ -56859,7 +56871,7 @@ class OnigiriPanelRigTools(bpy.types.Panel):
         row.operator(
             "onigiri.remove_bone_shapes",
             text="Remove bone shapes",
-            icon_value = get_icon_id("bone_bent"),
+            icon_value = get_icon_id("shape"),
         )
         row = col.row(align=True)
         row.prop(
