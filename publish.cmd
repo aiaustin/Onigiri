@@ -1,6 +1,11 @@
 @echo off
 
-7z a -r "./Releases/Onigiri-%DATE:~-4%-%DATE:~4,2%-%DATE:~7,2%.7z" Onigiri/*.* -xr!.vscode -xr!__pycache__ -xr!Onigiri.code-workspace
+set filename=".\Releases\Onigiri-%DATE:~-4%-%DATE:~4,2%-%DATE:~7,2%.zip"
+
+if exist "%filename%" (
+    del %filename%
+)
+7z a -r %filename% Onigiri/*.* -tzip -xr!.vscode -xr!__pycache__ -xr!Onigiri.code-workspace
 if errorlevel 1 goto erroroccurred
 
 goto noerrors
