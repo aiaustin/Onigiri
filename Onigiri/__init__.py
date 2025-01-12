@@ -18376,6 +18376,22 @@ class OnigiriColladaDataRemove(bpy.types.Operator):
 
         return {"FINISHED"}
 
+anim_hand_poses_menu = [
+    ("0", "Spread", "1", 0),
+    ("1", "Relaxed", "2", 1),
+    ("2", "Point", "3", 2),
+    ("3", "Fist", "4", 3),
+    ("4", "Relaxed Left", "5", 4),
+    ("5", "Point Left", "6", 5),
+    ("6", "Fist Left", "7", 6),
+    ("7", "Relaxed Right", "8", 7),
+    ("8", "Point Right", "9", 8),
+    ("9", "Fist Right", "10", 9),
+    ("10", "Salute Right", "11", 10),
+    ("11", "Typing", "12", 11),
+    ("12", "Peace Right", "13", 12),
+    ("13", "Palm Right", "14", 13),
+]
 
 class OnigiriAnimEditProperties(bpy.types.PropertyGroup):
 
@@ -18449,6 +18465,8 @@ class OnigiriAnimEditProperties(bpy.types.PropertyGroup):
         "This only works with the classic avatar, not mesh, because it's done with morphs, not bones.",
         default=False,
     )
+
+    """
     anim_hand_poses_menu = [
         ("0", "Spread", "", 0),
         ("1", "Relaxed", "", 1),
@@ -18465,6 +18483,8 @@ class OnigiriAnimEditProperties(bpy.types.PropertyGroup):
         ("12", "Peace Right", "", 12),
         ("13", "Palm Right", "", 13),
     ]
+    """
+
     anim_hand_pose: bpy.props.EnumProperty(
         name="Optional Hand Pose",
         description="Optional hand pose during animation.",
@@ -19005,7 +19025,7 @@ class OnigiriPanelImport(bpy.types.Panel):
                 row.prop(
                     oni_anim_edit,
                     "anim_hand_pose",
-                    text="",
+                    text="Optional Hand Pose: " + anim_hand_poses_menu[int(oni_anim_edit.anim_hand_pose)][1],
                     toggle=True,
                 )
 
@@ -30147,26 +30167,11 @@ class OnigiriAnimProperties(bpy.types.PropertyGroup):
         "This only works with the classic avatar, not mesh, because it's done with morphs, not bones.",
         default=False,
     )
-    anim_hand_poses_menu = [
-        ("0", "Spread", "", 0),
-        ("1", "Relaxed", "", 1),
-        ("2", "Point", "", 2),
-        ("3", "Fist", "", 3),
-        ("4", "Relaxed Left", "", 4),
-        ("5", "Point Left", "", 5),
-        ("6", "Fist Left", "", 6),
-        ("7", "Relaxed Right", "", 7),
-        ("8", "Point Right", "", 8),
-        ("9", "Fist Right", "", 9),
-        ("10", "Salute Right", "", 10),
-        ("11", "Typing", "", 11),
-        ("12", "Peace Right", "", 12),
-        ("13", "Palm Right", "", 13),
-    ]
+
     anim_hand_pose: bpy.props.EnumProperty(
         name="Optional Hand Pose",
         description="Optional hand pose during animation.",
-        items=anim_hand_poses_menu,
+        items=anim_hand_poses_menu
     )
     anim_loop: bpy.props.BoolProperty(
         name="",
@@ -50221,7 +50226,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 "motion_constrain_location",
                 toggle=True,
                 text="",
-                icon_value = get_icon_id("global"),
+                icon_value = get_icon_id("constraint"),
             )
 
             row = col.row(align=True)
@@ -53268,19 +53273,19 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     oni_split,
                     "split_debug",
                     toggle=use_prop_icons,
-                    text="debug",
+                    text="Debug",
                 )
                 row.prop(
                     oni_split,
                     "split_owner",
                     toggle=use_prop_icons,
-                    text="owner",
+                    text="Owner",
                 )
                 row.prop(
                     oni_split,
                     "split_loop",
                     toggle=use_prop_icons,
-                    text="loop",
+                    text="Loop",
                 )
                 row = col.row(align=True)
 
@@ -54020,6 +54025,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         box.prop_menu_enum(
                             anim,
                             "anim_hand_pose",
+                            text="Optional Hand Pose: " + anim_hand_poses_menu[int(anim.anim_hand_pose)][1],
                         )
 
                     col = box.column(align=True)
@@ -54615,7 +54621,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 row.operator(
                     "oni_converter.apply_pose",
                     text="",
-                    icon_value = get_icon_id("apply_pose"),
+                    icon_value = get_icon_id("apply"),
                 ).pose = pose
 
                 row.operator(
@@ -54652,7 +54658,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 row.operator(
                     "oni_converter.delete_pose",
                     text="",
-                    icon_value = get_icon_id("x"),
+                    icon_value = get_icon_id("cancel"),
                 ).pose = pose
 
         oni_autokey = bpy.context.scene.oni_autokey
