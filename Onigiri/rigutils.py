@@ -3249,13 +3249,14 @@ def check_maps(armature=None, rename=None, reskin=None, pose=None, report=False)
                         reskin[anchor] = {}
 
                     reskin[anchor][rbone] = ""
+
     if report:
         if len(reskin) == 0:
             print("There's a reskin map but no usable bones")
         else:
             print("The following reskin bones are available:", reskin)
 
-        return True
+    return True
 
 
 def create_bone_name(armature=None, bones=[], max=100):
