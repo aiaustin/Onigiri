@@ -1,9 +1,9 @@
 bl_info = {
     "name": "Onigiri",
-    "author": "Nessaki",
-    "version": (4, 1, 0, 1),
+    "author": "Nessaki, Originally writen by BinBash Resident (Second Life)",
+    "version": (4, 1, 0, 2),
     "blender": (4, 0, 0),
-    "description": "A Japanese dish consisting of small balls or triangles of rice stuffed with a pickled or salted filling, and typically wrapped in dried seaweed.",
+    "description": "Quick Bento / Animesh prototype tool, includes an advanced Character Converter and animation system, Based on last version of GNU GPL v3 Bento Buddy",
     "warning": "",
     "category": "3D View",
     "location": "View3D > Tools > Onigiri",
@@ -52482,6 +52482,9 @@ class OnigiriMotionAnchor(bpy.types.Operator):
 
     def execute(self, context):
         oni_motion = bpy.context.window_manager.oni_motion
+        if len(bpy.context.selected_objects) == 0:
+            print("Nothing to do without a set")
+            return {"FINISHED"}
         armObj = bpy.context.selected_objects[0]
         inRig = motion.get_director(armObj)
         if not inRig:
