@@ -1,4 +1,3 @@
-import bpy
 import os
 from . import mod_settings
 from .mod_settings import *
@@ -14,8 +13,10 @@ icons_dir = script_dir + oni_settings["paths"]["icons"]
 custom_icons = None
 builtin_icons = None
 map_icons = None
+
 used_icons = None
 loaded_icons = []
+loaded_files = []
 
 def load_icons():
     def load(name, image_name):
@@ -25,6 +26,7 @@ def load_icons():
             return
 
         filename = os.path.join(icons_dir, image_name)
+        loaded_files.append(image_name)
 
         if os.path.exists(filename):
             if name not in used_icons:
@@ -39,8 +41,10 @@ def load_icons():
     global custom_icons
     global map_icons
     global builtin_icons
+
     global used_icons
     global loaded_icons
+    global loaded_files
 
     custom_icons = bpy.utils.previews.new()
 
@@ -402,6 +406,7 @@ def load_icons():
     load("roll", "roll.svg")
     load("second-life", "second-life.svg")
     #https://www.svgrepo.com/svg/321379/skeleton-inside
+
     #load("skeleton", "skeleton.svg")
 
     #load("arrow_top_right", "arrow_top_right.png")
@@ -732,6 +737,11 @@ def load_icons():
 
     load("unknown", "unknown.png")
     #load("ragdoll", "ragdoll.png")
+
+    for root, dirs, files in os.walk(icons_dir):
+        for file in files:
+            if file in loaded_files:
+                print("Unused file: " + file)
 
     for ico in used_icons:
         if ico not in loaded_icons:
