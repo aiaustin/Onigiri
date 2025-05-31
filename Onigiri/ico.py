@@ -1,3 +1,4 @@
+import bpy
 import os
 from . import mod_settings
 from .mod_settings import *
@@ -15,18 +16,15 @@ builtin_icons = None
 map_icons = None
 
 used_icons = None
-loaded_icons = []
-loaded_files = []
+loaded_icons = {}
 
 def load_icons():
     def load(name, image_name):
         if (image_name == ""):
             custom_icons.load(name, "", "IMAGE")
-            loaded_icons.append(name)
             return
 
         filename = os.path.join(icons_dir, image_name)
-        loaded_files.append(image_name)
 
         if os.path.exists(filename):
             if name not in used_icons:
@@ -34,7 +32,7 @@ def load_icons():
             #    #os.remove(filename)
 
             custom_icons.load(name, filename, "IMAGE")
-            loaded_icons.append(name)
+            loaded_icons[image_name] = name
         else:
             print("Failed to load: " + name)
 
@@ -44,7 +42,6 @@ def load_icons():
 
     global used_icons
     global loaded_icons
-    global loaded_files
 
     custom_icons = bpy.utils.previews.new()
 
@@ -405,6 +402,7 @@ def load_icons():
     load("anchor", "anchor.svg")
     load("roll", "roll.svg")
     load("second-life", "second-life.svg")
+
     #https://www.svgrepo.com/svg/321379/skeleton-inside
 
     #load("skeleton", "skeleton.svg")
@@ -633,7 +631,7 @@ def load_icons():
     load("location_red", "location_red.png")
     load("location_blue", "location_blue.png")
     #load("location_white", "location_white.png")
-    #load("location_enabled", "location_enabled.png")
+    load("location_enabled", "location_enabled.png")
     #load("rotation", "rotation.png")
     load("rotation_red", "rotation_red.png")
     load("rotation_blue", "rotation_blue.png")
@@ -740,14 +738,12 @@ def load_icons():
 
     for root, dirs, files in os.walk(icons_dir):
         for file in files:
-            if file in loaded_files:
+            if not loaded_icons.get(file):
                 print("Unused file: " + file)
 
     for ico in used_icons:
-        if ico not in loaded_icons:
-            icon_id = map_icons.get(ico)
-            if not icon_id:
-                print("Icon needed: " + ico)
+        if not custom_icons.get(ico) and not map_icons.get(ico):
+            print("Icon needed: " + ico)
 
     icon_items = bpy.types.UILayout.bl_rna.functions["prop"].parameters["icon"].enum_items.items()
     builtin_icons = {tup[1].identifier : tup[1].value for tup in icon_items}
