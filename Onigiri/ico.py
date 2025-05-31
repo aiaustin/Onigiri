@@ -125,7 +125,6 @@ def load_icons():
         "dot_red",
         "dot_black",
         #"data",
-        "sl",
         "export",
         "old",
         "dot_white",
@@ -344,6 +343,8 @@ def load_icons():
         "prefix":"EVENT_P", #SYNTAX_OFF
         "axis_side": "AXIS_SIDE",
         #"data": "ASSET_MANAGER",
+        "choice_on": "CHECKBOX_HLT",
+        "choice_off": "CHECKBOX_DEHLT",
         "loop": "DECORATE_OVERRIDE",
         "pin": "PINNED",
         "alert": "ERROR",
@@ -554,7 +555,7 @@ def load_icons():
     #load("check_blue", "check_blue.png")
     load("check_green", "check_green.png")
     #load("check_yellow", "check_yellow.png")
-    load("sl", "sl.png")
+    #load("sl", "sl.png")
     #load("skin", "skin.png")
     #load("menu_closed", "menu_closed.png")
 

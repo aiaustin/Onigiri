@@ -48006,7 +48006,7 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                 "use_sl_compatible_data",
                 toggle=use_prop_icons,
                 text="Use SL Data",
-                icon_value = get_prop_icon_id("sl"),
+                icon_value = get_prop_icon_id("second-life"),
             )
 
             col = box.column(align=True)
@@ -64031,7 +64031,7 @@ class OnigiriPanelAdvanced(bpy.types.Panel):
                     for icon_axis in idef.icon_defs:
                         idef.icon_defs[icon_axis]["icon"] = idef.icon_choice_off
                     for icon_axis in jd.joint_data[selected_bone]:
-                        if icon_axis.endswith("angle"):
+                        if icon_axis.endswith("angle"): ##ZAHER: REALLY!!!
                             x, y, z = jd.joint_data[selected_bone][icon_axis]
                             axis = str(idef.ICON_AXIS[x])
                             axis += str(idef.ICON_AXIS[y])
