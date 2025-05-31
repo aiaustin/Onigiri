@@ -27,9 +27,10 @@ def load_icons():
         filename = os.path.join(icons_dir, image_name)
 
         if os.path.exists(filename):
-            if name not in used_icons:
-                print("Unused icon " + name)
-            #    #os.remove(filename)
+            if name not in used_icons or name in map_icons:
+                if image_name.endswith(".png"):
+                    print("Unused icon loaded: " + image_name)
+                    #os.remove(filename)
 
             custom_icons.load(name, filename, "IMAGE")
             loaded_icons[image_name] = name
@@ -123,7 +124,7 @@ def load_icons():
         "dot_yellow",
         "dot_red",
         "dot_black",
-        "data",
+        #"data",
         "sl",
         "export",
         "old",
@@ -430,17 +431,17 @@ def load_icons():
     #load("map_to_mbones", "map_to_mbones.png")
     #load("map_to_template", "map_to_template.png")
     #load("load_template", "load_template.png")
-    load("save", "save.png")
+    #load("save", "save.png")
     load("save_dark", "save_dark.png")
-    load("load", "load.png")
+    #load("load", "load.png")
     #load("reset", "reset.png")
     load("reset_warning", "reset_warning.png")
     load("fix_pose", "fix_pose.png")
-    load("magnify", "magnify.png")
+    #load("magnify", "magnify.png")
     #load("restore_bone", "restore_bone.png")
 
     load("bone_fixed", "bone_fixed.png")
-    load("bones", "bones.png")
+    #load("bones", "bones.png")
     load("bones_blue", "bones_blue.png")
     load("bone_bent", "bone_bent.png")
     #load("bone_yellow", "bone_yellow.png")
@@ -454,7 +455,7 @@ def load_icons():
     load("view_output_bones", "view_output_bones.png")
 
     load("tail_to_head", "tail_to_head.png")
-    load("map", "map.png")
+    #load("map", "map.png")
     #load("create_rig", "create_rig.png")
     #load("create_neutral_rig", "create_neutral_rig.png")
     #load("create_reference_rig", "create_reference_rig.png")
@@ -486,7 +487,7 @@ def load_icons():
     load("apply_pose", "apply_pose.png")
     #load("custom_mapping", "custom_mapping.png")
 
-    load("x", "x.png")
+    #load("x", "x.png")
     #load("x_red", "x_red.png")
     #load("x_blue", "x_blue.png")
     load("x_green", "x_green.png")
@@ -497,7 +498,7 @@ def load_icons():
     #load("x_black_white", "x_black_white.png")
     #load("x_white_black", "x_white_black.png")
 
-    load("info", "info.png")
+    #load("info", "info.png")
 
     load("key_red", "key_red.png")
     load("key_blue", "key_blue.png")
@@ -513,30 +514,30 @@ def load_icons():
 
     load("integrity_check", "integrity_check.png")
     #load("pose_library", "pose_library.png")
-    load("add", "add.png")
+    #load("add", "add.png")
     load("subtract", "subtract.png")
     #load("edit", "edit.png")
     load("edit_red", "edit_red.png")
     #load("edit_rgb", "edit_rgb.png")
     #load("edit_grey", "edit_grey.png")
     #load("edit_white", "edit_white.png")
-    load("selection", "selection.png")
+    #load("selection", "selection.png")
     load("merge", "merge.png")
-    load("broken_link", "broken_link.png")
+    #load("broken_link", "broken_link.png")
 
     load("loop_enabled", "loop_enabled.png")
     load("range", "range.png")
     load("range_enabled", "range_enabled.png")
 
     load("angle", "angle.png")
-    load("bake", "bake.png")
-    load("store", "store.png")
+    #load("bake", "bake.png")
+    #load("store", "store.png")
     load("record", "record.png")
-    load("tools", "tools.png")
-    load("alert", "alert.png")
+    #load("tools", "tools.png")
+    #load("alert", "alert.png")
     #load("head", "head.png")
     load("stabilize", "stabilize.png")
-    load("prefix", "prefix.png")
+    #load("prefix", "prefix.png")
     load("prefix_remove", "prefix_remove.png")
     #load("reshape", "reshape.png")
     load("assume_pose", "assume_pose.png")
@@ -545,7 +546,7 @@ def load_icons():
     load("all_bones", "all_bones.png")
     load("all_types", "all_types.png")
     #load("selected_bones", "selected_bones.png")
-    load("smooth", "smooth.png")
+    #load("smooth", "smooth.png")
     load("undeform", "undeform.png")
     #load("check_white", "check_white.png")
     #load("check_black", "check_black.png")
@@ -565,20 +566,20 @@ def load_icons():
     #load("choice_on", "choice_on.png")
     #load("choice_red", "choice_red.png")
     #load("choice_green", "choice_green.png")
-    load("sync", "sync.png")
+    #load("sync", "sync.png")
     #load("inherit", "inherit.png")
     load("linear", "linear.png")
     load("retarget", "retarget.png")
     load("proxy", "proxy.png")
     load("detach", "detach.png")
-    load("target", "target.png")
+    #load("target", "target.png")
     load("disable_map_pose", "disable_map_pose.png")
     load("magic", "magic.png")
     #load("hide_bones", "hide_bones.png")
     #load("hide_mapped_bones", "hide_mapped_bones.png")
     #load("hide_anchor_branch_bones", "hide_anchor_branch_bones.png")
     #load("isolation_mode", "isolation_mode.png")
-    load("isolate", "isolate.png")
+    #load("isolate", "isolate.png")
     #load("reskin_bone", "reskin_bone.png")
     load("glue", "glue.png")
     load("experiment", "experiment.png")
@@ -586,7 +587,7 @@ def load_icons():
     load("ease", "ease.png")
     load("ease_enabled", "ease_enabled.png")
 
-    load("eye", "eye.png")
+    #load("eye", "eye.png")
     load("hammer", "hammer.png")
     load("calc", "calc.png")
     load("center", "center.png")
@@ -620,13 +621,13 @@ def load_icons():
     load("peak_yellow", "peak_yellow.png")
     load("avastar_to_oni", "avastar_to_oni.png")
     load("safe", "safe.png")
-    load("match", "match.png")
+    #load("match", "match.png")
     load("fitmesh", "fitmesh.png")
     load("animation_start", "animation_start.png")
     #load("split", "split.png")
-    load("mesh", "mesh.png")
+    #load("mesh", "mesh.png")
     #load("volume", "volume.png")
-    load("rotate", "rotate.png")
+    #load("rotate", "rotate.png")
     #load("location", "location.png")
     load("location_red", "location_red.png")
     load("location_blue", "location_blue.png")
@@ -642,12 +643,12 @@ def load_icons():
     #load("scale_special", "scale_special.png")
     load("transform", "transform.png")
     #load("transform_enabled", "transform_enabled.png")
-    load("transfer", "transfer.png")
+    #load("transfer", "transfer.png")
     #load("properties_black", "properties_black.png")
     #load("properties_white", "properties_white.png")
     load("freeze", "freeze.png")
     load("thaw", "thaw.png")
-    load("clean", "clean.png")
+    #load("clean", "clean.png")
     load("fill", "fill.png")
     load("empty", "empty.png")
     load("copy", "copy.png")
@@ -670,11 +671,10 @@ def load_icons():
     load("sample", "sample.png")
     load("hand_love", "hand_love.png")
     load("full", "full.png")
-    load("time", "time.png")
+    #load("time", "time.png")
     load("hourglass", "hourglass.png")
 
-    load("symmetric", "symmetric.png")
-
+    #load("symmetric", "symmetric.png")
     #load("paint", "paint.png")
     load("paint_enabled", "paint_enabled.png")
     load("paint_disabled", "paint_disabled.png")
@@ -683,23 +683,19 @@ def load_icons():
     load("back_face_disabled", "back_face_disabled.png")
 
     load("link", "link.png")
-
     #load("opensim", "opensim.png")
     load("controller", "controller.png")
     #load("start", "start.png")
-
-    load("action", "action.png")
+    #load("action", "action.png")
     #load("camera", "camera.png")
     load("camera_on", "camera_on.png")
     load("director", "director.png")
     load("to_actor", "to_actor.png")
     #load("director_blue", "director_blue.png")
     #load("director_green", "director_green.png")
-
-    load("script", "script.png")
-    load("code", "code.png")
+    #load("script", "script.png")
+    #load("code", "code.png")
     load("code_disabled", "code_disabled.png")
-
     load("nuke", "nuke.png")
 
     #load("next", "next.png")
@@ -726,20 +722,18 @@ def load_icons():
     load("project", "project.png")
     #load("pin", "pin.png")
     load("inverse_motion", "inverse_motion.png")
-
     #load("nametag", "nametag.png")
-
     #load("axis_x", "axis_x.png")
-    load("axis_y", "axis_y.png")
+    #load("axis_y", "axis_y.png")
     #load("axis_z", "axis_z.png")
-
     load("unknown", "unknown.png")
     #load("ragdoll", "ragdoll.png")
 
     for root, dirs, files in os.walk(icons_dir):
         for file in files:
-            if not loaded_icons.get(file):
-                print("Unused file: " + file)
+            if file.endswith(".png"):
+                if not loaded_icons.get(file):
+                    print("Unused file: " + file)
 
     for ico in used_icons:
         if not custom_icons.get(ico) and not map_icons.get(ico):
