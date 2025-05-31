@@ -11,6 +11,8 @@ bl_info = {
 
 print("NOTES:")
 print("-------")
+print("Onigiri A Japanese dish consisting of small balls or triangles of rice stuffed with a pickled or salted filling, and typically wrapped in dried seaweed.")
+print("-------")
 print(" * OnigiriCreateAnimationRig disabled until complete")
 print(" * snap_symmetry_enabled : False")
 print(" * OnigiriMotionHipCorrectionStart : Disabled")
@@ -58536,7 +58538,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 )
 
                 sim_custom_bones_icon = "bone_black"
-                sim_custom_mesh_icon = "object_black"
+                sim_custom_mesh_icon = "object"
                 if sim.props.get("custom_bones") is not None:
                     sim_custom_bones_icon = "bone_red"
                 if sim.props.get("custom_mesh") is not None:

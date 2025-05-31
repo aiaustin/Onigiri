@@ -47,6 +47,10 @@ def load_icons():
     custom_icons = bpy.utils.previews.new()
 
     used_icons = {
+        "blank",
+        "click",
+        "panel_opened",
+        "panel_closed",
         "load",
         "delete",
         "copy",
@@ -256,7 +260,6 @@ def load_icons():
         "master",
         "loop_enabled",
         "object_red",
-        "object_black",
         "peak_white",
         "peak_yellow",
         "peak_red",
@@ -381,6 +384,11 @@ def load_icons():
         "deform": "MOD_SIMPLEDEFORM",
         "shape": "SHAPEKEY_DATA",
         "match": "CON_SIZELIKE",
+        "angle": "FACE_CORNER",
+        "ik": "CON_SPLINEIK",
+        "object": "CUBE",
+        "more": "COLLAPSEMENU",
+        "freeze": "FREEZE"
     }
 
     load("blank", "")
@@ -398,7 +406,7 @@ def load_icons():
     load("dot_green", "dot_green.svg")
     load("dot_yellow", "dot_yellow.svg")
 
-    #load("click", "click.svg")
+    load("click", "click.svg")
     load("cut", "cut.svg")
     load("loop", "loop.svg")
     load("anchor", "anchor.svg")
@@ -530,7 +538,7 @@ def load_icons():
     load("range", "range.png")
     load("range_enabled", "range_enabled.png")
 
-    load("angle", "angle.png")
+    #load("angle", "angle.png")
     #load("bake", "bake.png")
     #load("store", "store.png")
     load("record", "record.png")
@@ -647,7 +655,7 @@ def load_icons():
     #load("transfer", "transfer.png")
     #load("properties_black", "properties_black.png")
     #load("properties_white", "properties_white.png")
-    load("freeze", "freeze.png")
+    #load("freeze", "freeze.png")FREEZE
     load("thaw", "thaw.png")
     #load("clean", "clean.png")
     load("fill", "fill.png")
@@ -707,14 +715,13 @@ def load_icons():
     load("select_attach", "select_attach.png")
     load("deselect_non_ends", "deselect_non_ends.png")
 
-    load("ik", "ik.png")
-    load("object", "object.png")
-    load("object_black", "object.png")
+    #load("ik", "ik.png")
+    #load("object", "object.png")
     #load("object_white", "object_white.png")
     load("object_red", "object_red.png")
     load("dynamic", "dynamic.png")
 
-    load("more", "more.png")
+    #load("more", "more.png")
     #load("global", "global.png")
     #load("pull", "pull.png")
     load("master", "master.png")
@@ -742,8 +749,6 @@ def load_icons():
 
     icon_items = bpy.types.UILayout.bl_rna.functions["prop"].parameters["icon"].enum_items.items()
     builtin_icons = {tup[1].identifier : tup[1].value for tup in icon_items}
-
-
 
 def unload_icons():
     global custom_icons
