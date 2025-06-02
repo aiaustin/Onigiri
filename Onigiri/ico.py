@@ -7,42 +7,76 @@ use_prop_icons = False
 use_oper_icons = False
 
 ## https://docs.blender.org/api/current/bpy_types_enum_items/icon_items.html
+## https://iamvector.com/all-icons
+
+
+import bpy.utils.previews
+import os
+# Globals for custom icon previews
+custom_icons = None
+
+def is_light_theme():
+    prefs = bpy.context.preferences
+    #theme = prefs.themes['Default'] if 'Default' in prefs.themes else prefs.themes[0]
+    #color = theme.user_interface.wcol_tooltip.inner
+    #r, g, b, a = color
+
+    theme = bpy.context.preferences.themes[0]
+    ui = theme.user_interface.wcol_regular
+    color = ui.inner
+    r, g, b, a = color
+    brightness = 0.299 * r + 0.587 * g + 0.114 * b
+    return brightness > 0.5
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-icons_dir = script_dir + oni_settings["paths"]["icons"]
 
 custom_icons = None
 builtin_icons = None
 map_icons = None
+modern_icons = []
 
 used_icons = None
 loaded_icons = {}
 
 def load_icons():
+
+    global custom_icons
+    global map_icons
+    global builtin_icons
+    global modern_icons
+
+    global used_icons
+    global loaded_icons
+
+    icons_dir = script_dir + oni_settings["paths"]["icons"]
+    if is_light_theme():
+        theme_icons_dir = os.path.join(icons_dir, 'light')
+    else:
+        theme_icons_dir = os.path.join(icons_dir, 'dark')
+
     def load(name, image_name):
         if (image_name == ""):
             custom_icons.load(name, "", "IMAGE")
             return
 
-        filename = os.path.join(icons_dir, image_name)
+        if image_name.endswith(".svg"):
+            filename = os.path.join(theme_icons_dir, image_name)
+        else:
+            filename = os.path.join(icons_dir, image_name)
 
         if os.path.exists(filename):
             if name not in used_icons or name in map_icons:
                 if image_name.endswith(".png"):
                     print("Unused icon loaded: " + image_name)
-                    #os.remove(filename)
+                else:
+                    modern_icons.append(name)
 
             custom_icons.load(name, filename, "IMAGE")
+            if image_name.endswith(".svg"):
+                print(filename)
             loaded_icons[image_name] = name
         else:
             print("Failed to load: " + name)
-
-    global custom_icons
-    global map_icons
-    global builtin_icons
-
-    global used_icons
-    global loaded_icons
 
     custom_icons = bpy.utils.previews.new()
 
@@ -70,7 +104,7 @@ def load_icons():
         "walking_black",
         "walking_blue",
         "walking_red",
-        "edit_red",
+        "overwrite",
         "prefix_remove",
         "x_red",
         "magic",
@@ -150,8 +184,8 @@ def load_icons():
         "calc",
         "add",
         "subtract",
+        "paint",
         "paint_disabled",
-        "paint_enabled",
         "arrow_right_green",
         "fitmesh",
         "no_bone",
@@ -218,8 +252,8 @@ def load_icons():
         "paste",
         "flag_none",
         "flag_all",
-        "avastar_to_oni",
-        "save_dark",
+        #"avastar_to_oni",
+        #"save_dark",
         "fill",
         "empty",
         "camera_on",
@@ -289,6 +323,7 @@ def load_icons():
         "panel_opened": "DISCLOSURE_TRI_DOWN",
         "panel_closed": "DISCLOSURE_TRI_RIGHT",
         "duplicate": "DUPLICATE",
+        "copy": "COPYDOWN",
         "star_green": "ARMATURE_DATA",
         "axis_y" : "AXIS_FRONT",
         "axis": "EMPTY_AXIS",
@@ -298,7 +333,8 @@ def load_icons():
         "rotate": "ORIENTATION_GIMBAL",
         "clean": "BRUSH_DATA",
         "restore": "LOOP_BACK",
-        "time": "PREVIEW_RANGE",
+        "time": "PREVIEW_RANGE", #SORTTIME
+        "range": "ACTION_TWEAK",
         "build": "MOD_BUILD",
         "refresh": "FILE_REFRESH",
         #"reset": "DECORATE_OVERRIDE",
@@ -318,6 +354,7 @@ def load_icons():
         "bones": "GROUP_BONE",
         "delete": "TRASH",
         "edit": "GREASEPENCIL",
+        "overwrite": "MOD_LINEART",
         "apply": "NLA_PUSHDOWN", #SHADERFX
         "cube" :"CUBE",
         "constraint": "CONSTRAINT",
@@ -326,7 +363,7 @@ def load_icons():
         "lock": "DECORATE_LOCKED",
         "unlock": "DECORATE_UNLOCKED",
         "code": "CONSOLE",
-        "camera": "OUTLINER_OB_CAMERA",
+        "camera": "OUTLINER_DATA_CAMERA",
         "action": "SEQUENCE",
         "join": "RESTRICT_INSTANCED_OFF",
         "reverse": "UV_SYNC_SELECT",
@@ -368,12 +405,15 @@ def load_icons():
         "save_default": "FILE_CACHE",
         "save_preset": "PRESET_NEW",
         "script": "SCRIPT",
+        "nuke": "TRASH",
         "split": "AREA_SWAP",
         "magnify": "VIEWZOOM",
         "settings": "SETTINGS",
         "configure": "PREFERENCES",
         "smooth": "MOD_SMOOTH",
+        "link": "LINK_BLEND",
         "broken_link": "UNLINKED",
+        "detach": "UNLINKED",
         "attach": "APPEND_BLEND",
         "skeleton": "ARMATURE_DATA",
         "bake": "TRIA_DOWN_BAR",
@@ -388,7 +428,13 @@ def load_icons():
         "ik": "CON_SPLINEIK",
         "object": "CUBE",
         "more": "COLLAPSEMENU",
-        "freeze": "FREEZE"
+        "freeze": "FREEZE",
+        "paste": "PASTEDOWN",
+        "ease": "FORCE_CURVE",
+        "default": "PRESET_NEW",
+        "camera_on": "OUTLINER_OB_CAMERA",
+        "paint": "BRUSHES_ALL",
+        "hourglass": "PREVIEW_RANGE"
     }
 
     load("blank", "")
@@ -412,10 +458,13 @@ def load_icons():
     load("anchor", "anchor.svg")
     load("roll", "roll.svg")
     load("second-life", "second-life.svg")
-
-    #https://www.svgrepo.com/svg/321379/skeleton-inside
+    load("hammer", "hammer.svg")
+    load("joint", "joint.svg")
 
     #load("skeleton", "skeleton.svg")
+
+    ## https://www.svgrepo.com/svg/321379/skeleton-inside
+
 
     #load("arrow_top_right", "arrow_top_right.png")
     #load("arrow_bottom_right", "arrow_bottom_right.png")
@@ -441,7 +490,7 @@ def load_icons():
     #load("map_to_template", "map_to_template.png")
     #load("load_template", "load_template.png")
     #load("save", "save.png")
-    load("save_dark", "save_dark.png")
+    #load("save_dark", "save_dark.png")
     #load("load", "load.png")
     #load("reset", "reset.png")
     load("reset_warning", "reset_warning.png")
@@ -457,7 +506,6 @@ def load_icons():
     load("bone_mixed", "bone_mixed.png")
     load("bone_black_red", "bone_black_red.png")
     load("bone_yellow_blue", "bone_yellow_blue.png")
-    load("joint", "joint.png")
 
     load("view_anchor_bones", "view_anchor_bones.png")
     load("view_reskin_bones", "view_reskin_bones.png")
@@ -526,7 +574,7 @@ def load_icons():
     #load("add", "add.png")
     load("subtract", "subtract.png")
     #load("edit", "edit.png")
-    load("edit_red", "edit_red.png")
+    #load("edit_red", "edit_red.png")
     #load("edit_rgb", "edit_rgb.png")
     #load("edit_grey", "edit_grey.png")
     #load("edit_white", "edit_white.png")
@@ -535,7 +583,7 @@ def load_icons():
     #load("broken_link", "broken_link.png")
 
     load("loop_enabled", "loop_enabled.png")
-    load("range", "range.png")
+    #load("range", "range.png")
     load("range_enabled", "range_enabled.png")
 
     #load("angle", "angle.png")
@@ -580,7 +628,7 @@ def load_icons():
     load("linear", "linear.png")
     load("retarget", "retarget.png")
     load("proxy", "proxy.png")
-    load("detach", "detach.png")
+    #load("detach", "detach.png")
     #load("target", "target.png")
     load("disable_map_pose", "disable_map_pose.png")
     load("magic", "magic.png")
@@ -593,11 +641,10 @@ def load_icons():
     load("glue", "glue.png")
     load("experiment", "experiment.png")
     #load("curves", "curves.png")
-    load("ease", "ease.png")
+    #load("ease", "ease.png")
     load("ease_enabled", "ease_enabled.png")
 
     #load("eye", "eye.png")
-    load("hammer", "hammer.png")
     load("calc", "calc.png")
     load("center", "center.png")
     load("sliders", "sliders.png")
@@ -613,7 +660,7 @@ def load_icons():
     load("star_black", "star_black.png")
     #load("star_green", "star_green.png")
     #load("star_yellow", "star_yellow.png")
-    load("default", "default.png")
+    #load("default", "default.png")
     #load("neutral", "neutral.png")
     load("shape_shifter", "shape_shifter.png")
     #load("shape_shifter_green", "shape_shifter_green.png")
@@ -628,7 +675,7 @@ def load_icons():
     load("peak_red", "peak_red.png")
     load("peak_white", "peak_white.png")
     load("peak_yellow", "peak_yellow.png")
-    load("avastar_to_oni", "avastar_to_oni.png")
+    #oad("avastar_to_oni", "avastar_to_oni.png")
     load("safe", "safe.png")
     #load("match", "match.png")
     load("fitmesh", "fitmesh.png")
@@ -660,8 +707,8 @@ def load_icons():
     #load("clean", "clean.png")
     load("fill", "fill.png")
     load("empty", "empty.png")
-    load("copy", "copy.png")
-    load("paste", "paste.png")
+    #load("copy", "copy.png")
+    #load("paste", "paste.png")
     load("insert", "insert.png")
     #load("play", "play.png")
     load("play_red", "play_red.png")
@@ -681,23 +728,22 @@ def load_icons():
     load("hand_love", "hand_love.png")
     load("full", "full.png")
     #load("time", "time.png")
-    load("hourglass", "hourglass.png")
+    #load("hourglass", "hourglass.png")
 
     #load("symmetric", "symmetric.png")
-    #load("paint", "paint.png")
-    load("paint_enabled", "paint_enabled.png")
+    #load("paint_enabled", "paint_enabled.png") //paint
     load("paint_disabled", "paint_disabled.png")
     #load("back_face", "back_face.png")
     load("back_face_enabled", "back_face_enabled.png")
     load("back_face_disabled", "back_face_disabled.png")
 
-    load("link", "link.png")
+    #load("link", "link.png")
     #load("opensim", "opensim.png")
     load("controller", "controller.png")
     #load("start", "start.png")
     #load("action", "action.png")
     #load("camera", "camera.png")
-    load("camera_on", "camera_on.png")
+    #load("camera_on", "camera_on.png")
     load("director", "director.png")
     load("to_actor", "to_actor.png")
     #load("director_blue", "director_blue.png")
@@ -705,7 +751,7 @@ def load_icons():
     #load("script", "script.png")
     #load("code", "code.png")
     load("code_disabled", "code_disabled.png")
-    load("nuke", "nuke.png")
+    #load("nuke", "nuke.png")
 
     #load("next", "next.png")
     load("next_red_blue", "next_red_blue.png")
@@ -776,19 +822,23 @@ def get_panel_icon_id(opened):
     else:
         return get_icon_id("panel_closed")
 
-def get_prop_icon_id(name):
+def get_prop_icon_id(name, default = 0):
     global use_prop_icons
     if use_prop_icons:
         return get_icon_id(name)
     else:
-        return 0
+        return default
 
-def get_oper_icon_id(name):
+def get_oper_icon_id(name, default = 0):
+    global use_oper_icons
+    global builtin_icons
+    global map_icons
+    global modern_icons
     if use_oper_icons:
-        icon_name = map_icons.get(name)
-        if icon_name:
-            return builtin_icons[icon_name]
-        else:
-            return get_icon_id("click")
-    else:
         return get_icon_id(name)
+    else:
+        icon_name = map_icons.get(name)
+        if icon_name or (name in modern_icons):
+            return get_icon_id(name)
+        else:
+            return default

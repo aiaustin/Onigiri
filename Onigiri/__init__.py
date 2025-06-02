@@ -5,6 +5,7 @@ bl_info = {
     "blender": (4, 0, 0),
     "description": "Quick Bento / Animesh prototype tool, includes an advanced Character Converter and animation system, Based on last version of GNU GPL v3 Bento Buddy",
     "warning": "",
+    "doc_url": "",
     "category": "3D View",
     "location": "View3D > Tools > Onigiri",
 }
@@ -364,7 +365,6 @@ def cleanup():
         pass
 
     return 1.0
-
 
 print("Handlers loaded")
 if 1 == 1:
@@ -2255,7 +2255,7 @@ class OnigiriCharacterConverterPanel(bpy.types.Panel):
             "copy",
             toggle=use_prop_icons,
             text="Make Copy",
-            icon_value = get_prop_icon_id("copy"),
+            icon_value = get_prop_icon_id("duplicate"),
         )
         row = col.row(align=True)
         row.prop(
@@ -9209,7 +9209,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                         row.operator(
                             "onigiri.edit_template_move_target",
                             text="",
-                            icon_value = get_icon_id("edit_red"),
+                            icon_value = get_icon_id("overwrite"),
                         ).name = target
                         if (
                             oni_edit_template.get("item") == "move"
@@ -10296,13 +10296,13 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             row.operator(
                 "onigiri.snap_map_add",
                 text="Map these bones",
-                icon_value = get_icon_id("map_bones"),
+                icon_value = get_oper_icon_id("map_bones"),
             )
 
             row.operator(
                 "onigiri.snap_map_remove",
                 text="Unmap",
-                icon_value = get_icon_id("map_bones_reverse"),
+                icon_value = get_oper_icon_id("map_bones_reverse"),
             )
 
             row.operator(
@@ -47829,7 +47829,7 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                 "export_copies",
                 text="Export Copies",
                 toggle=use_prop_icons,
-                icon_value = get_prop_icon_id("copy"),
+                icon_value = get_prop_icon_id("duplicate"),
             )
 
             row.prop(
@@ -48873,6 +48873,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
             row.label(
                 text="Paint Weights:",
             )
+
             row = col.row(align=True)
             if not oni_paint.paint_active:
                 row.operator(
@@ -48885,7 +48886,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
                     oni_paint,
                     "paint_active",
                     text="Disable Weight Painting",
-                    icon_value = get_icon_id("paint_enabled"),
+                    icon_value = get_icon_id("paint"),
                 )
 
             paint_back_face_icon = "back_face_disabled"
@@ -49612,12 +49613,12 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                     row.operator(
                         "onigiri.dummy_animation",
                         text=onia.export_sl_bvh_label_short,
-                        icon_value = get_icon_id("export_animation"),
+                        icon_value = get_oper_icon_id("export_animation"),
                     )
                     row.operator(
                         "onigiri.dummy_animation",
                         text=oni_anim.export_sl_anim_label_short,
-                        icon_value = get_icon_id("running_guy"),
+                        icon_value = get_oper_icon_id("running_guy"),
                     )
                 else:
                     col.separator()
@@ -49626,13 +49627,13 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                     row.operator(
                         "onigiri.export_bvh_sl",
                         text=onia.export_sl_bvh_label_short,
-                        icon_value = get_icon_id("export_animation"),
+                        icon_value = get_oper_icon_id("export_animation"),
                     )
                     row.alert = oni_anim.export_sl_anim_alert
                     row.operator(
                         "onigiri.export_sl_anim",
                         text=oni_anim.export_sl_anim_label_short,
-                        icon_value = get_icon_id("running_guy"),
+                        icon_value = get_oper_icon_id("running_guy"),
                     )
 
             if 1 == 1:
@@ -50748,7 +50749,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             row.operator(
                 "onigiri.align_bones",
                 text="Align Bones",
-                icon_value = get_icon_id("align_bones"),
+                icon_value = get_oper_icon_id("align_bones"),
             )
 
             if 1 == 0:
@@ -53265,7 +53266,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     "split_blank",
                     text="Time Delay",
                     toggle=use_prop_icons,
-                    icon_value = get_prop_icon_id("hourglass"),
+                    icon_value = get_prop_icon_id("time"),
                 )
                 row.prop(
                     oni_split,
@@ -54303,7 +54304,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             row.operator(
                 "onigiri.scale_animation",
                 text="Scale Active Animation",
-                icon_value = get_icon_id("scale_animation"),
+                icon_value = get_oper_icon_id("scale_animation"),
             )
 
         onia = bpy.context.scene.oni_anim_props
@@ -54337,7 +54338,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 row.operator(
                     "onigiri.pose_library_merge",
                     text="Merge Pose Lib",
-                    icon_value = get_icon_id("merge"),
+                    icon_value = get_oper_icon_id("merge"),
                 )
                 row = col.row(align=True)
                 row.prop(
@@ -54455,7 +54456,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             row.operator(
                 "onigiri.remove_animation_keys",
                 text="Remove animation from selected bones",
-                icon_value = get_icon_id("remove_keys"),
+                icon_value = get_oper_icon_id("remove_keys"),
             )
 
             col = box.column(align=True)
@@ -54532,12 +54533,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             row.operator(
                 "oni_converter.merge_pose_library",
                 text="Merge pose library",
-                icon_value = get_icon_id("merge"),
+                icon_value = get_oper_icon_id("merge"),
             )
             row.operator(
                 "oni_converter.merge_ccm_pose",
                 text="Merge ONIM pose",
-                icon_value = get_icon_id("merge"),
+                icon_value = get_oper_icon_id("merge"),
             )
             row = col.row(align=True)
             row.operator(
@@ -54766,7 +54767,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     oni_autokey,
                     "autokey_bake_progress_show",
                     text="Show Bake Progress",
-                    icon_value = get_icon_id("progress"),
+                    icon_value = get_prop_icon_id("progress"),
                 )
             else:
                 row.prop(
@@ -54775,7 +54776,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     text="Baking, please wait ["
                     + oni_autokey.autokey_bake_progress
                     + "]",
-                    icon_value = get_icon_id("progress"),
+                    icon_value = get_prop_icon_id("progress"),
                 )
 
             row = col.row(align=True)
@@ -54817,14 +54818,14 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             row.operator(
                 "onigiri.auto_key",
                 text="Copy Pose",
-                icon_value = get_icon_id("copy"),
+                icon_value = get_icon_id("duplicate"),
             ).action = "copy"
 
             row.prop(
                 oni, "blank",
                 text="",
-                toggle=True,
-                emboss=False,
+                toggle=False,
+                #emboss=True,
                 icon_value = get_icon_id("blank")
             )
 
@@ -54833,6 +54834,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 text="Paste Pose",
                 icon_value = get_icon_id("paste"),
             ).action = "paste"
+
             row.prop(
                 oni_autokey,
                 "autokey_paste_to_selected",
@@ -54882,15 +54884,17 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     text="Save Lib",
                     icon_value = get_icon_id("save"),
                 )
+
                 row.operator(
                     "onigiri.animation_library_load",
                     text="Load Lib",
                     icon_value = get_icon_id("load"),
                 )
+
                 row.operator(
                     "onigiri.animation_library_merge",
                     text="Merge Lib",
-                    icon_value = get_icon_id("merge"),
+                    icon_value = get_oper_icon_id("merge"),
                 )
                 row = col.row(align=True)
 
@@ -55108,10 +55112,10 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
                 alib_ranges_all_enabled_icon = "range"
                 alib_loops_all_enabled_icon = "loop"
-                if oni_alib.alib_ranges_all_enabled:
-                    alib_ranges_all_enabled_icon = "range_enabled"
-                if oni_alib.alib_loops_all_enabled:
-                    alib_loops_all_enabled_icon = "loop_enabled"
+                #if oni_alib.alib_ranges_all_enabled:
+                #    alib_ranges_all_enabled_icon = "range_enabled"
+                #if oni_alib.alib_loops_all_enabled:
+                #    alib_loops_all_enabled_icon = "loop_enabled"
 
                 if 1 == 0:
                     row.operator(
@@ -55141,8 +55145,8 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 )
 
                 alib_ease_all_enabled_icon = "ease"
-                if oni_alib.alib_ease_all_enabled:
-                    alib_ease_all_enabled_icon = "ease_enabled"
+                #if oni_alib.alib_ease_all_enabled:
+                #    alib_ease_all_enabled_icon = "ease_enabled"
                 row.prop(
                     oni_alib,
                     "alib_ease_all_enabled",
@@ -55161,7 +55165,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     row.operator(
                         "onigiri.alib_action_convert",
                         text="",
-                        icon_value = get_icon_id("avastar_to_oni"),
+                        icon_value = get_icon_id("convert"),
                     )
                     row.prop(
                         oni_alib,
@@ -55184,13 +55188,13 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     "alib_action_overwrite",
                     toggle=True,
                     text="",
-                    icon_value = get_icon_id("edit_red"),
+                    icon_value = get_icon_id("overwrite"),
                 )
 
                 row.operator(
                     "onigiri.alib_action_export",
                     text="",
-                    icon_value = get_icon_id("save_dark"),
+                    icon_value = get_icon_id("export"),
                 )
 
                 row = col.row(align=True)
@@ -55678,13 +55682,13 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     "pose_library_overwrite",
                     toggle=True,
                     text="",
-                    icon_value = get_icon_id("edit_red"),
+                    icon_value = get_icon_id("overwrite"),
                 )
 
                 row.operator(
                     "onigiri.pose_library_export",
                     text="",
-                    icon_value = get_icon_id("save_dark"),
+                    icon_value = get_icon_id("export"),
                 )
 
                 oni_pose_list = oni_pose.get("poses", [])
@@ -56721,7 +56725,7 @@ class OnigiriPanelRigTools(bpy.types.Panel):
         row.operator(
             "onigiri.convert_from_avastar",
             text="Convert from Avastar",
-            icon_value = get_icon_id("avastar_to_oni"),
+            icon_value = get_icon_id("convert"),
         )
 
         if 1 == 0:
@@ -56729,7 +56733,7 @@ class OnigiriPanelRigTools(bpy.types.Panel):
             row.operator(
                 "onigiri.convert_avastar_rig",
                 text="Convert Avastar rig to ONI",
-                icon_value = get_icon_id("avastar_to_oni"),
+                icon_value = get_icon_id("convert"),
             )
             row.prop(
                 onim,
@@ -58472,7 +58476,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 )
                 sim_edit_bones_icon = "edit"
                 if bpy.context.mode == "EDIT_ARMATURE":
-                    sim_edit_bones_icon = "edit_red"
+                    sim_edit_bones_icon = "overwrite"
                 row.operator(
                     "onigiri.sim_edit_bones",
                     text="Edit Bones",
@@ -58659,7 +58663,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 if 1 == 0:
                     sim_skin_enabled_icon = "paint_disabled"
                     if oni_sim.sim_skin_enabled:
-                        sim_skin_enabled_icon = "paint_enabled"
+                        sim_skin_enabled_icon = "paint"
                     row.prop(
                         oni_sim,
                         "sim_skin_enabled",
@@ -59622,7 +59626,7 @@ class OnigiriReactorPanel(bpy.types.Panel):
             row.operator(
                 "onigiri.ragdoll_copy_rigid",
                 text="Copy Rigid",
-                icon_value = get_icon_id("freeze"),
+                icon_value = get_icon_id("copy"),
             )
 
 
