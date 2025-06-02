@@ -72,8 +72,6 @@ def load_icons():
                     modern_icons.append(name)
 
             custom_icons.load(name, filename, "IMAGE")
-            if image_name.endswith(".svg"):
-                print(filename)
             loaded_icons[image_name] = name
         else:
             print("Failed to load: " + name)
@@ -237,7 +235,7 @@ def load_icons():
         "location_red",
         "pen",
         "bone",
-        "hand_love",
+        #"hand_love",
         "undeform",
         "scale_animation",
         "dot_blue",
@@ -434,7 +432,21 @@ def load_icons():
         "default": "PRESET_NEW",
         "camera_on": "OUTLINER_OB_CAMERA",
         "paint": "BRUSHES_ALL",
-        "hourglass": "PREVIEW_RANGE"
+        "hourglass": "PREVIEW_RANGE",
+        "sliders": "OPTIONS",
+        "record": "RECORD_ON",
+        "sample": "GEOMETRY_NODES",
+        "animation": "RENDER_ANIMATION",
+        "arrow_up": "INDIRECT_ONLY_ON",
+        "center": "ANCHOR_CENTER",
+        "calc": "DRIVER_TRANSFORM",
+        "hand": "HAND", #VIEW_PAN
+        "align_bones": "NLA_PUSHDOWN",
+        "magic": "SHADERFX",
+        "puppet": "MESH_MONKEY",
+        "insert": "NODE_INSERT_ON",
+        "progress": "SORTSIZE",
+        "unknown": "QUESTION"
     }
 
     load("blank", "")
@@ -460,6 +472,7 @@ def load_icons():
     load("second-life", "second-life.svg")
     load("hammer", "hammer.svg")
     load("joint", "joint.svg")
+    load("flag", "flag.svg")
 
     #load("skeleton", "skeleton.svg")
 
@@ -468,7 +481,7 @@ def load_icons():
 
     #load("arrow_top_right", "arrow_top_right.png")
     #load("arrow_bottom_right", "arrow_bottom_right.png")
-    load("arrow_up", "arrow_up.png")
+    #load("arrow_up", "arrow_up.png")
     load("arrow_right_green", "arrow_right_green.png")
     load("arrow_left_green", "arrow_left_green.png")
     #load("configure", "configure.png")
@@ -534,7 +547,7 @@ def load_icons():
     load("scale_animation", "scale_animation.png")
     load("remove_constraints", "remove_constraints.png")
     load("control", "control.png")
-    load("animation", "animation.png")
+    #load("animation", "animation.png")
     #load("character_converter", "character_converter.png")
     #load("connect_links", "connect_links.png")
     #load("rename_to_targets", "rename_to_targets.png")
@@ -589,7 +602,7 @@ def load_icons():
     #load("angle", "angle.png")
     #load("bake", "bake.png")
     #load("store", "store.png")
-    load("record", "record.png")
+    #load("record", "record.png")
     #load("tools", "tools.png")
     #load("alert", "alert.png")
     #load("head", "head.png")
@@ -631,7 +644,7 @@ def load_icons():
     #load("detach", "detach.png")
     #load("target", "target.png")
     load("disable_map_pose", "disable_map_pose.png")
-    load("magic", "magic.png")
+    #load("magic", "magic.png")
     #load("hide_bones", "hide_bones.png")
     #load("hide_mapped_bones", "hide_mapped_bones.png")
     #load("hide_anchor_branch_bones", "hide_anchor_branch_bones.png")
@@ -645,9 +658,9 @@ def load_icons():
     load("ease_enabled", "ease_enabled.png")
 
     #load("eye", "eye.png")
-    load("calc", "calc.png")
-    load("center", "center.png")
-    load("sliders", "sliders.png")
+    #load("calc", "calc.png")
+    #load("center", "center.png")
+    #load("sliders", "sliders.png")
     #load("line_white", "line_white.png")
     #load("line_black", "line_black.png")
     #load("line_red", "line_red.png")
@@ -709,7 +722,7 @@ def load_icons():
     load("empty", "empty.png")
     #load("copy", "copy.png")
     #load("paste", "paste.png")
-    load("insert", "insert.png")
+    #load("insert", "insert.png")
     #load("play", "play.png")
     load("play_red", "play_red.png")
     #load("play_blue", "play_blue.png")
@@ -717,15 +730,14 @@ def load_icons():
     #load("play_white", "play_white.png")
     #load("play_yellow", "play_yellow.png")
     #load("play_orange", "play_orange.png")
-    load("progress", "progress.png")
-    load("flag", "flag.png")
+    #load("progress", "progress.png")
     load("flag_on", "flag_on.png")
     load("flag_all", "flag_all.png")
     load("flag_none", "flag_none.png")
     load("deviation", "deviation.png")
     #load("tolerance", "tolerance.png")
-    load("sample", "sample.png")
-    load("hand_love", "hand_love.png")
+    #load("sample", "sample.png")
+    #load("hand_love", "hand_love.png")
     load("full", "full.png")
     #load("time", "time.png")
     #load("hourglass", "hourglass.png")
@@ -771,8 +783,8 @@ def load_icons():
     #load("global", "global.png")
     #load("pull", "pull.png")
     load("master", "master.png")
-    load("puppet", "puppet.png")
-    load("align_bones", "align_bones.png")
+    #load("puppet", "puppet.png")
+    #load("align_bones", "align_bones.png")
     load("project", "project.png")
     #load("pin", "pin.png")
     load("inverse_motion", "inverse_motion.png")
@@ -780,7 +792,7 @@ def load_icons():
     #load("axis_x", "axis_x.png")
     #load("axis_y", "axis_y.png")
     #load("axis_z", "axis_z.png")
-    load("unknown", "unknown.png")
+    #load("unknown", "unknown.png")
     #load("ragdoll", "ragdoll.png")
 
     for root, dirs, files in os.walk(icons_dir):

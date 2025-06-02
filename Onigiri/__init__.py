@@ -54025,7 +54025,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         "anim_hand_pose_enabled",
                         text="Use an internal hand pose",
                         toggle=use_prop_icons,
-                        icon_value = get_prop_icon_id("hand_love"),
+                        icon_value = get_prop_icon_id("hand"),
                     )
                     if anim.anim_hand_pose_enabled:
                         box.prop_menu_enum(
