@@ -51,7 +51,7 @@ def update_preset_source(report=False):
     armObj = utils.has_armature()
     preset = get_properties()
 
-    if armObj is None:
+    if not armObj:
         if not report:
             print("No armature found, updating preset for defaults...")
         for prop in preset:
