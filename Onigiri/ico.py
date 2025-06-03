@@ -116,7 +116,7 @@ def load_icons():
         "action",
         "bone_red",
         "bone_blue",
-        "running_guy",
+        "run",
         "follow",
         "view_anchor_bones",
         "view_reskin_bones",
@@ -258,6 +258,7 @@ def load_icons():
         "key_black",
         "range",
         "hammer",
+        "fix",
         "checked",
         "unchecked",
         "animation",
@@ -354,6 +355,7 @@ def load_icons():
         "edit": "GREASEPENCIL",
         "overwrite": "MOD_LINEART",
         "apply": "NLA_PUSHDOWN", #SHADERFX
+        "done": "CHECKMARK",
         "cube" :"CUBE",
         "constraint": "CONSTRAINT",
         "invert": "MOD_MASK",
@@ -379,6 +381,7 @@ def load_icons():
         "plus": "PLUS",
         "add": "PLUS",
         "prefix":"EVENT_P", #SYNTAX_OFF
+        "fix": "MODIFIER",
         "axis_side": "AXIS_SIDE",
         #"data": "ASSET_MANAGER",
         "choice_on": "CHECKBOX_HLT",
@@ -453,7 +456,9 @@ def load_icons():
         "bone_fixed": "PINNED",
         "stabilize": "OUTLINER_OB_MESH", #RIGID_BODY_CONSTRAINT
         "bone_bent": "MOD_SIMPLEDEFORM",
-        "check_all": "ZOOM_ALL",
+        "check_all": "ZOOM_ALL", #BORDERMOVE
+        "run": "PLAY",
+        "weight": "MOD_VERTEX_WEIGHT",
         "remove_keys": "KEY_DEHLT",
         "unknown": "QUESTION"
     }
@@ -843,14 +848,14 @@ def get_panel_icon_id(opened):
     else:
         return get_icon_id("panel_closed")
 
-def get_prop_icon_id(name, default = 0):
+def get_prop_icon_id(name):
     global use_prop_icons
     if use_prop_icons:
         return get_icon_id(name)
     else:
-        return default
+        return 0
 
-def get_oper_icon_id(name, default = 0):
+def get_oper_icon_id(name):
     global use_oper_icons
     global builtin_icons
     global map_icons
@@ -862,4 +867,4 @@ def get_oper_icon_id(name, default = 0):
         if icon_name or (name in modern_icons):
             return get_icon_id(name)
         else:
-            return default
+            return 0
