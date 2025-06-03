@@ -16541,7 +16541,7 @@ class OnigiriDevkitProperties(bpy.types.PropertyGroup):
                 except:
                     pass
 
-        oni_devkit.export_menu_enabled = True
+        #oni_devkit.export_menu_enabled = True
 
         return True
 
@@ -48921,7 +48921,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
             row.operator(
                 "onigiri.move_weights",
                 text="Move weights from control rig",
-                icon_value = get_icon_id("arrow_right_green"),
+                icon_value = get_icon_id("move"),
             )
             row = col.row(align=True)
             row.operator(
@@ -54425,7 +54425,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 "reference_from_pose",
                 text="Reference from pose",
                 toggle=use_prop_icons,
-                icon_value = get_prop_icon_id("arrow_left_green"),
+                icon_value = get_prop_icon_id("reference"),
             )
             row = col.row(align=True)
             row.operator(

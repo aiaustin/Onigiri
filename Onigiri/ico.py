@@ -11,7 +11,7 @@ use_oper_icons = False
 
 
 import bpy.utils.previews
-import os
+
 # Globals for custom icon previews
 custom_icons = None
 
@@ -184,7 +184,7 @@ def load_icons():
         "subtract",
         "paint",
         "paint_disabled",
-        "arrow_right_green",
+        #"arrow_right_green",
         "fitmesh",
         "no_bone",
         "star_green",
@@ -239,7 +239,7 @@ def load_icons():
         "undeform",
         "scale_animation",
         "dot_blue",
-        "arrow_left_green",
+        #"arrow_left_green",
         "remove_keys",
         "cancel",
         "insert",
@@ -446,6 +446,15 @@ def load_icons():
         "puppet": "MESH_MONKEY",
         "insert": "NODE_INSERT_ON",
         "progress": "SORTSIZE",
+        "reference": "TRACKING_REFINE_FORWARDS",
+        "subtract": "SELECT_SUBTRACT",
+        "transform": "MOD_SIMPLEDEFORM",
+        "safe": "FAKE_USER_ON",
+        "bone_fixed": "PINNED",
+        "stabilize": "OUTLINER_OB_MESH", #RIGID_BODY_CONSTRAINT
+        "bone_bent": "MOD_SIMPLEDEFORM",
+        "check_all": "ZOOM_ALL",
+        "remove_keys": "KEY_DEHLT",
         "unknown": "QUESTION"
     }
 
@@ -482,8 +491,8 @@ def load_icons():
     #load("arrow_top_right", "arrow_top_right.png")
     #load("arrow_bottom_right", "arrow_bottom_right.png")
     #load("arrow_up", "arrow_up.png")
-    load("arrow_right_green", "arrow_right_green.png")
-    load("arrow_left_green", "arrow_left_green.png")
+    #load("arrow_right_green", "arrow_right_green.png")
+    #load("arrow_left_green", "arrow_left_green.png")
     #load("configure", "configure.png")
     #load("settings_general", "settings_general.png")
     #load("settings_advanced", "settings_advanced.png")
@@ -511,10 +520,10 @@ def load_icons():
     #load("magnify", "magnify.png")
     #load("restore_bone", "restore_bone.png")
 
-    load("bone_fixed", "bone_fixed.png")
+    #load("bone_fixed", "bone_fixed.png")
     #load("bones", "bones.png")
     load("bones_blue", "bones_blue.png")
-    load("bone_bent", "bone_bent.png")
+    #load("bone_bent", "bone_bent.png")
     #load("bone_yellow", "bone_yellow.png")
     load("bone_mixed", "bone_mixed.png")
     load("bone_black_red", "bone_black_red.png")
@@ -535,7 +544,7 @@ def load_icons():
     load("running_guy_enabled", "running_guy_enabled.png"),
     load("rig_to_mesh", "rig_to_mesh.png")
     load("bones_to_mesh", "bones_to_mesh.png")
-    load("remove_keys", "remove_keys.png")
+    #load("remove_keys", "remove_keys.png")
     load("export_mesh", "export_mesh.png")
     #load("unlocked", "unlocked.png")
     #load("lock_red", "lock_red.png")
@@ -585,7 +594,7 @@ def load_icons():
     load("integrity_check", "integrity_check.png")
     #load("pose_library", "pose_library.png")
     #load("add", "add.png")
-    load("subtract", "subtract.png")
+    #load("subtract", "subtract.png")
     #load("edit", "edit.png")
     #load("edit_red", "edit_red.png")
     #load("edit_rgb", "edit_rgb.png")
@@ -606,7 +615,7 @@ def load_icons():
     #load("tools", "tools.png")
     #load("alert", "alert.png")
     #load("head", "head.png")
-    load("stabilize", "stabilize.png")
+    #load("stabilize", "stabilize.png")
     #load("prefix", "prefix.png")
     load("prefix_remove", "prefix_remove.png")
     #load("reshape", "reshape.png")
@@ -689,7 +698,7 @@ def load_icons():
     load("peak_white", "peak_white.png")
     load("peak_yellow", "peak_yellow.png")
     #oad("avastar_to_oni", "avastar_to_oni.png")
-    load("safe", "safe.png")
+    #load("safe", "safe.png")
     #load("match", "match.png")
     load("fitmesh", "fitmesh.png")
     load("animation_start", "animation_start.png")
@@ -710,7 +719,7 @@ def load_icons():
     #load("scale", "scale.png")
     load("scale_enabled", "scale_enabled.png")
     #load("scale_special", "scale_special.png")
-    load("transform", "transform.png")
+    #load("transform", "transform.png")
     #load("transform_enabled", "transform_enabled.png")
     #load("transfer", "transfer.png")
     #load("properties_black", "properties_black.png")
