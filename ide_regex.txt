@@ -7,3 +7,10 @@
 
 (\.prop\(\s*[^)]*)[^#]toggle([^)]*get_prop_icon_id\(\")
 \1#toggle\2
+
+AI
+regex: from file ".\Onigiri\__init__.py", i want to mark all variables string values that variable ended with  _icon,
+match all and sorted with no duplicated then save the values into a text file
+
+regex: from file ".\Onigiri\__init__.py", i want to mark all first parameter string values that functions ended with  _icon_id,
+match all and sorted with no duplicated then save the values into a text file

@@ -49485,7 +49485,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                 "mapper_auto_fix_bvh",
                 text="",
                 toggle=use_prop_icons,
-                icon_value = get_prop_icon_id("glue"),
+                icon_value = get_prop_icon_id("fix"),
             )
 
             layout = self.layout
@@ -54130,7 +54130,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             if oni.bvh_to_sl:
                 bvh_to_sl_icon = "check_green"
             else:
-                bvh_to_sl_icon = "CHECKBOX_DEHLT"
+                bvh_to_sl_icon = "unchecked"
 
             layout = self.layout
             box = layout.box()
@@ -58489,11 +58489,11 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
 
                 row = col.row(align=True)
                 sim_path_text = "Enable Path"
-                sim_path_icon = "dot_red"
+                sim_path_icon = "unchecked"
                 sim_path_enabled = oni_sim.sim_motion_dynamic
                 if oni_sim.sim_path:
-                    sim_path_text = "Disble Path"
-                    sim_path_icon = "dot_green"
+                    sim_path_text = "Disable Path"
+                    sim_path_icon = "checked"
                 row.enabled = sim_path_enabled
                 row.prop(
                     oni_sim,

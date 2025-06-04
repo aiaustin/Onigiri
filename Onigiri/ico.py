@@ -489,6 +489,8 @@ def load_icons():
     load("joint", "joint.svg")
     load("flag", "flag.svg")
     load("flag_red", "flag_red.svg")
+    load("glue", "glue.svg")
+    load("master", "master.svg")
 
     #load("skeleton", "skeleton.svg")
 
@@ -667,7 +669,6 @@ def load_icons():
     #load("isolation_mode", "isolation_mode.png")
     #load("isolate", "isolate.png")
     #load("reskin_bone", "reskin_bone.png")
-    load("glue", "glue.png")
     load("experiment", "experiment.png")
     #load("curves", "curves.png")
     #load("ease", "ease.png")
@@ -797,7 +798,6 @@ def load_icons():
     #load("more", "more.png")
     #load("global", "global.png")
     #load("pull", "pull.png")
-    load("master", "master.png")
     #load("puppet", "puppet.png")
     #load("align_bones", "align_bones.png")
     load("project", "project.png")
