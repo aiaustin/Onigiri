@@ -248,8 +248,8 @@ def load_icons():
         "record",
         "blank",
         "paste",
-        "flag_none",
-        "flag_all",
+        #"flag_none",
+        #"flag_all",
         #"avastar_to_oni",
         #"save_dark",
         "fill",
@@ -308,7 +308,7 @@ def load_icons():
         "running_guy_enabled",
         "star_black",
         "flag",
-        "flag_on",
+        "flag_red",
         "ease",
         "ease_enabled",
         "reset_warning"
@@ -460,6 +460,7 @@ def load_icons():
         "run": "PLAY",
         "weight": "MOD_VERTEX_WEIGHT",
         "remove_keys": "KEY_DEHLT",
+        "merge": "AREA_JOIN_LEFT",
         "unknown": "QUESTION"
     }
 
@@ -487,6 +488,7 @@ def load_icons():
     load("hammer", "hammer.svg")
     load("joint", "joint.svg")
     load("flag", "flag.svg")
+    load("flag_red", "flag_red.svg")
 
     #load("skeleton", "skeleton.svg")
 
@@ -606,7 +608,7 @@ def load_icons():
     #load("edit_grey", "edit_grey.png")
     #load("edit_white", "edit_white.png")
     #load("selection", "selection.png")
-    load("merge", "merge.png")
+    #load("merge", "merge.png")
     #load("broken_link", "broken_link.png")
 
     load("loop_enabled", "loop_enabled.png")
@@ -745,9 +747,8 @@ def load_icons():
     #load("play_yellow", "play_yellow.png")
     #load("play_orange", "play_orange.png")
     #load("progress", "progress.png")
-    load("flag_on", "flag_on.png")
-    load("flag_all", "flag_all.png")
-    load("flag_none", "flag_none.png")
+    #load("flag_all", "flag_all.png")
+    #load("flag_none", "flag_none.png")
     load("deviation", "deviation.png")
     #load("tolerance", "tolerance.png")
     #load("sample", "sample.png")

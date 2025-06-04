@@ -1,0 +1,9 @@
+\.prop\(.*?\)
+\.prop\(\s*[^)]*toggle[^)]*(get_icon_id)[^)]*\)
+
+(\.prop\(\s*[^)]*toggle[^)]*)get_icon_id(\(\")
+\1get_prop_icon_id\2
+
+
+(\.prop\(\s*[^)]*)[^#]toggle([^)]*get_prop_icon_id\(\")
+\1#toggle\2

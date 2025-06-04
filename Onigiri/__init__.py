@@ -55106,12 +55106,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 row.operator(
                     "onigiri.alib_action_flag",
                     text="",
-                    icon_value = get_icon_id("flag_none"),
+                    icon_value = get_icon_id("unchecked"),
                 ).action = "none"
                 row.operator(
                     "onigiri.alib_action_flag",
                     text="",
-                    icon_value = get_icon_id("flag_all"),
+                    icon_value = get_icon_id("checked"),
                 ).action = "all"
 
                 alib_ranges_all_enabled_icon = "range"
@@ -55216,7 +55216,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     if oni_alib.get("actions") is not None:
                         if actionObj.name in oni_alib["actions"]:
                             if oni_alib["actions"][actionObj.name]["flagged"]:
-                                action_flag_icon = "flag_on"
+                                action_flag_icon = "flag_red"
                     row.operator(
                         "onigiri.alib_action_flag",
                         text="",
@@ -55656,12 +55656,12 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 row.operator(
                     "onigiri.pose_library_flag",
                     text="",
-                    icon_value = get_icon_id("flag_none"),
+                    icon_value = get_icon_id("unchecked"),
                 ).action = "none"
                 row.operator(
                     "onigiri.pose_library_flag",
                     text="",
-                    icon_value = get_icon_id("flag_all"),
+                    icon_value = get_icon_id("checked"),
                 ).action = "all"
 
                 row.operator(
@@ -55706,7 +55706,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
                     pose_flag_icon = "flag"
                     if oni_pose["poses"][oni_pose_name].get("flagged"):
-                        pose_flag_icon = "flag_on"
+                        pose_flag_icon = "flag_red"
                     row.operator(
                         "onigiri.pose_library_flag",
                         text="",
