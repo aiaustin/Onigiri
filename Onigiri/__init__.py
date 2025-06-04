@@ -9352,7 +9352,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                         row.operator(
                             "onigiri.edit_template_remove_bone",
                             text="",
-                            icon_value = get_icon_id("x_black"),
+                            icon_value = get_icon_id("remove"),
                         ).bone = sbone
 
         layout = self.layout
@@ -10382,7 +10382,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             row.operator(
                 "onigiri.snap_deselect_non_ends",
                 text="Exclude Non Safe",
-                icon_value = get_icon_id("deselect_non_ends"),
+                icon_value = get_oper_icon_id("deselect_non_ends"),
             )
             row = col.row(align=True)
             row.operator(
@@ -48692,7 +48692,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
                         row.operator(
                             "onigiri.remove_skin_source",
                             text="",
-                            icon_value = get_icon_id("x_black"),
+                            icon_value = get_icon_id("remove"),
                         ).source = skin_source
                         row.label(
                             text=skin_source,
@@ -49454,7 +49454,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                                 row.operator(
                                     "onigiri.mapper_remove_retarget_link",
                                     text="",
-                                    icon_value = get_icon_id("x_black"),
+                                    icon_value = get_icon_id("remove"),
                                 ).bone = boneObj.name
                                 row.label(text=boneObj.name)
                                 break
@@ -49880,7 +49880,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                     row.operator(
                         "onigiri.animesh_remove_bone",
                         text="",
-                        icon_value = get_icon_id("x_black"),
+                        icon_value = get_icon_id("remove"),
                     ).bone = sbone
                     row.label(text=sbone + " -> " + target + " [" + tbone + "]")
 
@@ -50913,7 +50913,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
                 row.operator(
                     "onigiri.shape_remove",
                     text="Remove",
-                    icon_value = get_icon_id("x_black"),
+                    icon_value = get_icon_id("remove"),
                 )
                 row = col.row(align=True)
 
@@ -55345,7 +55345,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     row.operator(
                         "onigiri.action_fill_del",
                         text="Empty",
-                        icon_value = get_icon_id("empty"),
+                        icon_value = get_icon_id("clean"),
                     )
                     row = col.row(align=True)
                     row.prop(
@@ -58583,17 +58583,17 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 row.operator(
                     "onigiri.sim_custom_constraints",
                     text="Disa. Constr.",
-                    icon_value = get_icon_id("x_black"),
+                    icon_value = get_icon_id("disable"),
                 ).action = "disable"
                 row.operator(
                     "onigiri.sim_custom_constraints",
                     text="Ena. Constr.",
-                    icon_value = get_icon_id("x_green"),
+                    icon_value = get_icon_id("enable"),
                 ).action = "enable"
                 row.operator(
                     "onigiri.sim_custom_constraints",
                     text="Rem. Constr.",
-                    icon_value = get_icon_id("x_red"),
+                    icon_value = get_icon_id("remove"),
                 ).action = "remove"
 
                 row = col.row(align=True)

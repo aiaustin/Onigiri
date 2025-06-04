@@ -4,9 +4,15 @@
 (\.prop\(\s*[^)]*toggle[^)]*)get_icon_id(\(\")
 \1get_prop_icon_id\2
 
-
 (\.prop\(\s*[^)]*)[^#]toggle([^)]*get_prop_icon_id\(\")
 \1#toggle\2
+
+Match .operator with none empty text and get_icon_id
+
+^\s*\w*\.operator\([\s\S]*?text="[^"]+"[\s\S]*?get_icon_id\("([^"]+)+"\)
+
+Match .operator with none empty text and get_oper_icon_id
+^\s*\w+\.operator\([^()]*?text=""[^()]*get_oper_icon_id
 
 AI
 regex: from file ".\Onigiri\__init__.py", i want to mark all variables string values that variable ended with  _icon,

@@ -85,6 +85,7 @@ def load_icons():
         "panel_closed",
         "load",
         "delete",
+        "remove",
         "copy",
         "convert",
         "volume_bones",
@@ -254,7 +255,7 @@ def load_icons():
         #"avastar_to_oni",
         #"save_dark",
         "fill",
-        "empty",
+        #"empty",
         "camera_on",
         "key_black",
         "range",
@@ -353,6 +354,7 @@ def load_icons():
         "bone": "BONE_DATA",
         "bones": "GROUP_BONE",
         "delete": "TRASH",
+        "remove": "TRASH", # "CLOSE",
         "edit": "GREASEPENCIL",
         "overwrite": "MOD_LINEART",
         "apply": "NLA_PUSHDOWN", #SHADERFX
@@ -406,7 +408,7 @@ def load_icons():
         "preset": "PRESET",
         "save_default": "FILE_CACHE",
         "save_preset": "PRESET_NEW",
-        "script": "SCRIPT",
+        "script": "WORDWRAP_ON", #"SCRIPT",
         "nuke": "TRASH",
         "split": "AREA_SWAP",
         "magnify": "VIEWZOOM",
@@ -463,7 +465,10 @@ def load_icons():
         "remove_keys": "KEY_DEHLT",
         "merge": "AREA_JOIN_LEFT",
         "child": "CON_CHILDOF",
-        "unknown": "QUESTION"
+        "unknown": "QUESTION",
+        "disable": "MODIFIER_OFF",
+        "enable": "MODIFIER_ON",
+        "constraint_bone":"CONSTRAINT_BONE"
     }
 
     load("blank", "")
@@ -738,7 +743,7 @@ def load_icons():
     load("thaw", "thaw.png")
     #load("clean", "clean.png")
     load("fill", "fill.png")
-    load("empty", "empty.png")
+    #load("empty", "empty.png")
     #load("copy", "copy.png")
     #load("paste", "paste.png")
     #load("insert", "insert.png")
