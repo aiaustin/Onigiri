@@ -111,6 +111,7 @@ def load_icons():
         "match",
         "controller",
         "bone_black",
+        "child"
         "play_red",
         "play_green",
         "action",
@@ -461,6 +462,7 @@ def load_icons():
         "weight": "MOD_VERTEX_WEIGHT",
         "remove_keys": "KEY_DEHLT",
         "merge": "AREA_JOIN_LEFT",
+        "child": "CON_CHILDOF",
         "unknown": "QUESTION"
     }
 

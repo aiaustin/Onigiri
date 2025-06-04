@@ -58781,7 +58781,7 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 row.operator(
                     "onigiri.puppet_minions",
                     text="Pick Minions",
-                    icon_value = get_oper_icon_id("puppet"),
+                    icon_value = get_oper_icon_id("child"),
                 )
                 row = col.row(align=True)
                 row.operator(
