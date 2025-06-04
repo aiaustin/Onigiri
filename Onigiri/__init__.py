@@ -9918,8 +9918,7 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
             row = col.row(align=True)
             row.operator(
                 "onigiri.snap_convert",
-                text="Director to Actor",
-                icon_value = get_oper_icon_id("follow"),
+                text="Director to Actor"
             )
             row.operator(
                 "onigiri.snap_convert_undo",
@@ -48004,7 +48003,6 @@ class OnigiriPanelMeshExport(bpy.types.Panel):
                 "use_app_compatible_data",
                 toggle=use_prop_icons,
                 text="Use App Data",
-                #icon_value = get_prop_icon_id("data"),
             )
             row.prop(
                 oni_devkit,
@@ -50165,7 +50163,7 @@ class OnigiriCharacterPanel(bpy.types.Panel):
             row.operator(
                 "onigiri.onemap_reverse",
                 text="Reverse Map",
-                icon_value = get_icon_id("to_actor"),
+                icon_value = get_icon_id("reverse"),
             )
 
             row = col.row(align=True)
@@ -53639,7 +53637,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 row.operator(
                     "onigiri.export_sl_anim_old",
                     text=export_sl_anim_old_label,
-                    #icon_value = get_icon_id("run"),
+                    icon_value = get_icon_id("run"),
                 )
                 row.scale_y = 1
                 row.alert = False

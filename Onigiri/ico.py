@@ -119,7 +119,7 @@ def load_icons():
         "bone_red",
         "bone_blue",
         "run",
-        "follow",
+        #"follow",
         "view_anchor_bones",
         "view_reskin_bones",
         "view_output_bones",
@@ -287,7 +287,7 @@ def load_icons():
         "range_enabled",
         "object",
         "more",
-        "x_green",
+        #"x_green",
         "puppet",
         "thaw",
         "back_face_enabled",
@@ -355,6 +355,7 @@ def load_icons():
         "bones": "GROUP_BONE",
         "delete": "TRASH",
         "remove": "TRASH", # "CLOSE",
+        "close": "PANEL_CLOSE",
         "edit": "GREASEPENCIL",
         "overwrite": "MOD_LINEART",
         "apply": "NLA_PUSHDOWN", #SHADERFX
@@ -381,6 +382,7 @@ def load_icons():
         "x": "EVENT_X",
         "y": "EVENT_Y",
         "z": "EVENT_Z",
+        "x_black": "X",
         "plus": "PLUS",
         "add": "PLUS",
         "prefix":"EVENT_P", #SYNTAX_OFF
@@ -498,6 +500,7 @@ def load_icons():
     load("flag_red", "flag_red.svg")
     load("glue", "glue.svg")
     load("master", "master.svg")
+    load("fill", "fill.svg")
 
     #load("skeleton", "skeleton.svg")
 
@@ -519,7 +522,7 @@ def load_icons():
     load("walking_black", "walking_black.png")
     load("walking_blue", "walking_blue.png")
     load("walking_red", "walking_red.png")
-    load("follow", "follow.png")
+    #load("follow", "follow.png")
     load("lead", "lead.png")
 
     load("map_bones", "map_bones.png")
@@ -585,8 +588,8 @@ def load_icons():
     #load("x", "x.png")
     #load("x_red", "x_red.png")
     #load("x_blue", "x_blue.png")
-    load("x_green", "x_green.png")
-    load("x_black", "x_black.png")
+    #load("x_green", "x_green.png")
+    #load("x_black", "x_black.png")
     #load("x_white", "x_white.png")
     load("x_mixed", "x_mixed.png")
     #load("x_yellow", "x_yellow.png")
@@ -742,7 +745,6 @@ def load_icons():
     #load("freeze", "freeze.png")FREEZE
     load("thaw", "thaw.png")
     #load("clean", "clean.png")
-    load("fill", "fill.png")
     #load("empty", "empty.png")
     #load("copy", "copy.png")
     #load("paste", "paste.png")
