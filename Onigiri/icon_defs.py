@@ -8,7 +8,7 @@ LOC_SIMPLE = ["X", "Y", "Z"]
 ICON_AXIS = ["x", "y", "z"]
 
 icon_choice_off = "choice_off"
-icon_choice_on = "choice_red"
+icon_choice_on = "choice_on"
 
 icon_defs = {
     "loc_axis_angle_xyz": {
