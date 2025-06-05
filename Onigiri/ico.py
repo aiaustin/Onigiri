@@ -100,9 +100,9 @@ def load_icons():
         "map",
         "loop",
         "line_thin_white",
-        "walking_black",
-        "walking_blue",
-        "walking_red",
+        #"walking_black",
+        #"walking_blue",
+        #"walking_red",
         "overwrite",
         "prefix_remove",
         "x_red",
@@ -112,14 +112,14 @@ def load_icons():
         "match",
         "controller",
         "bone_black",
-        "child"
-        "play_red",
-        "play_green",
+        "child",
+        #"play_red",
+        #"play_green",
         "action",
         "bone_red",
         "bone_blue",
         "run",
-        #"follow",
+        "follow",
         "view_anchor_bones",
         "view_reskin_bones",
         "view_output_bones",
@@ -193,7 +193,7 @@ def load_icons():
         "axis_y",
         "axis",
         "kit",
-        "x_mixed",
+        #"x_mixed",
         "fix_pose",
         "detach",
         "retarget",
@@ -272,12 +272,12 @@ def load_icons():
         "restore",
         "skeleton",
         "roll",
-        "check_green",
+        #"check_green",
         "broken_link",
         "remove_constraints",
         "axis_side",
         "transform",
-        "control",
+        #"control",
         "angle",
         "lock_black",
         "info",
@@ -289,7 +289,7 @@ def load_icons():
         "more",
         #"x_green",
         "puppet",
-        "thaw",
+        #"thaw",
         "back_face_enabled",
         "back_face_disabled",
         "master",
@@ -325,6 +325,7 @@ def load_icons():
         "panel_closed": "DISCLOSURE_TRI_RIGHT",
         "duplicate": "DUPLICATE",
         "copy": "COPYDOWN",
+        "paste": "PASTEDOWN",
         "star_green": "ARMATURE_DATA",
         "axis_y" : "AXIS_FRONT",
         "axis": "EMPTY_AXIS",
@@ -360,6 +361,7 @@ def load_icons():
         "overwrite": "MOD_LINEART",
         "apply": "NLA_PUSHDOWN", #SHADERFX
         "done": "CHECKMARK",
+        "checkmark": "CHECKMARK",
         "cube" :"CUBE",
         "constraint": "CONSTRAINT",
         "invert": "MOD_MASK",
@@ -435,7 +437,6 @@ def load_icons():
         "object": "CUBE",
         "more": "COLLAPSEMENU",
         "freeze": "FREEZE",
-        "paste": "PASTEDOWN",
         "ease": "FORCE_CURVE",
         "default": "PRESET_NEW",
         "camera_on": "OUTLINER_OB_CAMERA",
@@ -470,7 +471,13 @@ def load_icons():
         "unknown": "QUESTION",
         "disable": "MODIFIER_OFF",
         "enable": "MODIFIER_ON",
-        "constraint_bone":"CONSTRAINT_BONE"
+        "constraint_bone":"CONSTRAINT_BONE",
+        "pose": "POSE_HLT",
+        "proxy": "MOD_PARTICLE_INSTANCE",
+        "linear": "NORMALIZE_FCURVES",
+        "full": "CENTER_ONLY",
+        "follow": "CURVE_PATH",
+        "retarget": "CON_OBJECTSOLVER"
     }
 
     load("blank", "")
@@ -517,11 +524,11 @@ def load_icons():
     #load("settings_advanced", "settings_advanced.png")
     #load("bone_source", "bone_source.png")
     #load("bone_target", "bone_target.png")
-    #load("walking_green", "walking_green.png")
+    #load("green", "walking_green.png")
     #load("walking_white", "walking_white.png")
-    load("walking_black", "walking_black.png")
-    load("walking_blue", "walking_blue.png")
-    load("walking_red", "walking_red.png")
+    #load("walking_black", "walking_black.png")
+    #load("walking_blue", "walking_blue.png")
+    #load("walking_red", "walking_red.png")
     #load("follow", "follow.png")
     load("lead", "lead.png")
 
@@ -558,7 +565,7 @@ def load_icons():
     #load("create_neutral_rig", "create_neutral_rig.png")
     #load("create_reference_rig", "create_reference_rig.png")
     load("export_animation", "export_animation.png")
-    load("running_guy", "running_guy.png")
+    #load("running_guy", "running_guy.png")
     #load("running_guy_red", "running_guy_red.png")
     load("running_guy_enabled", "running_guy_enabled.png"),
     load("rig_to_mesh", "rig_to_mesh.png")
@@ -574,7 +581,7 @@ def load_icons():
     #load("create_reference_pose", "create_reference_pose.png")
     load("scale_animation", "scale_animation.png")
     load("remove_constraints", "remove_constraints.png")
-    load("control", "control.png")
+    #load("control", "control.png")
     #load("animation", "animation.png")
     #load("character_converter", "character_converter.png")
     #load("connect_links", "connect_links.png")
@@ -591,7 +598,7 @@ def load_icons():
     #load("x_green", "x_green.png")
     #load("x_black", "x_black.png")
     #load("x_white", "x_white.png")
-    load("x_mixed", "x_mixed.png")
+    #load("x_mixed", "x_mixed.png")
     #load("x_yellow", "x_yellow.png")
     #load("x_black_white", "x_black_white.png")
     #load("x_white_black", "x_white_black.png")
@@ -650,7 +657,7 @@ def load_icons():
     #load("check_black", "check_black.png")
     #load("check_red", "check_red.png")
     #load("check_blue", "check_blue.png")
-    load("check_green", "check_green.png")
+    #load("check_green", "check_green.png")
     #load("check_yellow", "check_yellow.png")
     #load("sl", "sl.png")
     #load("skin", "skin.png")
@@ -666,9 +673,9 @@ def load_icons():
     #load("choice_green", "choice_green.png")
     #load("sync", "sync.png")
     #load("inherit", "inherit.png")
-    load("linear", "linear.png")
-    load("retarget", "retarget.png")
-    load("proxy", "proxy.png")
+    #load("linear", "linear.png")
+    #load("retarget", "retarget.png")
+    #load("proxy", "proxy.png")
     #load("detach", "detach.png")
     #load("target", "target.png")
     load("disable_map_pose", "disable_map_pose.png")
@@ -743,16 +750,16 @@ def load_icons():
     #load("properties_black", "properties_black.png")
     #load("properties_white", "properties_white.png")
     #load("freeze", "freeze.png")FREEZE
-    load("thaw", "thaw.png")
+    #load("thaw", "thaw.png")
     #load("clean", "clean.png")
     #load("empty", "empty.png")
     #load("copy", "copy.png")
     #load("paste", "paste.png")
     #load("insert", "insert.png")
     #load("play", "play.png")
-    load("play_red", "play_red.png")
+    #load("play_red", "play_red.png")
     #load("play_blue", "play_blue.png")
-    load("play_green", "play_green.png")
+    #load("play_green", "play_green.png")
     #load("play_white", "play_white.png")
     #load("play_yellow", "play_yellow.png")
     #load("play_orange", "play_orange.png")
@@ -763,7 +770,7 @@ def load_icons():
     #load("tolerance", "tolerance.png")
     #load("sample", "sample.png")
     #load("hand_love", "hand_love.png")
-    load("full", "full.png")
+    #load("full", "full.png")
     #load("time", "time.png")
     #load("hourglass", "hourglass.png")
 

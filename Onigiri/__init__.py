@@ -9179,18 +9179,15 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                                 "source_active",
                                 toggle=use_prop_icons,
                                 text="Source Active",
-                                icon_value = get_prop_icon_id("walking_black"),
                             )
                         else:
                             row.operator(
                                 "onigiri.edit_template_pick_source",
                                 text="Pick the source rig",
-                                icon_value = get_icon_id("walking_blue"),
                             )
                         row.operator(
                             "onigiri.edit_template_pick_target",
                             text="Pick a target rig",
-                            icon_value = get_icon_id("walking_red"),
                         )
 
                         col = box.column(align=True)
@@ -9480,13 +9477,13 @@ class OnigiriPanelTemplateEditor(bpy.types.Panel):
                 row.operator(
                     "onigiri.onemap_action",
                     text="Ready",
-                    icon_value = get_icon_id("play_red"),
+                    icon_value = get_icon_id("play"),
                 )
             elif oni_onemap_state == "pick":
                 row.operator(
                     "onigiri.onemap_pick_output",
                     text="Pick Output Rig",
-                    icon_value = get_icon_id("play_green"),
+                    icon_value = get_icon_id("play"),
                 )
 
             else:
@@ -48639,7 +48636,7 @@ class OnigiriSkinningPanel(bpy.types.Panel):
                     oni_skin,
                     "skin_use_skin_pose",
                     text="Skin Pose",
-                    icon_value = get_prop_icon_id("walking_red"),
+                    icon_value = get_prop_icon_id("pose"),
                 )
 
                 col = box.column(align=True)
@@ -49264,7 +49261,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                     row = self.layout.row(align=True)
                     row.label(
                         text="Note: you can remove the targets if you like",
-                        icon_value = get_icon_id("x_mixed"),
+                        icon_value = get_icon_id("info"),
                     )
                 else:
                     if (
@@ -49277,7 +49274,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                         row = self.layout.row(align=True)
                         row.label(
                             text="Note: you can remove the targets if you like",
-                            icon_value = get_icon_id("x_mixed"),
+                            icon_value = get_icon_id("info"),
                         )
                 targets_waiting = bmp.get("targets_waiting", [])
                 for tarm in targets_waiting:
@@ -49285,7 +49282,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                     row.operator(
                         "onigiri.mapper_remove_target",
                         text="",
-                        icon_value = get_icon_id("x_mixed"),
+                        icon_value = get_icon_id("remove"),
                     ).target = tarm
                     row.operator(
                         "onigiri.mapper_target",
@@ -49335,7 +49332,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                         row.operator(
                             "onigiri.mapper_remove_target",
                             text="",
-                            icon_value = get_icon_id("x_mixed"),
+                            icon_value = get_icon_id("remove"),
                         ).target = tarm
                         row.operator(
                             "onigiri.mapper_target",
@@ -49564,7 +49561,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                 "remove_empty_groups",
                 toggle=True,
                 text="",
-                icon_value = get_icon_id("x_red"),
+                icon_value = get_icon_id("clean"),
             )
 
             oni_anim = bpy.context.scene.oni_anim
@@ -49849,7 +49846,7 @@ class OnigiriAnimeshPanel(bpy.types.Panel):
                     row.operator(
                         "onigiri.animesh_remove_target",
                         text="",
-                        icon_value = get_icon_id("x_mixed"),
+                        icon_value = get_icon_id("remove"),
                     ).target = tarm
 
                     row.operator(
@@ -54068,7 +54065,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
                         for emote in gestures.emote:
                             if emote == anim.anim_emote_name:
-                                chosen_icon = "check_green"
+                                chosen_icon = "checkmark"
                             else:
                                 chosen_icon = "blank"
                             p = gestures.emote[emote].get("priority")
@@ -54126,7 +54123,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
             oni_anim = bpy.context.scene.oni_anim
 
             if oni.bvh_to_sl:
-                bvh_to_sl_icon = "check_green"
+                bvh_to_sl_icon = "checkmark"
             else:
                 bvh_to_sl_icon = "unchecked"
 
@@ -54589,9 +54586,9 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                 text="Remove Pose",
             ).action = "del"
 
-            pose_rename_map_text = " "
+            pose_rename_map_text = "-"
             pose_rename_map_icon = "dot_black"
-            pose_pose_map_text = " "
+            pose_pose_map_text = "-"
             pose_pose_map_icon = "dot_black"
             selected = bpy.context.selected_objects
             if len(selected) == 1:
@@ -58727,7 +58724,6 @@ class OnigiriShapeShifterPanel(bpy.types.Panel):
                 row.operator(
                     "onigiri.puppet_decompose",
                     text="Decompose Rigs",
-                    icon_value = get_oper_icon_id("thaw"),
                 )
 
                 col = box.column(align=True)
