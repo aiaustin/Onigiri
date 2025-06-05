@@ -9,13 +9,13 @@
             "type": "debugpy",
             "request": "attach",
             "connect": {
-                "host": "127.0.0.1",
+                "host": "localhost",
                 "port": 5678
             },
             "pathMappings": [
                 {
-                    "localRoot": "${workspaceFolder}\Onigiri",
-                    "remoteRoot": "${workspaceFolder\Onigiri}"
+                    "localRoot": "${workspaceFolder}\\Onigiri",
+                    "remoteRoot": "D:\\lab\\python\\blender\\scripts\\addons\\onigiri"
                 }
             ]
         }

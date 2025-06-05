@@ -40758,7 +40758,7 @@ class OnigiriMotionSpliceReset(bpy.types.Operator):
         oni_splice = bpy.context.scene.oni_splice
         state = utils.get_state()
 
-        for prop in bpy.context.scene["oni_splice"]:
+        for prop in list(bpy.context.scene["oni_splice"]):
             try:
                 oni_splice.property_unset(prop)
             except:
@@ -41372,6 +41372,9 @@ class OnigiriTeflon(bpy.types.Operator):
         return True
 
     def execute(self, context):
+        if len(bpy.context.selected_objects) <= 0:
+            return {"FINISHED"}
+
         oni_anim = bpy.context.scene.oni_anim
         armObj = bpy.context.selected_objects[0]
         print(
@@ -54644,6 +54647,8 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
                     col = box.column(align=True)
 
+                row = col.row(align=True)
+
                 fake_count = 0
                 for actionObj in bpy.data.actions:
                     if actionObj.use_fake_user:
@@ -54656,8 +54661,6 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     "onigiri.alib_action_fake_user",
                     text="Disable Fake User",
                 ).action = False
-
-                row = col.row(align=True)
 
                 row = col.row(align=True)
                 row.operator(
@@ -55056,7 +55059,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         "blank",
                         toggle=True,
                         emboss=False,
-                        text="Action",
+                        text="Action"
                     )
 
                     row.prop(
@@ -55064,56 +55067,56 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         "blank",
                         toggle=True,
                         emboss=False,
-                        text="Time",
+                        text="Time"
                     )
                     row.prop(
                         oni,
                         "blank",
                         toggle=True,
                         emboss=False,
-                        text="Frame Start",
+                        text="Frame Start"
                     )
                     row.prop(
                         oni,
                         "blank",
                         toggle=True,
                         emboss=False,
-                        text="Frame End",
+                        text="Frame End"
                     )
                     row.prop(
                         oni,
                         "blank",
                         toggle=True,
                         emboss=False,
-                        text="Loop Start",
+                        text="Loop Start"
                     )
                     row.prop(
                         oni,
                         "blank",
                         toggle=True,
                         emboss=False,
-                        text="Loop End",
+                        text="Loop End"
                     )
                     row.prop(
                         oni,
                         "blank",
                         toggle=True,
                         emboss=False,
-                        text="Priority",
+                        text="Priority"
                     )
                     row.prop(
                         oni,
                         "blank",
                         toggle=True,
                         emboss=False,
-                        text="Ease In",
+                        text="Ease In"
                     )
                     row.prop(
                         oni,
                         "blank",
                         toggle=True,
                         emboss=False,
-                        text="Ease Out",
+                        text="Ease Out"
                     )
 
                     oni_frame_start = oni.animation_start_frame
@@ -55146,11 +55149,11 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         total_time_text = str(round(total_time, 2))
 
                         if oni_alib.alib_action_range_set_name == actionObj.name:
-                            alib_action_range_set_icon = "run"
+                            alib_action_range_set_icon = "dot_black"
                         elif actionObj.name in oni_alib.get("fill_actions", ""):
                             alib_action_range_set_icon = "split"
                         elif total_time > 60:
-                            alib_action_range_set_icon = "dot_red" ##Zaher check it
+                            alib_action_range_set_icon = "play" #dot_red
                         else:
                             alib_action_range_set_icon = "play"
                         row.operator(
