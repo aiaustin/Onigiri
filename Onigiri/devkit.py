@@ -716,31 +716,32 @@ def export_dae(matrices=None, joint="bone_data", file=None, real=None):
 
         base = visual_scene_old.find(f"{n}node")
         print("============== NODES 1 =============")
-        for node in base:
-            if node.find(f"{n}instance_controller"):
-                print("found instance controller, appending")
-                node_type = node.get("TYPE")
-                node_name = node.get("name")
-                node_id = node.get("id")
-                print("node_type:", node_type)
-                print("node_name:", node_name)
-                print("node_id  :", node_id)
+        if base is not None:
+            for node in base:
+                if node.find(f"{n}instance_controller"):
+                    print("found instance controller, appending")
+                    node_type = node.get("TYPE")
+                    node_name = node.get("name")
+                    node_id = node.get("id")
+                    print("node_type:", node_type)
+                    print("node_name:", node_name)
+                    print("node_id  :", node_id)
 
-                skeleton_node = node.find(f"{n}instance_controller/{n}skeleton")
-                if skeleton_node is None:
-                    print(
-                        "No skeleton found under instance_controller, this could be a bug in",
-                        node_name,
-                    )
-                else:
-                    print(
-                        "Altering skeleton referencd from",
-                        skeleton_node.text,
-                        "to",
-                        "#mPelvis",
-                    )
-                    skeleton_node.text = "#mPelvis"
-                vs.append(node)
+                    skeleton_node = node.find(f"{n}instance_controller/{n}skeleton")
+                    if skeleton_node is None:
+                        print(
+                            "No skeleton found under instance_controller, this could be a bug in",
+                            node_name,
+                        )
+                    else:
+                        print(
+                            "Altering skeleton referencd from",
+                            skeleton_node.text,
+                            "to",
+                            "#mPelvis",
+                        )
+                        skeleton_node.text = "#mPelvis"
+                    vs.append(node)
         print("====================================")
 
         if 1 == 0:
