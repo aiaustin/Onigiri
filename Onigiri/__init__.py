@@ -48493,18 +48493,19 @@ class OnigiriSkinningPanel(bpy.types.Panel):
                 row = col.row(align=True)
                 row.operator(
                     "onigiri.transfer_weights",
-                    text="Transfer Weights",
+                    text="Transfer Weights"
                 ).action = "transfer"
 
                 row = col.row(align=True)
                 row.operator(
                     "onigiri.transfer_weights",
-                    text="Parent Object Only",
+                    text="Parent Object Only"
                 ).action = "parent_object"
+
                 row = col.row(align=True)
                 row.operator(
                     "onigiri.transfer_weights",
-                    text="Parent Armature Only",
+                    text="Parent Armature Only"
                 ).action = "parent_armature"
 
                 if oni_skin.source_count > 1:
@@ -55383,7 +55384,6 @@ class OnigiriAnimationPanel(bpy.types.Panel):
 
                 if targetObj is not None:
                     if targetObj.name not in bpy.context.scene.objects:
-
                         oni_mixer.mixer_target_locked = False
                     else:
                         mixer_target_name = targetObj.name
@@ -55457,7 +55457,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                         row.operator(
                             "onigiri.mixer_ready",
                             text="Click To Start Picking",
-                            icon_value = get_icon_id("thumb_up"),
+                            icon_value = get_icon_id("click"),
                         )
 
                     row = col.row(align=True)
@@ -55584,7 +55584,7 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     mixer_inherit.state = "True"
                     mixer_inherit = row.operator(
                         "onigiri.mixer_inherit",
-                        text="Rotation Disable",
+                        text="Rotation Disable"
                     )
                     mixer_inherit.transform = "rotation"
                     mixer_inherit.state = "False"
@@ -55592,13 +55592,13 @@ class OnigiriAnimationPanel(bpy.types.Panel):
                     row = col.row(align=True)
                     mixer_inherit = row.operator(
                         "onigiri.mixer_inherit",
-                        text="Location Enable",
+                        text="Location Enable"
                     )
                     mixer_inherit.transform = "location"
                     mixer_inherit.state = "True"
                     mixer_inherit = row.operator(
                         "onigiri.mixer_inherit",
-                        text="Location Disable",
+                        text="Location Disable"
                     )
                     mixer_inherit.transform = "location"
                     mixer_inherit.state = "False"
