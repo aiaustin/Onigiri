@@ -61892,7 +61892,9 @@ class OnigiriSelectBones(bpy.types.Operator):
 
         for bone in skel.avatar_skeleton:
             if bone in bone_groups.bones[group]:
-                boneType[bone].select = state
+                b = boneType.get(bone)
+                if b is not None:
+                    b.select = state
 
         return {"FINISHED"}
 
