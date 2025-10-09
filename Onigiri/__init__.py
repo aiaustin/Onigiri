@@ -1,8 +1,8 @@
 bl_info = {
     "name": "Onigiri",
     "author": "Nessaki, Originally writen by BinBash Resident (Second Life)",
-    "version": (4, 1, 0, 2),
-    "blender": (4, 0, 0),
+    "version": (4, 1, 3),
+    "blender": (4, 3, 0),
     "description": "Quick Bento / Animesh prototype tool, includes an advanced Character Converter and animation system, Based on last open source version of GNU GPL v3 Bento Buddy",
     "warning": "",
     "doc_url": "",
