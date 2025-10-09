@@ -56059,7 +56059,8 @@ class OnigiriPanelRigTools(bpy.types.Panel):
                     is_qualified = True
 
 
-        MOOFEEDOODLEPOODLEMAKOODLE = onim.poll_enable_bones
+        #Zaher: Removed due bug : AttributeError: Writing to ID classes in this context is not allowed: Neru Akita_arm, Object datablock, error setting Object.oni_bone_groups
+        #MOOFEEDOODLEPOODLEMAKOODLE = onim.poll_enable_bones
         row = col.row(align=True)
         select_base_bones = row.operator(
             "onigiri.select_bones",
@@ -63110,9 +63111,9 @@ class OnigiriSimCurlAdd(bpy.types.Operator):
                         continue
                 if not oni_sim.sim_anchor:
                     if parent not in bone_names:
-
                         anchor = boneObj.name
                         continue
+
                 armObj.data.bones.active = boneObj.bone
                 bc = boneObj.constraints
                 conObj = bc.new("COPY_TRANSFORMS")

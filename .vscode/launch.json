@@ -15,7 +15,7 @@
             "pathMappings": [
                 {
                     "localRoot": "${workspaceFolder}\\Onigiri",
-                    "remoteRoot": "D:\\lab\\python\\blender\\scripts\\addons\\onigiri"
+                    "remoteRoot": "D:\\lab\\python\\blender\\scripts\\addons\\Onigiri"
                 }
             ]
         }
