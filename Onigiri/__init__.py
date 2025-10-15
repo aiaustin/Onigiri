@@ -18779,33 +18779,31 @@ class OnigiriPanelImport(bpy.types.Panel):
                     emote_name = "None"
 
                 row = col.row(align=True)
-                row.prop(
-                    oni_anim_edit,
-                    "anim_blank",
+                row.label(
                     text="Version:",
                 )
                 row.prop(
                     oni_anim_edit,
                     "anim_blank",
                     text=str(version),
+                    toggle=False,
+                    emboss = False,
                 )
 
                 row = col.row(align=True)
-                row.prop(
-                    oni_anim_edit,
-                    "anim_blank",
+                row.label(
                     text="Sub-Version:",
                 )
                 row.prop(
                     oni_anim_edit,
                     "anim_blank",
                     text=str(sub_version),
+                    toggle=False,
+                    emboss = False,
                 )
 
                 row = col.row(align=True)
-                row.prop(
-                    oni_anim_edit,
-                    "anim_blank",
+                row.label(
                     text="Base Priority:",
                 )
                 row.prop(
@@ -18815,33 +18813,31 @@ class OnigiriPanelImport(bpy.types.Panel):
                 )
 
                 row = col.row(align=True)
-                row.prop(
-                    oni_anim_edit,
-                    "anim_blank",
+                row.label(
                     text="Duration:",
                 )
                 row.prop(
                     oni_anim_edit,
                     "anim_blank",
                     text=str(round(duration, 4)),
+                    emboss = False,
+                    toggle=False,
                 )
 
                 row = col.row(align=True)
-                row.prop(
-                    oni_anim_edit,
-                    "anim_blank",
+                row.label(
                     text="Emote Name:",
                 )
                 row.prop(
                     oni_anim_edit,
                     "anim_blank",
                     text=str(emote_name),
+                    emboss = False,
+                    toggle=False,
                 )
 
                 row = col.row(align=True)
-                row.prop(
-                    oni_anim_edit,
-                    "anim_blank",
+                row.label(
                     text="Loop in point:",
                 )
                 row.prop(
@@ -18851,9 +18847,7 @@ class OnigiriPanelImport(bpy.types.Panel):
                 )
 
                 row = col.row(align=True)
-                row.prop(
-                    oni_anim_edit,
-                    "anim_blank",
+                row.label(
                     text="Loop out point:",
                 )
                 row.prop(
@@ -18866,10 +18860,9 @@ class OnigiriPanelImport(bpy.types.Panel):
                     loop_enabled = "Yes"
                 else:
                     loop_enabled = "No"
+
                 row = col.row(align=True)
-                row.prop(
-                    oni_anim_edit,
-                    "anim_blank",
+                row.label(
                     text="Loop enabled:",
                 )
                 row.prop(
@@ -18879,9 +18872,7 @@ class OnigiriPanelImport(bpy.types.Panel):
                 )
 
                 row = col.row(align=True)
-                row.prop(
-                    oni_anim_edit,
-                    "anim_blank",
+                row.label(
                     text="Ease in duration:",
                 )
                 row.prop(
@@ -18891,16 +18882,14 @@ class OnigiriPanelImport(bpy.types.Panel):
                 )
 
                 row = col.row(align=True)
-                row.prop(
-                    oni_anim_edit,
-                    "anim_blank",
+                row.label(
                     text="Ease out duration:",
                 )
                 row.prop(
                     oni_anim_edit,
                     "anim_ease_out_duration",
                     text=" ",
-                    toggle=True,
+					toggle=True,
                 )
 
                 row = col.row(align=True)
@@ -18910,23 +18899,24 @@ class OnigiriPanelImport(bpy.types.Panel):
                     text="Hand Pose:",
                 )
 
+                row = col.row(align=True)
                 row.prop(
                     oni_anim_edit,
                     "anim_hand_pose",
                     text="Optional Hand Pose: " + anim_hand_poses_menu[int(oni_anim_edit.anim_hand_pose)][1],
-                    toggle=True,
                 )
 
                 row = col.row(align=True)
-                row.prop(
-                    oni_anim_edit,
-                    "anim_blank",
+                row.label(
                     text="Animated Joints:",
                 )
+
                 row.prop(
                     oni_anim_edit,
                     "anim_blank",
                     text=str(num_joints),
+                    emboss = False,
+                    toggle=False,
                 )
 
             if oni_anim_edit.anim_last_loaded != "":
@@ -18935,6 +18925,7 @@ class OnigiriPanelImport(bpy.types.Panel):
                     oni_anim_edit,
                     "anim_blank",
                     text=oni_anim_edit.anim_last_loaded,
+                    emboss = False,
                 )
                 col = box.column(align=True)
 
@@ -18966,6 +18957,8 @@ class OnigiriPanelImport(bpy.types.Panel):
                                 oni_anim_edit,
                                 "anim_blank",
                                 text=anim_joint,
+			                    emboss = False,
+			                    toggle=False,
                             )
                             if anim_joint == oni_anim_edit.anim_joint_name:
                                 row.prop(
