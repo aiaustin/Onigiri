@@ -18885,6 +18885,7 @@ class OnigiriPanelImport(bpy.types.Panel):
                 row.label(
                     text="Ease out duration:",
                 )
+
                 row.prop(
                     oni_anim_edit,
                     "anim_ease_out_duration",
@@ -35063,8 +35064,8 @@ class OnigiriAccessAllBones(bpy.types.Operator):
         armObj.select_set(True)
         utils.activate(armObj)
 
-        layers = [True for i in armObj.data.layers]
-        armObj.data.layers = layers
+        for collection in armObj.data.collections:
+            collection.is_visible = True
 
         for boneObj in armObj.data.bones:
             boneObj.hide = False
@@ -56667,16 +56668,17 @@ class OnigiriPanelRigTools(bpy.types.Panel):
         col.separator()
         row = col.row(align=True)
 
-        row.operator(
-            "onigiri.rotation_mode",
-            text="Set rotation mode",
-            icon_value = get_icon_id("rotation"),
-        )
-        row = col.row(align=True)
         row.prop_menu_enum(
             context.scene.oni_anim_props,
             "rotation_mode",
             text="Rotation Mode: " + context.scene.oni_anim_props.rotation_mode,
+        )
+
+        row = col.row(align=True)
+        row.operator(
+            "onigiri.rotation_mode",
+            text="Set rotation mode",
+            icon_value = get_icon_id("rotation"),
         )
 
         oni = bpy.context.scene.onigiri

@@ -19,6 +19,7 @@ from . import mod_data
 from . import mod_data as md
 from . import mod_functions as mf
 from . import animutils
+from . import bone_groups as bg
 from .presets import volumes
 from .presets import rig_data
 from .presets import base_data
@@ -2271,6 +2272,9 @@ def build_rig(rig_class="pos", rotate=False, connect=False):
     obj[arm].data.collections.new(mod_data.rig_group_vbones)
     obj[arm].data.collections.new(mod_data.rig_group_abones)
     obj[arm].data.collections.new(mod_data.rig_group_nbones)
+
+    #for group_name in bg.bones:
+    #    obj[arm].data.collections.new(group_name)
 
     bpy.context.view_layer.objects.active = obj[arm]
     for bone in skel.avatar_skeleton:
