@@ -1338,25 +1338,21 @@ rig_group_all_bones = "All Bones"
 rig_group_mbones = "mBones"
 rig_group_vbones = "vBones"
 rig_group_abones = "aBones"
+
 rig_group_mtheme = "THEME04"
 rig_group_vtheme = "THEME10"
 rig_group_atheme = "THEME09"
 
-
 rig_group_nbones = "nBones"
 rig_group_ntheme = "THEME01"
 
-
 oni_all_bones_layer = 0
 
-
 oni_base_layer = 0
-
 
 oni_vbones_layer = 1
 
 oni_mbones_layer = 2
-
 
 cr_mbones_theme = "THEME08"
 cr_vbones_theme = "THEME05"

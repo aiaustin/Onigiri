@@ -1,6 +1,7 @@
 print("rigs loaded")
 print(__name__, __file__)
 
+import string
 import os
 import bpy
 import sys
@@ -2267,14 +2268,19 @@ def build_rig(rig_class="pos", rotate=False, connect=False):
 
     bpy.ops.object.mode_set(mode="POSE")
 
-    allBones = obj[arm].data.collections.new(mod_data.rig_group_all_bones)
-    obj[arm].data.collections.new(mod_data.rig_group_mbones)
-    obj[arm].data.collections.new(mod_data.rig_group_vbones)
-    obj[arm].data.collections.new(mod_data.rig_group_abones)
-    obj[arm].data.collections.new(mod_data.rig_group_nbones)
+    def add_collection(g, is_visible = False):
+        c = obj[arm].data.collections.new(g)
+        c.is_visible = is_visible
+        return c
 
-    #for group_name in bg.bones:
-    #    obj[arm].data.collections.new(group_name)
+    #allBones = add_collection(mod_data.rig_group_all_bones, True)
+    add_collection(mod_data.rig_group_mbones)
+    add_collection(mod_data.rig_group_vbones)
+    add_collection(mod_data.rig_group_abones)
+    add_collection(mod_data.rig_group_nbones)
+
+    for group in bg.bones:
+        add_collection(string.capwords(group), is_visible = (group=="base"))
 
     bpy.context.view_layer.objects.active = obj[arm]
     for bone in skel.avatar_skeleton:
@@ -2293,13 +2299,19 @@ def build_rig(rig_class="pos", rotate=False, connect=False):
             palette = mod_data.rig_group_vtheme
 
         boneObj = obj[arm].data.bones[bone]
-        allBones.assign(boneObj)
+        #allBones.assign(boneObj)
         obj[arm].data.collections[group].assign(boneObj)
+
+        bone_groups = [parent for parent, children in bg.bones.items() if bone in children]
+        for group in bone_groups:
+            obj[arm].data.collections[string.capwords(group)].assign(boneObj)
+
         boneObj.color.palette =  palette
 
     bpy.ops.object.mode_set(mode="OBJECT")
 
-    bpy.context.object.data.collections[mod_data.rig_group_all_bones].is_visible = True
+    #bpy.context.object.data.collections[mod_data.rig_group_all_bones].is_visible = True
+
     armObj.select_set(True)
     bpy.context.view_layer.objects.active = armObj
 
@@ -2342,7 +2354,8 @@ def build_rig(rig_class="pos", rotate=False, connect=False):
         armObj["hide_hand_bones"] = 0
         armObj["hide_volume_bones"] = 0
 
-    show_bones(armature=armObj, default=True)
+    ## Zaher: Noh, we will keep it
+    #show_bones(armature=armObj, default=True)
 
     return armObj
 
