@@ -64898,14 +64898,17 @@ def register():
     from bpy.utils import register_class
 
     for cls in classes:
+        try:
+            register_class(cls)
+        except Exception as e:
+            print(f"Error registering class {cls.__name__}: {e}")
 
-        register_class(cls)
-
-        globals.version = bl_info["version"]
+    globals.version = bl_info["version"]
 
     bpy.types.Scene.oni_sliders = bpy.props.PointerProperty(
         type=OnigiriSlidersProperties
     )
+
 
     bpy.types.PoseBone.oni_sliders_location_x = bpy.props.FloatProperty(
         name="",
