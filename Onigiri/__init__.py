@@ -20599,6 +20599,7 @@ class OnigiriRunProperties(bpy.types.PropertyGroup):
         return
 
     def trigger_get(self):
+        """
         print("Triggered get")
 
         if oni_settings["terminate"]:
@@ -20606,6 +20607,8 @@ class OnigiriRunProperties(bpy.types.PropertyGroup):
             return True
         bpy.context.scene.oni_run.running = False
         return True
+        """
+        return bpy.context.scene.oni_run.running
 
     def trigger_set(self, value):
 
@@ -20632,6 +20635,7 @@ class OnigiriRunProperties(bpy.types.PropertyGroup):
         name="oni_running",
         description="actively running",
         set=trigger_set,
+        get=trigger_get,
         default=False,
     )
 
